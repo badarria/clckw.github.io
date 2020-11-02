@@ -1,49 +1,38 @@
---что делать с городом клиента? Надо его тоже добавить? Может ли это быть несколько городов, как у мастеров, или всегда один, допустим из последнего заказа?
---рейтинг мастера, видимо, какой-то очень условный?)
---подходит ли вообще такая структура?
---что, если я хочу добавить фото мастеров? надо их как-то отдельно хранить, а сюда передавать путь?
---что будет при удалении мастера или клиента? Должны вместе с этим удалиться все связанные заказы?
---для выбора свободных мастеров использовать OVERLAPS с датами-временем из заказов? или это делается каким-то другим способом?
-
-
 CREATE DATABASE clockware;
 
 CREATE TABLE masters(
-id_master serial primary key,
-master_name varchar(50) not null,
-master_surname varchar(50) not null,
-master_rating numeric not null
+id serial primary key,
+name varchar(50) not null,
+surname varchar(50) not null,
+cityId integer not null REFERENCES cities,
+rating numeric not null
 );
 
 CREATE TABLE services(
-id_service serial primary key,
-service_name varchar not null,
-service_time time not null
+id serial primary key,
+name varchar not null,
+time time not null
 );
 
-CREATE TABLE clients(
-id_client serial primary key,
-client_email citext unique not null,
-client_name varchar not null,
-client_surname varchar not null
+CREATE TABLE customers(
+id serial primary key,
+name varchar not null,
+surname varchar not null,
+email citext unique not null
 );
 
 CREATE TABLE cities(
-id_city serial primary key,
-city_name varchar not null
-);
-
-table cities_masters(
-id_city REFERENCES cities,
-id_master REFERENCES masters
+id serial primary key,
+name varchar not null
 );
 
 CREATE TABLE orders(
 id serial primary key,
-id_master REFERENCES masters,
-id_client REFERENCES clients,
-id_service REFERENCES orders,
-start_at datatime not null,
-end_at datatime not null
+masterId integer not null REFERENCES masters,
+clientId integer not null REFERENCES clients,
+serviceId integer not null REFERENCES orders,
+startAt timestamp not null,
+endAt timestamp not null
 );
+
 

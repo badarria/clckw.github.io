@@ -11,6 +11,7 @@ import DatePicker from "../date-picker";
 const AdminTableHeaderOrders = (props) => {
 	const {state, dataToChange, editItem, addItem, updateItem, cancelInput} = props
 
+
 	const data = {
 		"master": [
 			{

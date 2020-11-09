@@ -1,5 +1,5 @@
 import {IconButton, TableCell, Tooltip} from "@material-ui/core";
-import React, {Fragment} from "react";
+import React from "react";
 
 const TableButton = (props) => {
 	const {handleClick, icon, title, disabled, colSpan} = props;

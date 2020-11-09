@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {makeStyles, Tabs, Tab, Typography, Box, Container} from '@material-ui/core';
 import AdminTable from "./admin-table";
-// import {Context} from "./components/context";
+
 
 
 const TabPanel = (props) => {

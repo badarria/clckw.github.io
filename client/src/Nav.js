@@ -2,6 +2,8 @@ import React from 'react';
 import './App.css';
 import {Link} from 'react-router-dom'
 import {Container, AppBar, Toolbar, Typography, Button, makeStyles} from "@material-ui/core"
+import Login from './components/Main/login'
+
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -15,22 +17,23 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function Nav() {
+const Nav = (props) => {
 	const classes = useStyles();
+	const {loginUser, isAuth, logout} = props;
 
 	return (
 		<AppBar position="static">
 			<Container>
 				<Toolbar>
-					<Typography variant="h6" className={classes.title}>
+					<Typography component={Link} to={"/"} style={{textDecoration: "none", color:"white"}} variant="h6" className={classes.title}>
 						Clockware
 					</Typography>
-						<Button color="inherit" component={Link} to={"/"} className={classes.menuButton}>Home</Button>
-						<Button color="inherit" component={Link} to={"/admin"}>Admin</Button>
+					{isAuth ? <Button color="inherit" component={Link} to={"/admin"}className={classes.menuButton}>Admin</Button> : null}
+					{isAuth ? <Button color="inherit" onClick={logout} className={classes.menuButton}>Logout</Button> :
+						<Login loginUser={loginUser} classes={classes.menuButton}/>}
 				</Toolbar>
 			</Container>
 		</AppBar>
-
 	)
 }
 

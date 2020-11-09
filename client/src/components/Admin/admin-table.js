@@ -13,8 +13,7 @@ import {
 import AdminTableList from './Table-List/admin-table-list'
 import AdminTableHeader from "./Table-Header/admin-table-header";
 import AdminTableHeaderEditing from './Table-Header/admin-table-header-editing';
-import AutocompleteTextField from './autocomplete-text-field'
-import AdminTableHeaderOrders from "./Table-Header/admin-table-header-orders";
+
 
 const useStyles = makeStyles({
 	table: {
@@ -24,7 +23,7 @@ const useStyles = makeStyles({
 
 const AdminTable = (props) => {
 	const {subj} = props;
-	const path = `http://localhost:5000/admin/${subj}`;
+	const path = `/admin/${subj}`;
 
 	const getItems = async () => {
 		try {

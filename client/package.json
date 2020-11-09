@@ -45,5 +45,6 @@
     "@material-ui/lab": "^4.0.0-alpha.56",
     "@material-ui/pickers": "^3.2.8",
     "prop-types": "^15.7.2"
-  }
+  },
+  "proxy": "http://localhost:5000"
 }

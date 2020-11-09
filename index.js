@@ -1,111 +1,21 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const routes = require('./routes/routes')
+const routes = require('./routes/routes');
+const path = require('path');
+const PORT = process.env.PORT || 5000;
 
-//middleware
+
 app.use(cors())
 app.use(express.json());//req.body
 app.use('/', routes)
+app.use(express.static(path.join(__dirname, "client/build")))
 
-//
-//
-// //Auth
-// app.get('/admin/customers/labels', customers.getColumnNames)
-//
-//
-//
-//
-//
-// //POST new city
-// app.post('/admin/cities', async (req, res) => {
-// 	try {
-// 		const {name} = req.body;
-// 		const newCity = await pool.query(
-// 			"INSERT INTO cities (name) VALUES($1) RETURNING *", [name]
-// 		);
-// 		res.json(newCity.rows[0])
-// 	} catch (e) {
-// 		console.error(e.message);
-// 	}
-// })
-// //GET all cities
-// app.get('/admin/cities', async (req, res) => {
-// 	try {
-// 		const allCities = await pool.query(
-// 			"SELECT * FROM cities"
-// 		);
-// 		res.json(allCities.rows)
-// 	} catch (e) {
-// 		console.error(e.message)
-// 	}
-// })
-//
-// //Get cities labels
-// app.get('/admin/cities/labels', async (req, res) => {
-// 	try {
-// 		const getLabels = await pool.query(
-// 			"SELECT column_name FROM information_schema.columns WHERE table_name = 'cities'");
-// 		res.json(getLabels.rows);
-// 	} catch (err) {
-// 		console.error(err.message)
-// 	}
-// })
-// //GET city
-// app.get('/admin/cities/:id', async (req, res) => {
-// 	try {
-// 		const {id} = req.params;
-// 		const getCity = await pool.query(
-// 			"SELECT * FROM cities WHERE id_city = $1", [id]
-// 		);
-// 		res.json(getCity.rows[0])
-// 	} catch (e) {
-// 		console.error(e.message)
-// 	}
-// })
-// //PUT new city
-// app.put('/admin/cities/:id', async (req, res) => {
-// 	try {
-// 		const {id} = req.params;
-// 		const {city} = req.body;
-// 		const updateCity = await pool.query(
-// 			"UPDATE cities SET name = $1 WHERE id = $2", [city, id]
-// 		);
-// 		res.json("City was updated")
-// 	} catch (e) {
-// 		console.error(e.message)
-// 	}
-// })
-// //DELETE a city
-// app.delete('/admin/cities/:id', async (req, res) => {
-// 	try {
-// 		const {id} = req.params;
-// 		const delCity = await pool.query(
-// 			"DELETE FROM cities WHERE id = $1", [id]
-// 		);
-// 		res.json("City was deleted")
-// 	} catch (e) {
-// 		console.error(e.message)
-// 	}
-// })
-//
-// //POST masters list
-// // app.post("/admin/masters", async (req, res) => {
-// // 	try {
-// // 		const {name, surname, rating, cityId} = req.body;
-// // 		const newMaster = await pool.query(
-// // 			"INSERT INTO masters (name, surname, rating, cityId) VALUES ($1, $2, $3, $4) RETURNING *",
-// // 			[name, surname, rating, cityId]
-// // 		);
-// // 		res.json(newMaster.rows);
-// // 	} catch (e) {
-// // 		console.error(e.message)
-// // 	}
-// // })
+if (process.env.NODE_ENV === "production") {
+	app.use(express.static(path.join(__dirname, "client/build")))
+}
+console.log(path.join(__dirname, "client/build"))
 
-
-
-
-app.listen(5000, () => {
-	console.log('Server has started on port 5000..')
+app.listen(PORT, () => {
+	console.log(`Server has started on port ${PORT}..`)
 })

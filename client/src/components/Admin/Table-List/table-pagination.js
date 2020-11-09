@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const Pagination = (props) => {
+const TablePagination = (props) => {
 	const classes = useStyles();
 	const theme = useTheme();
 	const { count, page, rowsPerPage, onChangePage } = props;
@@ -34,7 +34,6 @@ const Pagination = (props) => {
 	const handleLastPageButtonClick = (event) => {
 		onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
 	};
-
 	return (
 		<div className={classes.root}>
 			<IconButton
@@ -65,11 +64,11 @@ const Pagination = (props) => {
 	);
 }
 
-Pagination.propTypes = {
+TablePagination.propTypes = {
 	count: PropTypes.number.isRequired,
 	onChangePage: PropTypes.func.isRequired,
 	page: PropTypes.number.isRequired,
 	rowsPerPage: PropTypes.number.isRequired,
 };
 
-export default Pagination
+export default TablePagination

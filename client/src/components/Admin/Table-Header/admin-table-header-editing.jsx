@@ -2,8 +2,7 @@ import {TableCell, TableRow, TextField} from "@material-ui/core";
 import React from "react";
 import PropTypes from "prop-types";
 import TableButton from "../table-button";
-import DoneIcon from '@material-ui/icons/Done';
-import ClearIcon from '@material-ui/icons/Clear';
+import {Done, Clear} from '@material-ui/icons';
 
 
 const AdminTableHeaderEditing = (props) => {
@@ -28,8 +27,8 @@ const AdminTableHeaderEditing = (props) => {
 				)
 			})}
 			<TableButton handleClick={state === 'isAdding' ? addItem : updateItem} title='Edit'
-									 icon={<DoneIcon fontSize="small"/>}/>
-			<TableButton handleClick={cancelInput} title='Cancel' icon={<ClearIcon fontSize="small"/>}/>
+									 icon={<Done fontSize="small"/>}/>
+			<TableButton handleClick={cancelInput} title='Cancel' icon={<Clear fontSize="small"/>}/>
 		</TableRow>
 	)
 }

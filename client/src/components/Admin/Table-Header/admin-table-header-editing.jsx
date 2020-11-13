@@ -3,7 +3,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import TableButton from "../table-button";
 import DoneIcon from "@material-ui/icons/Done";
-import ClearIcon from "@material-ui/icons/Clear";
+import ClearIcon from '@material-ui/icons/Clear';
 
 
 const AdminTableHeaderEditing = (props) => {

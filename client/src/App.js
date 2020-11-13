@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import './App.css';
 import Nav from "./Nav"
-import HomePage from './components/Main/main'
+import HomePage from './components/Main/Main'
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
 import AdminMain from "./components/Admin/admin-main";
 

@@ -11,7 +11,7 @@ const AdminTableHeader = (props) => {
 
 	return (
 		<TableRow component='tr'>
-			<TableCell>#</TableCell>
+			<TableCell>{columnNames.length? '#' : null}</TableCell>
 			{columnNames.map((columnName, i) => {
 				return (
 					<TableCell key={i}>

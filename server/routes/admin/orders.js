@@ -46,7 +46,7 @@ router.put('/:id', async (req, res) => {
 router.get('/', async (req, res) => {
 	try {
 		const ordersList = await pool.query(
-			"SELECT o.id, m.name as master, c.name as customer, s.name as service, ci.name as city, startAt as start, endAt as end FROM orders o LEFT JOIN masters m ON o.masterId=m.id LEFT JOIN customers c ON o.customerId = c.id LEFT JOIN services s ON o.serviceId=s.id LEFT JOIN cities ci ON o.cityId = ci.id"
+			"SELECT o.id, m.name as master, c.name as customer, s.name as service, ci.name as city, to_char(startAt, 'Dy DD/MM/YY HH24:MI') as start, to_char(endAt, 'DD/MM/YY HH24:MI') as end FROM orders o LEFT JOIN masters m ON o.masterId=m.id LEFT JOIN customers c ON o.customerId = c.id LEFT JOIN services s ON o.serviceId=s.id LEFT JOIN cities ci ON o.cityId = ci.id"
 		)
 		console.log(res.json(ordersList.rows))
 	} catch (e) {

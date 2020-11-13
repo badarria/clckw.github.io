@@ -41,11 +41,10 @@ const AutocompleteTextField = (props) => {
 		getOptionProps,
 		groupedOptions,
 	} = useAutocomplete({
-
 		id: 'someid',
 		options: data,
 		getOptionLabel: (option) => option.name,
-		getOptionSelected: (option) => option.id
+		onChange: (event, cf)
 	});
 
 	return (

@@ -55,7 +55,6 @@ const AdminTable = (props) => {
 				headers: {"Content-Type": "application/json"},
 				body: JSON.stringify(body)
 			})
-			console.log(edit)
 			await getItems();
 			cancelInput();
 		} catch (err) {
@@ -82,7 +81,7 @@ const AdminTable = (props) => {
 		try {
 			const res = await fetch(`${path}/columnNames`);
 			const req = await res.json();
-			const names = await req.map(({column_name}) => column_name);
+			const names = await req.map(({column_name}) => column_name.replace(/\Bid|\Bat$/i, ''));
 			setColumnNames(names);
 		} catch (err) {
 			console.error(err.message)
@@ -102,7 +101,7 @@ const AdminTable = (props) => {
 
 
 	const createNewItem = () => {
-		const columns = [...columnNames].filter(key => key !== 'id').map(item => item.replace(/id$/, ''));
+		const columns = [...columnNames].filter(key => key !== 'id');
 		const data = columns.reduce((acc, key) => {
 			return {...acc, [key]: ''}
 		}, {})

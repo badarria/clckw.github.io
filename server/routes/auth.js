@@ -5,24 +5,23 @@ const jwtGenerator = require("../utils/jwtGenerator")
 const authorization = require("../middleware/authorization")
 
 //post new
+// router.post("/", async (req, res) => {
+// 	try {
+// 		const {name, password} = req.body;
+// 		const saltRound = 10;
+// 		const salt = await bcrypt.genSalt(saltRound);
+// 		const bcryptPassword = await bcrypt.hash(password, salt);
+// 		const newUser = await pool.query("INSERT INTO admin (name, password) VALUES ($1, $2) RETURNING *", [name, bcryptPassword])
+// 		const token = jwtGenerator(newUser.rows[0].id);
+// 		res.json({token})
+//
+// 	} catch (err) {
+// 		console.error(err.message);
+// 		res.status(500).send("Server error")
+// 	}
+// })
+
 router.post("/", async (req, res) => {
-	try {
-		const {name, password} = req.body;
-		const saltRound = 10;
-		const salt = await bcrypt.genSalt(saltRound);
-		const bcryptPassword = await bcrypt.hash(password, salt);
-		const newUser = await pool.query("INSERT INTO admin (name, password) VALUES ($1, $2) RETURNING *", [name, bcryptPassword])
-
-		const token = jwtGenerator(newUser.rows[0].id);
-		res.json({token})
-
-	} catch (err) {
-		console.error(err.message);
-		res.status(500).send("Server error")
-	}
-})
-
-router.post("/login", async (req, res) => {
 	try {
 		const {name, password} = req.body;
 		const user = await pool.query("SELECT * FROM admin WHERE name = $1", [name]);

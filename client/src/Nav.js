@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import {Link} from 'react-router-dom'
 import {Container, AppBar, Toolbar, Typography, Button, makeStyles} from "@material-ui/core"
-import Login from './components/Main/login'
+import Login from './components/Main/Login'
 
 
 const useStyles = makeStyles((theme) => ({

@@ -45,7 +45,7 @@ const AlertDialog = (props) => {
 
 AlertDialog.defaultProps = {
 	messageQuestion: 'Are you sure?',
-	description: 'It will be permanently removed from the database.',
+	description: 'This will be permanently removed from the database.',
 }
 
 export default AlertDialog

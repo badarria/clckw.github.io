@@ -5,7 +5,7 @@ DATABASE clockware;
 
 CREATE TABLE masters
 (
-    id      serial primary key,
+    id      serial NOT NULL primary key,
     name    varchar(50) not null,
     surname varchar(50) not null,
     city    integer     REFERENCES cities ON DELETE SET NULL,
@@ -24,7 +24,7 @@ CREATE TABLE customers
     id      serial primary key,
     name    varchar       not null,
     surname varchar       not null,
-    email   citext unique not null
+    email   varchar unique not null
 );
 
 CREATE TABLE cities
@@ -59,5 +59,5 @@ CREATE TABLE admin
     name     VARCHAR(255) NOT NULL,
     password VARCHAR(255)      NOT NULL
 );
-
-insert into admin (name, password) values ('admin', 'admin123');
+--create extension if not exists "uuid-ossp";
+--insert into admin (name, password) values ('admin', 'admin123');

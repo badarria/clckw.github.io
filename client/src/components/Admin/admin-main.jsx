@@ -71,8 +71,8 @@ const AdminMain = () => {
 					<Tab label="Customers" {...a11yProps(0)} />
 					<Tab label="Masters" {...a11yProps(1)} />
 					<Tab label="Cities" {...a11yProps(2)} />
-					<Tab label="Orders" {...a11yProps(3)} />
-					<Tab label="Services" {...a11yProps(4)} />
+					<Tab label="Services" {...a11yProps(3)} />
+					<Tab label="Orders" {...a11yProps(4)} />
 
 				</Tabs>
 				<TabPanel value={value} index={0}>
@@ -85,10 +85,10 @@ const AdminMain = () => {
 					<AdminTable subj='cities'/>
 				</TabPanel>
 				<TabPanel value={value} index={3}>
-					<AdminTable subj='orders'/>
+					<AdminTable subj='services'/>
 				</TabPanel>
 				<TabPanel value={value} index={4}>
-					<AdminTable subj='services'/>
+					<AdminTable subj='orders'/>
 				</TabPanel>
 			</Box>
 		</Container>

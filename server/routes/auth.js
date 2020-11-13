@@ -1,8 +1,8 @@
 const router = require('express').Router();
-const pool = require('../db')
-const bcrypt = require('bcrypt')
-const jwtGenerator = require("../utils/jwtGenerator")
-const authorization = require("../middleware/authorization")
+const pool = require('../db');
+const bcrypt = require('bcrypt');
+const jwtGenerator = require("../utils/jwtGenerator");
+const authorization = require("../middleware/authorization");
 
 //post new
 // router.post("/", async (req, res) => {

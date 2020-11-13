@@ -52,7 +52,6 @@ insert into orders (masterId, customerId, cityId, serviceId, startAt, endAt)
 values (3, 16, 2, 3, '2020-11-09 17:00:00', '2020-11-09 18:00:00');
 
 
-
 CREATE TABLE admin
 (
     id       uuid PRIMARY KEY DEFAULT uuid_generate_v4(),

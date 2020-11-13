@@ -3,8 +3,8 @@ import TableRow from "@material-ui/core/TableRow";
 import AdminTableListItem from "./admin-table-list-i";
 import PropTypes from "prop-types";
 import {TableCell} from "@material-ui/core";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import TableButton from "../table-button";
 import AlertDialog from "../dialog-window";
 

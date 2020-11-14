@@ -3,7 +3,7 @@ const app = express();
 const cors = require('cors');
 const routes = require('./server/routes/routes');
 const path = require('path');
-require('dotenv').config()
+
 const PORT = process.env.PORT || 5000;
 
 
@@ -16,7 +16,7 @@ app.use('/', routes)
 if (process.env.NODE_ENV === "production") {
 	app.use(express.static(path.join(__dirname, "client/build")))
 }
-console.log(path.join(__dirname, "client/build"))
+
 
 app.listen(PORT, () => {
 	console.log(`Server has started on port ${PORT}..`)

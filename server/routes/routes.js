@@ -17,7 +17,7 @@ routes.use('/admin/services', services);
 routes.use('/auth', auth);
 routes.use('/admin-page', adminPage)
 
-app.get('*', function(req, res) {
+routes.get('*', function(req, res) {
 	res.sendFile(path.join(__dirname, '../../client/build', 'index.html'));
 })
 

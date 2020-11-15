@@ -22,13 +22,13 @@ const Nav = (props) => {
 	const {loginUser, isAuth, logout} = props;
 
 	return (
-		<AppBar position="static">
+				<AppBar position="static">
 			<Container>
 				<Toolbar>
 					<Typography component={Link} to={"/"} style={{textDecoration: "none", color:"white"}} variant="h6" className={classes.title}>
 						Clockware
 					</Typography>
-					{isAuth ? <Button color="inherit" component={Link} to={"/admin"}className={classes.menuButton}>Admin</Button> : null}
+					{isAuth ? <Button color="inherit" component={Link} to={"/admin"} className={classes.menuButton}>Admin</Button> : null}
 					{isAuth ? <Button color="inherit" onClick={logout} className={classes.menuButton}>Logout</Button> :
 						<Login loginUser={loginUser} classes={classes.menuButton}/>}
 				</Toolbar>

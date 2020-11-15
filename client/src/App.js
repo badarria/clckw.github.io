@@ -4,11 +4,11 @@ import Nav from "./Nav"
 import HomePage from './components/Main/Main'
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
 import AdminMain from "./components/Admin/admin-main";
+import {parse} from "dotenv";
 
 
 const App = () => {
 	const [isAuth, setAuth] = useState(false);
-
 
 	const loginUser = async (data) => {
 		try {
@@ -18,8 +18,11 @@ const App = () => {
 				body: JSON.stringify(data),
 			})
 			const parseRes = await res.json()
-			localStorage.setItem("token", parseRes.token)
-			setAuth(true);
+
+			if (parseRes.token) {
+				localStorage.setItem("token", parseRes.token)
+				setAuth(true);
+			}
 
 		} catch (err) {
 			console.error(err.message);

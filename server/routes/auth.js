@@ -32,7 +32,7 @@ router.post("/", async (req, res) => {
 		if (!validPassword) {
 			return res.status(401).json("Password or email is incorrect")
 		}
-		const token = jwtGenerator(user.rows[0].id);
+		const token =  jwtGenerator(user.rows[0].id);
 		res.json({token})
 
 	} catch (err) {

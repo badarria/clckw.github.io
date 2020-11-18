@@ -13,6 +13,7 @@ import {
 import AdminTableList from './Table-List/admin-table-list'
 import AdminTableHeader from "./Table-Header/admin-table-header";
 import AdminTableHeaderEditing from './Table-Header/admin-table-header-editing';
+import AdminTableHeaderOrders from "./Table-Header/admin-table-header-orders";
 
 
 const useStyles = makeStyles({
@@ -145,11 +146,12 @@ const AdminTable = (props) => {
 			<TableContainer component={Paper}>
 				<Table className={classes.table} aria-label={`${subj} table`}>
 					<TableHead>
-						{state ?
-							<AdminTableHeaderEditing cancelInput={cancelInput} dataToChange={dataToChange} state={state}
-																			 updateItem={updateItem}
-																			 editItem={editItem} addItem={addItem}/> :
-							<AdminTableHeader columnNames={columnNames} createNewItem={createNewItem}/>}
+						<AdminTableHeaderOrders cancelInput={cancelInput} dataToChange={dataToChange} updateItem={updateItem} editItem={editItem} addItem={addItem}/>
+						{/*{state ?*/}
+						{/*	<AdminTableHeaderEditing cancelInput={cancelInput} dataToChange={dataToChange} state={state}*/}
+						{/*													 updateItem={updateItem}*/}
+						{/*													 editItem={editItem} addItem={addItem}/> :*/}
+						{/*	<AdminTableHeader columnNames={columnNames} createNewItem={createNewItem}/>}*/}
 					</TableHead>
 					<TableBody>
 						<AdminTableList data={itemsPerPage} deleteItem={deleteItem} pushItemToEdit={pushItemToEdit}

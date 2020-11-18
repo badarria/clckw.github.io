@@ -41,6 +41,7 @@ const App = () => {
 			console.error(err.message)
 		}
 	}
+
 	const logout = () => {
 		localStorage.removeItem("token");
 		setAuth(false);

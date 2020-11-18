@@ -5,8 +5,10 @@ import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import PropTypes from "prop-types";
 import DoneIcon from "@material-ui/icons/Done";
 import ClearIcon from "@material-ui/icons/Clear";
-import AutocompleteTextField from '../autocomplete-text-field'
+
 import DatePicker from "../date-picker";
+import AutocompleteField from "../autocomplete-field.jsx";
+
 
 const AdminTableHeaderOrders = (props) => {
 	const {state, dataToChange, editItem, addItem, updateItem, cancelInput} = props
@@ -81,16 +83,16 @@ const AdminTableHeaderOrders = (props) => {
 		<TableRow component='tr'>
 			<TableCell colSpan={2}/>
 			<TableCell >
-				<AutocompleteTextField data={data.master}/>
+				<AutocompleteField data={data.master} label="Master"/>
 			</TableCell>
 			<TableCell>
-				<AutocompleteTextField data={data.customer}/>
+				<AutocompleteField data={data.customer} idToEdit={16} label="Customer"/>
 			</TableCell>
 			<TableCell>
-				<AutocompleteTextField data={data.service} />
+				<AutocompleteField data={data.service} label="Service"/>
 			</TableCell>
 			<TableCell>
-				<AutocompleteTextField data={data.city} />
+				<AutocompleteField data={data.city} label="City"/>
 			</TableCell>
 			<TableCell colSpan={2}>
 				<DatePicker timestamp='2020-11-08T14:00:00.000Z'/>

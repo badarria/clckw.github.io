@@ -26,6 +26,7 @@
     "webpack-dev-server": "^3.11.0"
   },
   "devDependencies": {
+    "@material-ui/pickers": "^3.2.10",
     "dotenv": "^8.2.0"
   }
 }

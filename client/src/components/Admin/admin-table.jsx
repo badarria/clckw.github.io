@@ -17,8 +17,17 @@ import AdminTableHeaderOrders from "./Table-Header/admin-table-header-orders";
 
 
 const useStyles = makeStyles({
+	root: {
+		width: 'fit-content',
+		margin: "56px auto 80px",
+	},
 	table: {
 		minWidth: 600,
+		width: 'auto'
+	},
+	head: {
+		textTransform: 'capitalize',
+		background: '#bfbfbf33'
 	},
 });
 
@@ -143,15 +152,15 @@ const AdminTable = (props) => {
 
 	return (
 		<Fragment>
-			<TableContainer component={Paper}>
+			<TableContainer component={Paper} className={classes.root}>
 				<Table className={classes.table} aria-label={`${subj} table`}>
-					<TableHead>
-						<AdminTableHeaderOrders cancelInput={cancelInput} dataToChange={dataToChange} updateItem={updateItem} editItem={editItem} addItem={addItem}/>
-						{/*{state ?*/}
-						{/*	<AdminTableHeaderEditing cancelInput={cancelInput} dataToChange={dataToChange} state={state}*/}
-						{/*													 updateItem={updateItem}*/}
-						{/*													 editItem={editItem} addItem={addItem}/> :*/}
-						{/*	<AdminTableHeader columnNames={columnNames} createNewItem={createNewItem}/>}*/}
+					<TableHead className={classes.head}>
+						{/*<AdminTableHeaderOrders cancelInput={cancelInput} dataToChange={dataToChange} updateItem={updateItem} editItem={editItem} addItem={addItem}/>*/}
+						{state ?
+							<AdminTableHeaderEditing cancelInput={cancelInput} dataToChange={dataToChange} state={state}
+																			 updateItem={updateItem}
+																			 editItem={editItem} addItem={addItem}/> :
+							<AdminTableHeader columnNames={columnNames} createNewItem={createNewItem}/>}
 					</TableHead>
 					<TableBody>
 						<AdminTableList data={itemsPerPage} deleteItem={deleteItem} pushItemToEdit={pushItemToEdit}

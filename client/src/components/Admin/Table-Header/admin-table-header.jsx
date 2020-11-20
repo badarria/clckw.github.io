@@ -1,13 +1,14 @@
-import {TableRow, TableCell} from "@material-ui/core";
+import {TableRow, TableCell,makeStyles} from "@material-ui/core";
 import React from "react";
 import PropTypes from "prop-types";
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import TableButton from "../table-button";
 
 
+
+
 const AdminTableHeader = (props) => {
 	const {columnNames, createNewItem} = props;
-	console.log(columnNames);
 
 	return (
 		<TableRow component='tr'>

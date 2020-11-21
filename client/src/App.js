@@ -3,7 +3,7 @@ import './App.css';
 import Nav from "./Nav"
 import HomePage from './components/Main/Main'
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
-import AdminMain from "./components/Admin/admin-main";
+import Main from "./components/Admin/Pages/main";
 import {parse} from "dotenv";
 
 
@@ -57,7 +57,7 @@ const App = () => {
 			<Nav loginUser={loginUser} isAuth={isAuth} logout={logout}/>
 			<Switch>
 				<Route path="/" exact component={HomePage}/>
-				{isAuth ? <Route path="/admin" component={AdminMain}/> : <Redirect to="/"/>}
+				{isAuth ? <Route path="/admin" component={Main}/> : <Redirect to="/"/>}
 			</Switch>
 		</Router>
 	);

@@ -9,7 +9,7 @@ import TableButton from "../table-button";
 import AlertDialog from "../dialog-window";
 
 const AdminTableList = (props) => {
-	const {data, deleteItem, pushItemToEdit, state} = props;
+	const {data, deleteSelectedItem, pushItemToEdit, state} = props;
 
 
 	return (
@@ -23,7 +23,7 @@ const AdminTableList = (props) => {
 					<AdminTableListItem data={data}/>
 					<TableButton handleClick={() => pushItemToEdit(item)} title='Edit' icon={<EditIcon fontSize="small"/>}
 											 disabled={!!state}/>
-					<AlertDialog acceptFunc={() => deleteItem(id)} title='Delete' icon={<DeleteIcon fontSize="small"/>}
+					<AlertDialog acceptFunc={() => deleteSelectedItem(id)} title='Delete' icon={<DeleteIcon fontSize="small"/>}
 											 disabled={!!state}/>
 				</TableRow>
 			)

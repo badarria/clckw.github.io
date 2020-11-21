@@ -7,7 +7,7 @@ import DoneIcon from "@material-ui/icons/Done";
 import ClearIcon from "@material-ui/icons/Clear";
 
 import DatePicker from "../date-picker";
-import AutocompleteField from "../autocomplete-field.jsx";
+import AutocompleteField from "./autocomplete-field.jsx";
 
 
 const AdminTableHeaderOrders = (props) => {

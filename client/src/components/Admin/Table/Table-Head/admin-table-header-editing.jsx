@@ -6,8 +6,8 @@ import {Done, Clear} from '@material-ui/icons';
 
 
 const AdminTableHeaderEditing = (props) => {
-	const {state, dataToChange, editItem, addItem, updateItem, cancelInput} = props
-	const labels = Object.keys(dataToChange);
+	const {state, data, edit, add, update, cancel} = props
+	const labels = Object.keys(data);
 
 	return (
 		<TableRow component='tr'>
@@ -17,28 +17,28 @@ const AdminTableHeaderEditing = (props) => {
 				return (
 					<TableCell key={i}>
 						<TextField type={label === "email" ? 'email' : 'text'}
-											 value={dataToChange[label] || ''}
-											 onChange={(e) => editItem(label, e.target.value)}
+											 value={data[label] || ''}
+											 onChange={(e) => edit(label, e.target.value)}
 											 label={label}
-											 required="true"
+											 // required="true"
 											 disabled={label === 'id'}
 						/>
 					</TableCell>
 				)
 			})}
-			<TableButton handleClick={state === 'isAdding' ? addItem : updateItem} title='Edit'
+			<TableButton handleClick={state === 'isAdding' ? add : update} title='Edit'
 									 icon={<Done fontSize="small"/>}/>
-			<TableButton handleClick={cancelInput} title='Cancel' icon={<Clear fontSize="small"/>}/>
+			<TableButton handleClick={cancel} title='Cancel' icon={<Clear fontSize="small"/>}/>
 		</TableRow>
 	)
 }
 AdminTableHeaderEditing.propTypes = {
 	state: PropTypes.string,
-	dataToChange: PropTypes.object.isRequired,
-	editItem: PropTypes.func.isRequired,
-	addItem: PropTypes.func.isRequired,
-	updateItem: PropTypes.func.isRequired,
-	cancelInput: PropTypes.func.isRequired,
+	data: PropTypes.object.isRequired,
+	edit: PropTypes.func.isRequired,
+	add: PropTypes.func.isRequired,
+	update: PropTypes.func.isRequired,
+	cancel: PropTypes.func.isRequired,
 }
 
 

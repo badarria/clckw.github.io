@@ -8,25 +8,25 @@ import TableButton from "../table-button";
 
 
 const AdminTableHeader = (props) => {
-	const {columnNames, createNewItem} = props;
+	const {columns, create} = props;
 
 	return (
 		<TableRow component='tr'>
-			<TableCell>{columnNames.length? '#' : null}</TableCell>
-			{columnNames.map((columnName, i) => {
+			<TableCell>{columns.length? '#' : null}</TableCell>
+			{columns.map((column, i) => {
 				return (
 					<TableCell key={i}>
-						{columnName}
+						{column}
 					</TableCell>
 				)
 			})}
-			<TableButton handleClick={createNewItem} colSpan={2} title='Add New' icon={<AddCircleOutlineIcon/>}/>
+			<TableButton handleClick={create} colSpan={2} title='Add New' icon={<AddCircleOutlineIcon/>}/>
 		</TableRow>
 	)
 }
 AdminTableHeader.propTypes = {
-	columnNames: PropTypes.array.isRequired,
-	createNewItem: PropTypes.func.isRequired
+	columns: PropTypes.array.isRequired,
+	create: PropTypes.func.isRequired
 };
 
 export default AdminTableHeader

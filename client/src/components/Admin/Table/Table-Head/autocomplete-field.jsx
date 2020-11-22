@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useRef, Fragment} from "react";
-import {makeStyles, FormControl, InputLabel, TextField, List, ListItem, ListItemText} from '@material-ui/core';
+import {makeStyles, FormControl,  TextField, List, ListItem, ListItemText} from '@material-ui/core';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -28,20 +28,17 @@ const useStyles = makeStyles((theme) => ({
 
 
 const AutocompleteField = (props) => {
-
-	const {data, idToEdit = 0, label} = props;
-
-	const editedItem = idToEdit ? data.filter(({id}) => id === idToEdit) : [{'id': null, 'name': ''}]
-
+	const {data, label} = props;
+	const editedItem = data[0]
 
 	const [display, setDisplay] = useState(false);
-	const [search, setSearch] = useState(...editedItem);
+	const [search, setSearch] = useState(editedItem);
 	const wrapperRef = useRef(null);
 	const classes = useStyles();
 
 	const options = data.map(({id, name}) => {
 		return {'id': id, 'name': name.toLowerCase()}
-	}).filter(({name}) => name.includes(search.name.toLowerCase()));
+	}).filter(({name}) => name && name.includes(search.name.toLowerCase()));
 
 	const setItem = ({id, name}) => {
 		setSearch({'id': id, 'name': name});
@@ -62,7 +59,9 @@ const AutocompleteField = (props) => {
 		}
 	}
 
-	const handleChange = value => {
+	const handleChange = e => {
+		e.preventDefault()
+		const {value} = e.target;
 		setSearch({name: value});
 		!options.length && (setDisplay(false));
 	}
@@ -75,8 +74,8 @@ const AutocompleteField = (props) => {
 	return (
 		<Fragment>
 			<FormControl>
-			<TextField label={label} onClick={() => setDisplay(!display)} value={search.name}
-									 onChange={(e) => handleChange(e.target.value)} onBlur={handleBlur}/>
+				<TextField label={label} onClick={() => setDisplay(!display)} value={search.name}
+									 onChange={(e) => handleChange(e)} onBlur={handleBlur} autoComplete='nope'/>
 			</FormControl>
 			{display && (
 				<List className={classes.listbox} ref={wrapperRef}>

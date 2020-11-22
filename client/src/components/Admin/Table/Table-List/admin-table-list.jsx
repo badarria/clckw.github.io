@@ -9,21 +9,20 @@ import TableButton from "../table-button";
 import AlertDialog from "../dialog-window";
 
 const AdminTableList = (props) => {
-	const {data, deleteSelectedItem, pushItemToEdit, state} = props;
-
+	const {data, columns, del, pushItemToEdit, state} = props;
 
 	return (
 		data.map((item, indx) => {
-			const data = Object.entries(item);
+
 			const id = item.id;
 
 			return (
 				<TableRow key={id} component='tr'>
 					<TableCell component='td'>{indx + 1}</TableCell>
-					<AdminTableListItem data={data}/>
+					<AdminTableListItem data={item} columns={columns}/>
 					<TableButton handleClick={() => pushItemToEdit(item)} title='Edit' icon={<EditIcon fontSize="small"/>}
 											 disabled={!!state}/>
-					<AlertDialog acceptFunc={() => deleteSelectedItem(id)} title='Delete' icon={<DeleteIcon fontSize="small"/>}
+					<AlertDialog acceptFunc={() => del(id)} title='Delete' icon={<DeleteIcon fontSize="small"/>}
 											 disabled={!!state}/>
 				</TableRow>
 			)

@@ -13,6 +13,18 @@ router.get('/columnNames', async (req, res) => {
 	}
 })
 
+//GET Foreign keys for masters
+router.get('/foreignKeys', async (req, res) => {
+	try {
+		const getCityNames = await pool.query(
+			"SELECT * FROM cities");
+		res.json({city: getCityNames.rows})
+
+	} catch (err) {
+		console.error(err.message)
+	}
+})
+
 //PUT master
 router.put('/:id', async (req, res) => {
 	try {
@@ -27,11 +39,11 @@ router.put('/:id', async (req, res) => {
 	}
 })
 
-//GET (customers list)
+//GET (masters list)
 router.get('/', async (req, res) => {
 	try {
 		const mastersList = await pool.query(
-			"SELECT m.id, m.name, m.surname, ci.name as city, m.rating FROM masters m LEFT JOIN cities ci ON m.city = ci.id"
+			"SELECT m.id, m.name, m.surname, ci.name as city, m.city as city_id, m.rating FROM masters m LEFT JOIN cities ci ON m.city = ci.id"
 		)
 		res.json(mastersList.rows)
 	} catch (e) {
@@ -39,7 +51,7 @@ router.get('/', async (req, res) => {
 	}
 })
 
-//DELETE (a customer)
+//DELETE (a master)
 router.delete('/:id', async (req, res) => {
 	try {
 		const {id} = req.params;

@@ -3,13 +3,13 @@ import {TableCell} from "@material-ui/core";
 import PropTypes from "prop-types";
 
 const AdminTableListItem = (props) => {
-	const {data} = props;
+	const {data, columns } = props;
 
 	return (
 		<Fragment>
-			{data.map(([key, value], i) => {
+			{columns.map((key, i) => {
 				return (
-					<TableCell key={i}>{value}</TableCell>
+					<TableCell key={i}>{data[key]}</TableCell>
 				)
 			})}
 

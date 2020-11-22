@@ -28,7 +28,7 @@ const useStyles = makeStyles({
 });
 
 const AdmTable = (props) => {
-	const {children, itemsOnPage = 5, items, del, pushItemToEdit, state} = props;
+	const {children, itemsOnPage = 5, items, columns, del, pushItemToEdit, state} = props;
 
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(itemsOnPage);
@@ -51,7 +51,7 @@ const AdmTable = (props) => {
 					</TableHead>
 					<TableBody>
 						<AdminTableList data={itemsPerPage} del={del} pushItemToEdit={pushItemToEdit}
-														state={state}/>
+														state={state} columns={columns}/>
 						{emptyRows > 0 && (
 							<TableRow style={{height: 53 * emptyRows}}>
 								<TableCell component='td'/>

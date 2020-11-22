@@ -3,6 +3,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import TableButton from "../table-button";
 import {Done, Clear} from '@material-ui/icons';
+import AutocompleteField from "./autocomplete-field";
 
 
 const AdminTableHeaderEditing = (props) => {
@@ -16,13 +17,14 @@ const AdminTableHeaderEditing = (props) => {
 			{labels.map((label, i) => {
 				return (
 					<TableCell key={i}>
+						{Array.isArray(data[label]) ? <AutocompleteField data={data[label]} label={label} /> :
 						<TextField type={label === "email" ? 'email' : 'text'}
 											 value={data[label] || ''}
 											 onChange={(e) => edit(label, e.target.value)}
 											 label={label}
 											 // required="true"
 											 disabled={label === 'id'}
-						/>
+						/>}
 					</TableCell>
 				)
 			})}

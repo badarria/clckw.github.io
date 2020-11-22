@@ -52,7 +52,7 @@ const getColumnNames = async (subj) => {
 	try {
 		const res = await fetch(`${path}/${subj}/columnNames`);
 		const req = await res.json();
-		const names = await req.map(({column_name}) => column_name.replace(/\Bid|\Bat$/i, ''));
+		const names = await req.map(({column_name}) => column_name.replace(/\Bid|\Bat$/i, '')).filter(name => !name.match(/_/));
 		return names;
 	} catch (err) {
 		console.error(err.message)

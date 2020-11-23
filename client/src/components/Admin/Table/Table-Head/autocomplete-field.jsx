@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useRef, Fragment} from "react";
-import {makeStyles, FormControl,  TextField, List, ListItem, ListItemText} from '@material-ui/core';
+import {makeStyles, FormControl, TextField, List, ListItem, ListItemText} from '@material-ui/core';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const AutocompleteField = (props) => {
-	const {data, label} = props;
+	const {data, label, edit, helper} = props;
 	const editedItem = data[0]
 
 	const [display, setDisplay] = useState(false);
@@ -42,7 +42,8 @@ const AutocompleteField = (props) => {
 
 	const setItem = ({id, name}) => {
 		setSearch({'id': id, 'name': name});
-		setDisplay(false)
+		setDisplay(false);
+		edit(`${label}_id`, id)
 	}
 
 	useEffect(() => {
@@ -67,7 +68,11 @@ const AutocompleteField = (props) => {
 	}
 
 	const handleBlur = () => {
-		!options.length && (setSearch({"id": null, "name": ""}));
+		if (!options.length) {
+			setSearch({"id": null, "name": ""});
+			edit(`${label}_id`, null)
+		}
+		;
 	}
 
 
@@ -75,7 +80,7 @@ const AutocompleteField = (props) => {
 		<Fragment>
 			<FormControl>
 				<TextField label={label} onClick={() => setDisplay(!display)} value={search.name}
-									 onChange={(e) => handleChange(e)} onBlur={handleBlur} autoComplete='nope'/>
+									 onChange={(e) => handleChange(e)} onBlur={handleBlur} autoComplete='nope' helperText={helper} size="small"/>
 			</FormControl>
 			{display && (
 				<List className={classes.listbox} ref={wrapperRef}>

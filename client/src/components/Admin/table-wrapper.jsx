@@ -3,24 +3,37 @@ import AdmTable from "./Table/admin-table";
 import AdminTableHeaderEditing from "./Table/Table-Head/admin-table-header-editing";
 import AdminTableHeader from "./Table/Table-Head/admin-table-header";
 import {getColumnNames, addItem, updateItem, deleteItem, getItems} from './requests'
+import AdminTableHeaderOrders from "./Table/Table-Head/admin-table-header-orders";
 
 
 const TableWrapper = (props) => {
-	const [state, setState] = useState(null);
-	const [dataToChange, setDataToChange] = useState({});
-	const [columns, setColumns] = useState([]);
-	const [items, setItems] = useState([]);
 	const [changes, setChanges] = useState(0);
-	const [foreignKeys, setForeignKeys] = useState({})
+	const [globalState, setGlobalState] = useState({items: [], columns: []})
 
-	const {subj} = props
+	const {subj, helperText = {}, errorCases = {}} = props
+	const {state, dataToChange, errors, columns, foreignKeys} = globalState;
 
 	useEffect(() => {
-		getItems(subj).then(data => setItems(data));
-		getColumnNames(subj).then(data => setColumns(data));
-		getItems(`${subj}/foreignKeys`).then(data => setForeignKeys(data || {}))
-	}, [changes])
+		const getData = async () => {
+			const items = await getItems(subj)
+			const columns = await getColumnNames(subj)
+			const keys = await getItems(`${subj}/foreignKeys`)
+			return {items, columns, keys}
+		}
+		getData().then(({items, columns, keys}) => setGlobalState((globalState) => ({
+			...globalState,
+			'items': items,
+			'columns': columns,
+			'foreignKeys': keys || {}
+		})))
+	}, []);
 
+	useEffect(() => {
+		getItems(subj).then((items) => setGlobalState((globalState) => ({...globalState, 'items': items})))
+	}, [changes]);
+
+
+	console.log(globalState)
 
 	const mergeWithForeignKeys = (data) => {
 		const res = data.reduce((acc, [key, value]) => {
@@ -47,10 +60,17 @@ const TableWrapper = (props) => {
 		return res
 	}
 
+	const getHelperText = (data) => {
+		return data.reduce((acc, [key]) => {
+			acc = {...acc, [key]: helperText(key)}
+			return acc;
+		}, {})
+	}
+
 	const pushItemToEdit = (data) => {
 		const res = mergeWithForeignKeys(Object.entries(data))
-		setDataToChange(res)
-		setState('isEditing');
+		const text = getHelperText(Object.entries(data))
+		setGlobalState({...globalState, dataToChange: res, errors: {}, helper: text, state: 'isEditing'});
 	}
 
 	const pushDataToCreate = () => {
@@ -58,30 +78,45 @@ const TableWrapper = (props) => {
 			if (column !== 'id') acc.push([column, ''])
 			return acc;
 		}, []));
-		setDataToChange(res);
-		setState('isAdding')
+		const text = getHelperText(Object.entries(res))
+		setGlobalState({...globalState, dataToChange: res, errors: {}, helper: text, state: 'isAdding'});
 	}
 
 	const handleChangeData = (key, value) => {
-		setDataToChange({...dataToChange, [key]: value})
+		setGlobalState({
+			...globalState,
+			dataToChange: {...dataToChange, [key]: value},
+			errors: {
+				...errors, [key]: errorCases(key, value)
+			},
+		})
 	}
 
 	const cancelInput = () => {
-		setState(null);
-		setDataToChange({});
+		setGlobalState({
+			...globalState,
+			dataToChange: {},
+			state: null,
+		})
 	}
 
 ////////
-	const addNewItem = () => {
-		///isValid?
-		addItem(dataToChange, subj)
-			.then(cancelInput())
-			.then(setChanges(changes => ++changes))
+	const normalize = (data) => {
+		return Object.entries(data).reduce((acc, [key, value]) => {
+			if (!Array.isArray(value)) acc = {...acc, [key]: value};
+			return acc;
+		}, {})
 	}
 
-	const updateSelectedItem = () => {
+// const validation = (data) => {
+// 	return false
+// }
+
+	const pushToDB = () => {
 		///isValid?
-		updateItem(dataToChange, subj)
+		const normData = normalize(dataToChange);
+		const func = state === 'isAdding' ? addItem : updateItem;
+		func(normData, subj)
 			.then(cancelInput())
 			.then(setChanges(changes => ++changes))
 	}
@@ -94,14 +129,16 @@ const TableWrapper = (props) => {
 
 
 	return (
-		<AdmTable items={items} columns={columns} del={deleteSelectedItem} pushItemToEdit={pushItemToEdit}
-							state={state}>
-			{state ?
-				<AdminTableHeaderEditing cancel={cancelInput} data={dataToChange} state={state}
-																 update={updateSelectedItem}
-																 edit={handleChangeData} add={addNewItem}/> :
-				<AdminTableHeader columns={columns} create={pushDataToCreate}/>}
-		</AdmTable>
+		<>
+			<AdmTable data={globalState} del={deleteSelectedItem} pushItemToEdit={pushItemToEdit}>
+				{state ? subj === 'orders' ?
+					<AdminTableHeaderOrders cancel={cancelInput} push={pushToDB} edit={handleChangeData} data={globalState}/> :
+					<AdminTableHeaderEditing cancel={cancelInput} data={globalState}
+																	 push={pushToDB}
+																	 edit={handleChangeData}/> :
+					<AdminTableHeader columns={columns} create={pushDataToCreate}/>}
+			</AdmTable>
+		</>
 	)
 }
 

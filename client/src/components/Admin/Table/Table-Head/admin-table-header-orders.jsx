@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {TableCell, TableRow, TextField} from "@material-ui/core";
 import TableButton from "../table-button";
-import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+
 import PropTypes from "prop-types";
 import DoneIcon from "@material-ui/icons/Done";
 import ClearIcon from "@material-ui/icons/Clear";
@@ -11,95 +11,33 @@ import AutocompleteField from "./autocomplete-field.jsx";
 
 
 const AdminTableHeaderOrders = (props) => {
-	const {state, dataToChange, editItem, addItem, updateItem, cancelInput} = props
+	const {data, edit, push, cancel} = props
 
-
-	const data = {
-		"master": [
-			{
-				"id": 3,
-				"name": "xgn xngf"
-			}
-		],
-		"customer": [
-			{
-				"id": 19,
-				"name": "fdfafd dvdfsv"
-			},
-			{
-				"id": 16,
-				"name": "Uzhgorod fkj"
-			},
-			{
-				"id": 17,
-				"name": "ssss csc"
-			},
-			{
-				"id": 14,
-				"name": "asvsvfasf dfbsdvf"
-			},
-			{
-				"id": 20,
-				"name": "dyj dyj"
-			},
-			{
-				"id": 21,
-				"name": "cfgdg hhh"
-			},
-			{
-				"id": 15,
-				"name": "ddvv ggg xxzsvvzl"
-			},
-			{
-				"id": 22,
-				"name": "ddg gd"
-			}
-		],
-		"service": [
-			{
-				"id": 1,
-				"name": "Big Size"
-			},
-			{
-				"id": 3,
-				"name": "Small Size"
-			},
-			{
-				"id": 2,
-				"name": "Middle Size"
-			}
-		],
-		"city": [
-			{
-				"id": 2,
-				"name": "Dnepr"
-			}
-		]
-	}
-
-	const labels = Object.keys(data);
+	const {dataToChange, helper} = data;
+	console.log(dataToChange)
 
 	return (
 		<TableRow component='tr'>
 			<TableCell colSpan={2}/>
-			<TableCell >
-				<AutocompleteField data={data.master} label="Master"/>
+			<TableCell>
+				<AutocompleteField data={dataToChange.master} label='master' edit={edit} helper={helper.master}/>
 			</TableCell>
 			<TableCell>
-				<AutocompleteField data={data.customer} idToEdit={16} label="Customer"/>
+				<AutocompleteField data={dataToChange.customer} label='customer' edit={edit} helper={helper.customer}/>
 			</TableCell>
 			<TableCell>
-				<AutocompleteField data={data.service} label="Service"/>
+				<AutocompleteField data={dataToChange.city} label='city' edit={edit} helper={helper.city}/>
 			</TableCell>
 			<TableCell>
-				<AutocompleteField data={data.city} label="City"/>
+				<AutocompleteField data={dataToChange.service} label='service' edit={edit} helper={helper.service}/>
 			</TableCell>
 			<TableCell colSpan={2}>
-				<DatePicker timestamp='2020-11-08T14:00:00.000Z'/>
+				<DatePicker helperText={helper.date}/>
 			</TableCell>
-			<TableButton handleClick={state === 'isAdding' ? addItem : updateItem} title='Edit'
-									 icon={<DoneIcon fontSize="small"/>}/>
-			<TableButton handleClick={cancelInput} title='Cancel' icon={<ClearIcon fontSize="small"/>}/>
+
+			<TableButton handleClick={push} title='Edit'
+									 icon={<DoneIcon fontSize="small"/>} />
+			<TableButton handleClick={cancel} title='Cancel' icon={<ClearIcon fontSize="small"/>}/>
 		</TableRow>
 	)
 }

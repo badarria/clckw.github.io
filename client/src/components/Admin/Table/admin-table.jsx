@@ -1,4 +1,4 @@
-import React, { useState, Fragment} from 'react';
+import React, {useState, Fragment} from 'react';
 import {
 	makeStyles,
 	Paper,
@@ -28,7 +28,8 @@ const useStyles = makeStyles({
 });
 
 const AdmTable = (props) => {
-	const {children, itemsOnPage = 5, items, columns, del, pushItemToEdit, state} = props;
+	const {children, itemsOnPage = 5, data, del, pushItemToEdit} = props;
+	const {items, columns, state} = data;
 
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(itemsOnPage);

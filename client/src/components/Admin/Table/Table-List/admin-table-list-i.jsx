@@ -12,7 +12,6 @@ const AdminTableListItem = (props) => {
 					<TableCell key={i}>{data[key]}</TableCell>
 				)
 			})}
-
 		</Fragment>)
 }
 

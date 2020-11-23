@@ -7,42 +7,47 @@ import AutocompleteField from "./autocomplete-field";
 
 
 const AdminTableHeaderEditing = (props) => {
-	const {state, data, edit, add, update, cancel} = props
-	const labels = Object.keys(data);
+	const {data, edit, push, cancel} = props
+	const {dataToChange, errors, helper, state} = data;
+
+	const labels = Object.keys(dataToChange).filter(label => !label.match(/_id/));
+
 
 	return (
 		<TableRow component='tr'>
 			<TableCell/>
-			{state==='isAdding' ? <TableCell/> : null}
+			{state === 'isAdding' ? <TableCell/> : null}
 			{labels.map((label, i) => {
 				return (
 					<TableCell key={i}>
-						{Array.isArray(data[label]) ? <AutocompleteField data={data[label]} label={label} /> :
-						<TextField type={label === "email" ? 'email' : 'text'}
-											 value={data[label] || ''}
-											 onChange={(e) => edit(label, e.target.value)}
-											 label={label}
-											 // required="true"
-											 disabled={label === 'id'}
-						/>}
+						{Array.isArray(dataToChange[label]) ?
+							<AutocompleteField data={dataToChange[label]} label={label} edit={edit} helper={helper[label]}/> :
+							<TextField
+								value={dataToChange[label] || ''}
+								onChange={(e) => edit(label, e.target.value)}
+								label={label}
+								disabled={label === 'id'}
+								error={!!errors[label]}
+								helperText={errors[label] || helper[label]}
+								size="small"
+							/>
+						}
 					</TableCell>
 				)
 			})}
-			<TableButton handleClick={state === 'isAdding' ? add : update} title='Edit'
+			<TableButton handleClick={push} title='Edit'
 									 icon={<Done fontSize="small"/>}/>
 			<TableButton handleClick={cancel} title='Cancel' icon={<Clear fontSize="small"/>}/>
 		</TableRow>
 	)
 }
 AdminTableHeaderEditing.propTypes = {
-	state: PropTypes.string,
 	data: PropTypes.object.isRequired,
 	edit: PropTypes.func.isRequired,
 	add: PropTypes.func.isRequired,
 	update: PropTypes.func.isRequired,
 	cancel: PropTypes.func.isRequired,
 }
-
 
 
 export default AdminTableHeaderEditing;

@@ -10,9 +10,9 @@ router.get('/columnNames',async (req, res) => {
 		res.json(getColumnNames.rows);
 	} catch (err) {
 		console.error(err.message)
-
 	}
 })
+
 
 //PUT service
 router.put('/:id', async (req, res) => {

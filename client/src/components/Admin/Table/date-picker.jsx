@@ -1,25 +1,28 @@
 import React, {useState} from "react";
-import {DateTimePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
+import {KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 
 
 const DatePicker = (props) => {
-	const {timestamp} = props;
+	const {timestamp=new Date()} = props;
 	const [selectedDate, handleDateChange] = useState(new Date(timestamp));
 
 	return (
 		<MuiPickersUtilsProvider utils={DateFnsUtils}>
-			<DateTimePicker
+			<KeyboardDatePicker
+				disableToolbar
 				variant="inline"
-				label="Select day and time"
+				format="MM/dd/yyyy"
+				margin="normal"
+				id="date-picker-inline"
+				label="Select day"
+				disablePast
 				value={selectedDate}
 				onChange={handleDateChange}
-				minutesStep={30}
-				ampm={false}
-				format="yyyy/MM/dd HH:mm"
-				disablePast
+				KeyboardButtonProps={{
+					'aria-label': 'change date',
+				}}
 			/>
-
 		</MuiPickersUtilsProvider>
 	);
 }

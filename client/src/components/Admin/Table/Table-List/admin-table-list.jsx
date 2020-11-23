@@ -9,11 +9,11 @@ import TableButton from "../table-button";
 import AlertDialog from "../dialog-window";
 
 const AdminTableList = (props) => {
-	const {data, columns, del, pushItemToEdit, state} = props;
+	const {del, data, columns, state, pushItemToEdit} = props;
+
 
 	return (
 		data.map((item, indx) => {
-
 			const id = item.id;
 
 			return (
@@ -30,7 +30,8 @@ const AdminTableList = (props) => {
 }
 AdminTableList.propTypes = {
 	data: PropTypes.array.isRequired,
-	deleteItem: PropTypes.func.isRequired,
+	del: PropTypes.func.isRequired,
+	pushItemToEdit: PropTypes.func.isRequired,
 };
 
 export default AdminTableList

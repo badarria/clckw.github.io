@@ -14,21 +14,11 @@ router.get('/columnNames', async (req, res) => {
 	}
 })
 
-// router.get('/foreignKeys', async (req, res) => {
-// 	try {
-// 		const getCityNames = await pool.query(
-// 			"SELECT * FROM cities");
-// 		res.json({city: getCityNames.rows})
-//
-// 	} catch (err) {
-// 		console.error(err.message)
-// 	}
-// })
 
 //GET orders related data
 router.get('/foreignKeys', async (req, res) => {
 	try {
-		const masters = await pool.query("select id, name || ' ' || surname as name from masters");
+		const masters = await pool.query("select id, name || ' ' || surname as name, city as city_id from masters");
 		const customers = await pool.query("select id, name || ' ' || surname as name from customers");
 		const services = await pool.query("select id, name from services");
 		const cities = await pool.query("select * from cities")
@@ -57,7 +47,7 @@ router.put('/:id', async (req, res) => {
 router.get('/', async (req, res) => {
 	try {
 		const ordersList = await pool.query(
-			"SELECT o.id, o.masterID as master_id, o.serviceID as service_id, o.customerID as customer_id, o.cityID as city_id, m.name as master, c.name as customer, s.name as service, ci.name as city, to_char(startAt, 'Dy DD/MM/YY HH24:MI') as start, to_char(endAt, 'DD/MM/YY HH24:MI') as end FROM orders o LEFT JOIN masters m ON o.masterId=m.id LEFT JOIN customers c ON o.customerId = c.id LEFT JOIN services s ON o.serviceId=s.id LEFT JOIN cities ci ON o.cityId = ci.id"
+			"SELECT o.id, o.masterId as master_id, o.serviceId as service_id, o.customerId as customer_id, o.cityID as city_id, m.name as master, c.name as customer, s.name as service, ci.name as city, to_char(startAt, 'Dy DD/MM/YY HH24:MI') as start, to_char(endAt, 'DD/MM/YY HH24:MI') as end FROM orders o LEFT JOIN masters m ON o.masterId=m.id LEFT JOIN customers c ON o.customerId = c.id LEFT JOIN services s ON o.serviceId=s.id LEFT JOIN cities ci ON o.cityId = ci.id"
 		)
 		console.log(res.json(ordersList.rows))
 	} catch (e) {
@@ -82,9 +72,9 @@ router.delete('/:id', async (req, res) => {
 //POST new order
 router.post('/', async (req, res) => {
 	try {
-		const {master, customer, service, startAt, endAt} = req.body;
+		const {master_id, customer_id, service_id, city_id, start, end} = req.body;
 		const newOrder = await pool.query(
-			"INSERT INTO orders (master, customer, service, startAt, endAt) VALUES($1, $2, $3, $4, $5) RETURNING *", [master, customer, service, startAt, endAt]
+			"INSERT INTO orders (masterId, customerId, serviceId, cityId, startAt, endAt) VALUES($1, $2, $3, $4, $5, $6) RETURNING *", [master_id, customer_id, service_id, city_id, start, end]
 		);
 		res.json(newOrder.rows[0])
 	} catch (e) {

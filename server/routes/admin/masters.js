@@ -29,9 +29,9 @@ router.get('/foreignKeys', async (req, res) => {
 router.put('/:id', async (req, res) => {
 	try {
 		const {id} = req.params;
-		const {name, surname, rating, city} = req.body;
+		const {name, surname, rating, city_id} = req.body;
 		const updateMaster = await pool.query(
-			"UPDATE masters SET name = $1, surname = $2, rating = $3, city = $4 WHERE id = $5", [name, surname, rating, city, id]
+			"UPDATE masters SET name = $1, surname = $2, rating = $3, city = $4 WHERE id = $5", [name, surname, rating, city_id, id]
 		);
 		res.json("Master was updated")
 	} catch (e) {
@@ -66,9 +66,9 @@ router.delete('/:id', async (req, res) => {
 //POST new master
 router.post('/', async (req, res) => {
 	try {
-		const {name, surname, city, rating} = req.body;
+		const {name, surname, city_id, rating} = req.body;
 		const newCity = await pool.query(
-			"INSERT INTO masters (name, surname, city, rating) VALUES($1, $2, $3, $4) RETURNING *", [name, surname, city, rating]
+			"INSERT INTO masters (name, surname, city, rating) VALUES($1, $2, $3, $4) RETURNING *", [name, surname, city_id, rating]
 		);
 		res.json(newCity.rows[0])
 	} catch (e) {

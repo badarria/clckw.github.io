@@ -1,14 +1,18 @@
 import React, {useEffect, useState, useRef, Fragment} from "react";
-import {makeStyles, FormControl, TextField, List, ListItem, ListItemText} from '@material-ui/core';
+import {makeStyles, FormControl, TextField, List, ListItem, ListItemText, Box} from '@material-ui/core';
 
 
 const useStyles = makeStyles((theme) => ({
+	root: {
+		// position: 'relative',
+	},
 	listbox: {
 		width: 200,
 		margin: 0,
 		padding: 0,
 		zIndex: 1,
 		position: 'absolute',
+		// bottom: '0',
 		listStyle: 'none',
 		backgroundColor: theme.palette.background.paper,
 		overflow: 'auto',
@@ -77,11 +81,9 @@ const AutocompleteField = (props) => {
 
 
 	return (
-		<Fragment>
-			<FormControl>
-				<TextField label={label} onClick={() => setDisplay(!display)} value={search.name}
-									 onChange={(e) => handleChange(e)} onBlur={handleBlur} autoComplete='nope' helperText={helper} size="small"/>
-			</FormControl>
+		<Box>
+				<TextField label={label} onClick={() => setDisplay(!display)} value={search.name} required
+									 onChange={(e) => handleChange(e)} onBlur={handleBlur} autoComplete='nope' helperText={helper} size="small" className={classes.root}/>
 			{display && (
 				<List className={classes.listbox} ref={wrapperRef}>
 					{options.map((option, i) => {
@@ -91,7 +93,7 @@ const AutocompleteField = (props) => {
 							</ListItem>)
 					})}
 				</List>)}
-		</Fragment>
+		</Box>
 	)
 }
 

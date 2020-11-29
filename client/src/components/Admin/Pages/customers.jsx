@@ -1,8 +1,18 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import TableWrapper from "../table-wrapper";
+import {useDispatch} from 'react-redux'
+import {Button} from '@material-ui/core'
+import {compose} from "redux";
+import mapStateToProps from "react-redux/lib/connect/mapStateToProps";
+import AdmTable from "../Table/admin-table";
+import {deleteItem} from '../../../middleware/requests'
+import {actions} from "../../../slices/root-reduser";
 
-const Customers = () => {
+const Customers = (props) => {
 	const subj = 'customers'
+	const dispatch = useDispatch()
+	// const {items, columns, dataToChange, editState} = props
+	//
 
 	const errorCases = (label, data) => {
 		let error;
@@ -45,14 +55,33 @@ const Customers = () => {
 		}
 		return text;
 	}
-
-
+	// const deleteSelectedItem = (id) => {
+	// 	deleteItem(id, subj)
+	// 		.then(cancelInput())
+	// }
 
 	return (
 		<>
+
 			<TableWrapper subj={subj} errorCases={errorCases} helperText={helperText}/>
+			{/*const {children, itemsOnPage = 5, data, del, pushItemToEdit} = props;*/}
+			{/*<AdmTable data={items} del={deleteSelectedItem}>*/}
+
+			{/*</AdmTable>*/}
 		</>
 	)
 }
 
+// const mapStateToProps = (state) => {
+// 	return ({
+// 		items: state.customers.customersList,
+// 		columns: state.customers.columns,
+// 		dataToChange: state.customers.dataToChange,
+// 		editState: state.customers.editState
+// 	})
+// }
+
+//
+// export default compose(
+// 	connect(mapStateToProps))(Customers);
 export default Customers

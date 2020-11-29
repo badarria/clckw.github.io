@@ -2,9 +2,9 @@ import React, {useEffect, useState} from 'react';
 import AdmTable from "./Table/admin-table";
 import AdminTableHeaderEditing from "./Table/Table-Head/admin-table-header-editing";
 import AdminTableHeader from "./Table/Table-Head/admin-table-header";
-import {getColumnNames, addItem, updateItem, deleteItem, getItems} from './requests'
+import {getColumnNames, addItem, updateItem, deleteItem, getItems} from '../../middleware/requests'
 import AdminTableHeaderOrders from "./Table/Table-Head/admin-table-header-orders";
-
+import {mergeWithForeignKeys} from '../../utils/table'
 
 const TableWrapper = (props) => {
 	const [changes, setChanges] = useState(0);
@@ -35,30 +35,7 @@ const TableWrapper = (props) => {
 
 	console.log(globalState)
 
-	const mergeWithForeignKeys = (data) => {
-		const res = data.reduce((acc, [key, value]) => {
-				if (foreignKeys[key]) {
-					const idToEdit = data.reduce((acc, [name, val]) => {
-						if (name === `${key}_id`) acc = val;
-						return acc;
-					}, 0);
 
-					const filteredKeys = foreignKeys[key].filter(({id}) => id !== idToEdit)
-					acc = {
-						...acc,
-						[key]: [{
-							'id': idToEdit,
-							'name': value || ''
-						}, ...filteredKeys]
-					}
-				} else if (!key.match(/_id/)) {
-					acc = {...acc, [key]: value || ''}
-				}
-				return acc;
-			}, {}
-		)
-		return res
-	}
 
 	const getHelperText = (data) => {
 		return data.reduce((acc, [key]) => {
@@ -68,7 +45,7 @@ const TableWrapper = (props) => {
 	}
 
 	const pushItemToEdit = (data) => {
-		const res = mergeWithForeignKeys(Object.entries(data))
+		const res = mergeWithForeignKeys(Object.entries(data), foreignKeys)
 		const text = getHelperText(Object.entries(data))
 		setGlobalState({...globalState, dataToChange: res, errors: {}, helper: text, state: 'isEditing'});
 	}

@@ -5,7 +5,6 @@ const getItems = async (subj) => {
 		const response = await fetch(`${path}/${subj}`);
 		const jsonData = await response.json();
 		return jsonData;
-		// setItems({[subj]: jsonData});
 	} catch (err) {
 		console.error(err.message);
 	}

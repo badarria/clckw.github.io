@@ -4,14 +4,15 @@ import AdminTableHeaderEditing from "./Table/Table-Head/admin-table-header-editi
 import AdminTableHeader from "./Table/Table-Head/admin-table-header";
 import {getColumnNames, addItem, updateItem, deleteItem, getItems} from '../../middleware/requests'
 import AdminTableHeaderOrders from "./Table/Table-Head/admin-table-header-orders";
-import {mergeWithForeignKeys} from '../../utils/table'
+import {getHelperText, mergeWithForeignKeys, normalize} from '../../utils/table'
+import {compose} from "redux";
 
 const TableWrapper = (props) => {
+
 	const [changes, setChanges] = useState(0);
 	const [globalState, setGlobalState] = useState({items: [], columns: []})
-
 	const {subj, helperText = {}, errorCases = {}} = props
-	const {state, dataToChange, errors, columns, foreignKeys} = globalState;
+	const {state, dataToChange, errors, columns, foreignKeys, } = globalState;
 
 	useEffect(() => {
 		const getData = async () => {
@@ -20,7 +21,9 @@ const TableWrapper = (props) => {
 			const keys = await getItems(`${subj}/foreignKeys`)
 			return {items, columns, keys}
 		}
-		getData().then(({items, columns, keys}) => setGlobalState((globalState) => ({
+
+		getData()
+			.then(({items, columns, keys}) => setGlobalState((globalState) => ({
 			...globalState,
 			'items': items,
 			'columns': columns,
@@ -33,20 +36,10 @@ const TableWrapper = (props) => {
 	}, [changes]);
 
 
-	console.log(globalState)
-
-
-
-	const getHelperText = (data) => {
-		return data.reduce((acc, [key]) => {
-			acc = {...acc, [key]: helperText(key)}
-			return acc;
-		}, {})
-	}
 
 	const pushItemToEdit = (data) => {
 		const res = mergeWithForeignKeys(Object.entries(data), foreignKeys)
-		const text = getHelperText(Object.entries(data))
+		const text = getHelperText(Object.entries(data),helperText)
 		setGlobalState({...globalState, dataToChange: res, errors: {}, helper: text, state: 'isEditing'});
 	}
 
@@ -54,8 +47,8 @@ const TableWrapper = (props) => {
 		const res = mergeWithForeignKeys([...columns].reduce((acc, column) => {
 			if (column !== 'id') acc.push([column, ''])
 			return acc;
-		}, []));
-		const text = getHelperText(Object.entries(res))
+		}, []), foreignKeys);
+		const text = getHelperText(Object.entries(res), helperText)
 		setGlobalState({...globalState, dataToChange: res, errors: {}, helper: text, state: 'isAdding'});
 	}
 
@@ -76,18 +69,6 @@ const TableWrapper = (props) => {
 			state: null,
 		})
 	}
-
-////////
-	const normalize = (data) => {
-		return Object.entries(data).reduce((acc, [key, value]) => {
-			if (!Array.isArray(value)) acc = {...acc, [key]: value};
-			return acc;
-		}, {})
-	}
-
-// const validation = (data) => {
-// 	return false
-// }
 
 	const pushToDB = () => {
 		///isValid?
@@ -118,5 +99,20 @@ const TableWrapper = (props) => {
 		</>
 	)
 }
+//
+// const mapStateToProps = (state, ownProps) => {
+// 	return ({
+// 		subj: ownProps,
+// 		items: state[this.subj].list,
+// 		// columns: state[subj].columns,
+// 		// dataToChange: state[subj].dataToChange,
+// 		// editState: state[subj].editState,
+// 		// errors: state[subj].errors,
+// 		// helper: state[subj].helper,
+// 	})
+// }
+
+
+// export default connect(mapStateToProps)(TableWrapper);
 
 export default TableWrapper

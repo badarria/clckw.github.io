@@ -1,4 +1,4 @@
-import {rootReducer, actions} from './slices/root-reduser'
+import {rootReducer} from './redux/root-reduser'
 import {configureStore} from '@reduxjs/toolkit'
 
 

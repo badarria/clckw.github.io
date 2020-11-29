@@ -1,18 +1,16 @@
 import React, {useEffect} from 'react';
 import TableWrapper from "../table-wrapper";
-import {useDispatch} from 'react-redux'
-import {Button} from '@material-ui/core'
+import {useDispatch, connect} from 'react-redux'
 import {compose} from "redux";
-import mapStateToProps from "react-redux/lib/connect/mapStateToProps";
+import {getItemsThunkCreator, setErrorHelper, removeItemFromDB} from '../../../middleware/thunks'
 import AdmTable from "../Table/admin-table";
-import {deleteItem} from '../../../middleware/requests'
-import {actions} from "../../../slices/root-reduser";
+
+
+const subj = 'customers'
 
 const Customers = (props) => {
-	const subj = 'customers'
 	const dispatch = useDispatch()
-	// const {items, columns, dataToChange, editState} = props
-	//
+	const {items, errors, helper, columns, dataToChange, editState, foreignKeys} = props
 
 	const errorCases = (label, data) => {
 		let error;
@@ -55,33 +53,40 @@ const Customers = (props) => {
 		}
 		return text;
 	}
-	// const deleteSelectedItem = (id) => {
-	// 	deleteItem(id, subj)
-	// 		.then(cancelInput())
-	// }
+
+	useEffect(() => {
+		dispatch(getItemsThunkCreator(subj)(dispatch))
+		const data = {errors: errorCases, helper: helperText}
+		setErrorHelper(subj, data, dispatch)
+	}, [])
 
 	return (
 		<>
 
-			<TableWrapper subj={subj} errorCases={errorCases} helperText={helperText}/>
+			{/*<TableWrapper subj={subj} errorCases={errorCases} helperText={helperText} itemsRedux={items} foreignKeys={foreignKeys}/>*/}
 			{/*const {children, itemsOnPage = 5, data, del, pushItemToEdit} = props;*/}
-			{/*<AdmTable data={items} del={deleteSelectedItem}>*/}
+			<AdmTable data={items} del={removeItemFromDB(subj, dispatch)}/>
 
 			{/*</AdmTable>*/}
 		</>
 	)
 }
 
-// const mapStateToProps = (state) => {
-// 	return ({
-// 		items: state.customers.customersList,
-// 		columns: state.customers.columns,
-// 		dataToChange: state.customers.dataToChange,
-// 		editState: state.customers.editState
-// 	})
-// }
+
+// export default Customers
+const mapStateToProps = (state) => {
+	return ({
+		items: state[subj].list,
+		columns: state[subj].columns,
+		dataToChange: state[subj].dataToChange,
+		editState: state[subj].editState,
+		errors: state[subj].errors,
+		helper: state[subj].helper,
+		foreignKeys: null,
+	})
+}
 
 //
-// export default compose(
-// 	connect(mapStateToProps))(Customers);
-export default Customers
+
+export default compose(
+	connect(mapStateToProps))(Customers);

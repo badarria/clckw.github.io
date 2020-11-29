@@ -23,3 +23,16 @@ export const mergeWithForeignKeys = (data, keys) => {
 	return res
 }
 
+export const getHelperText = (data, textObj) => {
+	return data.reduce((acc, [key]) => {
+		acc = {...acc, [key]: textObj(key)}
+		return acc;
+	}, {})
+}
+
+export const normalize = (data) => {
+	return Object.entries(data).reduce((acc, [key, value]) => {
+		if (!Array.isArray(value)) acc = {...acc, [key]: value};
+		return acc;
+	}, {})
+}

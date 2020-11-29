@@ -3,9 +3,10 @@ import {Box, Button, Container} from '@material-ui/core'
 import '../../App.css'
 import {useDispatch, useSelector} from 'react-redux'
 import SearchForm from "./search-form";
+// import {getItemsThunkCreator} from '../../middleware/thunks'
+// import {addCitiesList} from '../../redux/root-reduser'
+// import {actions}  from '../../redux/root-reduser'
 import {getItemsThunkCreator} from '../../middleware/thunks'
-// import {addCitiesList} from '../../slices/root-reduser'
-import {actions}  from '../../slices/root-reduser'
 
 const init = {
 	find: {
@@ -37,7 +38,7 @@ const Main = () => {
 	const find = (e) => {
 		e.preventDefault()
 		// addCitiesList('cities')
-		getItemsThunkCreator('cities')(dispatch);
+
 		// addCitiesList(['d', 'dd', 'ddd'])
 	}
 
@@ -53,9 +54,8 @@ const Main = () => {
 	const subj = 'services'
 
 	const click = () => {
-		const func = (name) => actions[name][`test${name}`]
-		dispatch(func(subj)())
-		console.log(actions[subj][`test${subj}`])
+		dispatch(getItemsThunkCreator(subj));
+		console.log('222')
 	}
 
 	return (

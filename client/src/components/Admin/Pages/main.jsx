@@ -1,7 +1,7 @@
 import React from 'react';
 import {Box, Button, Container} from '@material-ui/core';
 import AdminTabs from "../admin-tabs";
-import Customers from './customers';
+import Customers from './customers-container';
 import Cities from './cities';
 import Masters from './masters';
 import Services from "./services";

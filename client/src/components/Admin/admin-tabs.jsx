@@ -64,14 +64,14 @@ const AdminTabs = (props) => {
 			>
 				{labels.map((label, inx) => {
 					return (
-						<Tab label={label} {...a11yProps(inx)} />
+						<Tab key={inx} label={label} {...a11yProps(inx)} />
 					)
 				})}
 			</Tabs>
 
 			{children.map((item, inx) => {
 				return (
-					<TabPanel value={value} index={inx}>
+					<TabPanel key={inx} value={value} index={inx}>
 						{item}
 					</TabPanel>
 				)

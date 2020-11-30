@@ -1,16 +1,23 @@
 import React, {useEffect} from 'react';
-import TableWrapper from "../table-wrapper";
 import {useDispatch, connect} from 'react-redux'
 import {compose} from "redux";
-import {getItemsThunkCreator, setErrorHelper, removeItemFromDB} from '../../../middleware/thunks'
-import AdmTable from "../Table/admin-table";
-
+import {
+	setHelper,
+	removeFromDB,
+	pushToChange,
+	acceptChanges,
+	handleChangeData,
+	cancelInput
+} from '../../../middleware/general'
+import AdmTableRedux from "../Table/admin-table--redux";
+import AdminTableHeaderEditingRedux from "../Table/Table-Head/admin-table-header-editing-redux";
+import AdminTableHeaderRedux from "../Table/Table-Head/admin-table-header-redux";
 
 const subj = 'customers'
 
-const Customers = (props) => {
+const CustomersContainer = (props) => {
 	const dispatch = useDispatch()
-	const {items, errors, helper, columns, dataToChange, editState, foreignKeys} = props
+	const {items, errors, helper, columns, dataToChange, editState} = props
 
 	const errorCases = (label, data) => {
 		let error;
@@ -53,27 +60,45 @@ const Customers = (props) => {
 		}
 		return text;
 	}
-
+	const table = {
+		items: items,
+		columns: columns,
+		state: editState,
+		del: removeFromDB(subj, dispatch),
+		push: pushToChange(subj, dispatch),
+	}
 	useEffect(() => {
-		dispatch(getItemsThunkCreator(subj)(dispatch))
-		const data = {errors: errorCases, helper: helperText}
-		setErrorHelper(subj, data, dispatch)
+			setHelper(subj, columns, helperText, dispatch)
 	}, [])
+
+	const form = {
+		data: dataToChange,
+		edit: handleChangeData(subj, dispatch, errorCases),
+		accept: acceptChanges(subj, editState, dispatch),
+		cancel: cancelInput(subj, dispatch),
+		state: editState,
+		errors: errors,
+		helper: helper,
+	}
+
+	const head = {
+		columns: columns,
+		create: pushToChange(subj, dispatch)
+	}
+
 
 	return (
 		<>
-
-			{/*<TableWrapper subj={subj} errorCases={errorCases} helperText={helperText} itemsRedux={items} foreignKeys={foreignKeys}/>*/}
-			{/*const {children, itemsOnPage = 5, data, del, pushItemToEdit} = props;*/}
-			<AdmTable data={items} del={removeItemFromDB(subj, dispatch)}/>
-
-			{/*</AdmTable>*/}
+			<AdmTableRedux tableProps={table}>
+				{editState ? <AdminTableHeaderEditingRedux formProps={form}/> :
+					<AdminTableHeaderRedux headProps={head}/>
+				}
+			</AdmTableRedux>
 		</>
 	)
 }
 
 
-// export default Customers
 const mapStateToProps = (state) => {
 	return ({
 		items: state[subj].list,
@@ -82,11 +107,10 @@ const mapStateToProps = (state) => {
 		editState: state[subj].editState,
 		errors: state[subj].errors,
 		helper: state[subj].helper,
-		foreignKeys: null,
 	})
 }
 
 //
 
 export default compose(
-	connect(mapStateToProps))(Customers);
+	connect(mapStateToProps))(CustomersContainer);

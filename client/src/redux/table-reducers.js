@@ -1,36 +1,46 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {getColumnNames, addItem, updateItem, deleteItem, getItems} from '../middleware/requests'
 
-const initState = (subj) => ({
+const initState = () => ({
 	list: null,
 	columns: null,
 	dataToChange: null,
 	editState: null,
-	errors: null,
+	errors: {},
 	helper: null,
 });
 
 
-export const createTableReducers = (name) => {
+export const createTableReducers = (subj) => {
 	const {reducer, actions} = createSlice({
-		name: name,
-		initialState: initState(name),
+		name: subj,
+		initialState: initState(subj),
 		reducers: {
-			[`get${name}List`]: (state, action) => {
+			[`get${subj}List`]: (state, action) => {
 				state.list = action.payload
 			},
-			[`get${name}Columns`]: (state, action) => {
+			[`get${subj}Columns`]: (state, action) => {
 				state.columns = action.payload
 			},
-			[`set${name}DataToChange`]: (state, action) => {
-				state.dataToChange = action.payload
+			[`set${subj}DataToChange`]: (state, action) => {
+				state.dataToChange = {...state.dataToChange, ...action.payload}
 			},
-			[`set${name}State`]: (state, action) => {
+			[`set${subj}State`]: (state, action) => {
 				state.editState = action.payload
 			},
-			[`set${name}ErrorHelper`]: (state, action) => {
-				state.errors = action.payload.errors;
-				state.helper = action.payload.helper;
+			[`set${subj}Errors`]: (state, action) => {
+				state.errors = {...state.errors, ...action.payload};
+			},
+			[`set${subj}Helper`]: (state, action) => {
+				state.helper = {...state.helper, ...action.payload};
+			},
+			[`toggle${subj}EditState`]: (state, action) => {
+				state.editState = action.payload;
+			},
+			[`push${subj}ToChange`]: (state, action) => {
+				state.dataToChange = action.payload;
+			},
+			[`clear${subj}DataToChange`]: (state, action) => {
+				state.dataToChange = null;
 			}
 		}
 	})

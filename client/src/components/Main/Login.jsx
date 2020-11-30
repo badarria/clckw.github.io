@@ -28,7 +28,7 @@ const Login = (props) => {
 
 	return (
 		<div>
-			<Button color="inherit" classname={classes} onClick={handleClickOpen}>
+			<Button color="inherit" className={classes} onClick={handleClickOpen}>
 				Login
 			</Button>
 			<Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">

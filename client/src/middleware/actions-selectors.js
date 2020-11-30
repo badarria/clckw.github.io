@@ -8,15 +8,37 @@ const getColumnsAction = (subj, data) => {
 	return actions[subj][`get${subj}Columns`](data)
 }
 
-const setDataToChangeAction = (subj) => {
-	return actions[subj][`set${subj}DataToChange`]
+const setDataToChangeAction = (subj, data) => {
+	return actions[subj][`set${subj}DataToChange`](data)
 }
 
-const setEditStateAction = (subj) => {
-	return actions[subj][`set${subj}State`]
+const setErrorsAction = (subj, data) => {
+	return actions[subj][`set${subj}Errors`](data)
 }
 
-const setErrorHelperAction = (subj, data) => {
-	return actions[subj][`set${subj}ErrorHelper`](data)
+const setHelperAction = (subj, data) => {
+	return actions[subj][`set${subj}Helper`](data)
 }
-export {getItemsAction, getColumnsAction, setDataToChangeAction, setEditStateAction, setErrorHelperAction}
+
+const pushToChangeAction = (subj, data) => {
+	return actions[subj][`push${subj}ToChange`](data)
+}
+
+const toggleStateAction = (subj, data) => {
+	return actions[subj][`toggle${subj}EditState`](data)
+}
+
+const clearDataToChangeAction = (subj) => {
+	return actions[subj][`clear${subj}DataToChange`]
+}
+
+export {
+	getItemsAction,
+	getColumnsAction,
+	setDataToChangeAction,
+	setErrorsAction,
+	setHelperAction,
+	pushToChangeAction,
+	toggleStateAction,
+	clearDataToChangeAction
+}

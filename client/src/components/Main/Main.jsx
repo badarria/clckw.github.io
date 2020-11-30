@@ -1,12 +1,9 @@
-import React, {useEffect, useState} from 'react'
-import {Box, Button, Container} from '@material-ui/core'
+import React, {useState} from 'react'
+import {Container} from '@material-ui/core'
 import '../../App.css'
 import {useDispatch, useSelector} from 'react-redux'
 import SearchForm from "./search-form";
-// import {getItemsThunkCreator} from '../../middleware/thunks'
-// import {addCitiesList} from '../../redux/root-reduser'
-// import {actions}  from '../../redux/root-reduser'
-import {getItemsThunkCreator} from '../../middleware/thunks'
+
 
 const init = {
 	find: {
@@ -32,36 +29,12 @@ const init = {
 const Main = () => {
 	const [state, setState] = useState(init);
 	const dispatch = useDispatch();
-	// const data = useSelector(state => state.main.dataToSearch)
 
-
-	const find = (e) => {
-		e.preventDefault()
-		// addCitiesList('cities')
-
-		// addCitiesList(['d', 'dd', 'ddd'])
-	}
-
-	const clear = () => {
-		setState(init)
-	}
-	const handleChange = (key, value) => {
-		console.log(key, value)
-		setState({...state, find: {...state.find, [key]: value}})
-		console.log(state.find)
-	}
-
-	const subj = 'services'
-
-	const click = () => {
-		dispatch(getItemsThunkCreator(subj));
-		console.log('222')
-	}
 
 	return (
 		<Container>
-			<Button onClick={click}>Click</Button>
-			<SearchForm const find={find} handleChange={handleChange} state={state.find} clear={clear}/>
+			<h1>Main page</h1>
+			{/*<SearchForm const find={find} handleChange={handleChange} state={state.find} clear={clear}/>*/}
 		</Container>
 	)
 }

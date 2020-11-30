@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react';
-import TableWrapper from "../../temp/table-wrapper";
 import {
 	acceptChanges,
 	cancelInput,

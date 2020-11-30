@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Button, Container} from '@material-ui/core';
+import {Box, Container} from '@material-ui/core';
 import HorizontalTabs from "../Common/horizontal-tabs";
 import Customers from './customers-container';
 import Cities from './cities-container';

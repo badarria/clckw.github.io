@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {Container} from '@material-ui/core'
 import '../../App.css'
 import {useDispatch, useSelector} from 'react-redux'
-import SearchForm from "./search-form";
+import SearchForm from "../Common/search-form";
 
 
 const init = {
@@ -26,7 +26,7 @@ const init = {
 		endAt: null
 	}
 }
-const Main = () => {
+const MainPage = () => {
 	const [state, setState] = useState(init);
 	const dispatch = useDispatch();
 
@@ -39,4 +39,4 @@ const Main = () => {
 	)
 }
 
-export default Main;
+export default MainPage;

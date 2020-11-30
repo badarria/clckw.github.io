@@ -1,14 +1,13 @@
 import {TableCell, TableRow, TextField} from "@material-ui/core";
 import React from "react";
 import PropTypes from "prop-types";
-import TableButton from "../table-button";
+import TableButton from "../Common/table-button";
 import {Done, Clear} from '@material-ui/icons';
-import AutocompleteField from "./autocomplete-field";
+import AutocompleteField from "../Common/autocomplete-field";
 
 
-const AdminTableHeaderEditingRedux = (props) => {
+const BasicTableHeadForm = (props) => {
 	const {data, edit, accept, cancel, state, errors, helper} = props.formProps
-
 	const labels = Object.keys(data).filter(label => !label.match(/_id/));
 
 
@@ -20,7 +19,7 @@ const AdminTableHeaderEditingRedux = (props) => {
 				return (
 					<TableCell key={i}>
 						{Array.isArray(data[label]) ?
-							<AutocompleteField data={data[label]} label={label} edit={edit} helper=''/> :
+							<AutocompleteField data={data[label]} label={label} edit={edit} helper={helper[label]}/> :
 							<TextField
 								value={data[label] || ''}
 								onChange={(e) => edit(label, e.target.value)}
@@ -41,7 +40,7 @@ const AdminTableHeaderEditingRedux = (props) => {
 		</TableRow>
 	)
 }
-AdminTableHeaderEditingRedux.propTypes = {
+BasicTableHeadForm.propTypes = {
 	formProps: PropTypes.shape({
 		data: PropTypes.object.isRequired,
 		edit: PropTypes.func,
@@ -54,4 +53,4 @@ AdminTableHeaderEditingRedux.propTypes = {
 }
 
 
-export default AdminTableHeaderEditingRedux;
+export default BasicTableHeadForm;

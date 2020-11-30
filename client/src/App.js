@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from "react";
 import './App.css';
 import Nav from "./Nav"
-import HomePage from './components/Main/Main'
+import HomePage from './components/Containers/main-page'
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
-import Main from "./components/Admin/Pages/main";
+import AdminPage from "./components/Containers/admin-page";
 import {parse} from "dotenv";
 
 
@@ -57,7 +57,7 @@ const App = () => {
 			<Nav loginUser={loginUser} isAuth={isAuth} logout={logout}/>
 			<Switch>
 				<Route path="/" exact component={HomePage}/>
-				{isAuth ? <Route path="/admin" component={Main}/> : <Redirect to="/"/>}
+				{isAuth ? <Route path="/admin" component={AdminPage}/> : <Redirect to="/"/>}
 			</Switch>
 		</Router>
 	);

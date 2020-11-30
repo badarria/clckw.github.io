@@ -7,7 +7,7 @@ import {
 	FormControl,
 	TextField
 } from "@material-ui/core";
-import AutocompleteField from "../Admin/Table/Table-Head/autocomplete-field";
+import AutocompleteField from "./autocomplete-field";
 
 const useStyles = makeStyles({
 	root: {

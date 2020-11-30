@@ -8,10 +8,16 @@ import {
 	acceptChanges,
 	handleChangeData,
 	cancelInput
-} from '../../../middleware/general'
-import AdmTableRedux from "../Table/admin-table--redux";
-import AdminTableHeaderEditingRedux from "../Table/Table-Head/admin-table-header-editing-redux";
-import AdminTableHeaderRedux from "../Table/Table-Head/admin-table-header-redux";
+} from '../../middleware/general'
+import AdmTableRedux from "../Table/basic-table";
+import BasicTableHeadForm from "../Table/basic-table-head-form";
+import BasicTableHead from "../Table/basic-table-head";
+import {
+	editStateState, errorsState,
+	getColumnsState,
+	getDataToChangeState,
+	getItemsState, helperState
+} from "../../middleware/state-selectors";
 
 const subj = 'customers'
 
@@ -90,8 +96,8 @@ const CustomersContainer = (props) => {
 	return (
 		<>
 			<AdmTableRedux tableProps={table}>
-				{editState ? <AdminTableHeaderEditingRedux formProps={form}/> :
-					<AdminTableHeaderRedux headProps={head}/>
+				{editState ? <BasicTableHeadForm formProps={form}/> :
+					<BasicTableHead headProps={head}/>
 				}
 			</AdmTableRedux>
 		</>
@@ -101,12 +107,12 @@ const CustomersContainer = (props) => {
 
 const mapStateToProps = (state) => {
 	return ({
-		items: state[subj].list,
-		columns: state[subj].columns,
-		dataToChange: state[subj].dataToChange,
-		editState: state[subj].editState,
-		errors: state[subj].errors,
-		helper: state[subj].helper,
+		items: getItemsState(subj, state),
+		columns: getColumnsState(subj, state),
+		dataToChange: getDataToChangeState(subj, state),
+		editState: editStateState(subj, state),
+		errors: errorsState(subj, state),
+		helper: helperState(subj, state),
 	})
 }
 

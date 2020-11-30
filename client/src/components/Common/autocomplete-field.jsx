@@ -55,6 +55,7 @@ const AutocompleteField = (props) => {
 		return () => {
 			document.removeEventListener("mousedown", handleClickOutside)
 		}
+		console.log(helper)
 	}, [])
 
 	const handleClickOutside = e => {

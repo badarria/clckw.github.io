@@ -2,10 +2,10 @@ import {TableRow, TableCell} from "@material-ui/core";
 import React from "react";
 import PropTypes from "prop-types";
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import TableButton from "../table-button";
+import TableButton from "../Common/table-button";
 
 
-const AdminTableHeaderRedux = (props) => {
+const BasicTableHead = (props) => {
 	const {columns, create} = props.headProps;
 
 	return (
@@ -24,11 +24,11 @@ const AdminTableHeaderRedux = (props) => {
 	)
 }
 
-AdminTableHeaderRedux.propTypes = {
+BasicTableHead.propTypes = {
 	headProps: PropTypes.shape({
 		columns: PropTypes.array.isRequired,
 		create: PropTypes.func.isRequired,
 	})
 };
 
-export default AdminTableHeaderRedux
+export default BasicTableHead

@@ -9,7 +9,7 @@ import {
 	toggleStateAction,
 	clearDataToChangeAction
 } from './actions-selectors'
-import {emptyFields, getHelperText, mergeWithForeignKeys} from "../utils/table";
+import {emptyFields, mergeWithForeignKeys} from "../utils/table";
 
 const getItemsThunk = (subj) => async (dispatch) => {
 	const data = await getItems(subj)
@@ -28,15 +28,12 @@ const removeFromDB = (subj, dispatch) => async (id) => {
 }
 
 const pushToChange = (subj, dispatch, keys = {}) => (data, state) => {
-	if (Array.isArray(data)) {
-		data = emptyFields(data)
-	}
+	let res = Array.isArray(data) ? emptyFields(data) : data
 	if (Object.keys(keys).length) {
-		data = mergeWithForeignKeys(Object.entries(data), keys);
+		res = mergeWithForeignKeys(Object.entries(res), keys);
 	}
-	dispatch(pushToChangeAction(subj, data))
+	dispatch(pushToChangeAction(subj, res))
 	dispatch(toggleStateAction(subj, state))
-	console.log('lll')
 }
 
 const cancelInput = (subj, dispatch) => () => {
@@ -61,7 +58,7 @@ const setHelper = (subj, columns, helperText, dispatch) => {
 const handleChangeData = (subj, dispatch, errorCases) => (key, value) => {
 	const error = {[key]: errorCases(key, value)}
 	// const helper = {[key]: helperText(key)}
-console.log(subj, error)
+	console.log(subj, error)
 	dispatch(setDataToChangeAction(subj, {[key]: value}))
 	dispatch(setErrorsAction(subj, error))
 	// dispatch(setHelperAction(subj, helper))

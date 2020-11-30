@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const AdminTabs = (props) => {
+const HorizontalTabs = (props) => {
 	const classes = useStyles;
 	const [value, setValue] = React.useState(0);
 	const {children, labels} = props;
@@ -80,9 +80,9 @@ const AdminTabs = (props) => {
 	);
 }
 
-export default AdminTabs;
+export default HorizontalTabs;
 
-AdminTabs.propTypes = {
+HorizontalTabs.propTypes = {
 	children: PropTypes.node,
 	labels: PropTypes.array.isRequired,
 }

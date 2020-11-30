@@ -11,7 +11,7 @@ import {
 	TableRow
 } from "@material-ui/core";
 
-import AdminTableListRedux from "./Table-List/admin-table-list--redux";
+import BasicTableList from "./basic-table-list";
 
 const useStyles = makeStyles({
 	root: {
@@ -52,8 +52,8 @@ const AdmTableRedux = (props) => {
 						{children}
 					</TableHead>
 					<TableBody>
-						<AdminTableListRedux data={itemsPerPage} del={del} push={push}
-																 state={state} columns={columns}/>
+						<BasicTableList data={itemsPerPage} del={del} push={push}
+														state={state} columns={columns}/>
 						{emptyRows > 0 && (
 							<TableRow style={{height: 53 * emptyRows}}>
 								<TableCell component='td'/>

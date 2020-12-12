@@ -83,10 +83,8 @@ const OrdersContainer = (props) => {
 		date: dataToChange.date,
 		time: dataToChange.time,
 		handleReset: cancelInput(subj, dispatch),
-		changeHours: changeFreeHours(subj,dispatch)
-		// edit: handleChangeData(subj, dispatch, errorCases),
-		// accept: acceptChanges(subj, editState, dispatch, dataToChange),
-		// state: editState,
+		changeHours: changeFreeHours(subj,dispatch),
+		accept: acceptChanges(subj, editState, dispatch)
 		// errors: errors,
 		// helper: helper,
 	}

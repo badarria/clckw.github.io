@@ -44,7 +44,6 @@ const removeFromDB = (subj, dispatch) => async (id) => {
 
 
 const getFreeHours = async (master_id, date, service_time, order_id = 0) => {
-	// const newDate = format(parseISO(date.toString()), 'dd-MM-yyyy')
 	date = date.replace(/[a-z ]/g, '')
 	const orders = await getFilteredOrders('orders', master_id, date, order_id)
 	return getHoursArray(orders, service_time);
@@ -75,7 +74,8 @@ const cancelInput = (subj, dispatch) => () => {
 	dispatch(toggleStateAction(subj, null))
 }
 
-const acceptChanges = (subj, state, dispatch, data) => async () => {
+const acceptChanges = (subj, state, dispatch) => async (data) => {
+	console.log(data, 'general')
 	state === 'isEditing' ? await updateItem(data, subj) : await addItem(data, subj);
 	await dispatch(getItemsThunk(subj))
 	await dispatch(cancelInput(subj, dispatch))

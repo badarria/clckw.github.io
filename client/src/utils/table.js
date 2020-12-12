@@ -5,25 +5,29 @@ export const emptyFields = (columns) => {
 	}, {})
 }
 
-export const mergeWithForeignKeys = (data, keys, isEditing = true) => {
+const _findEditedId = (data, key) => {
+	return data.reduce((acc, [name, val]) => {
+		if (name === `${key}_id`) acc = val;
+		return acc;
+	}, 0)
+}
+const _findEditedObj = (data, editedId) => data.find(({id}) => id === editedId)
+const _filterData = (data, editedId) => data.filter(({id}) => id !== editedId);
+const _createNewEmptyObj = (source) => {
+	const paramKeys = Object.keys(source);
+	return paramKeys.reduce((acc, param) => {
+		acc = {...acc, [param]: '',}
+		return acc
+	}, {})
+}
+
+export const mergeWithForeignKeys = (data, keys) => {
 	const res = data.reduce((acc, [key, value]) => {
 		if (keys[key]) {
-			if (isEditing) {
-				const idToEdit = data.reduce((acc, [name, val]) => {
-					if (name === `${key}_id`) acc = val;
-					return acc;
-				}, 0);
-				const editedObj = keys[key].find(({id}) => id === idToEdit);
-				const filteredKeys = keys[key].filter(({id}) => id !== idToEdit);
-				acc = {...acc, [key]: [editedObj, ...filteredKeys]}
-			} else {
-				const paramKeys = Object.keys(keys[key][0]);
-				const newEmptyObj = paramKeys.reduce((acc, param) => {
-					acc = {...acc, [param]: '',}
-					return acc
-				}, {})
-				acc = {...acc, [key]: [newEmptyObj, ...keys[key]]}
-			}
+			const idToEdit = _findEditedId(data, key);
+			const filteredKeys = _filterData(keys[key], idToEdit);
+			const editedObj = idToEdit ? _findEditedObj(keys[key], idToEdit) : _createNewEmptyObj(keys[key][0]);
+			acc = {...acc, [key]: [editedObj, ...filteredKeys]}
 		} else if (!key.match(/_/)) {
 			acc = {...acc, [key]: value || ''}
 		}

@@ -32,10 +32,10 @@ router.get('/columnNames', async (req, res) => {
 router.put('/:id', async (req, res) => {
 	try {
 		const {id} = req.params;
-		const {master, customer, service, date, begintAt, endAt} = req.body;
+		const {master, customer, service, date, begin, end} = req.body;
+		console.log(master, customer, service, date, begin, end)
 		const updateOrder = await pool.query(
-			"UPDATE orders SET master = $1, customer = $2, service = $3, begintAt = $4, endAt = $5 orderDate=$6 WHERE id = $7", [master, customer, service, begintAt, endAt, date, id]
-		);
+			"UPDATE orders SET master = $1, customer = $2, service = $3, beginAt = $4, endAt = $5, orderDate=$6 WHERE id = $7", [master, customer, service, begin, end, date, id]);
 		res.json("Order was updated")
 	} catch (e) {
 		console.error(e.message)
@@ -104,9 +104,9 @@ router.delete('/:id', async (req, res) => {
 //POST new order
 router.post('/', async (req, res) => {
 	try {
-		const {master_id, customer_id, service_id, city_id, start, end} = req.body;
+		const {master, customer, service, date, begin, end} = req.body;
 		const newOrder = await pool.query(
-			"INSERT INTO orders (master, customer, service, cityId, begintAt, endAt) VALUES($1, $2, $3, $4, $5, $6) RETURNING *", [master_id, customer_id, service_id, city_id, start, end]
+			"INSERT INTO orders (master, customer, service, orderDate, beginAt, endAt) VALUES($1, $2, $3, $4, $5, $6) RETURNING *", [master, customer, service, date, begin, end]
 		);
 		res.json(newOrder.rows[0])
 	} catch (e) {

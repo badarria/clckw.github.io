@@ -3,7 +3,7 @@ import {Box, Container} from '@material-ui/core';
 import HorizontalTabs from "../Common/horizontal-tabs";
 import Customers from './customers-container';
 import Cities from './cities-container';
-import Masters from './masters-container';
+import Masters from './Masters/masters-container';
 import ServicesContainer from "./services-container";
 import OrdersContainer from "./Orders/orders-container";
 

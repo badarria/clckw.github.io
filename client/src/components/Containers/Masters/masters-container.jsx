@@ -2,11 +2,10 @@ import React, {useEffect} from 'react';
 import {
 	acceptChanges,
 	cancelInput,
-	handleChangeData,
 	pushToChange,
-	removeFromDB,
+	removeFromDB, setColumns,
 	setHelper
-} from "../../middleware/general";
+} from "../../../middleware/general";
 import {
 	getItemsState,
 	getDataToChangeState,
@@ -14,15 +13,16 @@ import {
 	getColumnsState,
 	errorsState,
 	helperState
-} from '../../middleware/state-selectors'
+} from '../../../middleware/state-selectors'
 
-import AdmTableRedux from "../Table/basic-table";
-import BasicTableHeadForm from "../Table/basic-table-head-form";
-import BasicTableHead from "../Table/basic-table-head";
+import AdmTableRedux from "../../Table/basic-table";
+import BasicTableHead from "../../Table/basic-table-head";
 import {compose} from "redux";
 import {connect, useDispatch} from "react-redux";
+import MasterHeadForm from "./master-head-form";
 
 const subj = 'masters'
+const columnNames = ['id', 'name', 'surname', 'city', 'rating']
 
 
 const MastersContainer = (props) => {
@@ -76,7 +76,8 @@ const MastersContainer = (props) => {
 
 
 	useEffect(() => {
-		setHelper(subj, columns, helperText, dispatch)
+		setHelper(subj, columns, helperText, dispatch);
+		setColumns(subj, columnNames, dispatch)
 	}, [])
 
 	const table = {
@@ -89,12 +90,10 @@ const MastersContainer = (props) => {
 
 	const form = {
 		data: dataToChange,
-		edit: handleChangeData(subj, dispatch, errorCases),
-		accept: acceptChanges(subj, editState, dispatch),
-		cancel: cancelInput(subj, dispatch),
-		state: editState,
-		errors: errors,
-		helper: helper,
+		handleReset: cancelInput(subj, dispatch),
+		accept: acceptChanges(subj, editState, dispatch)
+		// errors: errors,
+		// helper: helper,
 	}
 
 	const head = {
@@ -105,7 +104,9 @@ const MastersContainer = (props) => {
 	return (
 		<>
 			<AdmTableRedux tableProps={table}>
-				{editState ? <BasicTableHeadForm formProps={form}/> :
+				{editState ?
+					<MasterHeadForm {...form} />
+					:
 					<BasicTableHead headProps={head}/>
 				}
 			</AdmTableRedux>
@@ -122,7 +123,6 @@ const mapStateToProps = (state) => {
 		editState: editStateState(subj, state),
 		errors: errorsState(subj, state),
 		helper: helperState(subj, state),
-		// foreignKeys: keysForMasters(state)
 	})
 }
 

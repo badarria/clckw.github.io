@@ -28,9 +28,9 @@ router.get('/foreignKeys', async (req, res) => {
 router.put('/:id', async (req, res) => {
 	try {
 		const {id} = req.params;
-		const {name, surname, rating, city_id} = req.body;
+		const {name, surname, rating, city} = req.body;
 		const updateMaster = await pool.query(
-			"UPDATE masters SET name = $1, surname = $2, rating = $3, city = $4 WHERE id = $5", [name, surname, rating, city_id, id]
+			"UPDATE masters SET name = $1, surname = $2, rating = $3, city = $4 WHERE id = $5", [name, surname, rating, city, id]
 		);
 		res.json("Master was updated")
 	} catch (e) {

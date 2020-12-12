@@ -13,8 +13,7 @@ import {
 	editStateState,
 	getColumnsState,
 	errorsState,
-	helperState,
-	keysForMasters
+	helperState
 } from '../../middleware/state-selectors'
 
 import AdmTableRedux from "../Table/basic-table";
@@ -28,7 +27,7 @@ const subj = 'masters'
 
 const MastersContainer = (props) => {
 	const dispatch = useDispatch()
-	const {items, errors, helper, columns, dataToChange, editState, foreignKeys} = props
+	const {items, errors, helper, columns, dataToChange, editState} = props
 
 	const errorCases = (label, data) => {
 		let error;
@@ -85,7 +84,7 @@ const MastersContainer = (props) => {
 		columns: columns,
 		state: editState,
 		del: removeFromDB(subj, dispatch),
-		push: pushToChange(subj, dispatch, foreignKeys),
+		push: pushToChange(subj, dispatch, true),
 	}
 
 	const form = {
@@ -100,7 +99,7 @@ const MastersContainer = (props) => {
 
 	const head = {
 		columns: columns,
-		create: pushToChange(subj, dispatch, foreignKeys)
+		create: pushToChange(subj, dispatch, true)
 	}
 
 	return (
@@ -123,7 +122,7 @@ const mapStateToProps = (state) => {
 		editState: editStateState(subj, state),
 		errors: errorsState(subj, state),
 		helper: helperState(subj, state),
-		foreignKeys: keysForMasters(state)
+		// foreignKeys: keysForMasters(state)
 	})
 }
 

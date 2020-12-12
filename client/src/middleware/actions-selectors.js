@@ -1,10 +1,10 @@
 import {actions} from '../redux/actions'
 
-const getItemsAction = (subj, data) => {
+const setItemsAction = (subj, data) => {
 	return actions[subj][`get${subj}List`](data)
 }
 
-const getColumnsAction = (subj, data) => {
+const setColumnsAction = (subj, data) => {
 	return actions[subj][`get${subj}Columns`](data)
 }
 
@@ -32,13 +32,18 @@ const clearDataToChangeAction = (subj) => {
 	return actions[subj][`clear${subj}DataToChange`]
 }
 
+const changeHoursAction = (subj, data) => {
+	return actions[subj][`change${subj}FreeHours`](data)
+}
+
 export {
-	getItemsAction,
-	getColumnsAction,
+	setItemsAction,
+	setColumnsAction,
 	setDataToChangeAction,
 	setErrorsAction,
 	setHelperAction,
 	pushToChangeAction,
 	toggleStateAction,
-	clearDataToChangeAction
+	clearDataToChangeAction,
+	changeHoursAction
 }

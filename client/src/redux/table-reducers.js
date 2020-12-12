@@ -3,7 +3,7 @@ import {createSlice} from "@reduxjs/toolkit";
 const initState = () => ({
 	list: null,
 	columns: null,
-	dataToChange: null,
+	dataToChange: {},
 	editState: null,
 	errors: {},
 	helper: null,
@@ -41,6 +41,9 @@ export const createTableReducers = (subj) => {
 			},
 			[`clear${subj}DataToChange`]: (state, action) => {
 				state.dataToChange = null;
+			},
+			[`change${subj}FreeHours`]: (state, action) => {
+				state.dataToChange.hours = action.payload;
 			}
 		}
 	})

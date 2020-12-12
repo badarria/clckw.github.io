@@ -51,11 +51,29 @@ const getColumnNames = async (subj) => {
 	try {
 		const res = await fetch(`${path}/${subj}/columnNames`);
 		const req = await res.json();
-		const names = await req.map(({column_name}) => column_name.replace(/\Bid|\Bat$/i, '')).filter(name => !name.match(/_/));
-		return names;
+		return req.map(({column_name}) => column_name.replace(/\Bid|\Bat$/i, '')).filter(name => !name.match(/_/));
 	} catch (err) {
 		console.error(err.message)
 	}
 };
 
-export {getColumnNames, addItem, updateItem, deleteItem, getItems}
+const getForeignKeys = async (subj) => {
+	try {
+		const res = await fetch(`${path}/${subj}/foreignKeys`);
+		return await res.json()
+	} catch (err) {
+		console.error(err.message)
+	}
+}
+
+const getFilteredOrders = async (subj, master_id, date, order_id) => {
+	try {
+		const res = await fetch(`${path}/${subj}/filtered/${date}/${master_id}/${order_id}`)
+		return res.json()
+	} catch (err) {
+		console.error(err.message)
+	}
+}
+
+
+export {getColumnNames, addItem, updateItem, deleteItem, getItems, getForeignKeys, getFilteredOrders}

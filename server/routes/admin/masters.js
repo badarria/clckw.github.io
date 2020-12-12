@@ -19,7 +19,6 @@ router.get('/foreignKeys', async (req, res) => {
 		const getCityNames = await pool.query(
 			"SELECT * FROM cities");
 		res.json({city: getCityNames.rows})
-
 	} catch (err) {
 		console.error(err.message)
 	}

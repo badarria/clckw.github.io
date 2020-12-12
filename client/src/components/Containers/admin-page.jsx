@@ -5,7 +5,7 @@ import Customers from './customers-container';
 import Cities from './cities-container';
 import Masters from './masters-container';
 import ServicesContainer from "./services-container";
-import OrdersContainer from "./orders-container";
+import OrdersContainer from "./Orders/orders-container";
 
 
 const AdminPage = () => {

@@ -8,6 +8,8 @@ const store = configureStore({
 });
 
 const subjects = ['customers', 'services', 'masters', 'orders', 'cities']
+
+
 const initState = (arr) => {
 	arr.forEach(subj => {
 		store.dispatch(getItemsThunk(subj));

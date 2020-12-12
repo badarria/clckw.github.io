@@ -1,3 +1,5 @@
+import {} from '../utils/func-for-timestamp'
+
 const getItemsState = (subj, state) => {
 	return state[subj].list
 };
@@ -16,16 +18,15 @@ const errorsState = (subj, state) => {
 const helperState = (subj, state) => {
 	return state[subj].helper
 };
-const keysForMasters = (state) => {
-	return {city: state.cities.list}
-}
-const keysForOrders = (state) => {
-	return {
-		city: state.cities.list,
-		customer: state.customers.list,
-		master: state.masters.list,
-		service: state.services.list,
-	}
+
+
+const ordersDataToChange = (state) => {
+	const data = state.orders.dataToChange;
+	let dataForFields = Object.entries(data).slice(0, -5)
+	dataForFields = Object.fromEntries(dataForFields)
+	let date = data.date;
+	let time = data.hours;
+	return {fields: dataForFields, date: date, time: time}
 }
 
 export {
@@ -35,6 +36,5 @@ export {
 	editStateState,
 	errorsState,
 	helperState,
-	keysForMasters,
-	keysForOrders
+	ordersDataToChange
 }

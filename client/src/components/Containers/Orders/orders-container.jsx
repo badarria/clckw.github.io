@@ -8,8 +8,8 @@ import {
 	setColumns,
 	changeFreeHours
 } from "../../../middleware/general";
-import AdmTableRedux from "../../Table/basic-table";
-import BasicTableHead from "../../Table/basic-table-head";
+import AdmTableRedux from "../../Common/table/basic-table";
+import BasicTableHead from "../../Common/table/basic-table-head";
 import {
 	editStateState, errorsState,
 	getColumnsState,

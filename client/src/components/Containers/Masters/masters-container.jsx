@@ -15,11 +15,11 @@ import {
 	helperState
 } from '../../../middleware/state-selectors'
 
-import AdmTableRedux from "../../Table/basic-table";
-import BasicTableHead from "../../Table/basic-table-head";
+import AdmTableRedux from "../../Common/table/basic-table";
+import BasicTableHead from "../../Common/table/basic-table-head";
 import {compose} from "redux";
 import {connect, useDispatch} from "react-redux";
-import MasterHeadForm from "./master-head-form";
+import MastersForm from "./masters-form";
 
 const subj = 'masters'
 const columnNames = ['id', 'name', 'surname', 'city', 'rating']
@@ -105,7 +105,7 @@ const MastersContainer = (props) => {
 		<>
 			<AdmTableRedux tableProps={table}>
 				{editState ?
-					<MasterHeadForm {...form} />
+					<MastersForm {...form} />
 					:
 					<BasicTableHead headProps={head}/>
 				}

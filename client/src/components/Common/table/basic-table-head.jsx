@@ -1,8 +1,8 @@
-import {TableRow, TableCell} from "@material-ui/core";
+import {TableRow, TableCell, IconButton} from "@material-ui/core";
 import React from "react";
 import PropTypes from "prop-types";
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import TableButton from "../Common/table-button";
+
 
 
 const BasicTableHead = (props) => {
@@ -18,8 +18,11 @@ const BasicTableHead = (props) => {
 					</TableCell>
 				)
 			})}
-			<TableButton handleClick={() => create(columns, 'isCreating')} colSpan={2} title='Add New'
-									 icon={<AddCircleOutlineIcon/>}/>
+			<TableCell colSpan={2} align="right">
+				<IconButton onClick={() => create(columns, 'isCreating')} colSpan={2} title='Add New Item'>
+					<AddCircleOutlineIcon/>
+				</IconButton>
+			</TableCell>
 		</TableRow>
 	)
 }

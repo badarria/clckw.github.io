@@ -1,27 +1,28 @@
 import React, {useEffect} from 'react';
-
-import {
-	acceptChanges,
-	cancelInput,
-	handleChangeData,
-	pushToChange,
-	removeFromDB,
-	setHelper
-} from "../../middleware/general";
-import AdmTableRedux from "../Table/basic-table";
-import BasicTableHeadForm from "../Table/basic-table-head-form";
-import BasicTableHead from "../Table/basic-table-head";
+import {useDispatch, connect} from 'react-redux'
 import {compose} from "redux";
-import {connect, useDispatch} from "react-redux";
+import {
+	setHelper,
+	removeFromDB,
+	pushToChange,
+	acceptChanges,
+	cancelInput, setColumns
+} from '../../../middleware/general'
+import AdmTableRedux from "../../Common/table/basic-table";
+import BasicTableHead from "../../Common/table/basic-table-head";
 import {
 	editStateState, errorsState,
 	getColumnsState,
 	getDataToChangeState,
 	getItemsState, helperState
-} from "../../middleware/state-selectors";
-const subj = 'services'
+} from "../../../middleware/state-selectors";
+import CustomersForm from "./customers-form";
 
-const ServicesContainer = (props) => {
+const subj = 'customers'
+const columnNames = ['id', 'name', 'surname', 'email']
+
+
+const CustomersContainer = (props) => {
 	const dispatch = useDispatch()
 	const {items, errors, helper, columns, dataToChange, editState} = props
 
@@ -29,12 +30,17 @@ const ServicesContainer = (props) => {
 		let error;
 		switch (label) {
 			case "name":
-				error = !data.match(/^[a-z0 -9_-]*$/i) ? 'Incorrect characters' :
+				error = !data.match(/^[a-z0-9_-]*$/i) ? 'Incorrect characters' :
 					data.length < 2 ? 'Name is too short' :
 						data.length > 16 ? "Name is too long" : '';
 				break;
-			case "time":
-				error = !data.match(/^\d+$/) ? 'Only digits' : !data.match(/^[1-7]$/) ? 'from 1 to 7 hours' : '';
+			case "surname":
+				error = !data.match(/^[a-z0-9_-]*$/i) ? 'Incorrect characters' :
+					data.length < 2 ? 'Surname is too short' :
+						data.length > 16 ? "Surname is too long" : '';
+				break;
+			case "email":
+				error = !data.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i) ? 'Invalid email' : '';
 				break;
 			default:
 				break;
@@ -48,21 +54,19 @@ const ServicesContainer = (props) => {
 				text = 'Unique id';
 				break;
 			case 'name':
-				text = 'Unique service name';
+				text = 'First name';
 				break;
-			case 'time':
-				text = 'Duration, hours';
+			case 'surname':
+				text = 'Second name';
+				break;
+			case 'email':
+				text = 'Unique email';
 				break;
 			default:
 				break;
 		}
 		return text;
 	}
-
-	useEffect(() => {
-		setHelper(subj, columns, helperText, dispatch)
-	}, [])
-
 	const table = {
 		items: items,
 		columns: columns,
@@ -70,15 +74,17 @@ const ServicesContainer = (props) => {
 		del: removeFromDB(subj, dispatch),
 		push: pushToChange(subj, dispatch),
 	}
+	useEffect(() => {
+		setHelper(subj, columns, helperText, dispatch);
+		setColumns(subj, columnNames, dispatch)
+	}, [])
 
 	const form = {
 		data: dataToChange,
-		edit: handleChangeData(subj, dispatch, errorCases),
+		handleReset: cancelInput(subj, dispatch),
 		accept: acceptChanges(subj, editState, dispatch),
-		cancel: cancelInput(subj, dispatch),
-		state: editState,
-		errors: errors,
-		helper: helper,
+		// errors: errors,
+		// helper: helper,
 	}
 
 	const head = {
@@ -86,10 +92,13 @@ const ServicesContainer = (props) => {
 		create: pushToChange(subj, dispatch)
 	}
 
+
 	return (
 		<>
 			<AdmTableRedux tableProps={table}>
-				{editState ? <BasicTableHeadForm formProps={form}/> :
+				{editState ?
+					<CustomersForm {...form} />
+					:
 					<BasicTableHead headProps={head}/>
 				}
 			</AdmTableRedux>
@@ -109,5 +118,6 @@ const mapStateToProps = (state) => {
 	})
 }
 
+
 export default compose(
-	connect(mapStateToProps))(ServicesContainer);
+	connect(mapStateToProps))(CustomersContainer);

@@ -1,4 +1,4 @@
-import {} from '../utils/func-for-timestamp'
+import {} from '../utils/date-time-func'
 
 const getItemsState = (subj, state) => {
 	return state[subj].list

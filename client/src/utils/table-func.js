@@ -1,9 +1,3 @@
-export const emptyFields = (columns) => {
-	return columns.reduce((acc, column) => {
-		if (column !== 'id') acc[column] = ''
-		return acc;
-	}, {})
-}
 
 const _findEditedId = (data, key) => {
 	return data.reduce((acc, [name, val]) => {
@@ -34,6 +28,13 @@ export const mergeWithForeignKeys = (data, keys) => {
 		return acc;
 	}, {})
 	return res
+}
+
+export const emptyFields = (columns) => {
+	return columns.reduce((acc, column) => {
+		if (column !== 'id') acc[column] = ''
+		return acc;
+	}, {})
 }
 
 export const getHelperText = (data, textObj) => {

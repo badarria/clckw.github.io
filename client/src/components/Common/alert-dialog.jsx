@@ -1,11 +1,13 @@
-import React, {Fragment} from  'react';
+import React, {Fragment} from 'react';
 import Button from '@material-ui/core/Button';
 import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core';
-import TableButton from './table-button'
+import IconButton from "@material-ui/core/IconButton";
+import {ButtonIcon} from "./button-icon";
+
 
 const AlertDialog = (props) => {
 	const [open, setOpen] = React.useState(false);
-	const {icon, title, acceptFunc, messageQuestion, description, disabled} = props;
+	const {icon, title, accept, question, description, disabled, type} = props;
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
@@ -13,29 +15,29 @@ const AlertDialog = (props) => {
 		setOpen(false);
 	};
 	const handleAccept = () => {
-		acceptFunc();
+		accept();
 		setOpen(false);
 	}
 
 	return (
 		<Fragment>
-			<TableButton icon={icon} handleClick={handleClickOpen} title={title} disabled={disabled}/>
+			<ButtonIcon onClick={handleClickOpen} title={title} disabled={disabled} icon={icon} type={type}/>
 			<Dialog
 				open={open}
 				onClose={handleClose}
 			>
-				<DialogTitle id="alert-dialog-title">{messageQuestion}</DialogTitle>
+				<DialogTitle id="alert-dialog-title">{question}</DialogTitle>
 				<DialogContent>
 					<DialogContentText id="alert-dialog-description">
 						{description}
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>
-					<Button onClick={handleClose} color="primary" autoFocus>
-						Disagree
-					</Button>
-					<Button onClick={handleAccept} color="primary">
+					<Button onClick={handleAccept} color="primary" autoFocus>
 						Agree
+					</Button>
+					<Button onClick={handleClose} color="primary" >
+						Disagree
 					</Button>
 				</DialogActions>
 			</Dialog>
@@ -44,8 +46,8 @@ const AlertDialog = (props) => {
 }
 
 AlertDialog.defaultProps = {
-	messageQuestion: 'Are you sure?',
-	description: 'This will be permanently removed from the database.',
+	question: 'Are you sure?',
+	description: 'This item will be permanently removed from the database',
 }
 
 export default AlertDialog

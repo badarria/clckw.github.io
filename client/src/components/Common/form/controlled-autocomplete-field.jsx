@@ -1,5 +1,6 @@
-import React, {useEffect, useState, useRef, Fragment} from "react";
-import {makeStyles, FormControl, TextField, List, ListItem, ListItemText, Box} from '@material-ui/core';
+import React, {useEffect, useState, useRef} from "react";
+import {makeStyles, TextField, List, ListItem, ListItemText, Box} from '@material-ui/core';
+import {Controller} from "react-hook-form";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -32,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const AutocompleteField = (props) => {
-	const {data, label, edit, helper} = props;
+	const {data, label, onChange, helper} = props;
 	const editedItem = data[0]
 
 	const [display, setDisplay] = useState(false);
@@ -40,14 +41,14 @@ const AutocompleteField = (props) => {
 	const wrapperRef = useRef(null);
 	const classes = useStyles();
 
-	const options = data.map(({id, name}) => {
-		return {'id': id, 'name': name.toLowerCase()}
+	const options = data.map(({id, name, ...rest}) => {
+		return {'id': id, 'name': name.toLowerCase(), ...rest}
 	}).filter(({name}) => name && name.includes(search.name.toLowerCase()));
 
-	const setItem = ({id, name}) => {
-		setSearch({'id': id, 'name': name});
+	const setItem = (option) => {
+		setSearch({'id': option.id, 'name': option.name});
 		setDisplay(false);
-		edit(`${label}_id`, id)
+		onChange(option)
 	}
 
 	useEffect(() => {
@@ -55,7 +56,6 @@ const AutocompleteField = (props) => {
 		return () => {
 			document.removeEventListener("mousedown", handleClickOutside)
 		}
-		// console.log(helper)
 	}, [])
 
 	const handleClickOutside = e => {
@@ -75,16 +75,26 @@ const AutocompleteField = (props) => {
 	const handleBlur = () => {
 		if (!options.length) {
 			setSearch({"id": null, "name": ""});
-			edit(`${label}_id`, null)
+			onChange(null)
 		}
-		;
 	}
 
+	const fieldProps = {
+		label,
+		onClick: () => setDisplay(!display),
+		value: search.name,
+		style: {margin: '16px'},
+		onChange: (e) => handleChange(e),
+		onBlur: handleBlur,
+		autoComplete: 'nope',
+		// helperText: {helper},
+		size: "small",
+		className: classes.root,
+	}
 
 	return (
 		<Box>
-				<TextField label={label} onClick={() => setDisplay(!display)} value={search.name} required
-									 onChange={(e) => handleChange(e)} onBlur={handleBlur} autoComplete='nope' helperText={helper} size="small" className={classes.root}/>
+			<TextField {...fieldProps}/>
 			{display && (
 				<List className={classes.listbox} ref={wrapperRef}>
 					{options.map((option, i) => {
@@ -98,4 +108,15 @@ const AutocompleteField = (props) => {
 	)
 }
 
-export default AutocompleteField;
+export const ControlledAutocompleteField = (props) => {
+	const {name, control, data} = props
+
+	return (
+		<Controller
+			name={name}
+			control={control}
+			render={(props) => (
+				<AutocompleteField data={data} label={name} {...props}/>)}
+		/>
+	)
+}

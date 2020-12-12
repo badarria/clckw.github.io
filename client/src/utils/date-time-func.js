@@ -1,39 +1,38 @@
 const beginKey = 'begin';
 const endKey = 'end';
-const cityKey = 'city_id';
-const masterKey = 'master';
-const idKey = 'id';
-const dateKey = 'date'
+// const cityKey = 'city_id';
+// const masterKey = 'master';
+// const idKey = 'id';
+// const dateKey = 'date'
 
-const getNum = (str) => {
+const _getNum = (str) => {
 	return Number(str.split(':')[0]);
 }
-const getTimeStr = (num) => {
+const _getTimeStr = (num) => {
 	return `${num}:00`;
 }
 
-
-const workingHours = (begin, end, serviceTime = 1) => {
+const _workingHours = (begin, end, serviceTime = 1) => {
 	const endTime = end - Number(serviceTime);
 	let res = [];
 	for (let i = begin; i <= endTime; i += 1) {
-		res.push(getTimeStr(i));
+		res.push(_getTimeStr(i));
 	}
 	return res;
 }
 
-const findBookedTime = (orders) => {
+const _findBookedTime = (orders) => {
 	return orders.reduce((acc, {[beginKey]: beginTime, [endKey]: endTime}) => {
-		for (let i = getNum(beginTime); i < getNum(endTime); i += 1) {
-			acc.push(getTimeStr(i));
+		for (let i = _getNum(beginTime); i < _getNum(endTime); i += 1) {
+			acc.push(_getTimeStr(i));
 		}
 		return acc
 	}, [])
 }
 
 const getHoursArray = (orders, service_time,  dayBegin = 8, dayEnd = 20) => {
-	const workDay = workingHours(dayBegin, dayEnd, service_time);
-	const bookedTime = findBookedTime(orders);
+	const workDay = _workingHours(dayBegin, dayEnd, service_time);
+	const bookedTime = _findBookedTime(orders);
 	const res =  workDay.reduce((acc, hour) => {
 		const booked = bookedTime.includes(hour)
 		acc = [...acc, {hour: hour, booked: booked}]
@@ -72,13 +71,4 @@ const getHoursArray = (orders, service_time,  dayBegin = 8, dayEnd = 20) => {
 // }
 
 
-export {workingHours, findBookedTime, getHoursArray}
-
-// const masters = [{id:8, name:'zzz', surname:'zzzz', cityId: 2, rating:5}, {id:3, name:'zzz', surname:'zzzz', cityId: 2, rating:5}, {id:4, name:'zzz', surname:'zzzz', cityId: 3, rating:5}]
-// const date = '09/11/20'
-// const ord = [
-// 	{id: 5, name: "Lesha", master: 3, date: "09/11/20", begin: ("12:00"), end: ('13:00'), cityId: 2},
-// 	{id: 5, name: "ivan", master: 3, date: "09/11/20", begin: ("10:00"), end: ('12:00'), cityId: 2},
-// ]
-//
-// console.log(getTimeArray(ord, 3, 3,"09/11/20" ))
+export {getHoursArray}

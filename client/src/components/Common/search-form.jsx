@@ -7,7 +7,7 @@ import {
 	FormControl,
 	TextField
 } from "@material-ui/core";
-import AutocompleteField from "./autocomplete-field";
+// import AutocompleteField from "./controlled-autocomplete-field";
 
 const useStyles = makeStyles({
 	root: {
@@ -47,10 +47,10 @@ const SearchForm = (props) => {
 		<Box component={Paper} className={classes.root}>
 			<form onSubmit={(e) => find(e)}>
 				<Box className={classes.inputWrap}>
-					<AutocompleteField data={services} label='service' edit={handleChange} helper='Choose a service'/>
-					<AutocompleteField data={services} label='service' edit={handleChange} helper='Choose a service'/>
-					<AutocompleteField data={services} label='service' edit={handleChange} helper='Choose a service'/>
-					<AutocompleteField data={services} label='service' edit={handleChange} helper='Choose a service'/>
+					{/*<AutocompleteField data={services} label='service' edit={handleChange} helper='Choose a service'/>*/}
+					{/*<AutocompleteField data={services} label='service' edit={handleChange} helper='Choose a service'/>*/}
+					{/*<AutocompleteField data={services} label='service' edit={handleChange} helper='Choose a service'/>*/}
+					{/*<AutocompleteField data={services} label='service' edit={handleChange} helper='Choose a service'/>*/}
 					{/*<TextField label='Service' name='service' value={state.service} helperText='Choose a service' required className={classes.input} onChange={(e) => handleChange(e)}/>*/}
 					{/*<TextField label='City' name='city' value={state.city} helperText='Choose a city' required className={classes.input} onChange={(e) => handleChange(e)}/>*/}
 					{/*<TextField label='Date' name='date' value={state.date} helperText='Pick a date' required className={classes.input} onChange={(e) => handleChange(e)}/>*/}

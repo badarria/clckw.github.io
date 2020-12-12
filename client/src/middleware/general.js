@@ -5,28 +5,26 @@ import {
 	deleteItem,
 	getItems,
 	getForeignKeys,
-	getBookedTime,
 	getFilteredOrders
 } from './requests'
 import {
 	setItemsAction,
 	setColumnsAction,
-	setDataToChangeAction,
 	setErrorsAction,
 	setHelperAction,
 	pushToChangeAction,
 	toggleStateAction,
 	clearDataToChangeAction, changeHoursAction
 } from './actions-selectors'
-import {emptyFields, mergeWithForeignKeys} from "../utils/table";
-import {findBookedTime, getHoursArray} from "../utils/func-for-timestamp";
-import format from "date-fns/format";
-import {parseISO} from "date-fns";
+import {emptyFields, mergeWithForeignKeys} from "../utils/table-func";
+import { getHoursArray} from "../utils/date-time-func";
+
 
 const getItemsThunk = (subj) => async (dispatch) => {
 	const data = await getItems(subj)
 	dispatch(setItemsAction(subj, data));
 }
+
 const setColumns = (subj, data, dispatch) => {
 	dispatch(setColumnsAction(subj, data));
 }
@@ -36,12 +34,10 @@ const getColumnsThunk = (subj) => async (dispatch) => {
 	dispatch(setColumnsAction(subj, data));
 }
 
-
 const removeFromDB = (subj, dispatch) => async (id) => {
 	await deleteItem(id, subj);
 	await dispatch(getItemsThunk(subj))
 }
-
 
 const getFreeHours = async (master_id, date, service_time, order_id = 0) => {
 	date = date.replace(/[a-z ]/g, '')
@@ -74,8 +70,8 @@ const cancelInput = (subj, dispatch) => () => {
 	dispatch(toggleStateAction(subj, null))
 }
 
+
 const acceptChanges = (subj, state, dispatch) => async (data) => {
-	console.log(data, 'general')
 	state === 'isEditing' ? await updateItem(data, subj) : await addItem(data, subj);
 	await dispatch(getItemsThunk(subj))
 	await dispatch(cancelInput(subj, dispatch))
@@ -89,11 +85,11 @@ const setHelper = (subj, columns, helperText, dispatch) => {
 	dispatch(setHelperAction(subj, helper))
 }
 
-const handleChangeData = (subj, dispatch, errorCases) => (key, value) => {
-	const error = {[key]: errorCases(key, value)}
-	dispatch(setDataToChangeAction(subj, {[key]: value}))
-	dispatch(setErrorsAction(subj, error))
-}
+// const handleChangeData = (subj, dispatch, errorCases) => (key, value) => {
+// 	const error = {[key]: errorCases(key, value)}
+// 	dispatch(setDataToChangeAction(subj, {[key]: value}))
+// 	dispatch(setErrorsAction(subj, error))
+// }
 
 
 export {
@@ -103,7 +99,6 @@ export {
 	setHelper,
 	pushToChange,
 	acceptChanges,
-	handleChangeData,
 	cancelInput,
-	setColumns, changeFreeHours
+	setColumns, changeFreeHours,
 }

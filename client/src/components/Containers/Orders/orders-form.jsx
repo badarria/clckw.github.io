@@ -1,11 +1,9 @@
-import {useForm} from "react-hook-form";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import FormFieldsGeneratorHook from "../../Common/form-fields-generator-hook";
-import ControlledDatePicker from "../../Common/controlled-date-picker";
-import {ControlledSelect} from "../../Common/controlled-select";
-import ButtonsGroupHook from "../../Common/buttons-group-hook";
 import React, {useEffect} from "react";
+import {useForm} from "react-hook-form";
+import FormFieldsGenerator from "../../Common/form/form-fields-generator";
+import ControlledDatePicker from "../../Common/form/controlled-date-picker";
+import {ControlledSelect} from "../../Common/form/controlled-select";
+import {BasicTableForm} from "../../Common/form/basic-table-form";
 
 
 const OrderHeadForm = (props) => {
@@ -36,6 +34,7 @@ const OrderHeadForm = (props) => {
 	}, [masterValue, dateValue, serviceValue])
 
 	const submitForm = (data) => {
+		console.log('subm')
 		const {id, master, customer, service, date, time} = data
 		const res = {
 			id: id,
@@ -44,27 +43,28 @@ const OrderHeadForm = (props) => {
 			service: service.id,
 			date: date.replace(/[a-z ]/g, ''),
 			begin: time,
-			end: `${Number(time.slice(0, 2))+Number(service.time)}:00`
+			end: `${Number(time.slice(0, 2)) + Number(service.time)}:00`
 		}
 		accept(res)
 	}
 
+	const formProps = {
+		submit: handleSubmit((data) => submitForm(data)),
+		reset: () => {
+			handleReset()
+			reset()
+		}
+	}
+	const formFieldsProps = {data: fields, register, control}
+
 	return (
-		<TableRow>
-			<TableCell colSpan={11}>
-				<form onSubmit={handleSubmit((data) => submitForm(data))}
-							style={{display: 'flex', justifyContent: "space-between", width: '100%', alignItems: 'center'}}>
-					<FormFieldsGeneratorHook data={fields} register={register} control={control}/>
-					<ControlledDatePicker date={date} control={control} setValue={setValue} watch={watch} getValues={getValues}/>
-					<ControlledSelect data={time} control={control} disabled={disableHours}
-														defaultValue={time[0].hour}/>
-					<ButtonsGroupHook reset={() => {
-						handleReset()
-						reset()
-					}}/>
-				</form>
-			</TableCell>
-		</TableRow>
+		<BasicTableForm {...formProps}>
+			<FormFieldsGenerator {...formFieldsProps}/>
+			<ControlledDatePicker date={date} control={control} setValue={setValue} watch={watch} getValues={getValues}/>
+			<ControlledSelect data={time} control={control} disabled={disableHours}
+												defaultValue={time[0].hour}/>
+		</BasicTableForm>
+
 	)
 }
 

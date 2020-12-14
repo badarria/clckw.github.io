@@ -1,60 +1,28 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect} from "react";
 import './App.css';
-import Nav from "./Nav"
-import HomePage from './components/Containers/main-page'
+import Navigation from "./components/Containers/HomePage/navigation"
+import {HomePage} from './components/Containers/home-page'
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
 import AdminPage from "./components/Containers/admin-page";
-import {parse} from "dotenv";
+import {compose} from "redux";
+import {connect} from "react-redux";
+import {getAuthState} from "./middleware/state-selectors";
+import {getAdminInitState, getInitState} from "./middleware/thunks";
 
 
-const App = () => {
-	const [isAuth, setAuth] = useState(false);
-
-	const loginUser = async (data) => {
-		try {
-			const res = await fetch('/auth', {
-				method: "POST",
-				headers: {"Content-Type": "application/json"},
-				body: JSON.stringify(data),
-			})
-			const parseRes = await res.json()
-
-			if (parseRes.token) {
-				localStorage.setItem("token", parseRes.token)
-				setAuth(true);
-			}
-
-		} catch (err) {
-			console.error(err.message);
-		}
-	}
-
-	const stayAuth = async () => {
-		try {
-			const res = await fetch('/auth/verify', {
-				method: "GET",
-				headers: {token: localStorage.token}
-			});
-			const parseRes = await res.json();
-			parseRes === true ? setAuth(true) : setAuth(false);
-		} catch (err) {
-			console.error(err.message)
-		}
-	}
-
-	const logout = () => {
-		localStorage.removeItem("token");
-		setAuth(false);
-	}
+const App = ({isAuth, getInitState, getAdminInitState}) => {
 
 	useEffect(() => {
-		stayAuth()
+		getInitState()
+		const token = localStorage.getItem('token');
+		if (token) {
+			getAdminInitState()
+		}
 	}, [])
-
 
 	return (
 		<Router>
-			<Nav loginUser={loginUser} isAuth={isAuth} logout={logout}/>
+			<Navigation/>
 			<Switch>
 				<Route path="/" exact component={HomePage}/>
 				{isAuth ? <Route path="/admin" component={AdminPage}/> : <Redirect to="/"/>}
@@ -63,4 +31,18 @@ const App = () => {
 	);
 }
 
-export default App;
+const mapStateToProps = (state) => {
+	return {
+		isAuth: getAuthState(state),
+	}
+}
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		getInitState: () => dispatch(getInitState),
+		getAdminInitState: () => dispatch(getAdminInitState),
+	}
+}
+
+export default compose(
+	connect(mapStateToProps, mapDispatchToProps))(App);

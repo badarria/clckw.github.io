@@ -7,11 +7,11 @@ const initState = {
 		email: '',
 		city: '',
 		service: '',
-		date: new Date(),
+		date: '',
 		hours: ''
 	},
 	freeMasters: [],
-	auth: false
+	isAuth: false
 };
 
 const mainReducer = createSlice({
@@ -28,7 +28,7 @@ const mainReducer = createSlice({
 			state.freeMasters = action.payload
 		},
 		setAuth: (state, action) => {
-			state.auth = action.payload
+			state.isAuth = action.payload
 		},
 	}
 })

@@ -11,7 +11,7 @@ const getItems = async (subj) => {
 	}
 }
 
-const deleteItem = async (id, subj) => {
+const removeItem = async (id, subj) => {
 	try {
 		await fetch(`${adminPath}/${subj}/${id}`, {
 			method: "DELETE"
@@ -76,7 +76,7 @@ const getFilteredOrders = async (subj, master_id, date, order_id) => {
 	}
 }
 
-////////MainPage
+////////HomePage
 
 const getFreeMasters = async (city, begin, end) => {
 	try {
@@ -87,6 +87,41 @@ const getFreeMasters = async (city, begin, end) => {
 	}
 }
 
+const loginUser = async (data) => {
+	try {
+		const res = await fetch('/auth', {
+			method: "POST",
+			headers: {"Content-Type": "application/json"},
+			body: JSON.stringify(data),
+		})
+		return res.json()
+	} catch (err) {
+		console.error(err.message);
+	}
+}
+
+const stayAuth = async () => {
+	try {
+		const res = await fetch('/auth/verify', {
+			method: "GET",
+			headers: {token: localStorage.token}
+		});
+		return res.json();
+	} catch (err) {
+		console.error(err.message)
+	}
+}
 
 
-export {getColumnNames, addItem, updateItem, deleteItem, getItems, getForeignKeys, getFilteredOrders, getFreeMasters}
+export {
+	getColumnNames,
+	addItem,
+	updateItem,
+	removeItem,
+	getItems,
+	getForeignKeys,
+	getFilteredOrders,
+	getFreeMasters,
+	loginUser,
+	stayAuth
+}

@@ -11,8 +11,6 @@ import {
 	changeFreeHours,
 	pushToChange,
 	removeFromDB,
-	setColumns,
-	setHelper
 } from "../../../middleware/thunks";
 
 
@@ -27,13 +25,11 @@ export const containerStateProps = (subj) => (state) => {
 	})
 }
 
-export const containerDispatchProps = (subj, columns, getKeys = false) => (dispatch) => {
+export const containerDispatchProps = (subj, getKeys = false) => (dispatch) => {
 	return ({
 		remove: (id) => dispatch(removeFromDB(subj, id)),
 		push: (data, state) => dispatch(pushToChange(subj, data, state, getKeys)),
 		handleReset: () => dispatch(cancelInput(subj)),
-		setHelper: (text) => dispatch(setHelper(subj, columns, text)),
-		setColumns: () => dispatch(setColumns(subj, columns, dispatch)),
 		accept: (data) => dispatch(accept(subj, data)),
 	})
 }

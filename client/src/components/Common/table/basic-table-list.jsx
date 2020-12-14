@@ -8,7 +8,7 @@ import {ButtonIcon} from "../button-icon";
 
 
 const BasicTableList = (props) => {
-	const {del, data, columns, state, push} = props;
+	const {remove, data, columns, editState, push} = props;
 
 
 	return (
@@ -16,14 +16,14 @@ const BasicTableList = (props) => {
 			const id = item.id;
 
 			const buttonProps = {
-				title: !!state ? "You have to submit form first" : "Edit item",
-				disabled: !!state,
+				title: !!editState ? "You have to submit form first" : "Edit item",
+				disabled: !!editState,
 				icon: <EditIcon fontSize="small"/>
 			}
 			const alertProps = {
-				title: !!state ? "You have to submit form first" : 'Delete item',
+				title: !!editState ? "You have to submit form first" : 'Remove item',
 				icon: <DeleteIcon fontSize="small"/>,
-				disabled: !!state
+				disabled: !!editState
 			}
 
 			return (
@@ -38,7 +38,7 @@ const BasicTableList = (props) => {
 						<ButtonIcon {...buttonProps} onClick={() => push(item, 'isEditing')}/>
 					</TableCell>
 					<TableCell align='right'>
-						<AlertDialog {...alertProps} accept={() => del(id)}/>
+						<AlertDialog {...alertProps} accept={() => remove(id)}/>
 					</TableCell>
 				</TableRow>
 			)
@@ -46,8 +46,8 @@ const BasicTableList = (props) => {
 }
 BasicTableList.propTypes = {
 	data: PropTypes.array.isRequired,
-	del: PropTypes.func.isRequired,
-	state: PropTypes.any,
+	remove: PropTypes.func.isRequired,
+	editState: PropTypes.any,
 	columns: PropTypes.array,
 	push: PropTypes.func.isRequired,
 };

@@ -44,12 +44,23 @@ create TABLE orders
     endAt     time not null
 );
 
+create TABLE newOrders (
+id serial primary key,
+    master   integer   REFERENCES masters ON delete SET NULL,
+    customer integer   REFERENCES customers ON delete SET NULL,
+    service  integer   REFERENCES services ON delete SET NULL,
+    beginAt timestamptz not null,
+    endAt timestamptz not null
+);
+
+
+
 insert into orders (master, customer, service, orderDate, beginAt, endAt)
 values (5, 27,  1, '2020-11-08', '16:00:00', '19:00:00');
 insert into orders (master, customer, service, orderDate, beginAt, endAt)
 values (9, 24,  2, '13/12/2020', '16:00:00', '19:00:00');
-insert into orders (master, customer, service, orderDate, beginAt, endAt)
-values (9, 24,  2, '2020-12-13', '15:00:00', '16:00:00');
+insert into newOrders (master, customer, service, beginAt, endAt)
+values (9, 42,  2, 'Wed Dec 16 2020 12:14:00', '2020-12-13 16:00:00');
 
 create TABLE admin
 (

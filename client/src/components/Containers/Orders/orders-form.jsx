@@ -4,10 +4,17 @@ import FormFieldsGenerator from "../../Common/form/form-fields-generator";
 import ControlledDatePicker from "../../Common/form/controlled-date-picker";
 import {ControlledSelect} from "../../Common/form/controlled-select";
 import {BasicTableForm} from "../../Common/form/basic-table-form";
+import {formDispatchProps, formStateProps} from "../utils/props-generator";
+import {compose} from "redux";
+import {connect} from "react-redux";
 
+const subj = 'orders';
+const mapStateToProps = formStateProps(subj);
+const mapDispatchToProps = formDispatchProps(subj);
 
-const OrderHeadForm = (props) => {
-	const {fields, date, time, handleReset, changeHours, accept} = props
+const OrdersForm = (props) => {
+	const {data, handleReset, changeHours, accept} = props;
+	const {fields, date, time,} = data;
 
 	const {register, handleSubmit, control, reset, watch, setValue, getValues} = useForm({
 		defaultValues: {
@@ -68,4 +75,7 @@ const OrderHeadForm = (props) => {
 	)
 }
 
-export default OrderHeadForm
+export default compose(
+	connect(mapStateToProps,
+		mapDispatchToProps
+	))(OrdersForm)

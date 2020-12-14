@@ -14,18 +14,22 @@ import {
 	setHelperAction,
 	pushToChangeAction,
 	toggleStateAction,
-	clearDataToChangeAction, changeHoursAction
+	clearDataAction,
+	changeHoursAction,
+	setFormDataAction,
+	setHoursAction,
+	setAuthAction
 } from './actions-selectors'
 import {emptyFields, mergeWithForeignKeys} from "../utils/table-func";
-import { getHoursArray} from "../utils/date-time-func";
-
+import {getHoursArray, getWorkingHours} from "../utils/date-time-func";
+// import {setFormDataAction, setAuth} from "../redux/main-reducer"
 
 const getItemsThunk = (subj) => async (dispatch) => {
 	const data = await getItems(subj)
 	dispatch(setItemsAction(subj, data));
 }
 
-const setColumns = (subj, data, dispatch) => {
+const setColumns = (subj, data) => (dispatch) => {
 	dispatch(setColumnsAction(subj, data));
 }
 
@@ -34,23 +38,13 @@ const getColumnsThunk = (subj) => async (dispatch) => {
 	dispatch(setColumnsAction(subj, data));
 }
 
-const removeFromDB = (subj, dispatch) => async (id) => {
+const removeFromDB = (subj, id) => async (dispatch) => {
 	await deleteItem(id, subj);
-	await dispatch(getItemsThunk(subj))
+	dispatch(getItemsThunk(subj))
 }
 
-const getFreeHours = async (master_id, date, service_time, order_id = 0) => {
-	date = date.replace(/[a-z ]/g, '')
-	const orders = await getFilteredOrders('orders', master_id, date, order_id)
-	return getHoursArray(orders, service_time);
-}
 
-const changeFreeHours = (subj, dispatch) => async (master_id, date, service_time, order_id) => {
-	const newHours = await getFreeHours(master_id, date, service_time, order_id);
-	dispatch(changeHoursAction(subj, newHours))
-}
-
-const pushToChange = (subj, dispatch, getKeys = false) => async (data, state) => {
+const pushToChange = (subj, data, state, getKeys = false) => async (dispatch) => {
 	const isEditing = state === 'isEditing'
 	const foreignKeys = getKeys ? await getForeignKeys(subj) : {};
 	let res = Array.isArray(data) ? emptyFields(data) : {...data}
@@ -65,19 +59,19 @@ const pushToChange = (subj, dispatch, getKeys = false) => async (data, state) =>
 	dispatch(toggleStateAction(subj, state))
 }
 
-const cancelInput = (subj, dispatch) => () => {
-	dispatch(clearDataToChangeAction(subj));
+const cancelInput = (subj) => (dispatch) => {
+	dispatch(clearDataAction(subj));
 	dispatch(toggleStateAction(subj, null))
 }
 
-
-const acceptChanges = (subj, state, dispatch) => async (data) => {
+const accept = (subj, data) => async (dispatch, getState) => {
+	const state = getState()[`${subj}`].editState;
 	state === 'isEditing' ? await updateItem(data, subj) : await addItem(data, subj);
 	await dispatch(getItemsThunk(subj))
 	await dispatch(cancelInput(subj, dispatch))
 }
 
-const setHelper = (subj, columns, helperText, dispatch) => {
+const setHelper = (subj, columns, helperText) => (dispatch) => {
 	const helper = columns.reduce((acc, column) => {
 		acc[column] = helperText(column)
 		return acc
@@ -85,11 +79,27 @@ const setHelper = (subj, columns, helperText, dispatch) => {
 	dispatch(setHelperAction(subj, helper))
 }
 
-// const handleChangeData = (subj, dispatch, errorCases) => (key, value) => {
-// 	const error = {[key]: errorCases(key, value)}
-// 	dispatch(setDataToChangeAction(subj, {[key]: value}))
-// 	dispatch(setErrorsAction(subj, error))
-// }
+const _getFreeHours = async (master_id, date, service_time, order_id = 0) => {
+	date = date.replace(/[a-z ]/g, '')
+	const orders = await getFilteredOrders('orders', master_id, date, order_id)
+	return getHoursArray(orders, service_time);
+}
+
+const changeFreeHours = (subj, master_id, date, service_time, order_id) => async (dispatch) => {
+	const newHours = await _getFreeHours(master_id, date, service_time, order_id);
+	dispatch(changeHoursAction(subj, newHours))
+}
+
+
+const getInitState = async (dispatch, getState) => {
+	const city = await getItems('cities');
+	const service = await getItems('services');
+	const hours = await getWorkingHours(8, 20, service[0].time);
+	const formData = Object.entries(getState().main.formData);
+	const keys = {city, service, hours}
+	const res = mergeWithForeignKeys(formData, keys)
+	dispatch(setFormDataAction(res))
+}
 
 
 export {
@@ -98,7 +108,8 @@ export {
 	removeFromDB,
 	setHelper,
 	pushToChange,
-	acceptChanges,
+	accept,
 	cancelInput,
 	setColumns, changeFreeHours,
+	getInitState
 }

@@ -6,7 +6,7 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
 
 const BasicTableHead = (props) => {
-	const {columns, create} = props.headProps;
+	const {columns, push} = props;
 
 	return (
 		<TableRow component='tr'>
@@ -19,7 +19,7 @@ const BasicTableHead = (props) => {
 				)
 			})}
 			<TableCell colSpan={2} align="right">
-				<IconButton onClick={() => create(columns, 'isCreating')} colSpan={2} title='Add New Item'>
+				<IconButton onClick={() => push(columns, 'isCreating')} colSpan={2} title='Add New Item'>
 					<AddCircleOutlineIcon/>
 				</IconButton>
 			</TableCell>
@@ -28,10 +28,8 @@ const BasicTableHead = (props) => {
 }
 
 BasicTableHead.propTypes = {
-	headProps: PropTypes.shape({
 		columns: PropTypes.array.isRequired,
 		create: PropTypes.func.isRequired,
-	})
 };
 
 export default BasicTableHead

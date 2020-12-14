@@ -2,7 +2,13 @@ import React from "react";
 import {useForm} from "react-hook-form";
 import FormFieldsGenerator from "../../Common/form/form-fields-generator";
 import {BasicTableForm} from "../../Common/form/basic-table-form";
+import {compose} from "redux";
+import {connect} from "react-redux";
+import {formDispatchProps, formStateProps} from "../utils/props-generator";
 
+const subj = 'services'
+const mapStateToProps = formStateProps(subj);
+const mapDispatchToProps = formDispatchProps(subj);
 
 const ServicesForm = (props) => {
 	const {data, handleReset, accept} = props
@@ -37,4 +43,8 @@ const ServicesForm = (props) => {
 	)
 }
 
-export default ServicesForm
+
+export default compose(
+	connect(mapStateToProps,
+		mapDispatchToProps
+	))(ServicesForm)

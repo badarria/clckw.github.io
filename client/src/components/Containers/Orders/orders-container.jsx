@@ -1,33 +1,19 @@
 import React, {useEffect} from 'react';
-import {
-	acceptChanges,
-	cancelInput,
-	pushToChange,
-	removeFromDB,
-	setHelper,
-	setColumns,
-	changeFreeHours
-} from "../../../middleware/general";
-import AdmTableRedux from "../../Common/table/basic-table";
+import {BasicTable} from "../../Common/table/basic-table";
 import BasicTableHead from "../../Common/table/basic-table-head";
-import {
-	editStateState, errorsState,
-	getColumnsState,
-	getItemsState, helperState, ordersDataToChange
-} from "../../../middleware/state-selectors";
 import {compose} from "redux";
-import {connect, useDispatch} from "react-redux";
-import OrderHeadForm from "./orders-form";
+import {connect} from "react-redux";
+import {containerDispatchProps, containerStateProps} from "../utils/props-generator";
+import OrdersForm from "./orders-form";
 
 
 const subj = 'orders'
-const columnNames = ['id', 'service', 'master', 'customer', 'city', 'date', 'begin', 'end']
-
+const columns = ['id', 'service', 'master', 'customer', 'city', 'date', 'begin', 'end']
+const mapStateToProps = containerStateProps(subj)
+const mapDispatchToProps = containerDispatchProps(subj, columns, true)
 
 const OrdersContainer = (props) => {
-	const dispatch = useDispatch()
-	const {items, errors, helper, columns, dataToChange, editState} = props
-
+	const {items, columns, editState, remove, push, setHelper, setColumns} = props
 	const errorCases = (label, data) => {
 		let error = '';
 		switch (label) {
@@ -66,59 +52,27 @@ const OrdersContainer = (props) => {
 
 
 	useEffect(() => {
-		setHelper(subj, columns, helperText, dispatch);
-		setColumns(subj, columnNames, dispatch)
+		setHelper(helperText);
+		setColumns()
 	}, [])
 
-	const table = {
-		items: items,
-		columns: columns,
-		state: editState,
-		del: removeFromDB(subj, dispatch),
-		push: pushToChange(subj, dispatch, true),
-	}
 
-	const form = {
-		fields: dataToChange.fields,
-		date: dataToChange.date,
-		time: dataToChange.time,
-		handleReset: cancelInput(subj, dispatch),
-		changeHours: changeFreeHours(subj,dispatch),
-		accept: acceptChanges(subj, editState, dispatch)
-		// errors: errors,
-		// helper: helper,
-	}
-
-	const head = {
-		columns: columns,
-		create: pushToChange(subj, dispatch, true)
-	}
-
+	const tableProps = {items, columns, push, editState, remove}
+	const headProps = {columns, push}
 
 	return (
 		<>
-			<AdmTableRedux tableProps={table}>
+			<BasicTable {...tableProps}>
 				{editState ?
-					<OrderHeadForm {...form} />
+					<OrdersForm/>
 					:
-					<BasicTableHead headProps={head}/>
+					<BasicTableHead {...headProps}/>
 				}
-			</AdmTableRedux>
+			</BasicTable>
 		</>
 	)
 }
 
 
-const mapStateToProps = (state) => {
-	return ({
-		items: getItemsState(subj, state),
-		columns: getColumnsState(subj, state),
-		dataToChange: ordersDataToChange(state),
-		editState: editStateState(subj, state),
-		errors: errorsState(subj, state),
-		helper: helperState(subj, state),
-	})
-}
-
 export default compose(
-	connect(mapStateToProps))(OrdersContainer);
+	connect(mapStateToProps, mapDispatchToProps))(OrdersContainer);

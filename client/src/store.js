@@ -1,6 +1,6 @@
 import {rootReducer} from './redux/root-reduser'
 import {configureStore} from '@reduxjs/toolkit'
-import {getColumnsThunk, getItemsThunk} from "./middleware/general";
+import {getColumnsThunk, getItemsThunk} from "./middleware/thunks";
 
 
 const store = configureStore({

@@ -1,42 +1,41 @@
 import React, {useState} from 'react'
 import {Container} from '@material-ui/core'
 import '../../App.css'
-import {useDispatch, useSelector} from 'react-redux'
-import SearchForm from "../Common/search-form";
+import {getInitState} from "../../middleware/thunks";
+import {compose} from "redux";
+import {connect, useDispatch} from "react-redux";
+import {getAuth, getFormData} from "../../middleware/state-selectors";
+
+const {useEffect} = require("react");
 
 
-const init = {
-	find: {
-		city: null,
-		date: null,
-		service: null,
-		time: null,
-	},
-	customerData: {
-		name: '',
-		surname: '',
-		email: ''
-	},
-	orderData: {
-		masterId: null,
-		cityId: null,
-		serviceId: null,
-		customerId: null,
-		startAt: null,
-		endAt: null
-	}
-}
-const MainPage = () => {
-	const [state, setState] = useState(init);
-	const dispatch = useDispatch();
+const MainPage = (props) => {
+	const {initState, fields, auth} = props
 
+
+	useEffect(() => {
+		initState()
+	}, [])
 
 	return (
 		<Container>
-			<h1>Main page</h1>
+			<h1>Find your master</h1>
 			{/*<SearchForm const find={find} handleChange={handleChange} state={state.find} clear={clear}/>*/}
 		</Container>
 	)
 }
 
-export default MainPage;
+
+
+const mapStateToProps = (state) => ({
+	fields: getFormData(state),
+})
+const mapDispatchToProps = (dispatch, getState) => {
+	return {
+		initState: () => dispatch(getInitState)
+	}
+}
+
+export default compose(
+	connect(mapStateToProps, mapDispatchToProps))
+(MainPage);

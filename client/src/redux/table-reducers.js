@@ -21,9 +21,9 @@ export const createTableReducers = (subj) => {
 			[`get${subj}Columns`]: (state, action) => {
 				state.columns = action.payload
 			},
-			[`set${subj}DataToChange`]: (state, action) => {
-				state.dataToChange = {...state.dataToChange, ...action.payload}
-			},
+			// [`set${subj}DataToChange`]: (state, action) => {
+			// 	state.dataToChange = {...state.dataToChange, ...action.payload}
+			// },
 			[`set${subj}State`]: (state, action) => {
 				state.editState = action.payload
 			},
@@ -40,7 +40,7 @@ export const createTableReducers = (subj) => {
 				state.dataToChange = action.payload;
 			},
 			[`clear${subj}DataToChange`]: (state, action) => {
-				state.dataToChange = null;
+				state.dataToChange = {};
 			},
 			[`change${subj}FreeHours`]: (state, action) => {
 				state.dataToChange.hours = action.payload;

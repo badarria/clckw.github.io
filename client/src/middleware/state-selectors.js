@@ -1,4 +1,3 @@
-import {} from '../utils/date-time-func'
 
 const getItemsState = (subj, state) => {
 	return state[subj].list
@@ -6,7 +5,7 @@ const getItemsState = (subj, state) => {
 const getColumnsState = (subj, state) => {
 	return state[subj].columns
 }
-const getDataToChangeState = (subj, state) => {
+const getDataState = (subj, state) => {
 	return state[subj].dataToChange
 };
 const editStateState = (subj, state) => {
@@ -19,7 +18,6 @@ const helperState = (subj, state) => {
 	return state[subj].helper
 };
 
-
 const ordersDataToChange = (state) => {
 	const data = state.orders.dataToChange;
 	let dataForFields = Object.entries(data).slice(0, -5)
@@ -29,12 +27,22 @@ const ordersDataToChange = (state) => {
 	return {fields: dataForFields, date: date, time: time}
 }
 
+const getFormData = (state) => {
+	return state.formData;
+}
+
+const getAuth = (state) => {
+	return state.auth;
+}
+
 export {
 	getItemsState,
-	getDataToChangeState,
+	getDataState,
 	getColumnsState,
 	editStateState,
 	errorsState,
 	helperState,
-	ordersDataToChange
+	ordersDataToChange,
+	getFormData,
+	getAuth
 }

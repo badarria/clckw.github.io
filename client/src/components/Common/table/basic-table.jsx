@@ -28,9 +28,9 @@ const useStyles = makeStyles({
 	},
 });
 
-const AdmTableRedux = (props) => {
-	const {children, tableProps} = props
-	const {items, columns, del, push, state, itemsOnPage = 5,} = tableProps;
+export const BasicTable = (props) => {
+	const {children, items, columns, remove, push, editState, itemsOnPage = 5,} = props
+
 
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(itemsOnPage);
@@ -52,8 +52,8 @@ const AdmTableRedux = (props) => {
 						{children}
 					</TableHead>
 					<TableBody>
-						<BasicTableList data={itemsPerPage} del={del} push={push}
-														state={state} columns={columns}/>
+						<BasicTableList data={itemsPerPage} remove={remove} push={push}
+														editState={editState} columns={columns}/>
 						{emptyRows > 0 && (
 							<TableRow style={{height: 53 * emptyRows}}>
 								<TableCell component='td'/>
@@ -80,6 +80,4 @@ const AdmTableRedux = (props) => {
 			</TableContainer>
 		</Fragment>
 	)
-
 }
-export default AdmTableRedux

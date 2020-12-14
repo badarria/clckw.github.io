@@ -8,9 +8,9 @@ const setColumnsAction = (subj, data) => {
 	return actions[subj][`get${subj}Columns`](data)
 }
 
-const setDataToChangeAction = (subj, data) => {
-	return actions[subj][`set${subj}DataToChange`](data)
-}
+// const setDataToChangeAction = (subj, data) => {
+// 	return actions[subj][`set${subj}DataToChange`](data)
+// }
 
 const setErrorsAction = (subj, data) => {
 	return actions[subj][`set${subj}Errors`](data)
@@ -28,22 +28,37 @@ const toggleStateAction = (subj, data) => {
 	return actions[subj][`toggle${subj}EditState`](data)
 }
 
-const clearDataToChangeAction = (subj) => {
-	return actions[subj][`clear${subj}DataToChange`]
+const clearDataAction = (subj) => {
+	return actions[subj][`clear${subj}DataToChange`]()
 }
 
 const changeHoursAction = (subj, data) => {
 	return actions[subj][`change${subj}FreeHours`](data)
 }
 
+///////Main page///////
+const setFormDataAction = (data) => {
+	return actions.setFormData(data);
+}
+
+const setHoursAction = (data) => {
+	return actions.setHours(data);
+}
+
+const setAuthAction = (data) => {
+	return actions.setAuth(data);
+}
+
 export {
 	setItemsAction,
 	setColumnsAction,
-	setDataToChangeAction,
 	setErrorsAction,
 	setHelperAction,
 	pushToChangeAction,
 	toggleStateAction,
-	clearDataToChangeAction,
-	changeHoursAction
+	clearDataAction,
+	changeHoursAction,
+	setFormDataAction,
+	setHoursAction,
+	setAuthAction
 }

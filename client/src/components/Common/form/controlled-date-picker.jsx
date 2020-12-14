@@ -5,6 +5,9 @@ import {Controller} from "react-hook-form";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import format from 'date-fns/format';
 import {parseISO, toDate} from 'date-fns'
+import { parse } from 'date-fns'
+
+const {useState} = require("react");
 
 const useStyles = makeStyles(() => ({
 	formControl: {
@@ -27,7 +30,8 @@ const ControlledDatePicker = (props) => {
 	return (
 		<Controller
 			name="date"
-			defaultValue={date}
+			// defaultValue={parse('Wed Dec 16 2020 12:14:00 GMT+0200', "dd-MM-yy", new Date())}
+			defaultValue={null}
 			onChange={data => {
 				setValue('date', data);
 				// handleBlur(getValues().id, 'date'); //Managing patch save at server
@@ -35,18 +39,22 @@ const ControlledDatePicker = (props) => {
 			}}
 			control={control}
 			value={watch('date')}
-			// onChange={([, data]) => setValue('date', data)}
+			// onChange={([, data]) => {console.log(data)}}
 			render={({onChange, value}) => (
 				<MuiPickersUtilsProvider utils={DateFnsUtils}>
 					<KeyboardDatePicker
 						className={classes.formControl}
 						disableToolbar
 						onChange={(data) => {
-							onChange(format(new Date(data), 'dd-MM-yyyy'))
+							console.log(data);
+							return onChange(date)
+							// return onChange(format(new Date(data), 'dd-MM-yy'))
 						}}
-						// value={value}
+						// inputValue={value}
+						value={value}
 						variant="inline"
 						autoOk
+						// initialFocusedDate='Wed Dec 16 2020 12:14:00 GMT+0200'
 						format="dd-MM-yy"
 						margin="normal"
 						id="date-picker"

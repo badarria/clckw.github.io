@@ -1,13 +1,13 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
 	Paper,
 	Box,
 	makeStyles,
 	Button,
-	FormControl,
-	TextField
 } from "@material-ui/core";
-// import AutocompleteField from "./controlled-autocomplete-field";
+import {useForm} from "react-hook-form";
+import FormFieldsGenerator from "./form/form-fields-generator";
+
 
 const useStyles = makeStyles({
 	root: {
@@ -32,30 +32,30 @@ const useStyles = makeStyles({
 		margin: '10px',
 	}
 });
-const services = [{id: 1, name: 'Big Clock', time: '3'}, {id: 2, name: 'Middle Clock', time: '2'}, {
-	id: 3,
-	name: 'Small Clock',
-	time: '1'
-}]
 
-const SearchForm = (props) => {
+
+export const MainSearchForm = (props) => {
 	const classes = useStyles();
-	const {handleChange, find, state, clear} = props;
+	const {find, fields, children,  } = props;
+	const {register, handleSubmit, control, reset} = useForm({
+		defaultValues: {
+			name: '',
+			surname: '',
+			email: '',
+			city: '',
+			service: fields.service[0],
+			date: data.date || new Date(),
+			time: ''
+		}
+	})
 
+	const fieldsProps = {data, register, control}
 
 	return (
 		<Box component={Paper} className={classes.root}>
-			<form onSubmit={(e) => find(e)}>
-				<Box className={classes.inputWrap}>
-					{/*<AutocompleteField data={services} label='service' edit={handleChange} helper='Choose a service'/>*/}
-					{/*<AutocompleteField data={services} label='service' edit={handleChange} helper='Choose a service'/>*/}
-					{/*<AutocompleteField data={services} label='service' edit={handleChange} helper='Choose a service'/>*/}
-					{/*<AutocompleteField data={services} label='service' edit={handleChange} helper='Choose a service'/>*/}
-					{/*<TextField label='Service' name='service' value={state.service} helperText='Choose a service' required className={classes.input} onChange={(e) => handleChange(e)}/>*/}
-					{/*<TextField label='City' name='city' value={state.city} helperText='Choose a city' required className={classes.input} onChange={(e) => handleChange(e)}/>*/}
-					{/*<TextField label='Date' name='date' value={state.date} helperText='Pick a date' required className={classes.input} onChange={(e) => handleChange(e)}/>*/}
-					{/*<TextField label='Time' name='time' value={state.time} helperText='Pick a time' required className={classes.input} onChange={(e) => handleChange(e)}/>*/}
-				</Box>
+			<form onSubmit={handleSubmit((data) => console.log(data))}>
+				{children}
+				<FormFieldsGenerator {...fieldsProps}/>
 				<Box className={classes.btnWrap}>
 					<Button type='submit' variant="contained" color="primary" className={classes.btn}>Find Master!</Button>
 					<Button type='reset' variant="contained" className={classes.btn} onClick={clear}>Clear</Button>
@@ -64,4 +64,4 @@ const SearchForm = (props) => {
 		</Box>
 	)
 }
-export default SearchForm;
+

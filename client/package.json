@@ -12,6 +12,7 @@
     "clsx": "^1.1.1",
     "date-fns": "^2.16.1",
     "react": "^17.0.1",
+    "react-datepicker": "^3.3.0",
     "react-dom": "^17.0.1",
     "react-hook-form": "^6.12.2",
     "react-redux": "^7.2.2",
@@ -50,7 +51,7 @@
   "devDependencies": {
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
-    "@material-ui/pickers": "^3.2.8",
+    "@material-ui/pickers": "^3.2.10",
     "prop-types": "^15.7.2"
   },
   "proxy": "http://localhost:5000"

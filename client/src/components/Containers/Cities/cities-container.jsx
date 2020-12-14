@@ -1,30 +1,20 @@
 import React, {useEffect} from 'react';
-import {
-	acceptChanges,
-	cancelInput,
-	pushToChange,
-	removeFromDB, setColumns,
-	setHelper
-} from "../../../middleware/general";
-import {
-	editStateState, errorsState,
-	getColumnsState,
-	getDataToChangeState,
-	getItemsState, helperState
-} from "../../../middleware/state-selectors";
-import AdmTableRedux from "../../Common/table/basic-table";
+import {BasicTable} from "../../Common/table/basic-table";
 import BasicTableHead from "../../Common/table/basic-table-head";
 import {compose} from "redux";
-import {connect, useDispatch} from "react-redux";
+import {connect} from "react-redux";
 import CitiesForm from "./cities-form";
+import {containerDispatchProps, containerStateProps} from "../utils/props-generator";
 
 
 const subj = 'cities'
-const columnNames = ['id', 'name']
+const columns = ['id', 'name']
+const mapStateToProps = containerStateProps(subj)
+const mapDispatchToProps = containerDispatchProps(subj, columns)
+
 
 const CitiesContainer = (props) => {
-	const dispatch = useDispatch()
-	const {items, errors, helper, columns, dataToChange, editState} = props
+	const {items, columns, editState, remove, push, setHelper, setColumns} = props
 
 
 	const errorCases = (label, data) => {
@@ -40,7 +30,6 @@ const CitiesContainer = (props) => {
 		}
 		return error;
 	}
-
 	const helperText = (label) => {
 		let text = '';
 		switch (label) {
@@ -57,55 +46,28 @@ const CitiesContainer = (props) => {
 	}
 
 	useEffect(() => {
-		setHelper(subj, columns, helperText, dispatch);
-		setColumns(subj, columnNames, dispatch)
+		setHelper(helperText);
+		setColumns()
 	}, [])
 
-	const table = {
-		items: items,
-		columns: columns,
-		state: editState,
-		del: removeFromDB(subj, dispatch),
-		push: pushToChange(subj, dispatch),
-	}
-
-	const form = {
-		data: dataToChange,
-		handleReset: cancelInput(subj, dispatch),
-		accept: acceptChanges(subj, editState, dispatch)
-		// errors: errors,
-		// helper: helper,
-	}
-
-	const head = {
-		columns: columns,
-		create: pushToChange(subj, dispatch)
-	}
+	const tableProps = {items, columns, push, editState, remove}
+	const headProps = {columns, push}
 
 	return (
 		<>
-			<AdmTableRedux tableProps={table}>
+			<BasicTable {...tableProps}>
 				{editState ?
-					<CitiesForm {...form} />
+					<CitiesForm/>
 					:
-					<BasicTableHead headProps={head}/>
+					<BasicTableHead {...headProps}/>
 				}
-			</AdmTableRedux>
+			</BasicTable>
 		</>
 	)
 }
 
-
-const mapStateToProps = (state) => {
-	return ({
-		items: getItemsState(subj, state),
-		columns: getColumnsState(subj, state),
-		dataToChange: getDataToChangeState(subj, state),
-		editState: editStateState(subj, state),
-		errors: errorsState(subj, state),
-		helper: helperState(subj, state),
-	})
-}
-
 export default compose(
-	connect(mapStateToProps))(CitiesContainer);
+	connect(mapStateToProps,
+		mapDispatchToProps
+	))
+(CitiesContainer);

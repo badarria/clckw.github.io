@@ -2,6 +2,13 @@ import React from "react";
 import {useForm} from "react-hook-form";
 import FormFieldsGenerator from "../../Common/form/form-fields-generator";
 import {BasicTableForm} from "../../Common/form/basic-table-form";
+import {compose} from "redux";
+import {connect} from "react-redux";
+import {formDispatchProps, formStateProps} from "../utils/props-generator";
+
+const subj = 'masters'
+const mapStateToProps = formStateProps(subj);
+const mapDispatchToProps = formDispatchProps(subj);
 
 
 const MastersForm = (props) => {
@@ -33,9 +40,9 @@ const MastersForm = (props) => {
 
 	return (
 		<BasicTableForm {...formProps}>
-					<FormFieldsGenerator {...formFieldsProps}/>
+			<FormFieldsGenerator {...formFieldsProps}/>
 		</BasicTableForm>
 	)
 }
 
-export default MastersForm
+export default compose(connect(mapStateToProps, mapDispatchToProps))(MastersForm)

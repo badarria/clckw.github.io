@@ -1,19 +1,30 @@
 import {createSlice} from "@reduxjs/toolkit";
 
-const initState = {list: null};
+const initState = {
+	formData: {
+		name: '',
+		surname: '',
+		email: '',
+		city: '',
+		service: '',
+		time: []
+	},
+	auth: false
+};
 
-const citiesReducer = createSlice({
-	name: 'cities',
+const mainReducer = createSlice({
+	name: 'main',
 	initialState: initState,
 	reducers: {
-		addCitiesList:(state, action) => {
-			state.list = action.payload
+		setFormData: (state, action) => {
+			console.log(action)
+			state.formData = action.payload
 		},
-		changeDataToSearch:(state, action) => {
-			state.dataToChange = action.payload
+		setAuth: (state, action) => {
+			state.auth = action.payload
 		}
 	}
 })
 
-export const {reducer} = citiesReducer;
-export const {addCitiesList, changeDataToSearch} = citiesReducer.actions;
+export const {reducer, actions} = mainReducer;
+export const {setFormData, setAuth} = mainReducer.actions

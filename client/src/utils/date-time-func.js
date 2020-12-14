@@ -12,7 +12,7 @@ const _getTimeStr = (num) => {
 	return `${num}:00`;
 }
 
-const _workingHours = (begin, end, serviceTime = 1) => {
+const getWorkingHours = (begin, end, serviceTime = 1) => {
 	const endTime = end - Number(serviceTime);
 	let res = [];
 	for (let i = begin; i <= endTime; i += 1) {
@@ -31,7 +31,7 @@ const _findBookedTime = (orders) => {
 }
 
 const getHoursArray = (orders, service_time,  dayBegin = 8, dayEnd = 20) => {
-	const workDay = _workingHours(dayBegin, dayEnd, service_time);
+	const workDay = getWorkingHours(dayBegin, dayEnd, service_time);
 	const bookedTime = _findBookedTime(orders);
 	const res =  workDay.reduce((acc, hour) => {
 		const booked = bookedTime.includes(hour)
@@ -71,4 +71,4 @@ const getHoursArray = (orders, service_time,  dayBegin = 8, dayEnd = 20) => {
 // }
 
 
-export {getHoursArray}
+export {getHoursArray, getWorkingHours}

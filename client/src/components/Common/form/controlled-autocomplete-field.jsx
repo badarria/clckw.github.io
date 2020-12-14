@@ -9,7 +9,6 @@ const useStyles = makeStyles((theme) => ({
 	},
 	listbox: {
 		width: 200,
-		margin: 0,
 		padding: 0,
 		zIndex: 1,
 		position: 'absolute',

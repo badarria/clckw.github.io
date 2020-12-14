@@ -11,7 +11,7 @@ const {useState} = require("react");
 
 const useStyles = makeStyles(() => ({
 	formControl: {
-		margin: 0,
+		margin: '16px',
 		maxWidth: '140px',
 	}
 }));

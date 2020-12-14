@@ -60,7 +60,12 @@ values (5, 27,  1, '2020-11-08', '16:00:00', '19:00:00');
 insert into orders (master, customer, service, orderDate, beginAt, endAt)
 values (9, 24,  2, '13/12/2020', '16:00:00', '19:00:00');
 insert into newOrders (master, customer, service, beginAt, endAt)
-values (9, 42,  2, 'Wed Dec 16 2020 12:14:00', '2020-12-13 16:00:00');
+values (9, 42,  2, 'Wed Dec 16 2020 12:14:00', '2020-12-16 16:00:00');
+insert into newOrders (master, customer, service, beginAt, endAt)
+values (9, 42,  2, 'Wed Dec 14 2020 12:00:00', '2020-12-14 13:00:00');
+
+--SELECT DISTINCT ON (m.id) * FROM masters m LEFT JOIN newOrders o ON o.master = m.id where m.city= 3 AND NOT (timestamp 'Wed Dec 14 2020 12:00:00', timestamp '2020-12-14 13:00:00' ) OVERLAPS (o.beginAt, o.endAt);
+			;
 
 create TABLE admin
 (

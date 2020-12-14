@@ -5,18 +5,16 @@ import {ControlledAutocompleteField} from "./controlled-autocomplete-field";
 
 
 const FormFieldsGenerator = (props) => {
-	const {data, register, control, state, errors, helper} = props
+	const {data, register, control, state, errors, helper, classes = {}} = props
 	const labels = Object.keys(data).filter(label => !label.match(/_id/));
 
 
 	return (
 		<>
-			<TableCell/>
-			{state === 'isCreating' ? <TableCell/> : null}
 			{labels.map((label, inx) => {
 				return (
 					Array.isArray(data[label]) ?
-						<ControlledAutocompleteField key={inx} control={control} name={label} data={data[label]}/> :
+						<ControlledAutocompleteField key={inx} control={control} name={label} data={data[label]} className={classes.controlled}/> :
 						<TextField
 							style={{margin: '16px'}}
 							defaultValue={data[label] || ''}
@@ -33,6 +31,7 @@ const FormFieldsGenerator = (props) => {
 							size="small"
 							required
 							inputRef={register}
+							className={classes.input}
 						/>
 				)
 			})}

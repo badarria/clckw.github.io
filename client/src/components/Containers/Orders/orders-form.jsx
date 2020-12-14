@@ -14,7 +14,7 @@ const mapDispatchToProps = formDispatchProps(subj);
 
 const OrdersForm = (props) => {
 	const {data, handleReset, changeHours, accept} = props;
-	const {fields, date, time,} = data;
+	const {fields, date, hours} = data;
 
 	const {register, handleSubmit, control, reset, watch, setValue, getValues} = useForm({
 		defaultValues: {
@@ -22,7 +22,7 @@ const OrdersForm = (props) => {
 			customer: fields.customer[0],
 			service: fields.service[0],
 			date: date || null,
-			time: time[0].hour || ''
+			hours: hours[0].hour || ''
 		}
 	})
 
@@ -42,15 +42,15 @@ const OrdersForm = (props) => {
 
 	const submitForm = (data) => {
 		console.log('subm')
-		const {id, master, customer, service, date, time} = data
+		const {id, master, customer, service, date, hours} = data
 		const res = {
 			id: id,
 			master: master.id,
 			customer: customer.id,
 			service: service.id,
 			date: date.replace(/[a-z ]/g, ''),
-			begin: time,
-			end: `${Number(time.slice(0, 2)) + Number(service.time)}:00`
+			begin: hours,
+			end: `${Number(hours.slice(0, 2)) + Number(service.time)}:00`
 		}
 		accept(res)
 	}
@@ -68,8 +68,8 @@ const OrdersForm = (props) => {
 		<BasicTableForm {...formProps}>
 			<FormFieldsGenerator {...formFieldsProps}/>
 			<ControlledDatePicker date={date} control={control} setValue={setValue} watch={watch} getValues={getValues}/>
-			<ControlledSelect data={time} control={control} disabled={disableHours}
-												defaultValue={time[0].hour}/>
+			<ControlledSelect data={hours} control={control} disabled={disableHours}
+												defaultValue={hours[0].hour}/>
 		</BasicTableForm>
 
 	)

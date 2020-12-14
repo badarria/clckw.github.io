@@ -12,7 +12,7 @@ const _getTimeStr = (num) => {
 	return `${num}:00`;
 }
 
-const getWorkingHours = (begin, end, serviceTime = 1) => {
+const _getWorkingHours = (begin, end, serviceTime = 1) => {
 	const endTime = end - Number(serviceTime);
 	let res = [];
 	for (let i = begin; i <= endTime; i += 1) {
@@ -30,10 +30,10 @@ const _findBookedTime = (orders) => {
 	}, [])
 }
 
-const getHoursArray = (orders, service_time,  dayBegin = 8, dayEnd = 20) => {
-	const workDay = getWorkingHours(dayBegin, dayEnd, service_time);
+const getHoursArray = (service_time, orders = [], dayBegin = 8, dayEnd = 20) => {
+	const workDay = _getWorkingHours(dayBegin, dayEnd, service_time);
 	const bookedTime = _findBookedTime(orders);
-	const res =  workDay.reduce((acc, hour) => {
+	const res = workDay.reduce((acc, hour) => {
 		const booked = bookedTime.includes(hour)
 		acc = [...acc, {hour: hour, booked: booked}]
 		return acc;
@@ -41,6 +41,19 @@ const getHoursArray = (orders, service_time,  dayBegin = 8, dayEnd = 20) => {
 	return res
 }
 
+
+const dateString = (date) => date.toString().match(/\w{3} \d\d \d{4}/)[0]
+
+const dateTimeString = (date, time, interval = 1) => {
+	console.log(time)
+	const endTime = _getTimeStr(_getNum(time) + Number(interval))
+	return {
+		begin: `${date} ${time}`, end: `${date} ${endTime}`
+	}
+}
+
+// const example = dateString('Mon Dec 14 2020 11:23:59 GMT+0200 (Восточная Европа, стандартное время)')
+// console.log(dateTimeString(example, '18:00'))
 //
 // const findFreeMasters = (orders, masters, city, date, beginAtTime, endAtTime) => {
 //
@@ -71,4 +84,4 @@ const getHoursArray = (orders, service_time,  dayBegin = 8, dayEnd = 20) => {
 // }
 
 
-export {getHoursArray, getWorkingHours}
+export {getHoursArray, dateTimeString, dateString}

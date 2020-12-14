@@ -3,7 +3,7 @@ import {
 	errorsState,
 	getColumnsState,
 	getDataState,
-	getItemsState, helperState, ordersDataToChange
+	getItemsState, helperState, ordersDataState
 } from "../../../middleware/state-selectors";
 import {
 	accept,
@@ -41,7 +41,7 @@ export const containerDispatchProps = (subj, columns, getKeys = false) => (dispa
 
 export const formStateProps = (subj) => (state) => {
 	return ({
-		data: subj === 'orders' ? ordersDataToChange(state) : getDataState(subj, state),
+		data: subj === 'orders' ? ordersDataState(state) : getDataState(subj, state),
 		errors: errorsState(subj, state),
 		helper: helperState(subj, state),
 	})

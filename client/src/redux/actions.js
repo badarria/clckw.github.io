@@ -1,5 +1,5 @@
 import {createTableReducers} from "./table-reducers";
-import {setFormData, setAuth} from './main-reducer';
+import {setFormData, setAuth, setWorkingHours} from './main-reducer';
 
 const action = (name) => createTableReducers(name).actions
 
@@ -9,5 +9,5 @@ export const actions = {
 	masters: action('masters'),
 	cities: action('cities'),
 	orders: action('orders'),
-	setFormData, setAuth,
+	setFormData, setAuth, setWorkingHours
 }

@@ -4,7 +4,7 @@ import {Controller} from "react-hook-form";
 
 
 const ControlledSelect = (props) => {
-	const {control, data, disabled, defaultValue} = props
+	const {control, data, defaultValue, name='time', disabled = false} = props
 
 	return (
 		<FormControl style={{margin: '16px', minWidth: '100px'}}>
@@ -13,10 +13,10 @@ const ControlledSelect = (props) => {
 			</InputLabel>
 			<Controller
 				control={control}
-				name="time"
+				name={name}
 				defaultValue={defaultValue}
 				as={
-					<Select id="time" disabled={disabled} >
+					<Select id={name} disabled={disabled}>
 						{data.map(({hour, booked}, inx) => (
 							<MenuItem key={inx} value={hour} disabled={booked}>
 								{hour}

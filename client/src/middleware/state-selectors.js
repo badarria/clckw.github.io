@@ -1,4 +1,3 @@
-
 const getItemsState = (subj, state) => {
 	return state[subj].list
 };
@@ -17,18 +16,22 @@ const errorsState = (subj, state) => {
 const helperState = (subj, state) => {
 	return state[subj].helper
 };
-
-const ordersDataToChange = (state) => {
-	const data = state.orders.dataToChange;
-	let dataForFields = Object.entries(data).slice(0, -5)
-	dataForFields = Object.fromEntries(dataForFields)
-	let date = data.date;
-	let time = data.hours;
-	return {fields: dataForFields, date: date, time: time}
+const _sliceData = (obj, endSlice) => {
+	const res = Object.entries(obj).slice(0, endSlice)
+	return Object.fromEntries(res)
 }
 
-const getFormData = (state) => {
-	return state.formData;
+const ordersDataState = (state) => {
+	const data = state.orders.dataToChange;
+	const fields = _sliceData(data, -5)
+	const date = data.date;
+	const hours = data.hours;
+	return {fields, date, hours}
+}
+
+const getFormDataState = (state) => {
+	const data = state.main.formData;
+	return {fields: _sliceData(data, -2) , date: data.date, hours: data.hours}
 }
 
 const getAuth = (state) => {
@@ -42,7 +45,7 @@ export {
 	editStateState,
 	errorsState,
 	helperState,
-	ordersDataToChange,
-	getFormData,
+	ordersDataState,
+	getFormDataState,
 	getAuth
 }

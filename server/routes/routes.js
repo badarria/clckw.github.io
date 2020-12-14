@@ -7,7 +7,7 @@ const orders = require('./admin/orders');
 const services = require('./admin/services');
 const auth = require('./auth')
 const adminPage = require('./main/admin-page')
-
+const mainPage = require('./main/find')
 
 routes.use('/admin/customers', customers);
 routes.use('/admin/masters', masters);
@@ -16,7 +16,7 @@ routes.use('/admin/orders', orders);
 routes.use('/admin/services', services);
 routes.use('/auth', auth);
 routes.use('/admin-page', adminPage)
-
+routes.use('/main-page', mainPage)
 
 
 module.exports = routes;

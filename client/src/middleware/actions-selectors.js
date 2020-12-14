@@ -32,7 +32,7 @@ const clearDataAction = (subj) => {
 	return actions[subj][`clear${subj}DataToChange`]()
 }
 
-const changeHoursAction = (subj, data) => {
+const changeOrdersHoursAction = (subj, data) => {
 	return actions[subj][`change${subj}FreeHours`](data)
 }
 
@@ -42,7 +42,7 @@ const setFormDataAction = (data) => {
 }
 
 const setHoursAction = (data) => {
-	return actions.setHours(data);
+	return actions.setWorkingHours(data);
 }
 
 const setAuthAction = (data) => {
@@ -57,7 +57,7 @@ export {
 	pushToChangeAction,
 	toggleStateAction,
 	clearDataAction,
-	changeHoursAction,
+	changeOrdersHoursAction,
 	setFormDataAction,
 	setHoursAction,
 	setAuthAction

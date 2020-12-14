@@ -7,7 +7,8 @@ const initState = {
 		email: '',
 		city: '',
 		service: '',
-		time: []
+		date: new Date(),
+		hours: ''
 	},
 	auth: false
 };
@@ -17,8 +18,10 @@ const mainReducer = createSlice({
 	initialState: initState,
 	reducers: {
 		setFormData: (state, action) => {
-			console.log(action)
 			state.formData = action.payload
+		},
+		setWorkingHours: (state, action) => {
+			state.formData.hours = action.payload
 		},
 		setAuth: (state, action) => {
 			state.auth = action.payload
@@ -26,5 +29,5 @@ const mainReducer = createSlice({
 	}
 })
 
-export const {reducer, actions} = mainReducer;
-export const {setFormData, setAuth} = mainReducer.actions
+export const {reducer} = mainReducer;
+export const {setFormData, setAuth, setWorkingHours} = mainReducer.actions

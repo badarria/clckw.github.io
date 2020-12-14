@@ -80,8 +80,7 @@ export const MainSearchForm = ({data, initState, changeHours, findMasters}) => {
 	const fieldsProps = {data: fields, register, control}
 
 	const submit = (data) => {
-		const {name, surname, email, city, date, hours, service} = data
-		findMasters(city.id, date, hours, service.time)
+		findMasters(data)
 		// if (!findCustomer(email)) {
 		// 	createNewCustomer({name, surname, email})
 		// }
@@ -113,7 +112,8 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		initState: () => dispatch(getInitState),
 		changeHours: (service_time) => dispatch(changeHours(service_time)),
-		findMasters: (city_id, date, time, service_time) => dispatch(findMasters(city_id, date, time, service_time))
+		findMasters: (data) => dispatch(findMasters(data)),
+		// findCustomer: (email) => dispatch(findCustomer(email))
 	}
 }
 

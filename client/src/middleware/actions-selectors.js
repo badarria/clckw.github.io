@@ -49,6 +49,10 @@ const setAuthAction = (data) => {
 	return actions.setAuth(data);
 }
 
+const setFreeMastersAction = (data) => {
+	return actions.setFreeMasters(data);
+}
+
 export {
 	setItemsAction,
 	setColumnsAction,
@@ -60,5 +64,6 @@ export {
 	changeOrdersHoursAction,
 	setFormDataAction,
 	setHoursAction,
-	setAuthAction
+	setAuthAction,
+	setFreeMastersAction
 }

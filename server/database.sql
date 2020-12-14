@@ -64,8 +64,20 @@ values (9, 42,  2, 'Wed Dec 16 2020 12:14:00', '2020-12-16 16:00:00');
 insert into newOrders (master, customer, service, beginAt, endAt)
 values (9, 42,  2, 'Wed Dec 14 2020 12:00:00', '2020-12-14 13:00:00');
 
---SELECT DISTINCT ON (m.id) * FROM masters m LEFT JOIN newOrders o ON o.master = m.id where m.city= 3 AND NOT (timestamp 'Wed Dec 14 2020 12:00:00', timestamp '2020-12-14 13:00:00' ) OVERLAPS (o.beginAt, o.endAt);
-			;
+
+
+SELECT m.id, m.name, m.surname FROM masters m where m.city=3
+EXCEPT select o.master, m.name, m.surname FROM newOrders o JOIN masters m ON o.master=m.id WHERE ('Wed Dec 14 2020 10:00:00'::timestamp, '2020-12-14 13:00:00'::timestamp ) OVERLAPS (o.beginAt, o.endAt);
+
+NOT ('13-12-2020 12:00:00'::timestamp, '2020-12-13 16:00:00'::timestamp ) OVERLAPS (o.beginAt, o.endAt);
+
+  5 | Vasja   | Kapitonov |    2 |      5
+ 11 | Alisa   | Postin    |    3 |      5
+  9 | Igor    | Igor      |    3 |      3
+  7 | Dasha   | Leshenko  |    2 |      5
+ 10 | ccccerj | ccccc     |    8
+
+
 
 create TABLE admin
 (

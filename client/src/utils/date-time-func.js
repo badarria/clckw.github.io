@@ -44,11 +44,10 @@ const getHoursArray = (service_time, orders = [], dayBegin = 8, dayEnd = 20) => 
 
 const dateString = (date) => date.toString().match(/\w{3} \d\d \d{4}/)[0]
 
-const dateTimeString = (date, time, interval = 1) => {
-	console.log(time)
-	const endTime = _getTimeStr(_getNum(time) + Number(interval))
+const dateTimeString = (date, hours, interval = 1) => {
+	const endTime = _getTimeStr(_getNum(hours) + Number(interval))
 	return {
-		begin: `${date} ${time}`, end: `${date} ${endTime}`
+		begin: `${date} ${hours}`, end: `${date} ${endTime}`
 	}
 }
 

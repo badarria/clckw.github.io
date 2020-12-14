@@ -10,6 +10,7 @@ const initState = {
 		date: new Date(),
 		hours: ''
 	},
+	freeMasters: [],
 	auth: false
 };
 
@@ -23,11 +24,14 @@ const mainReducer = createSlice({
 		setWorkingHours: (state, action) => {
 			state.formData.hours = action.payload
 		},
+		setFreeMasters: (state, action) => {
+			state.freeMasters = action.payload
+		},
 		setAuth: (state, action) => {
 			state.auth = action.payload
-		}
+		},
 	}
 })
 
 export const {reducer} = mainReducer;
-export const {setFormData, setAuth, setWorkingHours} = mainReducer.actions
+export const {setFormData, setAuth, setWorkingHours, setFreeMasters} = mainReducer.actions

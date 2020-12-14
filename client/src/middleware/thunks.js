@@ -11,7 +11,6 @@ import {
 import {
 	setItemsAction,
 	setColumnsAction,
-	setErrorsAction,
 	setHelperAction,
 	pushToChangeAction,
 	toggleStateAction,
@@ -19,7 +18,7 @@ import {
 	changeOrdersHoursAction,
 	setFormDataAction,
 	setHoursAction,
-	setAuthAction
+	setAuthAction, setFreeMastersAction
 } from './actions-selectors'
 import {emptyFields, mergeWithForeignKeys} from "../utils/table-func";
 import {dateString, dateTimeString, getHoursArray} from "../utils/date-time-func";
@@ -95,6 +94,7 @@ const changeHours = (service_time) => (dispatch) => {
 	dispatch(setHoursAction(newHours))
 }
 
+/////Main Page///
 
 const getInitState = async (dispatch, getState) => {
 	const city = await getItems('cities');
@@ -107,12 +107,21 @@ const getInitState = async (dispatch, getState) => {
 	dispatch(setFormDataAction(res))
 }
 
-const findMasters = (city_id, date, time, service_time) => async(dispatch) => {
+const findMasters = (data) => async (dispatch) => {
+	console.log(data)
+	const {city, date, hours, service, name, surname, email} = data
 	const normDate = dateString(date)
-	const {begin, end} = dateTimeString(normDate, time, service_time)
-	const masters = await getFreeMasters(city_id, begin, end)
+	const {begin, end} = dateTimeString(normDate, hours, service.time)
+	const masters = await getFreeMasters(city.id, begin, end)
+	const newCustomer = await addItem({name, surname, email}, 'customers');
+	console.log(newCustomer)
+	dispatch(setFreeMastersAction(masters))
 	console.log(masters)
 }
+
+// const findCustomer = (data) => async (dispatch) => {
+//
+// }
 
 export {
 	getItemsThunk,

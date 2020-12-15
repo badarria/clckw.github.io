@@ -33,18 +33,18 @@ create TABLE cities
     name varchar not null unique
 );
 
-create TABLE orders
-(
-    id         serial primary key,
-    master   integer   REFERENCES masters ON delete SET NULL,
-    customer integer   REFERENCES customers ON delete SET NULL,
-    service  integer   REFERENCES services ON delete SET NULL,
-    orderDate date not null,
-    beginAt   time not null,
-    endAt     time not null
-);
+--create TABLE orders
+--(
+--    id         serial primary key,
+--    master   integer   REFERENCES masters ON delete SET NULL,
+--    customer integer   REFERENCES customers ON delete SET NULL,
+--    service  integer   REFERENCES services ON delete SET NULL,
+--    orderDate date not null,
+--    beginAt   time not null,
+--    endAt     time not null
+--);
 
-create TABLE newOrders (
+create TABLE orders (
 id serial primary key,
     master   integer   REFERENCES masters ON delete SET NULL,
     customer integer   REFERENCES customers ON delete SET NULL,
@@ -61,13 +61,9 @@ insert into orders (master, customer, service, orderDate, beginAt, endAt)
 values (9, 24,  2, '13/12/2020', '16:00:00', '19:00:00');
 insert into newOrders (master, customer, service, beginAt, endAt)
 values (9, 42,  2, 'Wed Dec 16 2020 12:14:00', '2020-12-16 16:00:00');
-insert into newOrders (master, customer, service, beginAt, endAt)
-values (9, 42,  2, 'Wed Dec 14 2020 12:00:00', '2020-12-14 13:00:00');
+insert into orders (master, customer, service, beginAt, endAt)
+values (9, 42,  2, 'Wed Dec 24 2020 12:00:00', '2020-12-24 13:00:00');
 
---
---
---SELECT m.id, m.name, m.surname FROM masters m where m.city=3
---EXCEPT select o.master, m.name, m.surname FROM newOrders o JOIN masters m ON o.master=m.id WHERE ('Wed Dec 14 2020 10:00:00'::timestamp, '2020-12-14 13:00:00'::timestamp ) OVERLAPS (o.beginAt, o.endAt);
 
 
 

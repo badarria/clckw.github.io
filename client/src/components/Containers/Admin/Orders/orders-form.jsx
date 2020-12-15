@@ -7,6 +7,7 @@ import {BasicTableForm} from "../../../Common/form/basic-table-form";
 import {formDispatchProps, formStateProps} from "../../utils/props-generator";
 import {compose} from "redux";
 import {connect} from "react-redux";
+import {DateTime} from "luxon";
 
 const subj = 'orders';
 const mapStateToProps = formStateProps(subj);
@@ -16,13 +17,17 @@ const OrdersForm = (props) => {
 	const {data, handleReset, changeHours, accept} = props;
 	const {fields, date, hours} = data;
 
-	const {register, handleSubmit, control, reset, watch, setValue, getValues} = useForm({
+	const dateObj = date ? DateTime.fromFormat(date, 'EEE dd/MM/yyyy').toJSDate() :
+		DateTime.fromJSDate(new Date()).startOf('day').toJSDate();
+
+
+	const {register, handleSubmit, control, reset, watch,} = useForm({
 		defaultValues: {
 			master: fields.master[0],
 			customer: fields.customer[0],
 			service: fields.service[0],
-			date: date || null,
-			hours: hours[0].hour || ''
+			date: dateObj,
+			hours: hours[0].hour
 		},
 		shouldUnregister: false,
 	})
@@ -36,23 +41,24 @@ const OrdersForm = (props) => {
 
 
 	useEffect(() => {
-		console.log(masterValue, dateValue, serviceValue)
+		const normDate = DateTime.fromJSDate(dateValue).toLocaleString()
 		if (!disableHours) {
-			changeHours(masterValue, dateValue, serviceValue, fields.id)
+			changeHours(masterValue, normDate, serviceValue, fields.id)
 		}
 	}, [masterValue, dateValue, serviceValue])
 
 	const submitForm = (data) => {
-		console.log('subm')
-		const {id, master, customer, service, date, hours} = data
+		const {id, master, customer, service, date, hours} = data;
+		const begin = DateTime.fromJSDate(date).plus({hours: hours.split(':')[0]}).toHTTP();
+		const interval = Number(service.time)
+		const end = DateTime.fromHTTP(begin).plus({hours: interval}).toHTTP();
 		const res = {
 			id: id,
 			master: master.id,
 			customer: customer.id,
 			service: service.id,
-			date: date.replace(/[a-z ]/g, ''),
-			begin: hours,
-			end: `${Number(hours.slice(0, 2)) + Number(service.time)}:00`
+			begin,
+			end,
 		}
 		accept(res)
 	}
@@ -65,13 +71,14 @@ const OrdersForm = (props) => {
 		}
 	}
 	const formFieldsProps = {data: fields, register, control}
+	const datePickerProps = {date: dateObj, control, watch}
+	const selectProps = {data: hours, control, defaultValue: hours[0].hour, name: 'hours', disabled: disableHours}
 
 	return (
 		<BasicTableForm {...formProps}>
 			<FormFieldsGenerator {...formFieldsProps}/>
-			<ControlledDatePicker date={date} control={control} setValue={setValue} watch={watch} getValues={getValues}/>
-			<ControlledSelect data={hours} control={control} disabled={disableHours}
-												defaultValue={hours[0].hour}/>
+			<ControlledDatePicker {...datePickerProps}/>
+			<ControlledSelect {...selectProps}/>
 		</BasicTableForm>
 
 	)

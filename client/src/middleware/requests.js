@@ -1,7 +1,7 @@
 const adminPath = '/admin'
 const mainPagePath = '/main-page'
 
-const getItems = async (subj) => {
+export const getItems = async (subj) => {
 	try {
 		const response = await fetch(`${adminPath}/${subj}`);
 		const jsonData = await response.json();
@@ -11,7 +11,7 @@ const getItems = async (subj) => {
 	}
 }
 
-const removeItem = async (id, subj) => {
+export const removeItem = async (id, subj) => {
 	try {
 		await fetch(`${adminPath}/${subj}/${id}`, {
 			method: "DELETE"
@@ -21,7 +21,7 @@ const removeItem = async (id, subj) => {
 	}
 }
 
-const updateItem = async (data, subj) => {
+export const updateItem = async (data, subj) => {
 	try {
 		const body = data;
 		const id = data.id;
@@ -35,7 +35,7 @@ const updateItem = async (data, subj) => {
 	}
 }
 
-const addItem = async (data, subj) => {
+export const addItem = async (data, subj) => {
 	try {
 		const body = data;
 		const res = await fetch(`${adminPath}/${subj}`, {
@@ -43,31 +43,23 @@ const addItem = async (data, subj) => {
 			headers: {"Content-Type": "application/json"},
 			body: JSON.stringify(body)
 		})
+		return res.json()
 	} catch (err) {
 		console.error(err)
 	}
 }
 
-const getColumnNames = async (subj) => {
-	try {
-		const res = await fetch(`${adminPath}/${subj}/columnNames`);
-		const req = await res.json();
-		return req.map(({column_name}) => column_name.replace(/\Bid|\Bat$/i, '')).filter(name => !name.match(/_/));
-	} catch (err) {
-		console.error(err.message)
-	}
-};
 
-const getForeignKeys = async (subj) => {
+export const getForeignKeys = async (subj) => {
 	try {
 		const res = await fetch(`${adminPath}/${subj}/foreignKeys`);
-		return await res.json()
+		return res.json()
 	} catch (err) {
 		console.error(err.message)
 	}
 }
 
-const getFilteredOrders = async (subj, master_id, date, order_id) => {
+export const getFilteredOrders = async (subj, master_id, date, order_id) => {
 	try {
 		const res = await fetch(`${adminPath}/${subj}/filtered/${date}/${master_id}/${order_id}`)
 		return res.json()
@@ -78,7 +70,7 @@ const getFilteredOrders = async (subj, master_id, date, order_id) => {
 
 ////////HomePage
 
-const getFreeMasters = async (city, begin, end) => {
+export const getFreeMasters = async (city, begin, end) => {
 	try {
 		const res = await fetch(`${mainPagePath}/find/${city}/${begin}/${end}`)
 		return res.json()
@@ -86,8 +78,17 @@ const getFreeMasters = async (city, begin, end) => {
 		console.error(err.message)
 	}
 }
+export const getCustomer = async (email) => {
+	try {
+		const res = await fetch(`${mainPagePath}/customer/${email}`)
+		return res.json()
+	} catch (err) {
+		console.error(err.message)
+	}
+}
 
-const loginUser = async (data) => {
+
+export const loginUser = async (data) => {
 	try {
 		const res = await fetch('/auth', {
 			method: "POST",
@@ -100,7 +101,7 @@ const loginUser = async (data) => {
 	}
 }
 
-const stayAuth = async () => {
+export const stayAuth = async () => {
 	try {
 		const res = await fetch('/auth/verify', {
 			method: "GET",
@@ -110,18 +111,4 @@ const stayAuth = async () => {
 	} catch (err) {
 		console.error(err.message)
 	}
-}
-
-
-export {
-	getColumnNames,
-	addItem,
-	updateItem,
-	removeItem,
-	getItems,
-	getForeignKeys,
-	getFilteredOrders,
-	getFreeMasters,
-	loginUser,
-	stayAuth
 }

@@ -5,6 +5,7 @@ const endKey = 'end';
 // const idKey = 'id';
 // const dateKey = 'date'
 
+
 const _getNum = (str) => {
 	return Number(str.split(':')[0]);
 }
@@ -51,36 +52,6 @@ const dateTimeString = (date, hours, interval = 1) => {
 	}
 }
 
-// const example = dateString('Mon Dec 14 2020 11:23:59 GMT+0200 (Восточная Европа, стандартное время)')
-// console.log(dateTimeString(example, '18:00'))
-//
-// const findFreeMasters = (orders, masters, city, date, beginAtTime, endAtTime) => {
-//
-// 	const busyMasters = orders.filter(({[cityKey]: value}) => value === city)
-// 		.filter((order) => getDateValue(order[beginKey]) === date)
-// 		.reduce((acc, order) => {
-// 			const orderBegin = getTimeValue(order[beginKey]);
-// 			const orderEnd = getTimeValue(order[endKey], 1);
-// 			const beginTime = getTimeValue(beginAtTime);
-// 			const endTime = getTimeValue(endAtTime, 1);
-//
-// 			if (endTime <= orderBegin || beginTime >= orderEnd) {
-// 				acc.push(order[masterKey])
-// 			}
-// 			return acc;
-// 		}, [])
-//
-// 	const freeMasters = masters
-// 		.filter(({[cityKey]: value}) => value === city)
-// 		.reduce((acc, master) => {
-// 			const id = master[idKey];
-// 			console.log(busyMasters.includes(id), id, busyMasters)
-// 			!busyMasters.includes(id) && (acc.push(master));
-// 			return acc;
-// 		}, [])
-//
-// 	return freeMasters;
-// }
-
 
 export {getHoursArray, dateTimeString, dateString}
+

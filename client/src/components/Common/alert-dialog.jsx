@@ -1,13 +1,12 @@
 import React, {Fragment} from 'react';
 import Button from '@material-ui/core/Button';
 import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core';
-import IconButton from "@material-ui/core/IconButton";
 import {ButtonIcon} from "./button-icon";
 
 
 const AlertDialog = (props) => {
 	const [open, setOpen] = React.useState(false);
-	const {icon, title, accept, question, description, disabled, type} = props;
+	const {icon = null, title, accept, question, description, disabled, type} = props;
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
@@ -18,6 +17,8 @@ const AlertDialog = (props) => {
 		accept();
 		setOpen(false);
 	}
+
+
 
 	return (
 		<Fragment>
@@ -36,7 +37,7 @@ const AlertDialog = (props) => {
 					<Button onClick={handleAccept} color="primary" autoFocus>
 						Agree
 					</Button>
-					<Button onClick={handleClose} color="primary" >
+					<Button onClick={handleClose} color="primary">
 						Disagree
 					</Button>
 				</DialogActions>

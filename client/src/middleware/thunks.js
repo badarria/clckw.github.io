@@ -5,7 +5,7 @@ import {
 	getItems,
 	getForeignKeys,
 	getFilteredOrders,
-	getFreeMasters, loginUser, stayAuth
+	getFreeMasters, loginUser, stayAuth, getCustomer
 } from './requests'
 import {
 	setItemsAction,
@@ -16,10 +16,10 @@ import {
 	changeOrdersHoursAction,
 	setFormDataAction,
 	setHoursAction,
-	setAuthAction, setFreeMastersAction
+	setAuthAction, setFreeMastersAction, setNewOrderAction
 } from './actions-selectors'
 import {emptyFields, mergeWithForeignKeys} from "../utils/table-func";
-import {dateString, dateTimeString, getHoursArray} from "../utils/date-time-func";
+import {getHoursArray} from "../utils/date-time-func";
 import {subjects} from "../components/Containers/init-params";
 
 
@@ -53,21 +53,20 @@ export const pushToChange = (subj, data, state, getKeys = false) => async (dispa
 }
 
 export const cancelInput = (subj) => (dispatch) => {
-	dispatch(clearDataAction(subj));
 	dispatch(toggleStateAction(subj, null))
+	dispatch(clearDataAction(subj));
 }
 
 export const accept = (subj, data) => async (dispatch, getState) => {
 	const state = getState()[`${subj}`].editState;
 	state === 'isEditing' ? await updateItem(data, subj) : await addItem(data, subj);
-	await dispatch(setItems(subj))
 	await dispatch(cancelInput(subj, dispatch))
+	await dispatch(setItems(subj))
 }
 
 export const _getFreeHours = async (master_id, date, service_time, order_id = 0) => {
-	// date = date.replace(/[a-z ]/g, '')
 	const orders = await getFilteredOrders('orders', master_id, date, order_id)
-	return getHoursArray(orders, service_time);
+	return getHoursArray(service_time, orders);
 }
 
 export const changeFreeHours = (subj, master_id, date, service_time, order_id) => async (dispatch) => {
@@ -99,14 +98,35 @@ export const getAdminInitState = async (dispatch) => {
 	})
 }
 
+export const setOrderData = (data) => (dispatch) => {
+	dispatch(setNewOrderAction(data))
+}
 
-export const findMasters = (data) => async (dispatch) => {
-	const {city, date, hours, service, name, surname, email} = data
-	const normDate = dateString(date)
-	const {begin, end} = dateTimeString(normDate, hours, service.time)
-	const masters = await getFreeMasters(city.id, begin, end)
-	// const newCustomer = await addItem({name, surname, email}, 'customers');
+export const findMasters = ({city, begin, end}) => async (dispatch) => {
+	const masters = await getFreeMasters(city, begin, end)
 	dispatch(setFreeMastersAction(masters))
+}
+
+export const checkCustomer = ({name, surname, email}) => async (dispatch, getState) => {
+	let id = await getCustomer(email);
+	if (id.length) {
+		id = id[0].id
+	} else {
+		const newCustomer = await addItem({name, surname, email}, 'customers');
+		id = newCustomer.id
+	}
+	const order = {...getState().main.newOrder}
+	order.customer = id
+	dispatch(setOrderData(order))
+}
+
+export const acceptOrder = (id) => async (dispatch, getState) => {
+	const order = {...getState().main.newOrder}
+	order.master = id
+	dispatch(setOrderData(order))
+	const data = {...getState().main.newOrder}
+	await addItem(data, 'orders')
+	console.log('done')
 }
 
 export const login = (data) => async (dispatch) => {
@@ -127,3 +147,6 @@ export const logout = (dispatch) => {
 	localStorage.removeItem("token");
 	dispatch(setAuthAction(false));
 }
+
+
+

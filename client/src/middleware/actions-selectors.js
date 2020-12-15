@@ -48,3 +48,7 @@ export const setAuthAction = (data) => {
 export const setFreeMastersAction = (data) => {
 	return actions.setFreeMasters(data);
 }
+
+export const setNewOrderAction = (data) => {
+	return actions.setNewOrder(data);
+}

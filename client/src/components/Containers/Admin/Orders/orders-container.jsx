@@ -13,43 +13,6 @@ const mapDispatchToProps = containerDispatchProps(subj, true)
 
 const OrdersContainer = ({items, columns, editState, remove, push}) => {
 
-	const errorCases = (label, data) => {
-		let error = '';
-		switch (label) {
-
-			default:
-				break;
-		}
-		return error;
-	}
-	const helperText = (label) => {
-		let text = '';
-		switch (label) {
-			case 'id':
-				text = 'Unique id';
-				break;
-			case 'master':
-				text = 'First select a master';
-				break;
-			case 'city':
-				text = 'City of master';
-				break;
-			case 'customer':
-				text = 'Customers name';
-				break;
-			case 'service':
-				text = 'Service name';
-				break;
-			case 'date':
-				text = 'Choose a date';
-				break;
-			default:
-				break;
-		}
-		return text;
-	}
-
-
 	const tableProps = {items, columns, push, editState, remove}
 	const headProps = {columns, push}
 

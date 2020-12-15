@@ -10,9 +10,10 @@ import FormFieldsGenerator from "../../Common/form/form-fields-generator";
 import {compose} from "redux";
 import {connect} from "react-redux";
 import {getFormDataState} from "../../../middleware/state-selectors";
-import {changeHours, findMasters, getInitState} from "../../../middleware/thunks";
+import {changeHours, checkCustomer, findMasters, getInitState, setOrderData} from "../../../middleware/thunks";
 import ControlledDatePicker from "../../Common/form/controlled-date-picker";
 import {ControlledSelect} from "../../Common/form/controlled-select";
+import {DateTime} from "luxon";
 
 const {useEffect} = require("react");
 
@@ -42,9 +43,11 @@ const useStyles = makeStyles({
 	}
 });
 
-export const MainSearchForm = ({data, initState, changeHours, findMasters}) => {
+export const MainSearchForm = (props) => {
+	const {data, initState, changeHours, findMasters, checkCustomer, setOrderData} = props
 	const classes = useStyles();
-	const {fields, date, hours} = data;
+	const {fields, hours} = data;
+	const dateObj = DateTime.fromJSDate(new Date()).startOf('day').toJSDate();
 
 	useEffect(() => {
 		initState()
@@ -57,7 +60,7 @@ export const MainSearchForm = ({data, initState, changeHours, findMasters}) => {
 			email: '',
 			city: '',
 			service: '',
-			date: date,
+			date: dateObj,
 			hours: ''
 		}
 	})
@@ -70,7 +73,13 @@ export const MainSearchForm = ({data, initState, changeHours, findMasters}) => {
 	const fieldsProps = {data: fields, register, control}
 
 	const submit = (data) => {
-		findMasters(data)
+		const {name, surname, email, service, city, date, hours} = data;
+		const begin = DateTime.fromJSDate(date).plus({hours: hours.split(':')[0]}).toHTTP();
+		const interval = Number(service.time)
+		const end = DateTime.fromHTTP(begin).plus({hours: interval}).toHTTP();
+		findMasters({city: city.id, begin, end})
+		setOrderData({service:service.id, begin, end})
+		checkCustomer({name, surname, email})
 	}
 
 
@@ -83,7 +92,7 @@ export const MainSearchForm = ({data, initState, changeHours, findMasters}) => {
 					<ControlledSelect control={control} data={hours || []} name='hours'/>
 				</Box>
 				<Box className={classes.wrap}>
-					<Button type='submit' variant="contained" color="primary" className={classes.btn}>Find Master!</Button>
+					<Button type='submit' variant="contained" color="primary" className={classes.btn}>Find Master</Button>
 					<Button type='reset' variant="contained" className={classes.btn}>Clear</Button>
 				</Box>
 			</form>
@@ -100,6 +109,8 @@ const mapDispatchToProps = (dispatch) => {
 		initState: () => dispatch(getInitState),
 		changeHours: (service_time) => dispatch(changeHours(service_time)),
 		findMasters: (data) => dispatch(findMasters(data)),
+		checkCustomer: (data) => dispatch(checkCustomer(data)),
+		setOrderData: (data) => dispatch(setOrderData(data))
 	}
 }
 

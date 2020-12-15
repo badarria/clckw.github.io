@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import './App.css';
 import Navigation from "./components/Containers/HomePage/navigation"
-import {HomePage} from './components/Containers/home-page'
+import HomePage from './components/Containers/home-page'
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
 import AdminPage from "./components/Containers/admin-page";
 import {compose} from "redux";

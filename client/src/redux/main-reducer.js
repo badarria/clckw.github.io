@@ -11,6 +11,7 @@ const initState = {
 		hours: ''
 	},
 	freeMasters: [],
+	newOrder: {},
 	isAuth: false
 };
 
@@ -27,6 +28,9 @@ const mainReducer = createSlice({
 		setFreeMasters: (state, action) => {
 			state.freeMasters = action.payload
 		},
+		setNewOrder: (state, action) => {
+			state.newOrder = action.payload
+		},
 		setAuth: (state, action) => {
 			state.isAuth = action.payload
 		},
@@ -34,4 +38,4 @@ const mainReducer = createSlice({
 })
 
 export const {reducer} = mainReducer;
-export const {setFormData, setAuth, setWorkingHours, setFreeMasters} = mainReducer.actions
+export const {setFormData, setAuth, setWorkingHours, setFreeMasters, setNewOrder} = mainReducer.actions

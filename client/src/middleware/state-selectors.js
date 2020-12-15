@@ -41,3 +41,8 @@ export const getFormDataState = (state) => {
 export const getAuthState = (state) => {
 	return state.main.isAuth;
 }
+
+
+export const getFreeMastersState = (state) => {
+	return state.main.freeMasters;
+}

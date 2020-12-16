@@ -4,7 +4,7 @@ import BasicTableHead from "../../../Common/table/basic-table-head";
 import {compose} from "redux";
 import {connect} from "react-redux";
 import ServicesForm from "./services-form";
-import {containerDispatchProps, containerStateProps} from "../../utils/props-generator";
+import {containerDispatchProps, containerStateProps} from "../../utils/props-selector";
 
 const subj = 'services'
 const mapStateToProps = containerStateProps(subj)

@@ -3,7 +3,7 @@ import {BasicTable} from "../../../Common/table/basic-table";
 import BasicTableHead from "../../../Common/table/basic-table-head";
 import {compose} from "redux";
 import {connect} from "react-redux";
-import {containerDispatchProps, containerStateProps} from "../../utils/props-generator";
+import {containerDispatchProps, containerStateProps} from "../../utils/props-selector";
 import OrdersForm from "./orders-form";
 
 

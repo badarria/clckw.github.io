@@ -7,7 +7,7 @@ const jwtGenerator = (id) => {
 		user: id
 	}
 
-	return jwt.sign(payload, process.env.jwtSecret)
+	return jwt.sign(payload, process.env.JWT_SECRET)
 }
 
 module.exports = jwtGenerator

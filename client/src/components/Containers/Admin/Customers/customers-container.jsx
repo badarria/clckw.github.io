@@ -4,7 +4,7 @@ import {compose} from "redux";
 import {BasicTable} from "../../../Common/table/basic-table";
 import BasicTableHead from "../../../Common/table/basic-table-head";
 import CustomersForm from "./customers-form";
-import {containerDispatchProps, containerStateProps} from "../../utils/props-generator";
+import {containerDispatchProps, containerStateProps} from "../../utils/props-selector";
 
 const subj = 'customers'
 const mapStateToProps = containerStateProps(subj)

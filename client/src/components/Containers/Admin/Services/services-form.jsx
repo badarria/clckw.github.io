@@ -4,14 +4,14 @@ import FormFieldsGenerator from "../../../Common/form/form-fields-generator";
 import {BasicTableForm} from "../../../Common/form/basic-table-form";
 import {compose} from "redux";
 import {connect} from "react-redux";
-import {formDispatchProps, formStateProps} from "../../utils/props-generator";
+import {formDispatchProps, formStateProps} from "../../utils/props-selector";
+
 
 const subj = 'services'
 const mapStateToProps = formStateProps(subj);
 const mapDispatchToProps = formDispatchProps(subj);
 
-const ServicesForm = (props) => {
-	const {data, handleReset, accept} = props
+const ServicesForm = ({data, handleReset, accept}) => {
 
 	const {register, handleSubmit, control, reset} = useForm({
 		defaultValues: {

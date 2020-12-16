@@ -4,15 +4,16 @@ import FormFieldsGenerator from "../../../Common/form/form-fields-generator";
 import {BasicTableForm} from "../../../Common/form/basic-table-form";
 import {compose} from "redux";
 import {connect} from "react-redux";
-import {formDispatchProps, formStateProps} from "../../utils/props-generator";
+import {formDispatchProps, formStateProps} from "../../utils/props-selector";
+
 
 const subj = 'masters'
 const mapStateToProps = formStateProps(subj);
 const mapDispatchToProps = formDispatchProps(subj);
 
 
-const MastersForm = (props) => {
-	const {data, handleReset, accept} = props
+const MastersForm = ({data, handleReset, accept}) => {
+
 
 	const {register, handleSubmit, control, reset} = useForm({
 		defaultValues: {
@@ -34,7 +35,7 @@ const MastersForm = (props) => {
 		reset: () => {
 			handleReset()
 			reset()
-		}
+		},
 	}
 	const formFieldsProps = {data, register, control}
 

@@ -1,46 +1,54 @@
 import React, {useEffect} from 'react';
 import {Link} from 'react-router-dom'
-import {Container, AppBar, Toolbar, Typography, Button, makeStyles} from "@material-ui/core"
+import {Container, AppBar, Toolbar,} from "@material-ui/core"
 import {LoginForm} from './login-form'
 import {compose} from "redux";
 import {connect} from "react-redux";
 import {getAuthState} from "../../../middleware/state-selectors";
-import {checkAuth, login, logout} from "../../../middleware/thunks";
+import {checkAuth, login, logout} from "../../../middleware/home-page-thunks";
+import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
+import {makeStyles} from "@material-ui/core/styles";
 
 
-const useStyles = makeStyles((theme) => ({
+export const useNavStyles = makeStyles({
 	root: {
-		flexGrow: 1,
-	},
-	menuButton: {
-		marginRight: theme.spacing(2),
+		spaceBetween: 'justifyContent',
 	},
 	title: {
-		flexGrow: 1,
+		textDecoration: "none",
+		color: "white",
+		fontSize: '16px',
 	},
-}));
+	buttons: {
+		display: 'flex',
+		flexGrow: '1',
+		justifyContent: 'flex-end'
+	}
+})
 
 const Navigation = ({checkAuth, logout, login, isAuth}) => {
-	const classes = useStyles();
+	const classes = useNavStyles();
 
 	useEffect(() => {
 		checkAuth()
 	}, [])
 
-	const formProps = {login, classes: classes.menuButton}
+	const formProps = {login}
 
 	return (
 		<AppBar position="static">
 			<Container>
-				<Toolbar>
-					<Typography component={Link} to={"/"} style={{textDecoration: "none", color: "white"}} variant="h6"
-											className={classes.title}>
+				<Toolbar className={classes.root}>
+					<Button component={Link} to={"/"} className={classes.title}>
 						Clockware
-					</Typography>
-					{isAuth ?
-						<Button color="inherit" component={Link} to={"/admin"} className={classes.menuButton}>Admin</Button> : null}
-					{isAuth ? <Button color="inherit" onClick={logout} className={classes.menuButton}>Logout</Button> :
-						<LoginForm {...formProps} />}
+					</Button>
+					<Box className={classes.buttons}>
+						{isAuth ?
+							<Button color="inherit" component={Link} to={"/admin"}>Admin</Button> : null}
+						{isAuth ? <Button color="inherit" onClick={logout}>Logout</Button> :
+							<LoginForm {...formProps} />}
+					</Box>
 				</Toolbar>
 			</Container>
 		</AppBar>

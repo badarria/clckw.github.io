@@ -1,3 +1,5 @@
+import {dateFromFormatToObj, dateFromNewDate} from "./utils/date-time-func";
+
 export const getItemsState = (subj, state) => {
 	return state[subj].list
 };
@@ -25,16 +27,17 @@ export const _sliceData = (obj, endSlice) => {
 export const ordersDataState = (state) => {
 	const data = state.orders.dataToChange;
 	const fields = _sliceData(data, -5)
-	const date = data.date;
+	const date = data.date ? dateFromFormatToObj(data.date) : dateFromNewDate();
 	const hours = data.hours;
 	return {fields, date, hours}
 }
 
 export const getFormDataState = (state) => {
 	const data = state.main.formData;
+	const date = dateFromNewDate()
 	return {
 		fields: _sliceData(data, -2),
-		date: data.date, hours: data.hours
+		date: date, hours: data.hours, begin: data.begin
 	}
 }
 
@@ -45,4 +48,7 @@ export const getAuthState = (state) => {
 
 export const getFreeMastersState = (state) => {
 	return state.main.freeMasters;
+}
+export const getMessage = (state) => {
+	return state.main.msg
 }

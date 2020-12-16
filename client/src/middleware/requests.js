@@ -4,8 +4,7 @@ const mainPagePath = '/main-page'
 export const getItems = async (subj) => {
 	try {
 		const response = await fetch(`${adminPath}/${subj}`);
-		const jsonData = await response.json();
-		return jsonData;
+		return response.json();
 	} catch (err) {
 		console.error(err.message);
 	}
@@ -30,6 +29,7 @@ export const updateItem = async (data, subj) => {
 			headers: {"Content-Type": "application/json"},
 			body: JSON.stringify(body)
 		})
+		return edit.json()
 	} catch (err) {
 		console.error(err)
 	}
@@ -61,6 +61,7 @@ export const getForeignKeys = async (subj) => {
 
 export const getFilteredOrders = async (subj, master_id, date, order_id) => {
 	try {
+		console.log(date, 'filteredOrders')
 		const res = await fetch(`${adminPath}/${subj}/filtered/${date}/${master_id}/${order_id}`)
 		return res.json()
 	} catch (err) {

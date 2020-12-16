@@ -21,9 +21,6 @@ export const createTableReducers = (subj) => {
 			[`get${subj}Columns`]: (state, action) => {
 				state.columns = action.payload
 			},
-			// [`set${subj}DataToChange`]: (state, action) => {
-			// 	state.dataToChange = {...state.dataToChange, ...action.payload}
-			// },
 			[`set${subj}State`]: (state, action) => {
 				state.editState = action.payload
 			},
@@ -49,4 +46,7 @@ export const createTableReducers = (subj) => {
 	})
 	return {reducer: reducer, actions: actions}
 }
+
+
+
 

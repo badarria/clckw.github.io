@@ -11,7 +11,7 @@ import {
 	changeFreeHours,
 	pushToChange,
 	removeFromDB,
-} from "../../../middleware/thunks";
+} from "../../../middleware/admin-page-thunks";
 
 
 export const containerStateProps = (subj) => (state) => {

@@ -29,7 +29,7 @@ const BasicTableHead = (props) => {
 
 BasicTableHead.propTypes = {
 		columns: PropTypes.array.isRequired,
-		create: PropTypes.func.isRequired,
+		push: PropTypes.func.isRequired,
 };
 
 export default BasicTableHead

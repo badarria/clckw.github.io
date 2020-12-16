@@ -4,15 +4,15 @@ import FormFieldsGenerator from "../../../Common/form/form-fields-generator";
 import {BasicTableForm} from "../../../Common/form/basic-table-form";
 import {compose} from "redux";
 import {connect} from "react-redux";
-import {formDispatchProps, formStateProps} from "../../utils/props-generator";
-import { yupResolver } from '@hookform/resolvers/yup';
+import {formDispatchProps, formStateProps} from "../../utils/props-selector";
+import {yupResolver} from '@hookform/resolvers/yup';
+
 
 const subj = 'cities'
 const mapStateToProps = formStateProps(subj);
 const mapDispatchToProps = formDispatchProps(subj);
 
-const CitiesForm = (props) => {
-	const {data, handleReset, accept} = props
+const CitiesForm = ({data, handleReset, accept}) => {
 
 	const {register, handleSubmit, control, reset} = useForm({
 		defaultValues: {
@@ -31,7 +31,7 @@ const CitiesForm = (props) => {
 		reset: () => {
 			handleReset()
 			reset()
-		}
+		},
 	}
 
 	const formFieldsProps = {data, register, control}

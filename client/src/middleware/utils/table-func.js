@@ -44,9 +44,3 @@ export const getHelperText = (data, textObj) => {
 	}, {})
 }
 
-export const normalize = (data) => {
-	return Object.entries(data).reduce((acc, [key, value]) => {
-		if (!Array.isArray(value)) acc = {...acc, [key]: value};
-		return acc;
-	}, {})
-}

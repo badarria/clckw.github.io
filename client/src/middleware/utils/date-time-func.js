@@ -1,9 +1,11 @@
+// import {DateTime} from 'luxon';
+// import luxon from 'luxon';
+// const {DateTime} = luxon
+
+import {DateTime} from "luxon";
+
 const beginKey = 'begin';
 const endKey = 'end';
-// const cityKey = 'city_id';
-// const masterKey = 'master';
-// const idKey = 'id';
-// const dateKey = 'date'
 
 
 const _getNum = (str) => {
@@ -43,15 +45,22 @@ const getHoursArray = (service_time, orders = [], dayBegin = 8, dayEnd = 20) => 
 }
 
 
-const dateString = (date) => date.toString().match(/\w{3} \d\d \d{4}/)[0]
-
-const dateTimeString = (date, hours, interval = 1) => {
-	const endTime = _getTimeStr(_getNum(hours) + Number(interval))
-	return {
-		begin: `${date} ${hours}`, end: `${date} ${endTime}`
-	}
+export const dateFromFormatToObj = (date) => DateTime.fromFormat(date, 'EEE dd/MM/yyyy').toJSDate();
+export const dateFromNewDate = () => DateTime.fromJSDate(new Date()).set({hours: 0, minutes: 0, seconds: 0}).toJSDate();
+export const dateToRequest = (date) => DateTime.fromJSDate(date).toJSON()
+export const getBeginEnd = (date, hours, service_time) => {
+	let begin = DateTime.fromJSDate(date).set({hours: 0, minutes: 0, seconds: 0}).plus({hours: hours.split(':')[0]}).toJSDate();
+	const interval = Number(service_time)
+	const end = DateTime.fromJSDate(begin).plus({hours: interval}).toJSON();
+	begin = DateTime.fromJSDate(begin).toJSON()
+	return { end, begin}
 }
+//
+// // export const
+// console.log(currentDate)
+// console.log(fromFormatToObj)
+// console.log(currentDate1)
 
 
-export {getHoursArray, dateTimeString, dateString}
+export {getHoursArray}
 

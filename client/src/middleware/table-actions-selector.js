@@ -1,4 +1,15 @@
-import {actions} from '../redux/actions'
+import {createTableReducers} from "../redux/table-reducers";
+
+
+const action = (name) => createTableReducers(name).actions
+
+const actions = {
+	customers: action('customers'),
+	services: action('services'),
+	masters: action('masters'),
+	cities: action('cities'),
+	orders: action('orders'),
+}
 
 export const setItemsAction = (subj, data) => {
 	return actions[subj][`get${subj}List`](data)
@@ -32,23 +43,3 @@ export const changeOrdersHoursAction = (subj, data) => {
 	return actions[subj][`change${subj}FreeHours`](data)
 }
 
-///////Main page///////
-export const setFormDataAction = (data) => {
-	return actions.setFormData(data);
-}
-
-export const setHoursAction = (data) => {
-	return actions.setWorkingHours(data);
-}
-
-export const setAuthAction = (data) => {
-	return actions.setAuth(data);
-}
-
-export const setFreeMastersAction = (data) => {
-	return actions.setFreeMasters(data);
-}
-
-export const setNewOrderAction = (data) => {
-	return actions.setNewOrder(data);
-}

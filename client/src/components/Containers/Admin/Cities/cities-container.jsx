@@ -4,7 +4,7 @@ import BasicTableHead from "../../../Common/table/basic-table-head";
 import {compose} from "redux";
 import {connect} from "react-redux";
 import CitiesForm from "./cities-form";
-import {containerDispatchProps, containerStateProps} from "../../utils/props-generator";
+import {containerDispatchProps, containerStateProps} from "../../utils/props-selector";
 
 
 const subj = 'cities'

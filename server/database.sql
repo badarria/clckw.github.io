@@ -63,7 +63,8 @@ insert into newOrders (master, customer, service, beginAt, endAt)
 values (9, 42,  2, 'Wed Dec 16 2020 12:14:00', '2020-12-16 16:00:00');
 insert into orders (master, customer, service, beginAt, endAt)
 values (9, 42,  2, 'Wed Dec 24 2020 12:00:00', '2020-12-24 13:00:00');
-
+insert into orders (master, customer, service, beginAt, endAt)
+values (1, 1,  2, 'Wed Dec 24 2020 12:00:00', '2020-12-24 13:00:00');
 
 
 

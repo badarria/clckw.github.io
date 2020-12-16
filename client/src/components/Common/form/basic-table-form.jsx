@@ -1,12 +1,18 @@
 import React from "react";
 import {Clear, Done} from "@material-ui/icons";
 import AlertDialog from "../alert-dialog";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
+import {TableRow, Box, TableCell} from "@material-ui/core";
+import {makeStyles} from "@material-ui/core/styles";
+
+export const useStyles = makeStyles({
+	form: {display: 'flex', justifyContent: "space-between", width: '100%', alignItems: 'center'},
+	fields: {display: 'flex', maxWidth: '90%',},
+	buttons: {flexGrow: 1, display: 'flex', justifyContent: 'flex-end'}
+})
 
 
 export const BasicTableForm = (props) => {
-
+	const classes = useStyles()
 	const {children, submit, reset} = props;
 
 	const acceptDialogProps = {
@@ -26,14 +32,18 @@ export const BasicTableForm = (props) => {
 		accept: reset
 	}
 
+
 	return (
 		<TableRow>
 			<TableCell colSpan={11}>
-				<form onSubmit={submit}
-							style={{display: 'flex', justifyContent: "space-between", width: '100%', alignItems: 'center'}}>
-					{children}
-					<AlertDialog {...acceptDialogProps}/>
-					<AlertDialog {...resetDialogProps}/>
+				<form onSubmit={submit} className={classes.form}>
+					<Box className={classes.fields}>
+						{children}
+					</Box>
+					<Box className={classes.buttons}>
+						<AlertDialog {...acceptDialogProps}/>
+						<AlertDialog {...resetDialogProps}/>
+					</Box>
 				</form>
 			</TableCell>
 		</TableRow>

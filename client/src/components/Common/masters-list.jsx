@@ -2,7 +2,6 @@ import React from 'react';
 import {
 	makeStyles,
 	Card,
-	CardActionArea,
 	CardActions,
 	CardContent,
 	Typography,
@@ -28,19 +27,17 @@ const classes = useStyle()
 
 	return (
 		<Card className={classes.root}>
-			<CardActionArea>
 				<CardContent>
 					<Typography gutterBottom variant="h5" component="h2">
 						{`${name} ${surname}`}
 					</Typography>
 					<Box component="fieldset" mb={3} borderColor="transparent" className={classes.box}>
 						<Typography component="legend">Rating</Typography>
-						<Rating name="read-only" value={rating} readOnly/>
+						<Rating name="read-only" value={Number(rating)} readOnly/>
 					</Box>
 				</CardContent>
-			</CardActionArea>
 			<CardActions>
-				<Button variant="contained" color="primary" fullWidth sizeLarge onClick={() => accept(id)}> Choose! </Button>
+				<Button variant="contained" color="primary" fullWidth size='large' onClick={() => accept(id)}> Choose! </Button>
 			</CardActions>
 		</Card>
 	);

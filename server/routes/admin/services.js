@@ -47,7 +47,8 @@ router.post('/', async (req, res) => {
 		const newItem = await pool.query(
 			"INSERT INTO services (name, time) VALUES($1, $2) RETURNING *", [name, time]
 		);
-		res.json(newItem.rows[0])
+		res.json('Service was added')
+		// res.json(newItem.rows[0])
 	} catch (e) {
 		console.error(e.message);
 	}

@@ -47,7 +47,7 @@ router.post('/', async (req, res) => {
 		const newItem = await pool.query(
 			"INSERT INTO customers (name, surname, email) VALUES($1, $2, $3) RETURNING *", [name, surname, email]
 		);
-		res.json(newItem.rows[0])
+		res.json("Customer was added")
 	} catch (e) {
 		console.error(e.message);
 	}

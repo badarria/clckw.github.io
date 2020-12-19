@@ -2,11 +2,12 @@ import React from 'react'
 import {Container, Typography, Paper} from '@material-ui/core'
 import MainSearchForm from "./search-form";
 import {MastersList} from "../../Common/masters-list"
-import {getFreeMastersState, getMessage} from "../../../middleware/state-selectors";
+import {getFreeMastersState, getMessage, getHomePageToastMsg} from "../../../middleware/state-selectors";
 import {acceptOrder} from "../../../middleware/home-page-thunks";
 import {compose} from "redux";
 import {connect} from "react-redux";
 import {makeStyles} from "@material-ui/core/styles";
+import {Toast} from "../../Common/toast";
 
 
 export const useStyle = makeStyles({
@@ -14,7 +15,7 @@ export const useStyle = makeStyles({
 	title: {textAlign: 'center', margin: '50px 0 0'}
 })
 
-const HomePage = ({mastersList, accept, msg}) => {
+const HomePage = ({mastersList, accept, msg, toastMsg}) => {
 	const classes = useStyle()
 
 	return (
@@ -27,6 +28,7 @@ const HomePage = ({mastersList, accept, msg}) => {
 				</Paper> : null}
 			{mastersList.length ?
 				<MastersList data={mastersList} accept={accept}/> : null}
+			<Toast msg={toastMsg} />
 		</Container>
 	)
 }
@@ -35,11 +37,12 @@ const HomePage = ({mastersList, accept, msg}) => {
 const mapStateToProps = (state) => ({
 	mastersList: getFreeMastersState(state),
 	msg: getMessage(state),
+	toastMsg: getHomePageToastMsg(state)
 })
 
 const mapDispatchToProps = (dispatch) => {
 	return ({
-		accept: (master_id) => dispatch((acceptOrder(master_id))),
+		accept: (master_id) => dispatch(acceptOrder(master_id)),
 	})
 }
 

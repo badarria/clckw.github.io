@@ -45,10 +45,18 @@ export const getAuthState = (state) => {
 	return state.main.isAuth;
 }
 
-
 export const getFreeMastersState = (state) => {
 	return state.main.freeMasters;
 }
+
 export const getMessage = (state) => {
 	return state.main.msg
+}
+
+export const getHomePageToastMsg = (state) => {
+	return state.main.toastMsg
+}
+
+export const getAdminPageToastMsg = (subj, state) => {
+	return state[`${subj}`].toastMsg
 }

@@ -13,12 +13,18 @@ import {
 	toggleStateAction,
 	clearDataAction,
 	changeOrdersHoursAction,
-	setHoursAction,
+	setToastMsgAction,
 } from './table-actions-selector'
 import {emptyFields, mergeWithForeignKeys} from "./utils/table-func";
 import {getHoursArray} from "./utils/date-time-func";
 
 
+export const setToastMsg = (subj, msg, dispatch) => {
+	dispatch(setToastMsgAction(subj, msg))
+	setTimeout(() => {
+		dispatch(setToastMsgAction(subj,''))
+	}, 2000)
+}
 
 export const setItems = (subj) => async (dispatch) => {
 	const data = await getItems(subj)
@@ -30,7 +36,10 @@ export const setColumns = (subj, data) => (dispatch) => {
 }
 
 export const removeFromDB = (subj, id) => async (dispatch) => {
-	await removeItem(id, subj);
+	const res = await removeItem(id, subj);
+	if (res) {
+		setToastMsg(subj, res, dispatch)
+	}
 	dispatch(setItems(subj))
 }
 
@@ -56,13 +65,13 @@ export const cancelInput = (subj) => (dispatch) => {
 
 export const accept = (subj, data) => async (dispatch, getState) => {
 	const state = getState()[`${subj}`].editState;
-	state === 'isEditing' ? await updateItem(data, subj) : await addItem(data, subj);
+	const res = state === 'isEditing' ? await updateItem(data, subj) : await addItem(data, subj);
+	console.log(res, 'update/add')
 	await dispatch(cancelInput(subj, dispatch))
 	await dispatch(setItems(subj))
 }
 
 export const _getFreeHours = async (master_id, date, service_time, order_id = 0) => {
-	console.log(date, 'getfreehours')
 	const orders = await getFilteredOrders('orders', master_id, date, order_id)
 	return getHoursArray(service_time, orders);
 }

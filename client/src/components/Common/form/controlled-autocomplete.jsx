@@ -11,7 +11,7 @@ const useStyle = makeStyles({
 export const ControlledAutocomplete = (props) => {
 	const {data, control, name} = props
 	const classes = useStyle();
-	// const options = data.filter(({name}) => name)
+
 
 	return (
 		<Controller
@@ -22,6 +22,7 @@ export const ControlledAutocomplete = (props) => {
 					className={classes.root}
 					defaultValue={data[0]}
 					disableClearable
+					filterOptions={(data) => data.filter(opt => opt.name)}
 					getOptionLabel={(option) => option.name}
 					options={data}
 					getOptionSelected={(option, value) => option.name === value.name}

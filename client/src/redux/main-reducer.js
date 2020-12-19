@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 
-const initState = {
+export const initState = {
 	formData: {
 		name: '',
 		surname: '',
@@ -13,6 +13,7 @@ const initState = {
 	freeMasters: [],
 	msg: '',
 	newOrder: {},
+	toastMsg: '',
 	isAuth: false
 };
 
@@ -38,8 +39,11 @@ const mainReducer = createSlice({
 		setAuth: (state, action) => {
 			state.isAuth = action.payload
 		},
+		setToastMsg: (state, action) => {
+			state.toastMsg = action.payload;
+		}
 	}
 })
 
 export const {reducer} = mainReducer;
-export const {setFormData, setAuth, setWorkingHours, setFreeMasters, setMasterMessage, setNewOrder} = mainReducer.actions
+export const {setFormData, setAuth, setWorkingHours, setFreeMasters, setMasterMessage, setNewOrder, setToastMsg} = mainReducer.actions

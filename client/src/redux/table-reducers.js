@@ -7,6 +7,8 @@ const initState = () => ({
 	editState: null,
 	errors: {},
 	helper: null,
+	toastMsg: '',
+	loader: false
 });
 
 
@@ -41,6 +43,12 @@ export const createTableReducers = (subj) => {
 			},
 			[`change${subj}FreeHours`]: (state, action) => {
 				state.dataToChange.hours = action.payload;
+			},
+			[`set${subj}ToastMsg`]: (state, action) => {
+				state.toastMsg = action.payload
+			},
+			[`set${subj}Loader`]: (state, action) => {
+				state.loader = action.payload
 			}
 		}
 	})

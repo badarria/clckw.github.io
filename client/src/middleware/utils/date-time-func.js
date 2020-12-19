@@ -1,7 +1,3 @@
-// import {DateTime} from 'luxon';
-// import luxon from 'luxon';
-// const {DateTime} = luxon
-
 import {DateTime} from "luxon";
 
 const beginKey = 'begin';
@@ -55,11 +51,7 @@ export const getBeginEnd = (date, hours, service_time) => {
 	begin = DateTime.fromJSDate(begin).toJSON()
 	return { end, begin}
 }
-//
-// // export const
-// console.log(currentDate)
-// console.log(fromFormatToObj)
-// console.log(currentDate1)
+
 
 
 export {getHoursArray}

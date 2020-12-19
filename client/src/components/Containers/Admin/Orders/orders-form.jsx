@@ -7,7 +7,6 @@ import {BasicTableForm} from "../../../Common/form/basic-table-form";
 import {formDispatchProps, formStateProps} from "../../utils/props-selector";
 import {compose} from "redux";
 import {connect} from "react-redux";
-import {DateTime} from "luxon";
 import {dateToRequest, getBeginEnd} from "../../../../middleware/utils/date-time-func";
 
 
@@ -49,8 +48,7 @@ const OrdersForm = (props) => {
 	const submitForm = (data) => {
 		const {id, master, customer, service, date, hours} = data;
 		const {end, begin} = getBeginEnd(date, hours, service.time)
-		console.log( begin, 'begin')
-		console.log( end, 'end')
+
 		const res = {
 			id: id,
 			master: master.id,

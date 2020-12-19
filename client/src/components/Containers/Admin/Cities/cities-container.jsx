@@ -5,6 +5,7 @@ import {compose} from "redux";
 import {connect} from "react-redux";
 import CitiesForm from "./cities-form";
 import {containerDispatchProps, containerStateProps} from "../../utils/props-selector";
+import {Toast} from "../../../Common/toast";
 
 
 const subj = 'cities'
@@ -12,7 +13,7 @@ const mapStateToProps = containerStateProps(subj)
 const mapDispatchToProps = containerDispatchProps(subj)
 
 
-const CitiesContainer = ({items, columns, editState, remove, push}) => {
+const CitiesContainer = ({items, columns, editState, remove, push, msg}) => {
 
 	const tableProps = {items, columns, push, editState, remove}
 	const headProps = {columns, push}
@@ -26,6 +27,7 @@ const CitiesContainer = ({items, columns, editState, remove, push}) => {
 					<BasicTableHead {...headProps}/>
 				}
 			</BasicTable>
+			<Toast msg={msg} />
 		</>
 	)
 }

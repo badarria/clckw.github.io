@@ -46,7 +46,7 @@ router.delete('/:id', async (req, res) => {
 		await pool.query(
 			"DELETE FROM masters WHERE id = $1", [id]
 		);
-		res.json("Customer was deleted")
+		res.json("Master was deleted")
 	} catch (e) {
 		console.error(e.message)
 	}
@@ -59,7 +59,7 @@ router.post('/', async (req, res) => {
 		const newItem = await pool.query(
 			"INSERT INTO masters (name, surname, city, rating) VALUES($1, $2, $3, $4) RETURNING *", [name, surname, city_id, rating]
 		);
-		res.json(newItem.rows[0])
+		res.json("Master was added")
 	} catch (e) {
 		console.error(e.message);
 	}

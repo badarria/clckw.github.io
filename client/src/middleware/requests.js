@@ -12,9 +12,10 @@ export const getItems = async (subj) => {
 
 export const removeItem = async (id, subj) => {
 	try {
-		await fetch(`${adminPath}/${subj}/${id}`, {
+		const res = await fetch(`${adminPath}/${subj}/${id}`, {
 			method: "DELETE"
 		});
+		return res.json()
 	} catch (err) {
 		console.error(err)
 	}

@@ -29,7 +29,7 @@ export const ControlledSelect = (props) => {
 					<Select id={name} disabled={disabled}>
 						{data.map(({hour, booked}, inx) => (
 							<MenuItem key={inx} value={hour} disabled={booked}>
-								{hour}
+							{hour}
 							</MenuItem>
 						))}
 					</Select>

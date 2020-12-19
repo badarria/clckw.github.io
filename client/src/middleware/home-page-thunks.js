@@ -1,11 +1,22 @@
 import {addItem, getCustomer, getFreeMasters, getItems, loginUser, stayAuth} from "./requests";
-import {setFormData, setAuth, setMasterMessage, setFreeMasters, setWorkingHours, setNewOrder} from '../redux/main-reducer'
+import {
+	setFormData,
+	setAuth,
+	setMasterMessage,
+	setFreeMasters,
+	setWorkingHours,
+	setNewOrder,
+	setToastMsg, initState
+} from '../redux/main-reducer'
 import {getHoursArray} from "./utils/date-time-func";
 import {mergeWithForeignKeys} from "./utils/table-func";
 import {subjects} from "../components/Containers/init-params";
 import {setColumns, setItems} from "./admin-page-thunks";
 
 
+export const setHomePageToastMsg = (msg) => (dispatch) => {
+	dispatch(setToastMsg(msg))
+}
 
 export const getInitState = async (dispatch, getState) => {
 	const city = await getItems('cities');
@@ -43,9 +54,11 @@ export const findMasters = ({city, begin, end}) => async (dispatch) => {
 		dispatch(setFreeMasters(masters));
 		let msg = `Choose a master from the list below to place an order`
 		dispatch(setMasterMessage(msg))
+		return true
 	} else {
 		let msg = 'Sorry, there are no free masters. Try to choose another time'
 		dispatch(setMasterMessage(msg))
+		return false
 	}
 }
 
@@ -67,9 +80,17 @@ export const acceptOrder = (id) => async (dispatch, getState) => {
 	order.master = id
 	dispatch(setOrderData(order))
 	const data = {...getState().main.newOrder}
-	await addItem(data, 'orders')
-	dispatch(setOrderData({}))
-	console.log('done')
+	const res = await addItem(data, 'orders')
+	if (res) {
+		dispatch(setOrderData({}))
+		dispatch(setFreeMasters([]))
+		dispatch(setMasterMessage(''))
+		dispatch(setHomePageToastMsg('Order was successful added!'))
+		setTimeout(() => {
+			dispatch(setHomePageToastMsg(''))
+		}, 2000)
+	}
+	console.log(res)
 }
 
 export const login = (data) => async (dispatch) => {
@@ -84,6 +105,7 @@ export const login = (data) => async (dispatch) => {
 
 export const checkAuth = async (dispatch) => {
 	const res = await stayAuth()
+	console.log('stayauth')
 	dispatch(setAuth(res === true))
 }
 
@@ -91,4 +113,5 @@ export const logout = (dispatch) => {
 	localStorage.removeItem("token");
 	dispatch(setAuth(false));
 }
+
 

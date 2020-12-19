@@ -14,7 +14,6 @@ import {
 } from "../../../middleware/home-page-thunks";
 import {ControlledDatePicker} from "../../Common/form/controlled-date-picker";
 import {ControlledSelect} from "../../Common/form/controlled-select";
-import {DateTime} from "luxon";
 import {makeStyles} from "@material-ui/core/styles";
 import {getBeginEnd} from "../../../middleware/utils/date-time-func";
 
@@ -57,11 +56,11 @@ export const MainSearchForm = (props) => {
 	}, [])
 
 	const defaultValues = {
-		name: '',
+		name: null,
 		surname: '',
 		email: '',
 		city: '',
-		service: {id: '', name: '', time: ''},
+		service: '',
 		date: date,
 		hours: '',
 	}
@@ -75,19 +74,20 @@ export const MainSearchForm = (props) => {
 
 	const fieldsProps = {data: fields, register, control, classes}
 
-	const submit = (data) => {
+	const submit = async (data) => {
 		const {name, surname, email, service, city, date, hours} = data;
 		const {end, begin} = getBeginEnd(date, hours, service.time);
-		console.log(begin, 'begin')
-		console.log(end, 'end')
-		findMasters({city: city.id, begin, end})
-		setOrderData({service: service.id, begin, end})
-		checkCustomer({name, surname, email})
+		const res = await findMasters({city: city.id, begin, end})
+		if (res) {
+			setOrderData({service: service.id, begin, end})
+			checkCustomer({name, surname, email})
+			reset(defaultValues)
+		}
 	}
 
 
 	return (
-		<Box component={Paper} className={classes.container}>
+		<Paper className={classes.container}>
 			<form onSubmit={handleSubmit((data) => submit(data))} className={classes.form}>
 				<Box className={classes.wrap}>
 					<FormFieldsGenerator {...fieldsProps}/>
@@ -95,17 +95,18 @@ export const MainSearchForm = (props) => {
 					<ControlledSelect control={control} data={hours || []} name='hours'/>
 				</Box>
 				<Box className={classes.wrap}>
-					<Button type='submit' variant="contained" color="primary" className={classes.btn}>Find Master</Button>
 					<Button type='reset' variant="contained" className={classes.btn}
 									onClick={() => reset({...defaultValues})}>Clear</Button>
+					<Button type='submit' variant="contained" color="primary" className={classes.btn}>Find Master</Button>
 				</Box>
 			</form>
-		</Box>
+		</Paper>
 	)
 }
 
 const mapStateToProps = (state) => ({
 	data: getFormDataState(state),
+
 })
 
 const mapDispatchToProps = (dispatch) => {

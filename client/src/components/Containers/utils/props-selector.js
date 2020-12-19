@@ -1,6 +1,6 @@
 import {
 	editStateState,
-	errorsState,
+	errorsState, getAdminPageToastMsg,
 	getColumnsState,
 	getDataState,
 	getItemsState, helperState, ordersDataState
@@ -22,6 +22,7 @@ export const containerStateProps = (subj) => (state) => {
 		editState: editStateState(subj, state),
 		errors: errorsState(subj, state),
 		helper: helperState(subj, state),
+		msg: getAdminPageToastMsg(subj, state),
 	})
 }
 

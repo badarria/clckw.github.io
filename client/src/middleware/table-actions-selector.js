@@ -43,3 +43,6 @@ export const changeOrdersHoursAction = (subj, data) => {
 	return actions[subj][`change${subj}FreeHours`](data)
 }
 
+export const setToastMsgAction = (subj, data) => {
+	return actions[subj][`set${subj}ToastMsg`](data)
+}

@@ -34,7 +34,7 @@ router.delete('/:id', async (req, res) => {
 		await pool.query(
 			"DELETE FROM cities WHERE id = $1", [id]
 		);
-		res.json("Customer was deleted")
+		res.json("City was deleted")
 	} catch (e) {
 		console.error(e.message)
 	}
@@ -46,7 +46,7 @@ router.post('/', async (req, res) => {
 		const newItem = await pool.query(
 			"INSERT INTO cities (name) VALUES($1) RETURNING *", [name]
 		);
-		res.json(newItem.rows[0])
+		res.json("City was added")
 	} catch (e) {
 		console.error(e.message);
 	}

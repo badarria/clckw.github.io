@@ -60,7 +60,7 @@ router.delete('/:id', async (req, res) => {
 		await pool.query(
 			"DELETE FROM orders WHERE id = $1", [id]
 		);
-		res.json("Customer was deleted")
+		res.json("Order was deleted")
 	} catch (e) {
 		console.error(e.message)
 	}
@@ -73,7 +73,7 @@ router.post('/', async (req, res) => {
 		const newItem = await pool.query(
 			"INSERT INTO orders (master, customer, service, beginAt, endAt) VALUES($1, $2, $3, $4, $5) RETURNING *", [master, customer, service, begin, end]
 		);
-		res.json(newItem.rows[0])
+		res.json('Order was added')
 	} catch (e) {
 		console.error(e.message);
 	}

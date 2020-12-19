@@ -1,8 +1,6 @@
 import {Box, Tab, Tabs} from "@material-ui/core";
 import PropTypes from "prop-types";
 import React from "react";
-import {makeStyles} from "@material-ui/core/styles";
-
 
 
 const TabPanel = (props) => {
@@ -38,14 +36,8 @@ const a11yProps = (index) => {
 	};
 }
 
-// const useStyles = makeStyles({
-// 	root: {
-// 		backgroundColor: 'white',
-// 	},
-// });
 
 const HorizontalTabs = (props) => {
-	// const classes = useStyles;
 	const [value, setValue] = React.useState(0);
 	const {children, labels} = props;
 
@@ -61,7 +53,6 @@ const HorizontalTabs = (props) => {
 				indicatorColor="primary"
 				textColor="primary"
 				centered
-				// className={classes.root}
 			>
 				{labels.map((label, inx) => {
 					return (

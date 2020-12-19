@@ -5,15 +5,16 @@ import {compose} from "redux";
 import {connect} from "react-redux";
 import {containerDispatchProps, containerStateProps} from "../../utils/props-selector";
 import OrdersForm from "./orders-form";
+import {Toast} from "../../../Common/toast";
 
 
 const subj = 'orders'
 const mapStateToProps = containerStateProps(subj)
 const mapDispatchToProps = containerDispatchProps(subj, true)
 
-const OrdersContainer = ({items, columns, editState, remove, push}) => {
+const OrdersContainer = ({items, columns, editState, remove, push, msg}) => {
 
-	const tableProps = {items, columns, push, editState, remove}
+	const tableProps = {items, columns, push, editState, remove,}
 	const headProps = {columns, push}
 
 	return (
@@ -25,6 +26,7 @@ const OrdersContainer = ({items, columns, editState, remove, push}) => {
 					<BasicTableHead {...headProps}/>
 				}
 			</BasicTable>
+			<Toast msg={msg}/>
 		</>
 	)
 }

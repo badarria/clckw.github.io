@@ -13,7 +13,7 @@ import {
 	toggleStateAction,
 	clearDataAction,
 	changeOrdersHoursAction,
-	setToastMsgAction,
+	setToastMsgAction, setLoadingAction,
 } from './table-actions-selector'
 import {emptyFields, mergeWithForeignKeys} from "./utils/table-func";
 import {getHoursArray} from "./utils/date-time-func";
@@ -22,8 +22,11 @@ import {getHoursArray} from "./utils/date-time-func";
 export const setToastMsg = (subj, msg, dispatch) => {
 	dispatch(setToastMsgAction(subj, msg))
 	setTimeout(() => {
-		dispatch(setToastMsgAction(subj,''))
+		dispatch(setToastMsgAction(subj, ''))
 	}, 2000)
+}
+export const setLoader = (subj, data, dispatch) => {
+	dispatch(setLoadingAction(subj, data))
 }
 
 export const setItems = (subj) => async (dispatch) => {
@@ -36,7 +39,9 @@ export const setColumns = (subj, data) => (dispatch) => {
 }
 
 export const removeFromDB = (subj, id) => async (dispatch) => {
+	setLoader(subj, true, dispatch);
 	const res = await removeItem(id, subj);
+	setLoader(subj, false, dispatch);
 	if (res) {
 		setToastMsg(subj, res, dispatch)
 	}
@@ -44,10 +49,10 @@ export const removeFromDB = (subj, id) => async (dispatch) => {
 }
 
 export const pushToChange = (subj, data, state, getKeys = false) => async (dispatch) => {
+	setLoader(subj, true, dispatch);
 	const isEditing = state === 'isEditing'
 	const foreignKeys = getKeys ? await getForeignKeys(subj) : {};
 	let res = Array.isArray(data) ? emptyFields(data) : {...data}
-
 	if (foreignKeys) {
 		res = mergeWithForeignKeys(Object.entries(res), foreignKeys, isEditing);
 	}
@@ -56,6 +61,7 @@ export const pushToChange = (subj, data, state, getKeys = false) => async (dispa
 	}
 	dispatch(pushToChangeAction(subj, res))
 	dispatch(toggleStateAction(subj, state))
+	setLoader(subj, false, dispatch)
 }
 
 export const cancelInput = (subj) => (dispatch) => {
@@ -64,11 +70,15 @@ export const cancelInput = (subj) => (dispatch) => {
 }
 
 export const accept = (subj, data) => async (dispatch, getState) => {
+	setLoader(subj, true, dispatch);
 	const state = getState()[`${subj}`].editState;
 	const res = state === 'isEditing' ? await updateItem(data, subj) : await addItem(data, subj);
-	console.log(res, 'update/add')
-	await dispatch(cancelInput(subj, dispatch))
-	await dispatch(setItems(subj))
+	if (res) {
+		await dispatch(cancelInput(subj, dispatch))
+		await dispatch(setItems(subj))
+		setToastMsg(subj, res, dispatch)
+	}
+	setLoader(subj, false, dispatch);
 }
 
 export const _getFreeHours = async (master_id, date, service_time, order_id = 0) => {

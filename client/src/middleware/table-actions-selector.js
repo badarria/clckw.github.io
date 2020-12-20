@@ -1,6 +1,5 @@
 import {createTableReducers} from "../redux/table-reducers";
 
-
 const action = (name) => createTableReducers(name).actions
 
 const actions = {
@@ -45,4 +44,8 @@ export const changeOrdersHoursAction = (subj, data) => {
 
 export const setToastMsgAction = (subj, data) => {
 	return actions[subj][`set${subj}ToastMsg`](data)
+}
+
+export const setLoadingAction = (subj, data) => {
+	return actions[subj][`set${subj}Loader`](data)
 }

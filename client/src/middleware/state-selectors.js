@@ -49,7 +49,7 @@ export const getFreeMastersState = (state) => {
 	return state.main.freeMasters;
 }
 
-export const getMessage = (state) => {
+export const getMessageState = (state) => {
 	return state.main.msg
 }
 
@@ -57,6 +57,10 @@ export const getHomePageToastMsg = (state) => {
 	return state.main.toastMsg
 }
 
-export const getAdminPageToastMsg = (subj, state) => {
+export const getToastMsgState = (subj, state) => {
 	return state[`${subj}`].toastMsg
+}
+
+export const getLoadingState = (subj, state) => {
+	return state[subj].loading
 }

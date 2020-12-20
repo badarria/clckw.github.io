@@ -6,7 +6,8 @@ import {
 	setFreeMasters,
 	setWorkingHours,
 	setNewOrder,
-	setToastMsg, initState
+	setToastMsg,
+	setLoader
 } from '../redux/main-reducer'
 import {getHoursArray} from "./utils/date-time-func";
 import {mergeWithForeignKeys} from "./utils/table-func";
@@ -14,8 +15,11 @@ import {subjects} from "../components/Containers/init-params";
 import {setColumns, setItems} from "./admin-page-thunks";
 
 
-export const setHomePageToastMsg = (msg) => (dispatch) => {
+export const setHomePageToastMsg = (msg, dispatch) => {
 	dispatch(setToastMsg(msg))
+	setTimeout(() => {
+		dispatch(setToastMsg(''))
+	}, 2000)
 }
 
 export const getInitState = async (dispatch, getState) => {
@@ -49,7 +53,9 @@ export const changeHours = (service_time) => (dispatch) => {
 export const findMasters = ({city, begin, end}) => async (dispatch) => {
 	dispatch(setFreeMasters([]))
 	dispatch(setMasterMessage(''))
+	dispatch(setLoader(true))
 	const masters = await getFreeMasters(city, begin, end)
+	dispatch(setLoader(false))
 	if (masters.length) {
 		dispatch(setFreeMasters(masters));
 		let msg = `Choose a master from the list below to place an order`
@@ -85,10 +91,7 @@ export const acceptOrder = (id) => async (dispatch, getState) => {
 		dispatch(setOrderData({}))
 		dispatch(setFreeMasters([]))
 		dispatch(setMasterMessage(''))
-		dispatch(setHomePageToastMsg('Order was successful added!'))
-		setTimeout(() => {
-			dispatch(setHomePageToastMsg(''))
-		}, 2000)
+		setHomePageToastMsg('Order was successful added!', dispatch)
 	}
 	console.log(res)
 }

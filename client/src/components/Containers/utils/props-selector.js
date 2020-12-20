@@ -1,9 +1,9 @@
 import {
 	editStateState,
-	errorsState, getAdminPageToastMsg,
+	errorsState, getToastMsgState,
 	getColumnsState,
 	getDataState,
-	getItemsState, helperState, ordersDataState
+	getItemsState, helperState, ordersDataState, getLoadingState
 } from "../../../middleware/state-selectors";
 import {
 	accept,
@@ -22,7 +22,8 @@ export const containerStateProps = (subj) => (state) => {
 		editState: editStateState(subj, state),
 		errors: errorsState(subj, state),
 		helper: helperState(subj, state),
-		msg: getAdminPageToastMsg(subj, state),
+		msg: getToastMsgState(subj, state),
+		loading: getLoadingState(subj, state)
 	})
 }
 

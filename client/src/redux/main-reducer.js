@@ -14,6 +14,7 @@ export const initState = {
 	msg: '',
 	newOrder: {},
 	toastMsg: '',
+	loading: false,
 	isAuth: false
 };
 
@@ -41,9 +42,13 @@ const mainReducer = createSlice({
 		},
 		setToastMsg: (state, action) => {
 			state.toastMsg = action.payload;
-		}
+		},
+		setLoader: (state, action) => {
+			state.loading = action.payload
+		},
+
 	}
 })
 
 export const {reducer} = mainReducer;
-export const {setFormData, setAuth, setWorkingHours, setFreeMasters, setMasterMessage, setNewOrder, setToastMsg} = mainReducer.actions
+export const {setFormData, setAuth, setWorkingHours, setFreeMasters, setMasterMessage, setNewOrder, setToastMsg, setLoader} = mainReducer.actions

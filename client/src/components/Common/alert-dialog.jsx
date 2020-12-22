@@ -35,10 +35,10 @@ const AlertDialog = (props) => {
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleAccept} color="primary" autoFocus>
-						Agree
+						Ok
 					</Button>
 					<Button onClick={handleClose} color="primary">
-						Disagree
+						Cancel
 					</Button>
 				</DialogActions>
 			</Dialog>

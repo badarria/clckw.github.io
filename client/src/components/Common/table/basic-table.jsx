@@ -1,6 +1,5 @@
 import React, {useState, Fragment} from 'react';
 import {
-	makeStyles,
 	Paper,
 	Table,
 	TableBody,
@@ -8,16 +7,25 @@ import {
 	TableContainer,
 	TableFooter, TableHead,
 	TablePagination,
-	TableRow
+	TableRow,Box
 } from "@material-ui/core";
 
 import BasicTableList from "./basic-table-list";
+import {Toast} from "../toast";
+import makeStyles from "@material-ui/core/styles/makeStyles";
+
+
 
 const useStyles = makeStyles({
+	wrap: {
+		width: 'fit-content',
+		margin: '0 auto'
+	},
 	root: {
 		width: 'fit-content',
-		margin: "56px auto 80px",
+		margin: "0px auto 80px",
 	},
+	box: {minHeight: '100px'},
 	table: {
 		minWidth: 600,
 		width: 'auto'
@@ -29,7 +37,7 @@ const useStyles = makeStyles({
 });
 
 export const BasicTable = (props) => {
-	const {children, items, columns, remove, push, editState, itemsOnPage = 5,} = props
+	const {children, items, columns, remove, push, editState, msg, itemsOnPage = 5,} = props
 
 
 	const [page, setPage] = useState(0);
@@ -45,7 +53,8 @@ export const BasicTable = (props) => {
 	};
 
 	return (
-		<Fragment>
+		<Box className={classes.wrap}>
+			<Box className={classes.box}><Toast msg={msg}/></Box>
 			<TableContainer component={Paper} className={classes.root}>
 				<Table className={classes.table} aria-label={`table`}>
 					<TableHead className={classes.head}>
@@ -78,6 +87,6 @@ export const BasicTable = (props) => {
 					</TableFooter>
 				</Table>
 			</TableContainer>
-		</Fragment>
+		</Box>
 	)
 }

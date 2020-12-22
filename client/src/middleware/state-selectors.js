@@ -6,9 +6,29 @@ export const getItemsState = (subj, state) => {
 export const getColumnsState = (subj, state) => {
 	return state[subj].columns
 }
+/////dataForm states
+export const _sliceData = (obj, endSlice) => {
+	const res = Object.entries(obj).slice(0, endSlice)
+	return Object.fromEntries(res)
+}
+const _ordersDataState = (state) => {
+	const data = state.orders.dataToChange;
+	const fields = _sliceData(data, -5)
+	const date = data.date ? dateFromFormatToObj(data.date) : dateFromNewDate();
+	const hours = data.hours;
+	return {fields, date, hours}
+}
+const _mastersDataState = (state) => {
+	const data = state.masters.dataToChange;
+	return _sliceData(data, -1);
+}
+
 export const getDataState = (subj, state) => {
-	return state[subj].dataToChange
+	if (subj === 'orders') return _ordersDataState(state);
+	else if (subj === 'masters') return _mastersDataState(state);
+	else return state[subj].dataToChange
 };
+
 export const editStateState = (subj, state) => {
 	return state[subj].editState
 };
@@ -18,19 +38,6 @@ export const errorsState = (subj, state) => {
 export const helperState = (subj, state) => {
 	return state[subj].helper
 };
-
-export const _sliceData = (obj, endSlice) => {
-	const res = Object.entries(obj).slice(0, endSlice)
-	return Object.fromEntries(res)
-}
-
-export const ordersDataState = (state) => {
-	const data = state.orders.dataToChange;
-	const fields = _sliceData(data, -5)
-	const date = data.date ? dateFromFormatToObj(data.date) : dateFromNewDate();
-	const hours = data.hours;
-	return {fields, date, hours}
-}
 
 export const getFormDataState = (state) => {
 	const data = state.main.formData;
@@ -53,9 +60,9 @@ export const getMessageState = (state) => {
 	return state.main.msg
 }
 
-export const getHomePageToastMsg = (state) => {
-	return state.main.toastMsg
-}
+// export const getHomePageToastMsg = (state) => {
+// 	return state.main.toastMsg
+// }
 
 export const getToastMsgState = (subj, state) => {
 	return state[`${subj}`].toastMsg

@@ -12,10 +12,12 @@ import {connect} from "react-redux";
 import {makeStyles} from "@material-ui/core/styles";
 import {Toast} from "../../Common/toast";
 import {Loader} from "../../Common/loader";
+import Box from "@material-ui/core/Box";
 
 
 export const useStyle = makeStyles({
-	msgBox: {width: '70%', margin: '0 auto', padding: '24px'},
+	wrap: {width: '70%', margin: '0 auto'},
+	msgBox: {padding: '16px'},
 	title: {textAlign: 'center', margin: '50px 0 0'}
 })
 
@@ -24,16 +26,18 @@ const HomePage = ({mastersList, accept, msg, toastMsg, loading}) => {
 
 	return (
 		<Container>
-			<Loader loading={loading}/>
-			<Typography variant="h3" component="h3" className={classes.title}>Find master</Typography>
-			<MainSearchForm/>
-			{msg ?
-				<Paper className={classes.msgBox}>
-					<Typography variant="h5" component="h4">{msg}</Typography>
-				</Paper> : null}
-			{mastersList.length ?
+			<Box className={classes.wrap}>
+				<Loader loading={loading}/>
+				<Typography variant="h3" component="h3" className={classes.title}>Find master</Typography>
+				<MainSearchForm/>
+				{msg ?
+					<Paper className={classes.msgBox}>
+						<Typography variant="h5" component="h4">{msg}</Typography>
+					</Paper> : null}
+				{mastersList.length ?
 					<MastersList data={mastersList} accept={accept}/> : null}
-			<Toast msg={toastMsg}/>
+				<Toast msg={toastMsg}/>
+			</Box>
 		</Container>
 	)
 }

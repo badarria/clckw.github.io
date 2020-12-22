@@ -19,14 +19,13 @@ const MastersForm = ({data, handleReset, accept}) => {
 		defaultValues: {
 			name: data.name,
 			surname: data.surname,
-			city: data.city,
-			rating: data.rating,
+			city: data.city[0],
 		}
 	})
 
 	const submitForm = (data) => {
-		const {id, name, surname, city, rating} = data
-		const res = {id, name, surname, city: city.id, rating,}
+		const {id, name, surname, city} = data
+		const res = {id, name, surname, city: city.id}
 		accept(res)
 	}
 

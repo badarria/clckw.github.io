@@ -39,7 +39,7 @@ export const containerDispatchProps = (subj, getKeys = false) => (dispatch) => {
 
 export const formStateProps = (subj) => (state) => {
 	return ({
-		data: subj === 'orders' ? ordersDataState(state) : getDataState(subj, state),
+		data: getDataState(subj, state),
 		errors: errorsState(subj, state),
 		helper: helperState(subj, state),
 	})

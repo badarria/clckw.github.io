@@ -8,9 +8,10 @@ import ServicesContainer from "./Services/services-container";
 import OrdersContainer from "./Orders/orders-container";
 
 
+
 const AdminPage = () => {
 	return (
-		<Container>
+		<Container >
 			<Box mt={3}>
 				<HorizontalTabs labels={["customers", "masters", "cities", "services", 'orders']}>
 					<Customers />

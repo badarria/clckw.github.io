@@ -16,7 +16,7 @@ const mapDispatchToProps = containerDispatchProps(subj)
 
 const CitiesContainer = ({items, columns, editState, remove, push, msg, loading}) => {
 
-	const tableProps = {items, columns, push, editState, remove}
+	const tableProps = {items, columns, push, editState, remove, msg}
 	const headProps = {columns, push}
 
 	return (
@@ -28,7 +28,6 @@ const CitiesContainer = ({items, columns, editState, remove, push, msg, loading}
 					:
 					<BasicTableHead {...headProps}/>}
 			</BasicTable>
-			<Toast msg={msg}/>
 		</>
 	)
 }

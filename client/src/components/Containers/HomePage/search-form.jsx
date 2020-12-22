@@ -23,7 +23,7 @@ export const useStyles = makeStyles({
 		padding: '30px',
 		flexWrap: 'wrap',
 		margin: '50px auto',
-		width: '70%'
+		// width: '70%'
 	},
 	form: {
 		display: 'flex',

@@ -6,7 +6,21 @@ const pool = require('../../db');
 router.get('/find/:city/:begin/:end', async (req, res) => {
 	try {
 		const {city, begin, end} = req.params;
-		const findFreeMasters = await pool.query("SELECT m.id, m.name, m.surname, m.rating FROM masters m where m.city=$1 EXCEPT select o.master, m.name, m.surname, m.rating FROM orders o JOIN masters m ON o.master=m.id WHERE ($2::timestamp, $3::timestamp ) OVERLAPS (o.beginAt, o.endAt)", [city, begin, end]);
+		const findFreeMasters = await pool.query(`WITH excepted_masters as (
+								SELECT
+								m.id, m.name, m.surname FROM masters m where m.city=$1
+								EXCEPT
+								select o.master, m.name, m.surname
+								FROM orders o JOIN masters m
+								ON o.master=m.id
+								WHERE ($2::timestamp, $3::timestamp )
+								OVERLAPS (o.beginAt, o.endAt)
+						)
+				SELECT em.id, em.name, em.surname, COALESCE(round(avg(o.rating)::numeric), 5) as rating
+					FROM excepted_masters em
+					LEFT JOIN orders o ON em.id=o.master
+					GROUP BY em.id, em.name, em.surname`, [city, begin, end])
+
 		res.json(findFreeMasters.rows);
 	} catch (err) {
 		console.error(err.message)

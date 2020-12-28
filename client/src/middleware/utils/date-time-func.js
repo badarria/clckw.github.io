@@ -8,7 +8,7 @@ const _getNum = (str) => {
 	return Number(str.split(':')[0]);
 }
 const _getTimeStr = (num) => {
-	return `${num}:00`;
+	return num < 10 ? `0${num}:00`:`${num}:00`;
 }
 
 const _getWorkingHours = (begin, end, serviceTime = 1) => {

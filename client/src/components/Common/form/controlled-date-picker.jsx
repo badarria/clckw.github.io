@@ -25,6 +25,7 @@ export const ControlledDatePicker = (props) => {
 					<KeyboardDatePicker
 						className={classes.root}
 						disableToolbar
+						required
 						onChange={(data) => onChange(data)}
 						value={value}
 						variant="inline"

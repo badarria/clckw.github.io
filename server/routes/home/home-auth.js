@@ -1,8 +1,8 @@
 const router = require('express').Router();
-const pool = require('../db');
+const pool = require('../../db');
 const bcrypt = require('bcrypt');
-const jwtGenerator = require("../utils/jwtGenerator");
-const authorization = require("../middleware/authorization");
+const jwtGenerator = require("../../utils/jwtGenerator");
+const authorization = require("../../middleware/authorization");
 
 //post for adding new user to admin table with bcrypt password;
 // router.post("/", async (req, res) => {
@@ -35,18 +35,17 @@ router.post("/", async (req, res) => {
 		const token =  jwtGenerator(user.rows[0].id);
 		res.json({token})
 	} catch (err) {
-		console.error(err.message);
 		res.status(500).send("Server error")
 	}
 })
 
-router.get("/verify", authorization, async (req, res) => {
-	try {
-		res.json(true);
-	} catch (err) {
-		console.error(err.message);
-		res.status(500).send("Server error")
-	}
-})
+// router.get("/verify", authorization, async (req, res) => {
+// 	try {
+// 		res.json(true);
+// 	} catch (err) {
+// 		console.error(err.message);
+// 		res.status(500).send("Server error")
+// 	}
+// })
 
 module.exports = router;

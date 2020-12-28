@@ -1,22 +1,23 @@
 const index = require('express').Router();
 const path = require('path');
-const customers = require('./admin/customers');
-const masters = require('./admin/masters');
-const cities = require('./admin/cities');
-const orders = require('./admin/orders');
-const services = require('./admin/services');
-const auth = require('./auth')
-const adminPage = require('./main/admin-page')
-const mainPage = require('./main/find')
+const customers = require('./admin/admin-customers');
+const masters = require('./admin/admin-masters');
+const cities = require('./admin/admin-cities');
+const orders = require('./admin/admin-orders');
+const services = require('./admin/admin-services');
+const auth = require('./home/home-auth')
+const adminPage = require('./admin/admin')
+const homePage = require('./home/home')
 
+index.use('/admin', adminPage)
 index.use('/admin/customers', customers);
 index.use('/admin/masters', masters);
 index.use('/admin/cities', cities);
 index.use('/admin/orders', orders);
 index.use('/admin/services', services);
-index.use('/auth', auth);
-index.use('/admin-page', adminPage)
-index.use('/main-page', mainPage)
+index.use('/home', homePage)
+index.use('/home/auth', auth);
+
 
 
 module.exports = index;

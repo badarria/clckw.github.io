@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Paper, Box, Button,} from "@material-ui/core";
 import {useForm} from "react-hook-form";
 import FormFieldsGenerator from "../../Common/form/form-fields-generator";
@@ -11,19 +11,19 @@ import {
 	findMasters,
 	getInitState,
 	setOrderData
-} from "../../../middleware/home-page-thunks";
+} from "../../../middleware/home/home-page-thunks";
 import {ControlledDatePicker} from "../../Common/form/controlled-date-picker";
 import {ControlledSelect} from "../../Common/form/controlled-select";
 import {makeStyles} from "@material-ui/core/styles";
 import {getBeginEnd} from "../../../middleware/utils/date-time-func";
-
+import {yupResolver} from '@hookform/resolvers/yup';
+import * as yup from "yup";
 
 export const useStyles = makeStyles({
 	container: {
 		padding: '30px',
 		flexWrap: 'wrap',
 		margin: '50px auto',
-		// width: '70%'
 	},
 	form: {
 		display: 'flex',
@@ -42,9 +42,6 @@ export const useStyles = makeStyles({
 });
 
 
-const {useEffect} = require("react");
-
-
 export const MainSearchForm = (props) => {
 	const classes = useStyles();
 	const {data, initState, changeHours, findMasters, checkCustomer, setOrderData} = props
@@ -55,8 +52,9 @@ export const MainSearchForm = (props) => {
 		initState()
 	}, [])
 
+
 	const defaultValues = {
-		name: null,
+		name: '',
 		surname: '',
 		email: '',
 		city: '',
@@ -65,12 +63,31 @@ export const MainSearchForm = (props) => {
 		hours: '',
 	}
 
-	const {register, handleSubmit, control, reset, watch} = useForm({defaultValues})
+	const schema = yup.object().shape({
+		name: yup.string().matches(/^[a-z -]+$/gi, 'Incorrect symbols').min(2).max(20).required(),
+		surname: yup.string().matches(/^[a-z -]+$/gi, 'Incorrect symbols').min(2).max(20).required(),
+		email: yup.string().email('Enter correct email').required(),
+		service: yup.object({name: yup.string().required()}),
+		city: yup.object({
+			name: yup.string().required(),
+		}),
+		date: yup.date().required(),
+		hours: yup.string().required()
+	});
+
+
+	const {register, handleSubmit, control, watch, errors} = useForm({
+		resolver: yupResolver(schema),
+		defaultValues
+	})
 	const service = watch('service');
+
+
 
 	useEffect(() => {
 		changeHours(service.time)
 	}, [service])
+
 
 	const fieldsProps = {data: fields, register, control, classes}
 
@@ -81,22 +98,19 @@ export const MainSearchForm = (props) => {
 		if (res) {
 			setOrderData({service: service.id, begin, end})
 			checkCustomer({name, surname, email})
-			reset(defaultValues)
 		}
 	}
 
 
 	return (
 		<Paper className={classes.container}>
-			<form onSubmit={handleSubmit((data) => submit(data))} className={classes.form}>
+			<form onSubmit={handleSubmit((data) => submit(data))} className={classes.form} >
 				<Box className={classes.wrap}>
 					<FormFieldsGenerator {...fieldsProps}/>
 					<ControlledDatePicker control={control}/>
 					<ControlledSelect control={control} data={hours || []} name='hours'/>
 				</Box>
 				<Box className={classes.wrap}>
-					<Button type='reset' variant="contained" className={classes.btn}
-									onClick={() => reset({...defaultValues})}>Clear</Button>
 					<Button type='submit' variant="contained" color="primary" className={classes.btn}>Find Master</Button>
 				</Box>
 			</form>

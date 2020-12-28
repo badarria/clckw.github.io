@@ -1,4 +1,5 @@
-import {addItem, getCustomer, getFreeMasters, getItems, loginUser, stayAuth} from "./requests";
+import {getCustomer, getFreeMasters, loginUser} from "./home-requests";
+import {addItem, getItems} from "../admin/admin-requests";
 import {
 	setFormData,
 	setAuth,
@@ -8,36 +9,29 @@ import {
 	setNewOrder,
 	setToastMsg,
 	setLoader
-} from '../redux/main-reducer'
-import {getHoursArray} from "./utils/date-time-func";
-import {mergeWithForeignKeys} from "./utils/table-func";
-import {subjects} from "../components/Containers/init-params";
-import {setColumns, setItems} from "./admin-page-thunks";
+} from '../../redux/home-reducer'
+import {getHoursArray} from "../utils/date-time-func";
+import {mergeWithForeignKeys} from "../utils/table-func";
+import {getAdminInitState, resetAdminState, setItems} from "../admin/admin-page-thunks";
 
 
-export const setHomePageToastMsg = (msg, dispatch) => {
-	dispatch(setToastMsg(msg))
+
+const _setHomePageToastMsg = (toast, dispatch) => {
+	dispatch(setToastMsg(toast))
 	setTimeout(() => {
-		dispatch(setToastMsg(''))
-	}, 2000)
+		dispatch(setToastMsg({type: toast.type, msg: ''}))
+	}, 3000)
 }
 
 export const getInitState = async (dispatch, getState) => {
 	const city = await getItems('cities');
 	const service = await getItems('services');
 	const hours = getHoursArray(service.time);
-	const formData = Object.entries(getState().main.formData);
+	const formData = Object.entries(getState().home.formData);
 	const keys = {city, service}
 	const res = mergeWithForeignKeys(formData, keys)
 	res.hours = hours
 	dispatch(setFormData(res))
-}
-
-export const getAdminInitState = async (dispatch) => {
-	subjects.forEach(([subj, columns]) => {
-		dispatch(setItems(subj));
-		dispatch(setColumns(subj, columns))
-	})
 }
 
 export const setOrderData = (data) => (dispatch) => {
@@ -50,11 +44,11 @@ export const changeHours = (service_time) => (dispatch) => {
 }
 
 
-export const findMasters = ({city, begin, end}) => async (dispatch) => {
+export const findMasters = (data) => async (dispatch) => {
 	dispatch(setFreeMasters([]))
 	dispatch(setMasterMessage(''))
 	dispatch(setLoader(true))
-	const masters = await getFreeMasters(city, begin, end)
+	const masters = await getFreeMasters(data)
 	dispatch(setLoader(false))
 	if (masters.length) {
 		dispatch(setFreeMasters(masters));
@@ -68,53 +62,58 @@ export const findMasters = ({city, begin, end}) => async (dispatch) => {
 	}
 }
 
-export const checkCustomer = ({name, surname, email}) => async (dispatch, getState) => {
-	let id = await getCustomer(email);
-	if (id.length) {
-		id = id[0].id
-	} else {
-		const newCustomer = await addItem({name, surname, email}, 'customers');
-		id = newCustomer.id
-	}
-	const order = {...getState().main.newOrder}
-	order.customer = id
+export const checkCustomer = (data) => async (dispatch, getState) => {
+	let id = await getCustomer(data);
+	const order = {...getState().home.newOrder}
+	order.customer = id[0].id
 	dispatch(setOrderData(order))
 }
 
 export const acceptOrder = (id) => async (dispatch, getState) => {
-	const order = {...getState().main.newOrder}
+	dispatch(setLoader(true))
+	const order = {...getState().home.newOrder}
+	const isAuth = getState().home.isAuth;
 	order.master = id
 	dispatch(setOrderData(order))
-	const data = {...getState().main.newOrder}
+	const data = {...getState().home.newOrder}
 	const res = await addItem(data, 'orders')
+	if (isAuth) {
+		await dispatch(setItems('orders'))
+		await dispatch(setItems('customers'))
+	}
+	dispatch(setLoader(false))
 	if (res) {
 		dispatch(setOrderData({}))
 		dispatch(setFreeMasters([]))
 		dispatch(setMasterMessage(''))
-		setHomePageToastMsg('Order was successful added!', dispatch)
+		const toast = {type: 'success', msg: 'Order was successful added!'}
+		_setHomePageToastMsg(toast, dispatch)
+	} else {
+		const toast = {type: 'error', msg: 'Something went wrong, please, try again later'}
+		_setHomePageToastMsg(toast, dispatch)
 	}
-	console.log(res)
 }
 
 export const login = (data) => async (dispatch) => {
+	dispatch(setLoader(true))
 	const res = await loginUser(data)
-	console.log(res)
 	if (res.token) {
 		localStorage.setItem("token", res.token)
 		dispatch(setAuth(true));
-		dispatch(getAdminInitState);
+		await getAdminInitState(dispatch);
+		dispatch(setLoader(false))
+		return {status: true, msg: "Success!"}
+	} else {
+		dispatch(setLoader(false))
+		return {status: false, msg: res}
 	}
 }
 
-export const checkAuth = async (dispatch) => {
-	const res = await stayAuth()
-	console.log('stayauth')
-	dispatch(setAuth(res === true))
-}
 
 export const logout = (dispatch) => {
 	localStorage.removeItem("token");
 	dispatch(setAuth(false));
+	dispatch(resetAdminState)
 }
 
 

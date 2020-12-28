@@ -1,4 +1,4 @@
-import {createTableReducers} from "../redux/table-reducers";
+import {createTableReducers} from "../../redux/table-reducers";
 
 const action = (name) => createTableReducers(name).actions
 
@@ -26,16 +26,16 @@ export const setColumnsAction = (subj, data) => {
 // 	return actions[subj][`set${subj}Helper`](data)
 // }
 
-export const pushToChangeAction = (subj, data) => {
-	return actions[subj][`push${subj}ToChange`](data)
+export const setInitStateAction = (subj) => {
+	return actions[subj][`set${subj}Init`]()
+}
+
+export const setDataToChangeAction = (subj, data) => {
+	return actions[subj][`set${subj}DataToChange`](data)
 }
 
 export const toggleStateAction = (subj, data) => {
 	return actions[subj][`toggle${subj}EditState`](data)
-}
-
-export const clearDataAction = (subj) => {
-	return actions[subj][`clear${subj}DataToChange`]()
 }
 
 export const changeOrdersHoursAction = (subj, data) => {

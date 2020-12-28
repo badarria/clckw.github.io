@@ -27,11 +27,18 @@ router.get('/find/:city/:begin/:end', async (req, res) => {
 	}
 })
 
-router.get('/customer/:email', async (req, res) => {
+router.post('/customer', async (req, res) => {
 	try {
-		const {email} = req.params;
-		const findCustomer = await pool.query("SELECT id FROM customers WHERE email=$1", [email]);
-		res.json(findCustomer.rows);
+		const {email, name, surname} = req.body;
+		const id = await pool.query(`
+					INSERT INTO customers
+					(name, surname, email)
+					VALUES($1, $2, $3)
+					ON CONFLICT (email)
+					DO UPDATE SET name=$1, surname=$2
+					WHERE customers.email=$3
+					Returning id`, [name, surname, email]);
+		res.json(id.rows);
 	} catch (err) {
 		console.error(err.message)
 	}

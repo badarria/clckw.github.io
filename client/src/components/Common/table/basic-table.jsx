@@ -37,8 +37,7 @@ const useStyles = makeStyles({
 });
 
 export const BasicTable = (props) => {
-	const {children, items, columns, remove, push, editState, msg, itemsOnPage = 5,} = props
-
+	const {children, items, columns, remove, push, editState, toast, itemsOnPage = 5,} = props
 
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(itemsOnPage);
@@ -54,7 +53,7 @@ export const BasicTable = (props) => {
 
 	return (
 		<Box className={classes.wrap}>
-			<Box className={classes.box}><Toast msg={msg}/></Box>
+			<Box className={classes.box}><Toast toast={toast}/></Box>
 			<TableContainer component={Paper} className={classes.root}>
 				<Table className={classes.table} aria-label={`table`}>
 					<TableHead className={classes.head}>

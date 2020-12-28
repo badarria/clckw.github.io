@@ -18,7 +18,7 @@ export const ControlledSelect = (props) => {
 	return (
 
 		<FormControl className={classes.root}>
-			<InputLabel htmlFor="trinity-select">
+			<InputLabel htmlFor="trinity-select" required>
 				Time
 			</InputLabel>
 			<Controller
@@ -26,7 +26,7 @@ export const ControlledSelect = (props) => {
 				name={name}
 				defaultValue={defaultValue}
 				as={
-					<Select id={name} disabled={disabled}>
+					<Select id={name} disabled={disabled} >
 						{data.map(({hour, booked}, inx) => (
 							<MenuItem key={inx} value={hour} disabled={booked}>
 							{hour}

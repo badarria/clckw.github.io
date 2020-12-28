@@ -28,7 +28,7 @@ export const ControlledAutocomplete = (props) => {
 					getOptionSelected={(option, value) => option.name === value.name}
 					onChange={(event, newValue) => onChange(newValue)}
 					renderInput={(params) => (
-						<TextField {...params} label={name} autoComplete='nope' InputLabelProps={{className: classes.label}}/>
+						<TextField {...params} label={name} autoComplete='nope' InputLabelProps={{className: classes.label}} required/>
 					)}
 				/>
 			}

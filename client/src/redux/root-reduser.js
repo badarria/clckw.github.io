@@ -1,12 +1,12 @@
 import {combineReducers} from "@reduxjs/toolkit";
-import {reducer as mainReducer} from './main-reducer'
+import {reducer as homeReducer} from './home-reducer'
 import {createTableReducers} from './table-reducers'
 
 const reducer = (name) => createTableReducers(name).reducer
 
 
 export const rootReducer = combineReducers({
-	main: mainReducer,
+	home: homeReducer,
 	customers: reducer('customers'),
 	services: reducer('services'),
 	masters: reducer('masters'),

@@ -6,7 +6,7 @@ import {
 	getFreeMastersState, getMessageState,
 	getToastMsgState, getLoadingState
 } from "../../../middleware/state-selectors";
-import {acceptOrder} from "../../../middleware/home-page-thunks";
+import {acceptOrder} from "../../../middleware/home/home-page-thunks";
 import {compose} from "redux";
 import {connect} from "react-redux";
 import {makeStyles} from "@material-ui/core/styles";
@@ -21,7 +21,7 @@ export const useStyle = makeStyles({
 	title: {textAlign: 'center', margin: '50px 0 0'}
 })
 
-const HomePage = ({mastersList, accept, msg, toastMsg, loading}) => {
+const HomePage = ({mastersList, accept, msg, toast, loading}) => {
 	const classes = useStyle()
 
 	return (
@@ -36,7 +36,7 @@ const HomePage = ({mastersList, accept, msg, toastMsg, loading}) => {
 					</Paper> : null}
 				{mastersList.length ?
 					<MastersList data={mastersList} accept={accept}/> : null}
-				<Toast msg={toastMsg}/>
+				<Toast toast={toast}/>
 			</Box>
 		</Container>
 	)
@@ -46,8 +46,8 @@ const HomePage = ({mastersList, accept, msg, toastMsg, loading}) => {
 const mapStateToProps = (state) => ({
 	mastersList: getFreeMastersState(state),
 	msg: getMessageState(state),
-	toastMsg: getToastMsgState('main', state),
-	loading: getLoadingState('main', state),
+	toast: getToastMsgState('home', state),
+	loading: getLoadingState('home', state),
 })
 
 const mapDispatchToProps = (dispatch) => {

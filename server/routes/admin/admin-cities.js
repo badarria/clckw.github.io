@@ -1,10 +1,10 @@
 const router = require('express').Router();
 const pool = require('../../db');
-const devController = require('../../controller/dev')
-const validateDto = require('../../middleware/validate-dto')
-const devDto = require('../../dto/dev-dto')
+// const devController = require('../../controller/dev')
+// const validateDto = require('../../middleware/validate-dto')
+// const devDto = require('../../dto/dev-dto')
 
-router.post('/test', validateDto(devDto), devController.createDev)
+// router.post('/test', validateDto(devDto), devController.createDev)
 
 
 router.put('/:id', async (req, res) => {
@@ -16,9 +16,9 @@ router.put('/:id', async (req, res) => {
  				SET name = $1
  				WHERE id = $2`, [name, id]
 		);
-		res.json("City was updated")
+		return res.json('City was updated')
 	} catch (e) {
-		console.error(e.message)
+		return res.json('error')
 	}
 })
 
@@ -30,7 +30,7 @@ router.get('/', async (req, res) => {
 		)
 		res.json(citiesList.rows)
 	} catch (e) {
-		console.error(e.message)
+		res.json(e.message)
 	}
 })
 
@@ -40,25 +40,23 @@ router.delete('/:id', async (req, res) => {
 		const {id} = req.params;
 		await pool.query(
 				`DELETE FROM cities
- WHERE id = $1`, [id]
+ 												WHERE id = $1`, [id]
 		);
 		res.json("City was deleted")
 	} catch (e) {
-		console.error(e.message)
+		res.json("error")
 	}
 })
 
 router.post('/', async (req, res) => {
 	try {
 		const {name} = req.body;
-		const newItem = await pool.query(
-				`INSERT INTO cities
- (name) VALUES($1)
-  RETURNING *`, [name]
+		await pool.query(`INSERT INTO cities
+ 																		(name) VALUES($1)`, [name]
 		);
-		res.json("City was added")
+		res.json('City was added')
 	} catch (e) {
-		console.error(e.message);
+		res.json('error')
 	}
 })
 

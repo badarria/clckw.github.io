@@ -13,9 +13,9 @@ router.put('/:id', async (req, res) => {
 			service = $3, beginAt = $4,
 			endAt = $5 WHERE id = $6`,
 			[master, customer, service, begin, end, id]);
-		res.json("Order was updated")
+		res.json('Order was updated')
 	} catch (e) {
-		console.error(e.message)
+		res.json('error')
 	}
 })
 
@@ -41,9 +41,9 @@ router.get('/', async (req, res) => {
 				LEFT JOIN services s ON o.service=s.id
 				LEFT JOIN cities ci ON m.city = ci.id;`
 		)
-		console.log(res.json(list.rows))
+		res.json(list.rows)
 	} catch (e) {
-		console.error(e.message)
+		res.json(e.message)
 	}
 })
 
@@ -57,9 +57,9 @@ router.get('/filtered/:date/:master_id/:order_id', async (req, res) => {
  		FROM orders WHERE cast(beginAt as date) = $1::timestamp
  		and master = $2 and id != $3`,
 			[date, master_id, order_id])
-		console.log(res.json(filteredOrders.rows))
+		res.json(filteredOrders.rows)
 	} catch (e) {
-		console.error(e.message)
+		res.json(e.message)
 	}
 })
 
@@ -73,7 +73,7 @@ router.get('/foreignKeys', async (req, res) => {
 		const service = await pool.query(`SELECT id, name, time from services;`);
 		res.json({"master": [...master.rows], "customer": [...customer.rows], "service": [...service.rows]})
 	} catch (e) {
-		console.error(e.message)
+		res.json(e.message)
 	}
 })
 
@@ -86,7 +86,7 @@ router.delete('/:id', async (req, res) => {
 		);
 		res.json("Order was deleted")
 	} catch (e) {
-		console.error(e.message)
+		res.json("error")
 	}
 })
 
@@ -94,15 +94,14 @@ router.delete('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
 	try {
 		const {master, customer, service, begin, end} = req.body;
-		const newItem = await pool.query(`INSERT
+		await pool.query(`INSERT
 		INTO	orders(master, customer, service, beginAt, endAt)
-		VALUES($1, $2, $3, $4, $5)
-		RETURNING *`,
+		VALUES($1, $2, $3, $4, $5)`,
 			[master, customer, service, begin, end]
 		);
 		res.json('Order was added')
 	} catch (e) {
-		console.error(e.message);
+		res.json('error')
 	}
 })
 

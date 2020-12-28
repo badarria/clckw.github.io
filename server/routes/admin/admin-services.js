@@ -9,9 +9,9 @@ router.put('/:id', async (req, res) => {
 		await pool.query(
 			"UPDATE services SET name = $1, time = $2 WHERE id = $3", [name, time, id]
 		);
-		res.json("Service was updated")
+		res.json('Service was updated')
 	} catch (e) {
-		console.error(e.message)
+		res.json('error')
 	}
 })
 
@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
 		)
 		res.json(list.rows)
 	} catch (e) {
-		console.error(e.message)
+		res.json(e.message)
 	}
 })
 
@@ -36,7 +36,7 @@ router.delete('/:id', async (req, res) => {
 		);
 		res.json("Service was deleted")
 	} catch (e) {
-		console.error(e.message)
+		res.json("error")
 	}
 })
 
@@ -45,15 +45,13 @@ router.post('/', async (req, res) => {
 	try {
 		const {name, time} = req.body;
 		const newItem = await pool.query(
-			"INSERT INTO services (name, time) VALUES($1, $2) RETURNING *", [name, time]
+			"INSERT INTO services (name, time) VALUES($1, $2)", [name, time]
 		);
 		res.json('Service was added')
-		// res.json(newItem.rows[0])
 	} catch (e) {
-		console.error(e.message);
+		res.json('error')
 	}
 })
-
 
 
 module.exports = router;

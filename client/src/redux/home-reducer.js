@@ -13,13 +13,13 @@ export const initState = {
 	freeMasters: [],
 	msg: '',
 	newOrder: {},
-	toastMsg: '',
+	toast: {type: 'success', msg: ''},
 	loading: false,
 	isAuth: false
 };
 
-const mainReducer = createSlice({
-	name: 'main',
+const homeReducer = createSlice({
+	name: 'home',
 	initialState: initState,
 	reducers: {
 		setFormData: (state, action) => {
@@ -41,7 +41,7 @@ const mainReducer = createSlice({
 			state.isAuth = action.payload
 		},
 		setToastMsg: (state, action) => {
-			state.toastMsg = action.payload;
+			state.toast = action.payload;
 		},
 		setLoader: (state, action) => {
 			state.loading = action.payload
@@ -50,5 +50,5 @@ const mainReducer = createSlice({
 	}
 })
 
-export const {reducer} = mainReducer;
-export const {setFormData, setAuth, setWorkingHours, setFreeMasters, setMasterMessage, setNewOrder, setToastMsg, setLoader} = mainReducer.actions
+export const {reducer} = homeReducer;
+export const {setFormData, setAuth, setWorkingHours, setFreeMasters, setMasterMessage, setNewOrder, setToastMsg, setLoader} = homeReducer.actions

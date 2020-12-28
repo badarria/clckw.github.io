@@ -7,7 +7,7 @@ const initState = () => ({
 	editState: null,
 	errors: {},
 	helper: null,
-	toastMsg: '',
+	toast: {type: 'success', msg: ''},
 	loading: false
 });
 
@@ -35,17 +35,18 @@ export const createTableReducers = (subj) => {
 			[`toggle${subj}EditState`]: (state, action) => {
 				state.editState = action.payload;
 			},
-			[`push${subj}ToChange`]: (state, action) => {
+			[`set${subj}DataToChange`]: (state, action) => {
 				state.dataToChange = action.payload;
-			},
-			[`clear${subj}DataToChange`]: (state, action) => {
-				state.dataToChange = {};
 			},
 			[`change${subj}FreeHours`]: (state, action) => {
 				state.dataToChange.hours = action.payload;
 			},
+			[`set${subj}Init`]: (state) => {
+					const initValues = Object.entries(initState())
+					initValues.forEach(([key, value]) => state[key] = value)
+			},
 			[`set${subj}ToastMsg`]: (state, action) => {
-				state.toastMsg = action.payload
+				state.toast = action.payload
 			},
 			[`set${subj}Loader`]: (state, action) => {
 				state.loading = action.payload

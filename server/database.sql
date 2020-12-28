@@ -11,7 +11,7 @@ create TABLE masters
     city    integer     REFERENCES cities ON delete SET NULL,
     rating  numeric     not null
 );
---alter table masters drop rating;
+
 --select m.name, COALESCE(avg(r.rating), 5) from masters m left join rating r on
 --select m.id, m.name, m.surname, ci.name as city, coalesce(round(avg(r.rating)::numeric), 5) as rating from masters m left join orders o on m.id=o.master left join cities ci on m.city = ci.id left join rating r on r.orderId = o.id where o.master=m.id group by m.id, ci.name;
 
@@ -50,7 +50,7 @@ id serial primary key,
     beginAt timestamptz not null,
     endAt timestamptz not null
 );
-
+--alter table masters drop rating;
 
 
 insert into orders (master, customer, service, orderDate, beginAt, endAt)

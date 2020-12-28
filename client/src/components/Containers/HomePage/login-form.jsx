@@ -1,7 +1,10 @@
 import React, {useState} from 'react';
+import {useLocation, useHistory,} from 'react-router-dom'
 import {Dialog, DialogContent, DialogTitle, Button, Box, TextField} from '@material-ui/core';
 import {useForm} from "react-hook-form";
 import {makeStyles} from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+
 
 export const useStyles = makeStyles({
 	// button: {marginRight: '16px'},
@@ -12,15 +15,26 @@ export const useStyles = makeStyles({
 	btnWrap: {margin: '16px 0 16px'}
 })
 
-export const LoginForm = (props) => {
-	const {login} = props;
+export const LoginForm = ({login}) => {
 	const classes = useStyles()
 	const [open, setOpen] = useState(false);
+	const [msg, setMsg] = useState('')
+	const {state} = useLocation();
+	const history = useHistory();
+
 	const {register, handleSubmit, reset} = useForm()
 
-	const submit = (data) => {
-		login(data);
-		handleClose();
+	const submit = async (data) => {
+		const res = await login(data);
+		if (res.status) {
+			history.push(state?.from || '/admin')
+			handleClose();
+		} else {
+			setMsg(res.msg)
+			setTimeout(() => {
+				setMsg('')
+			}, 2000);
+		}
 	};
 
 	const handleClickOpen = () => {
@@ -33,7 +47,7 @@ export const LoginForm = (props) => {
 	};
 
 	return (
-		<div>
+		<>
 			<Button color="inherit" className={classes.button} onClick={handleClickOpen}>
 				Login
 			</Button>
@@ -61,7 +75,7 @@ export const LoginForm = (props) => {
 							required
 							className={classes.fields}
 						/>
-
+						{msg ? <Typography>{msg}</Typography> : null}
 						<Box className={classes.btnWrap}>
 							<Button type='submit' color="primary" variant="contained">
 								Accept
@@ -73,6 +87,6 @@ export const LoginForm = (props) => {
 					</form>
 				</DialogContent>
 			</Dialog>
-		</div>
-	);
+		</>
+	)
 }

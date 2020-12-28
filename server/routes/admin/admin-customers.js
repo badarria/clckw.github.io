@@ -7,11 +7,13 @@ router.put('/:id', async (req, res) => {
 		const {id} = req.params;
 		const {name, surname, email} = req.body;
 		await pool.query(
-			"UPDATE customers SET name = $1, surname = $2, email = $3 WHERE id = $4", [name, surname, email, id]
-		);
+				`UPDATE customers
+											SET name = $1, surname = $2, email = $3
+											WHERE id = $4`,
+			[name, surname, email, id]);
 		res.json("Customer was updated")
 	} catch (e) {
-		console.error(e.message)
+		res.json("error")
 	}
 })
 
@@ -19,11 +21,10 @@ router.put('/:id', async (req, res) => {
 router.get('/', async (req, res) => {
 	try {
 		const list = await pool.query(
-			"SELECT * FROM customers")
-		console.log(res.json(list.rows))
-		// res.json(res.rows)
+				`SELECT * FROM customers`)
+		res.json(list.rows)
 	} catch (e) {
-		console.error(e.message)
+		res.json(e.message)
 	}
 })
 
@@ -31,12 +32,12 @@ router.get('/', async (req, res) => {
 router.delete('/:id', async (req, res) => {
 	try {
 		const {id} = req.params;
-		await pool.query(
-			"DELETE FROM customers WHERE id = $1", [id]
-		);
+		await pool.query(`
+											DELETE FROM customers
+											WHERE id = $1`, [id]);
 		res.json("Customer was deleted")
 	} catch (e) {
-		console.error(e.message)
+		res.json("error")
 	}
 })
 
@@ -44,12 +45,13 @@ router.delete('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
 	try {
 		const {name, surname, email} = req.body;
-		const newItem = await pool.query(
-			"INSERT INTO customers (name, surname, email) VALUES($1, $2, $3) RETURNING *", [name, surname, email]
-		);
+		await pool.query(`
+											INSERT INTO customers
+											(name, surname, email)
+											VALUES($1, $2, $3)`, [name, surname, email]);
 		res.json("Customer was added")
 	} catch (e) {
-		console.error(e.message);
+		res.json("error")
 	}
 })
 

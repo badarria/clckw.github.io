@@ -1,21 +1,20 @@
 import React from 'react';
+import {connect} from 'react-redux'
+import {compose} from "redux";
 import {BasicTable} from "../../../Common/table/basic-table";
 import BasicTableHead from "../../../Common/table/basic-table-head";
-import {compose} from "redux";
-import {connect} from "react-redux";
-import MastersForm from "./masters-form";
+import CustomersForm from "./customers-form";
 import {containerDispatchProps, containerStateProps} from "../../utils/props-selector";
-import {Toast} from "../../../Common/toast";
 import {Loader} from "../../../Common/loader";
 
-
-const subj = 'masters'
+const subj = 'customers'
 const mapStateToProps = containerStateProps(subj)
-const mapDispatchToProps = containerDispatchProps(subj, true)
+const mapDispatchToProps = containerDispatchProps(subj)
 
-const MastersContainer = ({items, columns, editState, remove, push, msg, loading}) => {
 
-	const tableProps = {items, columns, push, editState, remove, msg}
+const CustomersContainer = (props) => {
+	const {items, columns, editState, remove, push, toast, loading} = props
+	const tableProps = {items, columns, push, editState, remove, toast}
 	const headProps = {columns, push}
 
 	return (
@@ -23,7 +22,7 @@ const MastersContainer = ({items, columns, editState, remove, push, msg, loading
 			<Loader loading={loading}/>
 			<BasicTable {...tableProps}>
 				{editState ?
-					<MastersForm/>
+					<CustomersForm/>
 					:
 					<BasicTableHead {...headProps}/>}
 			</BasicTable>
@@ -33,4 +32,4 @@ const MastersContainer = ({items, columns, editState, remove, push, msg, loading
 
 
 export default compose(
-	connect(mapStateToProps, mapDispatchToProps))(MastersContainer);
+	connect(mapStateToProps, mapDispatchToProps))(CustomersContainer);

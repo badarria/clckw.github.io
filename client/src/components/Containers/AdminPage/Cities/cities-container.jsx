@@ -3,18 +3,19 @@ import {BasicTable} from "../../../Common/table/basic-table";
 import BasicTableHead from "../../../Common/table/basic-table-head";
 import {compose} from "redux";
 import {connect} from "react-redux";
-import ServicesForm from "./services-form";
+import CitiesForm from "./cities-form";
 import {containerDispatchProps, containerStateProps} from "../../utils/props-selector";
-import {Toast} from "../../../Common/toast";
 import {Loader} from "../../../Common/loader";
 
-const subj = 'services'
+
+const subj = 'cities'
 const mapStateToProps = containerStateProps(subj)
 const mapDispatchToProps = containerDispatchProps(subj)
 
-const ServicesContainer = ({items, columns, editState, remove, push, msg, loading}) => {
 
-	const tableProps = {items, columns, push, editState, remove, msg}
+const CitiesContainer = (props) => {
+	const {items, columns, editState, remove, push, toast, loading} = props
+	const tableProps = {items, columns, push, editState, remove, toast}
 	const headProps = {columns, push}
 
 	return (
@@ -22,7 +23,7 @@ const ServicesContainer = ({items, columns, editState, remove, push, msg, loadin
 			<Loader loading={loading}/>
 			<BasicTable {...tableProps}>
 				{editState ?
-					<ServicesForm/>
+					<CitiesForm/>
 					:
 					<BasicTableHead {...headProps}/>}
 			</BasicTable>
@@ -30,6 +31,8 @@ const ServicesContainer = ({items, columns, editState, remove, push, msg, loadin
 	)
 }
 
-
 export default compose(
-	connect(mapStateToProps, mapDispatchToProps))(ServicesContainer);
+	connect(mapStateToProps,
+		mapDispatchToProps
+	))
+(CitiesContainer);

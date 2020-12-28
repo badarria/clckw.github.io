@@ -1,30 +1,27 @@
 import React, {useEffect} from "react";
 import Navigation from "./components/Containers/HomePage/navigation"
 import HomePage from './components/Containers/HomePage/home-page'
-import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
-import AdminPage from "./components/Containers/Admin/admin-page";
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
+import AdminPage from "./components/Containers/AdminPage/admin-page";
 import {compose} from "redux";
 import {connect} from "react-redux";
 import {getAuthState} from "./middleware/state-selectors";
-import {getAdminInitState, getInitState} from "./middleware/home-page-thunks";
+import {AdminPageRoute} from "./components/Common/route/admin-page-route";
 
 
-const App = ({isAuth, getInitState, getAdminInitState}) => {
+const App = ({isAuth}) => {
 
 	useEffect(() => {
-		getInitState()
-		const token = localStorage.getItem('token');
-		if (token) {
-			getAdminInitState()
-		}
+		localStorage.removeItem('token')
 	}, [])
+
 
 	return (
 		<Router>
 			<Navigation/>
 			<Switch>
 				<Route path="/" exact component={HomePage}/>
-				{isAuth ? <Route path="/admin" component={AdminPage}/> : <Redirect to="/"/>}
+				<AdminPageRoute isAuth={isAuth} path="/admin" component={AdminPage}/>
 			</Switch>
 		</Router>
 	);
@@ -36,12 +33,6 @@ const mapStateToProps = (state) => {
 	}
 }
 
-const mapDispatchToProps = (dispatch) => {
-	return {
-		getInitState: () => dispatch(getInitState),
-		getAdminInitState: () => dispatch(getAdminInitState),
-	}
-}
 
 export default compose(
-	connect(mapStateToProps, mapDispatchToProps))(App);
+	connect(mapStateToProps, null))(App);

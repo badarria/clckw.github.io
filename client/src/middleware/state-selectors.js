@@ -6,6 +6,8 @@ export const getItemsState = (subj, state) => {
 export const getColumnsState = (subj, state) => {
 	return state[subj].columns
 }
+
+
 /////dataForm states
 export const _sliceData = (obj, endSlice) => {
 	const res = Object.entries(obj).slice(0, endSlice)
@@ -40,7 +42,7 @@ export const helperState = (subj, state) => {
 };
 
 export const getFormDataState = (state) => {
-	const data = state.main.formData;
+	const data = state.home.formData;
 	const date = dateFromNewDate()
 	return {
 		fields: _sliceData(data, -2),
@@ -49,23 +51,19 @@ export const getFormDataState = (state) => {
 }
 
 export const getAuthState = (state) => {
-	return state.main.isAuth;
+	return state.home.isAuth;
 }
 
 export const getFreeMastersState = (state) => {
-	return state.main.freeMasters;
+	return state.home.freeMasters;
 }
 
 export const getMessageState = (state) => {
-	return state.main.msg
+	return state.home.msg
 }
 
-// export const getHomePageToastMsg = (state) => {
-// 	return state.main.toastMsg
-// }
-
 export const getToastMsgState = (subj, state) => {
-	return state[`${subj}`].toastMsg
+	return state[`${subj}`].toast
 }
 
 export const getLoadingState = (subj, state) => {

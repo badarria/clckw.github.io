@@ -3,7 +3,7 @@ import {
 	errorsState, getToastMsgState,
 	getColumnsState,
 	getDataState,
-	getItemsState, helperState, ordersDataState, getLoadingState
+	getItemsState, helperState, getLoadingState
 } from "../../../middleware/state-selectors";
 import {
 	accept,
@@ -11,7 +11,7 @@ import {
 	changeFreeHours,
 	pushToChange,
 	removeFromDB,
-} from "../../../middleware/admin-page-thunks";
+} from "../../../middleware/admin/admin-page-thunks";
 
 
 export const containerStateProps = (subj) => (state) => {
@@ -22,7 +22,7 @@ export const containerStateProps = (subj) => (state) => {
 		editState: editStateState(subj, state),
 		errors: errorsState(subj, state),
 		helper: helperState(subj, state),
-		msg: getToastMsgState(subj, state),
+		toast: getToastMsgState(subj, state),
 		loading: getLoadingState(subj, state)
 	})
 }
@@ -48,6 +48,8 @@ export const formDispatchProps = (subj) => (dispatch) => {
 	return ({
 		handleReset: () => dispatch(cancelInput(subj)),
 		accept: (data) => dispatch(accept(subj, data)),
-		changeHours: subj === 'orders' ? (master_id, date, service_time, order_id) => dispatch(changeFreeHours(subj, master_id, date, service_time, order_id)) : null
+		changeHours: subj === 'orders' ?
+			(master_id, date, service_time, order_id) =>
+				dispatch(changeFreeHours(subj, master_id, date, service_time, order_id)) : null
 	})
 }

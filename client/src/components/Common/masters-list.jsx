@@ -14,11 +14,11 @@ import Paper from "@material-ui/core/Paper";
 
 const useStyle  = makeStyles({
 	root: {
-		maxWidth: '345px',
+		maxWidth: '300px',
 		margin: '24px'
 	},
 	box: {margin: '50px 0 20px'},
-	listWrap: {display: 'flex', margin: '50px auto', padding: '30px'},
+	listWrap: {display: 'flex', margin: '50px auto', padding: '30px', flexWrap: 'wrap'},
 });
 
 

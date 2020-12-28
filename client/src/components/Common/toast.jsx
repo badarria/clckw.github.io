@@ -9,8 +9,9 @@ export const useStyle = makeStyles({
 
 
 export const Toast = (props) => {
-	const {type = 'success', msg} = props
-const classes = useStyle()
+	const {type, msg} = props.toast
+	const classes = useStyle()
+
 	return (
 		<Slide direction="left" in={!!msg}>
 			<Alert severity={type} className={classes.msgBox}>

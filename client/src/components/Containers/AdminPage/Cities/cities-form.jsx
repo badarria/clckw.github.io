@@ -20,14 +20,8 @@ const CitiesForm = ({data, handleReset, accept}) => {
 		}, resolver: yupResolver(schema.cities),
 	})
 
-	const submitForm = (data) => {
-		const {id, name} = data
-		const res = {id, name}
-		accept(res)
-	}
-
 	const formProps = {
-		submit: handleSubmit((data) => submitForm(data)),
+		submit: handleSubmit((data) => accept(data)),
 		reset: () => {
 			handleReset()
 			reset()

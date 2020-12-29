@@ -63,7 +63,7 @@ export const useTableStyles = makeStyles({
 
 export const useLoaderStyles = makeStyles({
 	backdrop: {
-		zIndex: 1200,
+		zIndex: 1301,
 		color: '#fff',
 	},
 });

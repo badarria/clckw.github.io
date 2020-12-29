@@ -23,20 +23,15 @@ const CustomersForm = ({data, handleReset, accept}) => {
 		}, resolver: yupResolver(schema.customers),
 	})
 
-	const submitForm = (data) => {
-		const {id, name, surname, email} = data
-		const res = {id, name, surname, email}
-		accept(res)
-	}
 
 	const formProps = {
-		submit: handleSubmit((data) => submitForm(data)),
+		submit: handleSubmit((data) => accept(data)),
 		reset: () => {
 			handleReset()
 			reset()
 		},
 	}
-	const formFieldsProps = {data, register, control,errors}
+	const formFieldsProps = {data, register, control, errors}
 
 	return (
 		<BasicTableForm {...formProps}>

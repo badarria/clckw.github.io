@@ -8,7 +8,7 @@ const _getNum = (str) => {
 	return Number(str.split(':')[0]);
 }
 const _getTimeStr = (num) => {
-	return num < 10 ? `0${num}:00`:`${num}:00`;
+	return num < 10 ? `0${num}:00` : `${num}:00`;
 }
 
 const _getWorkingHours = (begin, end, serviceTime = 1) => {
@@ -44,14 +44,14 @@ const getHoursArray = (service_time, orders = [], dayBegin = 8, dayEnd = 20) => 
 export const dateFromFormatToObj = (date) => DateTime.fromFormat(date, 'EEE dd/MM/yyyy').toJSDate();
 export const dateFromNewDate = () => DateTime.fromJSDate(new Date()).set({hours: 0, minutes: 0, seconds: 0}).toJSDate();
 export const dateToRequest = (date) => DateTime.fromJSDate(date).toJSON()
-export const getBeginEnd = (date, hours, service_time) => {
-	let begin = DateTime.fromJSDate(date).set({hours: 0, minutes: 0, seconds: 0}).plus({hours: hours.split(':')[0]}).toJSDate();
-	const interval = Number(service_time)
-	const end = DateTime.fromJSDate(begin).plus({hours: interval}).toJSON();
-	begin = DateTime.fromJSDate(begin).toJSON()
-	return { end, begin}
+export const setDisabled = (data) => {
+	return data.map((item) => {
+		const endAt = DateTime.fromFormat(`${item.date} ${item.end}`, 'EEE dd/MM/yyyy HH:mm').diffNow()
+		if (endAt.values.milliseconds < 1) {
+			item.disabled = true;
+		} return item
+	})
 }
-
 
 
 export {getHoursArray}

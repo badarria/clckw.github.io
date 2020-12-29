@@ -15,7 +15,7 @@ import {
 	setToastMsgAction, setLoadingAction, setInitStateAction,
 } from './admin-actions-selector'
 import {emptyFields, mergeWithForeignKeys} from "../utils/table-func";
-import {getHoursArray} from "../utils/date-time-func";
+import {getHoursArray, setDisabled} from "../utils/date-time-func";
 import {subjects} from "../../components/Containers/init-params";
 
 
@@ -31,17 +31,28 @@ export const setLoader = (subj, data, dispatch) => {
 }
 
 export const setItems = (subj) => async (dispatch) => {
-	const data = await getItems(subj)
-	await dispatch(setItemsAction(subj, data));
+	let data = await getItems(subj)
+	if (Array.isArray(data)) {
+		if (subj === 'orders') data = setDisabled(data)
+		await dispatch(setItemsAction(subj, data));
+		return true;
+	} else {
+		setToastMsg(subj, {type: 'error', msg: 'Something went wrong'});
+		return false;
+	}
+
 }
 
 export const getAdminInitState = async (dispatch) => {
 	for (let i = 0; i < subjects.length; i += 1) {
 		const subj = subjects[i][0];
 		const columns = subjects[i][1];
-		await dispatch(setItems(subj));
-		dispatch(setColumnsAction(subj, columns))
+		const done = await dispatch(setItems(subj));
+		if (done) {
+			dispatch(setColumnsAction(subj, columns))
+		}
 	}
+	return true
 }
 
 export const resetAdminState = (dispatch) => {
@@ -95,7 +106,7 @@ export const accept = (subj, data) => async (dispatch, getState) => {
 }
 
 export const _getFreeHours = async (master_id, date, service_time, order_id = 0) => {
-	const orders = await getFilteredOrders({master_id, date, order_id},'orders' )
+	const orders = await getFilteredOrders({master_id, date, order_id}, 'orders')
 	return getHoursArray(service_time, orders);
 }
 

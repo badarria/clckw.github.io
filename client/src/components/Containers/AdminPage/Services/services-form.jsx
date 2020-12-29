@@ -23,20 +23,14 @@ const ServicesForm = ({data, handleReset, accept}) => {
 	})
 
 
-	const submitForm = (data) => {
-		const {id, name, time} = data
-		const res = {id, name, time}
-		accept(res)
-	}
-
 	const formProps = {
-		submit: handleSubmit((data) => submitForm(data)),
+		submit: handleSubmit((data) => accept(data)),
 		reset: () => {
 			handleReset()
 			reset()
 		}
 	}
-	const formFieldsProps = {data, register, control,errors}
+	const formFieldsProps = {data, register, control, errors}
 
 	return (
 		<BasicTableForm {...formProps}>

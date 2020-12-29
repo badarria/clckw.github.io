@@ -15,11 +15,7 @@ const BasicTableList = (props) => {
 		data.map((item, inx) => {
 			const id = item.id;
 
-			const buttonProps = {
-				title: !!editState ? "You have to submit form first" : "Edit item",
-				disabled: !!editState,
-				icon: <EditIcon fontSize="small"/>
-			}
+
 			const alertProps = {
 				title: !!editState ? "You have to submit form first" : 'Remove item',
 				icon: <DeleteIcon fontSize="small"/>,
@@ -35,7 +31,10 @@ const BasicTableList = (props) => {
 						)
 					})}
 					<TableCell align='right'>
-						<ButtonIcon {...buttonProps} onClick={() => push(item, 'isEditing')}/>
+						<ButtonIcon icon={<EditIcon fontSize="small"/>} onClick={() => push(item, 'isEditing')}
+												disabled={!!item.disabled || !!editState}
+												title={!!editState ? "You have to submit form first" :
+													item.disabled ? "Past is gone" : "Edit item"}/>
 					</TableCell>
 					<TableCell align='right'>
 						<AlertDialog {...alertProps} accept={() => remove(id)}/>

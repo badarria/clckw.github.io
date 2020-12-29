@@ -24,6 +24,7 @@ export const LoginForm = ({login}) => {
 		const res = await login(data);
 		if (res.status) {
 			history.push(state?.from || '/admin')
+			setMsg(res.msg)
 			handleClose();
 		} else {
 			setMsg(res.msg)

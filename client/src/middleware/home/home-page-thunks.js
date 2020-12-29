@@ -15,7 +15,6 @@ import {mergeWithForeignKeys} from "../utils/table-func";
 import {getAdminInitState, resetAdminState, setItems} from "../admin/admin-page-thunks";
 
 
-
 const _setHomePageToastMsg = (toast, dispatch) => {
 	dispatch(setToastMsg(toast))
 	setTimeout(() => {

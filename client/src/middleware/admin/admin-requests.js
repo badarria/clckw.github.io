@@ -4,7 +4,7 @@ const _wrapTryCatch = async (tryFunc) => {
 	try {
 		return await tryFunc
 	} catch {
-		return {type: 'error', msg: 'Something went wrong'}
+		return 'Something went wrong'
 	}
 }
 
@@ -42,14 +42,15 @@ const _add = async (data, subj) => {
 }
 
 const _get = async (subj) => {
-	const response = await fetch(`${adminPath}/${subj}`);
-	return response.json();
+	const res = await fetch(`${adminPath}/${subj}`);
+	return res.json();
 }
 
 const _getKeys = async (subj) => {
 	const res = await fetch(`${adminPath}/${subj}/foreignKeys`);
 	return res.json()
 }
+
 const _getFilteredOrd = async ({master_id, order_id, date}, subj) => {
 	const res = await fetch(`${adminPath}/${subj}/filtered/${date}/${master_id}/${order_id}`)
 	return res.json()

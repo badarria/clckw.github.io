@@ -29,7 +29,6 @@ const FormFieldsGenerator = (props) => {
 								className: `${label === 'id' ? classes.idInput : null}
 								 ${isSmall ? classes.smallInput : null}`,
 							}}
-
 							error={!!errors[label]}
 							helperText={errors[label]?.message || ''}
 							key={inx}

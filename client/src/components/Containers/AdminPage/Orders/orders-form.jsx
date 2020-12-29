@@ -7,7 +7,7 @@ import {BasicTableForm} from "../../../Common/form/basic-table-form";
 import {formDispatchProps, formStateProps} from "../../utils/props-selector";
 import {compose} from "redux";
 import {connect} from "react-redux";
-import {dateToRequest, getBeginEnd} from "../../../../middleware/utils/date-time-func";
+import {dateToRequest} from "../../../../middleware/utils/date-time-func";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {schema} from "../../../../validation/admin-schema";
 
@@ -47,22 +47,9 @@ const OrdersForm = (props) => {
 		}
 	}, [masterValue, dateValue, serviceValue])
 
-	const submitForm = (data) => {
-		const {id, master, customer, service, date, hours} = data;
-		// const {end, begin} = getBeginEnd(date, hours, service.time)
-		//
-		// const res = {
-		// 	id,
-		// 	master,
-		// 	customer: customer.id,
-		// 	service: service.id,
-		//
-		// }
-		accept(data)
-	}
 
 	const formProps = {
-		submit: handleSubmit((data) => submitForm(data)),
+		submit: handleSubmit((data) => accept(data)),
 		reset: () => {
 			handleReset()
 			reset()

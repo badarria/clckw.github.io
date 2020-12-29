@@ -5,6 +5,8 @@ import {BasicTableForm} from "../../../Common/form/basic-table-form";
 import {compose} from "redux";
 import {connect} from "react-redux";
 import {formDispatchProps, formStateProps} from "../../utils/props-selector";
+import {yupResolver} from "@hookform/resolvers/yup";
+import {schema} from "../../../../validation/admin-schema";
 
 
 const subj = 'masters'
@@ -14,29 +16,23 @@ const mapDispatchToProps = formDispatchProps(subj);
 
 const MastersForm = ({data, handleReset, accept}) => {
 
-
-	const {register, handleSubmit, control, reset} = useForm({
+	const {register, handleSubmit, control, reset, errors} = useForm({
 		defaultValues: {
 			name: data.name,
 			surname: data.surname,
 			city: data.city[0],
-		}
+		}, resolver: yupResolver(schema.masters),
 	})
 
-	const submitForm = (data) => {
-		const {id, name, surname, city} = data
-		const res = {id, name, surname, city: city.id}
-		accept(res)
-	}
 
 	const formProps = {
-		submit: handleSubmit((data) => submitForm(data)),
+		submit: handleSubmit((data) => accept(data)),
 		reset: () => {
 			handleReset()
 			reset()
 		},
 	}
-	const formFieldsProps = {data, register, control}
+	const formFieldsProps = {data, register, control, errors}
 
 	return (
 		<BasicTableForm {...formProps}>

@@ -6,7 +6,7 @@ import {compose} from "redux";
 import {connect} from "react-redux";
 import {formDispatchProps, formStateProps} from "../../utils/props-selector";
 import {yupResolver} from '@hookform/resolvers/yup';
-
+import {schema} from '../../../../validation/admin-schema'
 
 const subj = 'cities'
 const mapStateToProps = formStateProps(subj);
@@ -14,10 +14,10 @@ const mapDispatchToProps = formDispatchProps(subj);
 
 const CitiesForm = ({data, handleReset, accept}) => {
 
-	const {register, handleSubmit, control, reset} = useForm({
+	const {register, handleSubmit, control, reset, errors} = useForm({
 		defaultValues: {
 			name: data.name,
-		}
+		}, resolver: yupResolver(schema.cities),
 	})
 
 	const submitForm = (data) => {
@@ -34,7 +34,7 @@ const CitiesForm = ({data, handleReset, accept}) => {
 		},
 	}
 
-	const formFieldsProps = {data, register, control}
+	const formFieldsProps = {data, register, control, errors}
 
 	return (
 		<BasicTableForm {...formProps}>

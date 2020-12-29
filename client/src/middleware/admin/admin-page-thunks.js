@@ -56,7 +56,6 @@ export const removeFromDB = (subj, id) => async (dispatch) => {
 	const res = await removeItem(id, subj);
 	setLoader(subj, false, dispatch);
 	setToastMsg(subj, res, dispatch)
-	console.log(res)
 	if (res.type === 'success') {
 		dispatch(setItems(subj))
 	}

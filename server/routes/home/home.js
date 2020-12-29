@@ -1,49 +1,27 @@
+const {dateCreator} = require("../../middleware/common");
+const {findMasters, upsertCustomer, auth} = require("./home-requests");
 const router = require('express').Router();
-const pool = require('../../db');
+const {masters, customer, loginForm} = require('../../validation/schemes/home-schema')
+const validator = require('../../validation/validator')
+const {dbTryCatch} = require("../../middleware/common");
 
 
-//Get free masters in city
-router.get('/find/:city/:begin/:end', async (req, res) => {
+const dataSelector = () => (req, res, next) => {
 	try {
-		const {city, begin, end} = req.params;
-		const findFreeMasters = await pool.query(`WITH excepted_masters as (
-								SELECT
-								m.id, m.name, m.surname FROM masters m where m.city=$1
-								EXCEPT
-								select o.master, m.name, m.surname
-								FROM orders o JOIN masters m
-								ON o.master=m.id
-								WHERE ($2::timestamp, $3::timestamp )
-								OVERLAPS (o.beginAt, o.endAt)
-						)
-				SELECT em.id, em.name, em.surname, COALESCE(round(avg(o.rating)::numeric), 5) as rating
-					FROM excepted_masters em
-					LEFT JOIN orders o ON em.id=o.master
-					GROUP BY em.id, em.name, em.surname`, [city, begin, end])
-
-		res.json(findFreeMasters.rows);
-	} catch (err) {
-		console.error(err.message)
+		const {end, begin, city} = req.body;
+		req.body = {city: city.id, end, begin}
+		next()
+	} catch (e) {
+		res.status(400).send('Something went wrong')
 	}
-})
+}
 
-router.post('/customer', async (req, res) => {
-	try {
-		const {email, name, surname} = req.body;
-		const id = await pool.query(`
-					INSERT INTO customers
-					(name, surname, email)
-					VALUES($1, $2, $3)
-					ON CONFLICT (email)
-					DO UPDATE SET name=$1, surname=$2
-					WHERE customers.email=$3
-					Returning id`, [name, surname, email]);
-		res.json(id.rows);
-	} catch (err) {
-		console.error(err.message)
-	}
-})
 
+router.get('/find', validator(masters, 'query'), dateCreator(), dataSelector(), dbTryCatch(findMasters))
+router.post('/customer', validator(customer,), dbTryCatch(upsertCustomer))
+router.post('/auth', validator(loginForm), dbTryCatch(auth))
+// router.get("/auth/verify", authorization, dbTryCatch(stayAuth))
+// router.post("/auth/new", dbTryCatch(newAdminPassword))
 
 
 module.exports = router;

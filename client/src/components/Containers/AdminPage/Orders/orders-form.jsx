@@ -8,6 +8,8 @@ import {formDispatchProps, formStateProps} from "../../utils/props-selector";
 import {compose} from "redux";
 import {connect} from "react-redux";
 import {dateToRequest, getBeginEnd} from "../../../../middleware/utils/date-time-func";
+import {yupResolver} from "@hookform/resolvers/yup";
+import {schema} from "../../../../validation/admin-schema";
 
 
 const subj = 'orders';
@@ -18,7 +20,7 @@ const OrdersForm = (props) => {
 	const {data, handleReset, changeHours, accept} = props;
 	const {fields, date, hours, begin} = data;
 
-	const {register, handleSubmit, control, reset, watch,} = useForm({
+	const {register, handleSubmit, control, reset, watch, errors} = useForm({
 		defaultValues: {
 			master: fields.master[0],
 			customer: fields.customer[0],
@@ -26,7 +28,7 @@ const OrdersForm = (props) => {
 			date: date,
 			hours: begin
 		},
-		shouldUnregister: false,
+		resolver: yupResolver(schema.orders),
 	})
 
 
@@ -47,17 +49,16 @@ const OrdersForm = (props) => {
 
 	const submitForm = (data) => {
 		const {id, master, customer, service, date, hours} = data;
-		const {end, begin} = getBeginEnd(date, hours, service.time)
-
-		const res = {
-			id: id,
-			master: master.id,
-			customer: customer.id,
-			service: service.id,
-			begin,
-			end,
-		}
-		accept(res)
+		// const {end, begin} = getBeginEnd(date, hours, service.time)
+		//
+		// const res = {
+		// 	id,
+		// 	master,
+		// 	customer: customer.id,
+		// 	service: service.id,
+		//
+		// }
+		accept(data)
 	}
 
 	const formProps = {
@@ -67,7 +68,7 @@ const OrdersForm = (props) => {
 			reset()
 		},
 	}
-	const formFieldsProps = {data: fields, register, control}
+	const formFieldsProps = {data: fields, register, control, errors}
 	const selectProps = {data: hours, control, defaultValue: hours[0].hour, name: 'hours', disabled: disableHours}
 
 	return (

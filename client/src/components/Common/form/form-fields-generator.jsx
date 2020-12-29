@@ -11,11 +11,12 @@ const useStyles = makeStyles({
 		color: 'lightgray', fontSize: '14px', width: '40px',
 		'&:hover': {cursor: 'auto'}
 	},
-	label: {textTransform: 'capitalize'}
+	label: {textTransform: 'capitalize'},
+	helper: {}
 })
 
 const FormFieldsGenerator = (props) => {
-	const {data, register, control, errors, helper, isSmall = true} = props
+	const {data, register, control, errors, isSmall = true} = props
 	const labels = Object.keys(data);
 	const classes = useStyles()
 
@@ -37,8 +38,8 @@ const FormFieldsGenerator = (props) => {
 								 ${isSmall ? classes.smallInput : null}`,
 							}}
 
-							// error={!!errors[label]}
-							// helperText={errors[label] || helper[label]}
+							error={!!errors[label]}
+							helperText={errors[label]?.message || ''}
 							key={inx}
 							size="small"
 							autoComplete='nope'
@@ -56,8 +57,6 @@ FormFieldsGenerator.propTypes = {
 	accept: PropTypes.func,
 	cancel: PropTypes.func,
 	state: PropTypes.any,
-	// errors: PropTypes.object.isRequired,
-	// helper: PropTypes.object.isRequired,
 }
 
 

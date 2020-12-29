@@ -5,6 +5,8 @@ import {BasicTableForm} from "../../../Common/form/basic-table-form";
 import {compose} from "redux";
 import {connect} from "react-redux";
 import {formDispatchProps, formStateProps} from "../../utils/props-selector";
+import {yupResolver} from "@hookform/resolvers/yup";
+import {schema} from "../../../../validation/admin-schema";
 
 
 const subj = 'services'
@@ -13,11 +15,11 @@ const mapDispatchToProps = formDispatchProps(subj);
 
 const ServicesForm = ({data, handleReset, accept}) => {
 
-	const {register, handleSubmit, control, reset} = useForm({
+	const {register, handleSubmit, control, reset, errors} = useForm({
 		defaultValues: {
 			name: data.name,
 			time: data.time,
-		}
+		}, resolver: yupResolver(schema.services),
 	})
 
 
@@ -34,7 +36,7 @@ const ServicesForm = ({data, handleReset, accept}) => {
 			reset()
 		}
 	}
-	const formFieldsProps = {data, register, control}
+	const formFieldsProps = {data, register, control,errors}
 
 	return (
 		<BasicTableForm {...formProps}>

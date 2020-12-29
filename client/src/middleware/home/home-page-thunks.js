@@ -10,7 +10,7 @@ import {
 	setToastMsg,
 	setLoader
 } from '../../redux/home-reducer'
-import {getHoursArray} from "../utils/date-time-func";
+import {dateToRequest, getHoursArray} from "../utils/date-time-func";
 import {mergeWithForeignKeys} from "../utils/table-func";
 import {getAdminInitState, resetAdminState, setItems} from "../admin/admin-page-thunks";
 
@@ -35,6 +35,9 @@ export const getInitState = async (dispatch, getState) => {
 }
 
 export const setOrderData = (data) => (dispatch) => {
+	if (data.date instanceof Date) {
+		data.date = dateToRequest(data.date)
+	}
 	dispatch(setNewOrder(data))
 }
 
@@ -65,7 +68,7 @@ export const findMasters = (data) => async (dispatch) => {
 export const checkCustomer = (data) => async (dispatch, getState) => {
 	let id = await getCustomer(data);
 	const order = {...getState().home.newOrder}
-	order.customer = id[0].id
+	order.customer = id[0]
 	dispatch(setOrderData(order))
 }
 
@@ -73,7 +76,7 @@ export const acceptOrder = (id) => async (dispatch, getState) => {
 	dispatch(setLoader(true))
 	const order = {...getState().home.newOrder}
 	const isAuth = getState().home.isAuth;
-	order.master = id
+	order.master = {id}
 	dispatch(setOrderData(order))
 	const data = {...getState().home.newOrder}
 	const res = await addItem(data, 'orders')
@@ -82,16 +85,12 @@ export const acceptOrder = (id) => async (dispatch, getState) => {
 		await dispatch(setItems('customers'))
 	}
 	dispatch(setLoader(false))
-	if (res) {
+	if (res.type === 'success') {
 		dispatch(setOrderData({}))
 		dispatch(setFreeMasters([]))
 		dispatch(setMasterMessage(''))
-		const toast = {type: 'success', msg: 'Order was successful added!'}
-		_setHomePageToastMsg(toast, dispatch)
-	} else {
-		const toast = {type: 'error', msg: 'Something went wrong, please, try again later'}
-		_setHomePageToastMsg(toast, dispatch)
 	}
+	_setHomePageToastMsg(res, dispatch)
 }
 
 export const login = (data) => async (dispatch) => {
@@ -102,7 +101,7 @@ export const login = (data) => async (dispatch) => {
 		dispatch(setAuth(true));
 		await getAdminInitState(dispatch);
 		dispatch(setLoader(false))
-		return {status: true, msg: "Success!"}
+		return {status: true, msg: "Success"}
 	} else {
 		dispatch(setLoader(false))
 		return {status: false, msg: res}

@@ -8,10 +8,13 @@ const _wrapTryCatch = async (tryFunc) => {
 	}
 }
 
-const _getMasters = async ({city, begin, end}) => {
-	const res = await fetch(`${homePath}/find/${city}/${begin}/${end}`)
+const _getMasters = async ({city, date, service, hours}) => {
+	const url = `${homePath}/find`
+	const params = `?city=${JSON.stringify(city)}&date=${date}&service=${JSON.stringify(service)}&hours=${hours}`
+	const res = await fetch(`${url}${params}`)
 	return res.json()
 }
+
 const _upsertCustomer = async (data) => {
 	const res = await fetch(`${homePath}/customer`, {
 		method: "POST",
@@ -20,6 +23,7 @@ const _upsertCustomer = async (data) => {
 	})
 	return res.json()
 }
+
 const _login = async (data) => {
 	const res = await fetch(`${homePath}/auth`, {
 		method: "POST",

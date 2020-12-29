@@ -9,10 +9,10 @@ const _wrapTryCatch = async (tryFunc) => {
 }
 
 const _changeEventErr = async (changeFunc) => {
-	const msg = await changeFunc
-	if (msg === 'error') {
-		return {type: 'error', msg: 'Something went wrong'}
-	} else return {type: 'success', msg}
+	const res = await changeFunc
+	if (res.length) {
+		return {type: 'success', msg: res}
+	} else return {type: 'error', msg: res.msg}
 }
 
 const _update = async (data, subj) => {

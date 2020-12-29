@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Paper, Box, Button,} from "@material-ui/core";
 import {useForm} from "react-hook-form";
 import FormFieldsGenerator from "../../Common/form/form-fields-generator";
@@ -15,9 +15,8 @@ import {
 import {ControlledDatePicker} from "../../Common/form/controlled-date-picker";
 import {ControlledSelect} from "../../Common/form/controlled-select";
 import {makeStyles} from "@material-ui/core/styles";
-import {getBeginEnd} from "../../../middleware/utils/date-time-func";
 import {yupResolver} from '@hookform/resolvers/yup';
-import * as yup from "yup";
+import {schema} from '../../../validation/home-schema'
 
 export const useStyles = makeStyles({
 	container: {
@@ -63,25 +62,12 @@ export const MainSearchForm = (props) => {
 		hours: '',
 	}
 
-	const schema = yup.object().shape({
-		name: yup.string().matches(/^[a-z -]+$/gi, 'Incorrect symbols').min(2).max(20).required(),
-		surname: yup.string().matches(/^[a-z -]+$/gi, 'Incorrect symbols').min(2).max(20).required(),
-		email: yup.string().email('Enter correct email').required(),
-		service: yup.object({name: yup.string().required()}),
-		city: yup.object({
-			name: yup.string().required(),
-		}),
-		date: yup.date().required(),
-		hours: yup.string().required()
-	});
-
 
 	const {register, handleSubmit, control, watch, errors} = useForm({
-		resolver: yupResolver(schema),
+		resolver: yupResolver(schema.form),
 		defaultValues
 	})
 	const service = watch('service');
-
 
 
 	useEffect(() => {
@@ -89,14 +75,13 @@ export const MainSearchForm = (props) => {
 	}, [service])
 
 
-	const fieldsProps = {data: fields, register, control, classes}
+	const fieldsProps = {data: fields, register, control, classes, errors}
 
 	const submit = async (data) => {
 		const {name, surname, email, service, city, date, hours} = data;
-		const {end, begin} = getBeginEnd(date, hours, service.time);
-		const res = await findMasters({city: city.id, begin, end})
+		const res = await findMasters({city, date, service, hours})
 		if (res) {
-			setOrderData({service: service.id, begin, end})
+			setOrderData({service, date, hours, city})
 			checkCustomer({name, surname, email})
 		}
 	}
@@ -104,7 +89,7 @@ export const MainSearchForm = (props) => {
 
 	return (
 		<Paper className={classes.container}>
-			<form onSubmit={handleSubmit((data) => submit(data))} className={classes.form} >
+			<form onSubmit={handleSubmit((data) => submit(data))} className={classes.form}>
 				<Box className={classes.wrap}>
 					<FormFieldsGenerator {...fieldsProps}/>
 					<ControlledDatePicker control={control}/>

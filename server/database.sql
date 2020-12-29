@@ -9,7 +9,6 @@ create TABLE masters
     name    varchar(50) not null,
     surname varchar(50) not null,
     city    integer     REFERENCES cities ON delete SET NULL,
-    rating  numeric     not null
 );
 
 --select m.name, COALESCE(avg(r.rating), 5) from masters m left join rating r on
@@ -36,11 +35,6 @@ create TABLE cities
     name varchar not null unique
 );
 
-
-create TABLE rating (
-    orderId integer REFERENCES orders ON delete SET NULL primary key,
-    rating integer not null default 5
-);
 
 create TABLE orders (
 id serial primary key,

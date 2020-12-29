@@ -2,17 +2,11 @@ import React from "react";
 import {Clear, Done} from "@material-ui/icons";
 import AlertDialog from "../alert-dialog";
 import {TableRow, Box, TableCell} from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
-
-export const useStyles = makeStyles({
-	form: {display: 'flex', justifyContent: "space-between", width: '100%', alignItems: 'center'},
-	fields: {display: 'flex', maxWidth: '90%',},
-	buttons: {flexGrow: 1, display: 'flex', justifyContent: 'flex-end'}
-})
+import {useTableFormStyles} from "../../styles/styles";
 
 
 export const BasicTableForm = (props) => {
-	const classes = useStyles()
+	const classes = useTableFormStyles()
 	const {children, submit, reset} = props;
 
 	const acceptDialogProps = {

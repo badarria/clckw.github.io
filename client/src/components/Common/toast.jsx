@@ -1,16 +1,12 @@
 import React from "react";
 import {Alert} from "@material-ui/lab";
-import {makeStyles} from "@material-ui/core/styles";
-import Slide from "@material-ui/core/Slide";
-
-export const useStyle = makeStyles({
-	msgBox: {padding: '16px'},
-})
+import {Slide} from "@material-ui/core";
+import {useToastStyle} from "../styles/styles";
 
 
 export const Toast = (props) => {
 	const {type, msg} = props.toast
-	const classes = useStyle()
+	const classes = useToastStyle()
 
 	return (
 		<Slide direction="left" in={!!msg}>

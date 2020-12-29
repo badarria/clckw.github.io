@@ -1,16 +1,13 @@
 import React from 'react';
-import {TextField, makeStyles} from '@material-ui/core';
+import {TextField} from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import {Controller} from "react-hook-form";
+import {useAutocompleteStyle} from "../../styles/styles";
 
-const useStyle = makeStyles({
-	root: {margin: '16px', minWidth: '130px'},
-	label: {textTransform: 'Capitalize'}
-})
 
 export const ControlledAutocomplete = (props) => {
 	const {data, control, name} = props
-	const classes = useStyle();
+	const classes = useAutocompleteStyle();
 
 
 	return (
@@ -28,7 +25,8 @@ export const ControlledAutocomplete = (props) => {
 					getOptionSelected={(option, value) => option.name === value.name}
 					onChange={(event, newValue) => onChange(newValue)}
 					renderInput={(params) => (
-						<TextField {...params} label={name} autoComplete='nope' InputLabelProps={{className: classes.label}} required/>
+						<TextField {...params} label={name} autoComplete='nope' InputLabelProps={{className: classes.label}}
+											 required/>
 					)}
 				/>
 			}

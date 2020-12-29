@@ -1,4 +1,4 @@
-import React, {useState, Fragment} from 'react';
+import React, {useState} from 'react';
 import {
 	Paper,
 	Table,
@@ -7,34 +7,12 @@ import {
 	TableContainer,
 	TableFooter, TableHead,
 	TablePagination,
-	TableRow,Box
+	TableRow, Box
 } from "@material-ui/core";
-
 import BasicTableList from "./basic-table-list";
 import {Toast} from "../toast";
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import {useTableStyles} from "../../styles/styles";
 
-
-
-const useStyles = makeStyles({
-	wrap: {
-		width: 'fit-content',
-		margin: '0 auto'
-	},
-	root: {
-		width: 'fit-content',
-		margin: "0px auto 80px",
-	},
-	box: {minHeight: '100px'},
-	table: {
-		minWidth: 600,
-		width: 'auto'
-	},
-	head: {
-		textTransform: 'capitalize',
-		background: '#bfbfbf33'
-	},
-});
 
 export const BasicTable = (props) => {
 	const {children, items, columns, remove, push, editState, toast, itemsOnPage = 5,} = props
@@ -42,7 +20,7 @@ export const BasicTable = (props) => {
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(itemsOnPage);
 
-	const classes = useStyles();
+	const classes = useTableStyles();
 	const emptyRows = rowsPerPage - Math.min(rowsPerPage, items.length - page * rowsPerPage);
 	const itemsPerPage = items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 	const changePage = (event, newPage) => setPage(newPage);

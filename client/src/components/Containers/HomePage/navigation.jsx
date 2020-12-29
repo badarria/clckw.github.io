@@ -1,36 +1,16 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Link} from 'react-router-dom'
-import {Container, AppBar, Toolbar,} from "@material-ui/core"
+import {Container, AppBar, Toolbar, Button, Box} from "@material-ui/core"
 import {LoginForm} from './login-form'
 import {compose} from "redux";
 import {connect} from "react-redux";
 import {getAuthState} from "../../../middleware/state-selectors";
 import {login, logout} from "../../../middleware/home/home-page-thunks";
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import {makeStyles} from "@material-ui/core/styles";
+import {useNavStyles} from "../../styles/styles";
 
 
-export const useStyles = makeStyles({
-	root: {
-		spaceBetween: 'justifyContent',
-	},
-	title: {
-		textDecoration: "none",
-		color: "white",
-		fontSize: '16px',
-	},
-	buttons: {
-		display: 'flex',
-		flexGrow: '1',
-		justifyContent: 'flex-end'
-	}
-})
-
-const Navigation = ({ logout, login, isAuth}) => {
-	const classes = useStyles();
-
-
+const Navigation = ({logout, login, isAuth}) => {
+	const classes = useNavStyles();
 	const formProps = {login, isAuth}
 
 	return (

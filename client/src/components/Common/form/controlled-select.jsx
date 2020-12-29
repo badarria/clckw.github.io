@@ -1,22 +1,17 @@
 import React from "react";
-import { FormControl, Select, InputLabel, MenuItem, makeStyles} from "@material-ui/core";
+import { FormControl, Select, InputLabel, MenuItem} from "@material-ui/core";
 import {Controller} from "react-hook-form";
+import {useSelectStyles} from "../../styles/styles";
 
 
 
-const useStyles = makeStyles({
-	root: {
-		margin: '16px',
-		minWidth: '80px'
-	},
-})
+
 
 export const ControlledSelect = (props) => {
-	const classes = useStyles()
+	const classes = useSelectStyles()
 	const {control, data, defaultValue, name = 'time', disabled = false} = props
 
 	return (
-
 		<FormControl className={classes.root}>
 			<InputLabel htmlFor="trinity-select" required>
 				Time

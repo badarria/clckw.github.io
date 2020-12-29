@@ -14,35 +14,13 @@ import {
 } from "../../../middleware/home/home-page-thunks";
 import {ControlledDatePicker} from "../../Common/form/controlled-date-picker";
 import {ControlledSelect} from "../../Common/form/controlled-select";
-import {makeStyles} from "@material-ui/core/styles";
 import {yupResolver} from '@hookform/resolvers/yup';
 import {schema} from '../../../validation/home-schema'
-
-export const useStyles = makeStyles({
-	container: {
-		padding: '30px',
-		flexWrap: 'wrap',
-		margin: '50px auto',
-	},
-	form: {
-		display: 'flex',
-		flexDirection: 'column',
-		alignItems: 'center',
-	},
-	wrap: {
-		margin: '30px 0 0',
-		display: 'flex',
-		justifyContent: 'center',
-		flexWrap: 'wrap'
-	},
-	btn: {
-		margin: '10px',
-	},
-});
+import {useSearchFormStyles} from "../../styles/styles";
 
 
 export const MainSearchForm = (props) => {
-	const classes = useStyles();
+	const classes = useSearchFormStyles();
 	const {data, initState, changeHours, findMasters, checkCustomer, setOrderData} = props
 	const {fields, date, hours} = data;
 

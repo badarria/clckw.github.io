@@ -2,23 +2,15 @@ import React from "react";
 import {TextField} from "@material-ui/core";
 import PropTypes from "prop-types";
 import {ControlledAutocomplete} from "./controlled-autocomplete";
-import {makeStyles} from "@material-ui/core/styles";
+import {useFieldStyles} from "../../styles/styles";
 
-const useStyles = makeStyles({
-	// root: {margin: '16px'},
-	smallInput: {fontSize: '14px'},
-	idInput: {
-		color: 'lightgray', fontSize: '14px', width: '40px',
-		'&:hover': {cursor: 'auto'}
-	},
-	label: {textTransform: 'capitalize'},
-	helper: {}
-})
+
+
 
 const FormFieldsGenerator = (props) => {
 	const {data, register, control, errors, isSmall = true} = props
 	const labels = Object.keys(data);
-	const classes = useStyles()
+	const classes = useFieldStyles()
 
 	return (
 		<>

@@ -6,16 +6,21 @@ import Cities from './Cities/cities-container';
 import Masters from './Masters/masters-container';
 import ServicesContainer from "./Services/services-container";
 import OrdersContainer from "./Orders/orders-container";
+import {useAdminStyles} from "../../styles/styles";
+
+
 
 
 
 const AdminPage = () => {
+	const classes = useAdminStyles()
+
 	return (
-		<Container >
+		<Container className={classes.container}>
 			<Box mt={3}>
 				<HorizontalTabs labels={["customers", "masters", "cities", "services", 'orders']}>
-					<Customers />
-					<Masters />
+					<Customers/>
+					<Masters/>
 					<Cities/>
 					<ServicesContainer/>
 					<OrdersContainer/>

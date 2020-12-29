@@ -1,5 +1,5 @@
 import React from 'react'
-import {Container, Typography, Paper} from '@material-ui/core'
+import {Container, Typography, Paper, Box} from '@material-ui/core'
 import MainSearchForm from "./search-form";
 import {MastersList} from "../../Common/masters-list"
 import {
@@ -9,23 +9,16 @@ import {
 import {acceptOrder} from "../../../middleware/home/home-page-thunks";
 import {compose} from "redux";
 import {connect} from "react-redux";
-import {makeStyles} from "@material-ui/core/styles";
 import {Toast} from "../../Common/toast";
 import {Loader} from "../../Common/loader";
-import Box from "@material-ui/core/Box";
+import {useHomeStyle} from "../../styles/styles";
 
-
-export const useStyle = makeStyles({
-	wrap: {width: '70%', margin: '0 auto'},
-	msgBox: {padding: '16px'},
-	title: {textAlign: 'center', margin: '50px 0 0'}
-})
 
 const HomePage = ({mastersList, accept, msg, toast, loading}) => {
-	const classes = useStyle()
+	const classes = useHomeStyle()
 
 	return (
-		<Container>
+		<Container className={classes.container}>
 			<Box className={classes.wrap}>
 				<Loader loading={loading}/>
 				<Typography variant="h3" component="h3" className={classes.title}>Find master</Typography>

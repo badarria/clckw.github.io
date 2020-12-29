@@ -1,6 +1,5 @@
 import React, {Fragment} from 'react';
-import Button from '@material-ui/core/Button';
-import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core';
+import {Dialog, DialogActions, DialogContent, Button, DialogContentText, DialogTitle} from '@material-ui/core';
 import {ButtonIcon} from "./button-icon";
 
 
@@ -17,8 +16,6 @@ const AlertDialog = (props) => {
 		accept();
 		setOpen(false);
 	}
-
-
 
 	return (
 		<Fragment>

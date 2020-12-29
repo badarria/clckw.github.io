@@ -1,5 +1,4 @@
-import {IconButton} from "@material-ui/core";
-import Tooltip from "@material-ui/core/Tooltip";
+import {IconButton, Tooltip} from "@material-ui/core";
 import React from "react";
 
 

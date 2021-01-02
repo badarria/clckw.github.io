@@ -1,15 +1,12 @@
-const router = require('express').Router();
-const {dbTryCatch} = require("../../../middleware/common");
-const {cities} = require('../../../validation/schemes/admin-schema')
-const validator = require('../../../validation/validator')
-const {update, getList, remove, add} = require("./cities-requests");
+const router = require("express").Router();
+const { dbTryCatch } = require("../../../middleware/common");
+const { cities } = require("../../../validation/schemes/admin-schema");
+const validator = require("../../../validation/validator");
+const { update, getList, remove, add } = require("./cities-requests");
 
-
-
-router.get('/', dbTryCatch(getList))
-router.put('/:id', validator(cities), dbTryCatch(update))
-router.delete('/:id', dbTryCatch(remove))
-router.post('/', validator(cities), dbTryCatch(add))
-
+router.get("/:limit/:offset", dbTryCatch(getList));
+router.put("/:id", validator(cities), dbTryCatch(update));
+router.delete("/:id", dbTryCatch(remove));
+router.post("/", validator(cities), dbTryCatch(add));
 
 module.exports = router;

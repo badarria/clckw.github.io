@@ -24,6 +24,8 @@
     "jsonwebtoken": "^8.5.1",
     "luxon": "^1.25.0",
     "pg": "^8.4.1",
+    "pg-promise": "^10.8.6",
+    "prettier": "^2.2.1",
     "webpack-dev-server": "^3.11.0",
     "yup": "^0.32.8"
   },

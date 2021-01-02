@@ -1,55 +1,64 @@
 import {
-	editStateState,
-	errorsState, getToastMsgState,
-	getColumnsState,
-	getDataState,
-	getItemsState, helperState, getLoadingState
+  editStateState,
+  errorsState,
+  getToastMsgState,
+  getColumnsState,
+  getDataState,
+  getItemsState,
+  helperState,
+  getLoadingState,
+  getPagingState,
 } from "../../../middleware/state-selectors";
 import {
-	accept,
-	cancelInput,
-	changeFreeHours,
-	pushToChange,
-	removeFromDB,
+  accept,
+  cancelInput,
+  changeFreeHours,
+  pushToChange,
+  removeFromDB,
+  setPaging,
 } from "../../../middleware/admin/admin-page-thunks";
 
-
 export const containerStateProps = (subj) => (state) => {
-	return ({
-		items: getItemsState(subj, state),
-		columns: getColumnsState(subj, state),
-		dataToChange: getDataState(subj, state),
-		editState: editStateState(subj, state),
-		errors: errorsState(subj, state),
-		helper: helperState(subj, state),
-		toast: getToastMsgState(subj, state),
-		loading: getLoadingState(subj, state)
-	})
-}
+  return {
+    items: getItemsState(subj, state),
+    columns: getColumnsState(subj, state),
+    dataToChange: getDataState(subj, state),
+    editState: editStateState(subj, state),
+    errors: errorsState(subj, state),
+    helper: helperState(subj, state),
+    toast: getToastMsgState(subj, state),
+    loading: getLoadingState(subj, state),
+    paging: getPagingState(subj, state),
+  };
+};
 
 export const containerDispatchProps = (subj, getKeys = false) => (dispatch) => {
-	return ({
-		remove: (id) => dispatch(removeFromDB(subj, id)),
-		push: (data, state) => dispatch(pushToChange(subj, data, state, getKeys)),
-		handleReset: () => dispatch(cancelInput(subj)),
-		accept: (data) => dispatch(accept(subj, data)),
-	})
-}
-
+  return {
+    remove: (id) => dispatch(removeFromDB(subj, id)),
+    push: (data, state) => dispatch(pushToChange(subj, data, state, getKeys)),
+    handleReset: () => dispatch(cancelInput(subj)),
+    accept: (data) => dispatch(accept(subj, data)),
+    setPaging: (data) => dispatch(setPaging(subj, data)),
+  };
+};
 
 export const formStateProps = (subj) => (state) => {
-	return ({
-		data: getDataState(subj, state),
-		errors: errorsState(subj, state),
-		helper: helperState(subj, state),
-	})
-}
+  return {
+    data: getDataState(subj, state),
+    errors: errorsState(subj, state),
+    helper: helperState(subj, state),
+  };
+};
 export const formDispatchProps = (subj) => (dispatch) => {
-	return ({
-		handleReset: () => dispatch(cancelInput(subj)),
-		accept: (data) => dispatch(accept(subj, data)),
-		changeHours: subj === 'orders' ?
-			(master_id, date, service_time, order_id) =>
-				dispatch(changeFreeHours(subj, master_id, date, service_time, order_id)) : null
-	})
-}
+  return {
+    handleReset: () => dispatch(cancelInput(subj)),
+    accept: (data) => dispatch(accept(subj, data)),
+    changeHours:
+      subj === "orders"
+        ? (master_id, date, service_time, order_id) =>
+            dispatch(
+              changeFreeHours(subj, master_id, date, service_time, order_id)
+            )
+        : null,
+  };
+};

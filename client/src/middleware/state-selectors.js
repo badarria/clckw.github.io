@@ -18,7 +18,7 @@ const _ordersDataState = (state) => {
 	const fields = _sliceData(data, -5)
 	const date = data.date ? dateFromFormatToObj(data.date) : dateFromNewDate();
 	const hours = data.hours;
-	return {fields, date, hours}
+	return {fields, date, hours, begin: data.begin}
 }
 const _mastersDataState = (state) => {
 	const data = state.masters.dataToChange;
@@ -58,14 +58,14 @@ export const getFreeMastersState = (state) => {
 	return state.home.freeMasters;
 }
 
-export const getMessageState = (state) => {
-	return state.home.msg
-}
-
 export const getToastMsgState = (subj, state) => {
 	return state[`${subj}`].toast
 }
 
 export const getLoadingState = (subj, state) => {
 	return state[subj].loading
+}
+
+export const getPagingState = (subj, state) => {
+	return state[subj].paging
 }

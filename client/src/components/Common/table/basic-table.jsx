@@ -1,69 +1,64 @@
-import React, {useState} from 'react';
+import React, { useState } from "react";
 import {
-	Paper,
-	Table,
-	TableBody,
-	TableCell,
-	TableContainer,
-	TableFooter, TableHead,
-	TablePagination,
-	TableRow, Box
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableFooter,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Box,
 } from "@material-ui/core";
 import BasicTableList from "./basic-table-list";
-import {Toast} from "../toast";
-import {useTableStyles} from "../../styles/styles";
-
+import { Toast } from "../toast";
+import { useTableStyles } from "../../styles/styles";
+import { Pagination } from "./pagination";
 
 export const BasicTable = (props) => {
-	const {children, items, columns, remove, push, editState, toast, itemsOnPage = 5,} = props
+  const {
+    items,
+    columns,
+    remove,
+    push,
+    editState,
+    toast,
+    header,
+    pagination,
+  } = props;
+  const classes = useTableStyles();
 
-	const [page, setPage] = useState(0);
-	const [rowsPerPage, setRowsPerPage] = useState(itemsOnPage);
-
-	const classes = useTableStyles();
-	const emptyRows = rowsPerPage - Math.min(rowsPerPage, items.length - page * rowsPerPage);
-	const itemsPerPage = items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-	const changePage = (event, newPage) => setPage(newPage);
-	const changeRowsPerPage = (event) => {
-		setRowsPerPage(parseInt(event.target.value, 10));
-		setPage(0);
-	};
-
-	return (
-		<Box className={classes.wrap}>
-			<Box className={classes.box}><Toast toast={toast}/></Box>
-			<TableContainer component={Paper} className={classes.root}>
-				<Table className={classes.table} aria-label={`table`}>
-					<TableHead className={classes.head}>
-						{children}
-					</TableHead>
-					<TableBody>
-						<BasicTableList data={itemsPerPage} remove={remove} push={push}
-														editState={editState} columns={columns}/>
-						{emptyRows > 0 && (
-							<TableRow style={{height: 53 * emptyRows}}>
-								<TableCell component='td'/>
-							</TableRow>
-						)}
-					</TableBody>
-					<TableFooter>
-						<TableRow>
-							<TablePagination
-								rowsPerPageOptions={[5, 10, 25, {label: 'All', value: -1}]}
-								count={items.length}
-								rowsPerPage={rowsPerPage}
-								page={page}
-								SelectProps={{
-									inputProps: {'aria-label': 'rows per page'},
-									native: true,
-								}}
-								onChangePage={changePage}
-								onChangeRowsPerPage={changeRowsPerPage}
-							/>
-						</TableRow>
-					</TableFooter>
-				</Table>
-			</TableContainer>
-		</Box>
-	)
-}
+  return (
+    <Box className={classes.wrap}>
+      <Box className={classes.box}>
+        <Toast toast={toast} />
+      </Box>
+      <TableContainer component={Paper} className={classes.root}>
+        <Table className={classes.table} aria-label={`table`}>
+          <TableHead className={classes.head}>{header}</TableHead>
+          <TableBody>
+            <BasicTableList
+              data={items}
+              remove={remove}
+              push={push}
+              editState={editState}
+              columns={columns}
+            />
+            {/*{emptyRows > 0 && (*/}
+            {/*	<TableRow style={{height: 53 * emptyRows}}>*/}
+            {/*		<TableCell component='td'/>*/}
+            {/*	</TableRow>*/}
+            {/*)}*/}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              {pagination}
+              {/*<Pagination {...paginationProps}/>*/}
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </TableContainer>
+    </Box>
+  );
+};

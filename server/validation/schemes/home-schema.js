@@ -1,31 +1,43 @@
-const yup = require('yup')
+const yup = require("yup");
 
-const schema = {}
-const name = yup.string().matches(/^[a-z -]+$/gi, 'Incorrect symbols').min(2, 'At least 2 characters').max(20, 'Max 20 characters').required();
+const schema = {};
+const name = yup
+  .string()
+  .matches(/^[a-z -]+$/gi, "Incorrect symbols")
+  .min(2, "At least 2 characters")
+  .max(20, "Max 20 characters")
+  .required();
 
 schema.masters = yup.object().shape({
-	city: yup.object().shape({
-		id: yup.number().required(),
-		name: yup.string().trim().required()
-	}),
-	service: yup.object().shape({
-		id: yup.number().required(),
-		name: yup.string().trim().required(),
-		time: yup.number().min(1, "At least 1 hour").max(8, "Not over than 8 hours").required()
-	}),
-	date: yup.date().required(),
-	hours: yup.string().matches(/(0[89]|1[0-9]):00/).required()
-})
+  city: yup.object().shape({
+    id: yup.number().required(),
+    name: yup.string().trim().required(),
+  }),
+  service: yup.object().shape({
+    id: yup.number().required(),
+    name: yup.string().trim().required(),
+    time: yup
+      .number()
+      .min(1, "At least 1 hour")
+      .max(8, "Not over than 8 hours")
+      .required(),
+  }),
+  date: yup.date().required(),
+  hours: yup
+    .string()
+    .matches(/(0[89]|1[0-9]):00/)
+    .required(),
+});
 
 schema.customer = yup.object().shape({
-	name: name,
-	surname: name,
-	email: yup.string().email('Enter correct email').required()
-})
+  name: name,
+  surname: name,
+  email: yup.string().email("Enter correct email").required(),
+});
 
 schema.loginForm = yup.object().shape({
-	name: name,
-	password: yup.string().trim().min(5, 'Min 5 symbols').required()
-})
+  name: name,
+  password: yup.string().trim().min(5, "Min 5 symbols").required(),
+});
 
-module.exports = schema
+module.exports = schema;

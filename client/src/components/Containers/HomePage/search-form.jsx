@@ -21,6 +21,7 @@ import Typography from "@material-ui/core/Typography";
 
 export const MainSearchForm = (props) => {
   const classes = useSearchFormStyles();
+
   const {
     data,
     initState,
@@ -32,7 +33,7 @@ export const MainSearchForm = (props) => {
   const { fields, date, hours } = data;
 
   useEffect(() => {
-    if (!Array.isArray(data.city) && !Array.isArray(data.service)) {
+    if (fields.city === "" && fields.service === "") {
       initState();
     }
   }, []);

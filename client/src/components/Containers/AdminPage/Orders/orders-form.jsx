@@ -40,10 +40,15 @@ const OrdersForm = (props) => {
   const disableHours = !(masterValue && serviceValue && dateValue);
 
   useEffect(() => {
-    const normDate = dateToRequest(dateValue);
-
     if (!disableHours) {
-      changeHours(masterValue, normDate, serviceValue, fields.id);
+      const normDate = dateToRequest(dateValue);
+      const data = {
+        master_id: masterValue,
+        date: normDate,
+        service_time: serviceValue,
+        order_id: fields.id,
+      };
+      changeHours(data);
     }
   }, [masterValue, dateValue, serviceValue]);
 
@@ -54,6 +59,7 @@ const OrdersForm = (props) => {
       reset();
     },
   };
+
   const formFieldsProps = {
     data: fields,
     register,
@@ -61,6 +67,7 @@ const OrdersForm = (props) => {
     errors,
     defaultValues,
   };
+
   const selectProps = {
     data: hours,
     control,

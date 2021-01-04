@@ -41,8 +41,12 @@ const _add = async (data, subj) => {
   return res.json();
 };
 
-const _get = async (subj) => {
-  const res = await fetch(`${adminPath}/${subj}`);
+const _get = async (subj, data) => {
+  const { limit, order, orderby, offset } = data;
+  console.log(data, subj, "request");
+  const res = await fetch(
+    `${adminPath}/${subj}/${limit}/${offset}/${orderby}/${order}`
+  );
   return res.json();
 };
 
@@ -60,11 +64,16 @@ const _getFilteredOrd = async ({ master_id, order_id, date }, subj) => {
 
 export const updateItem = async (data, subj) =>
   _wrapTryCatch(_changeEventErr(_update(data, subj)));
+
 export const removeItem = async (data, subj) =>
   _wrapTryCatch(_changeEventErr(_remove(data, subj)));
+
 export const addItem = async (data, subj) =>
   _wrapTryCatch(_changeEventErr(_add(data, subj)));
-export const getItems = async (subj) => _wrapTryCatch(_get(subj));
+
+export const getItems = async (subj, data) => _wrapTryCatch(_get(subj, data));
+
 export const getForeignKeys = async (subj) => _wrapTryCatch(_getKeys(subj));
+
 export const getFilteredOrders = async (data, subj) =>
   _wrapTryCatch(_getFilteredOrd(data, subj));

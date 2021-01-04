@@ -28,8 +28,10 @@ const CustomersContainer = (props) => {
     paging,
   } = props;
 
+  const { limit, offset, count, orderby, order } = paging;
+  const optionPagn = { limit, offset, count };
   const headProps = { columns, push };
-  const pagingProps = { paging, setPaging };
+  const pagingProps = { option: optionPagn, setPaging };
 
   const tableProps = {
     items,

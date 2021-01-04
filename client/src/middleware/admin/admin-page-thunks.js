@@ -2,85 +2,37 @@ import {
   addItem,
   updateItem,
   removeItem,
-  getItems,
   getForeignKeys,
-  getFilteredOrders,
 } from "./admin-requests";
 import {
-  setItemsAction,
-  setColumnsAction,
   setDataToChangeAction,
   toggleStateAction,
   changeOrdersHoursAction,
-  setToastMsgAction,
-  setLoadingAction,
-  setInitStateAction,
   setPagingAction,
+  setLoadingAction,
 } from "./admin-actions-selector";
 import {
   emptyFields,
   getServiceTime,
   mergeWithForeignKeys,
 } from "../utils/table-func";
-import { getHoursArray, setDisabled } from "../utils/date-time-func";
-import { subjects } from "../../components/Containers/init-params";
+import { _getFreeHours, _setAdminPageToastMsg, _setItems } from "../common";
 
-export const setToastMsg = (subj, toast, dispatch) => {
-  dispatch(setToastMsgAction(subj, toast));
-  setTimeout(() => {
-    dispatch(setToastMsgAction(subj, { type: toast.type, msg: "" }));
-  }, 3000);
-};
-
-export const setLoader = (subj, data, dispatch) => {
-  dispatch(setLoadingAction(subj, data));
-};
-
-export const setItems = (subj) => async (dispatch) => {
-  let data = await getItems(subj);
-  if (Array.isArray(data)) {
-    if (subj === "orders") data = setDisabled(data);
-    await dispatch(setItemsAction(subj, data));
-    return true;
-  } else {
-    setToastMsg(subj, { type: "error", msg: "Something went wrong" });
-    return false;
-  }
-};
-
-export const getAdminInitState = async (dispatch) => {
-  for (let i = 0; i < subjects.length; i += 1) {
-    const subj = subjects[i][0];
-    const columns = subjects[i][1];
-    const done = await dispatch(setItems(subj));
-    if (done) {
-      dispatch(setColumnsAction(subj, columns));
-    }
-  }
-  return true;
-};
-
-export const resetAdminState = (dispatch) => {
-  for (let i = 0; i < subjects.length; i += 1) {
-    const subj = subjects[i][0];
-    dispatch(setInitStateAction(subj));
-  }
-};
-
-export const removeFromDB = (subj, id) => async (dispatch) => {
-  setLoader(subj, true, dispatch);
+export const removeFromDB = (subj, id) => async (dispatch, getState) => {
+  dispatch(setLoadingAction(subj, true));
   const res = await removeItem(id, subj);
-  setLoader(subj, false, dispatch);
-  setToastMsg(subj, res, dispatch);
+  dispatch(setLoadingAction(subj, false));
+  _setAdminPageToastMsg(subj, res, dispatch);
   if (res.type === "success") {
-    dispatch(setItems(subj));
+    const data = getState()[subj].paging;
+    dispatch(_setItems(subj, data));
   }
 };
 
 export const pushToChange = (subj, data, state, getKeys = false) => async (
   dispatch
 ) => {
-  setLoader(subj, true, dispatch);
+  dispatch(setLoadingAction(subj, true));
   const foreignKeys = getKeys ? await getForeignKeys(subj) : {};
   let res = Array.isArray(data) ? emptyFields(data) : { ...data };
   if (foreignKeys) {
@@ -96,7 +48,7 @@ export const pushToChange = (subj, data, state, getKeys = false) => async (
   }
   dispatch(setDataToChangeAction(subj, res));
   dispatch(toggleStateAction(subj, state));
-  setLoader(subj, false, dispatch);
+  dispatch(setLoadingAction(subj, false));
 };
 
 export const cancelInput = (subj) => (dispatch) => {
@@ -105,44 +57,53 @@ export const cancelInput = (subj) => (dispatch) => {
 };
 
 export const accept = (subj, data) => async (dispatch, getState) => {
-  setLoader(subj, true, dispatch);
+  dispatch(setLoadingAction(subj, true));
   const state = getState()[`${subj}`].editState;
   const res =
     state === "isEditing"
       ? await updateItem(data, subj)
       : await addItem(data, subj);
   if (res) {
+    const data = getState()[subj].paging;
     await dispatch(cancelInput(subj, dispatch));
-    await dispatch(setItems(subj));
-    setToastMsg(subj, res, dispatch);
+    await dispatch(_setItems(subj, data));
+    _setAdminPageToastMsg(subj, res, dispatch);
   }
-  setLoader(subj, false, dispatch);
+  dispatch(setLoadingAction(subj, false));
 };
 
-export const _getFreeHours = async (
-  master_id,
-  date,
-  service_time,
-  order_id = 0
-) => {
-  const orders = await getFilteredOrders(
-    { master_id, date, order_id },
-    "orders"
-  );
-  return getHoursArray(service_time, orders);
-};
-
-export const changeFreeHours = (
-  subj,
-  master_id,
-  date,
-  service_time,
-  order_id
-) => async (dispatch) => {
-  const newHours = await _getFreeHours(master_id, date, service_time, order_id);
+export const changeFreeHours = (subj, data) => async (dispatch) => {
+  const newHours = await _getFreeHours(data);
   dispatch(changeOrdersHoursAction(subj, newHours));
 };
 
-export const setPaging = (subj, data) => (dispatch) => {
-  dispatch(setPagingAction(subj, data));
+// export const changePage = (subj, page) => async (dispatch, getState) => {
+//   dispatch(setLoadingAction(subj, true));
+//   const option = { ...getState()[subj].paging };
+//   option.offset = option.limit * page;
+//   dispatch(_setPaging(subj, option));
+//   await _setItems(subj, option);
+//   dispatch(setLoadingAction(subj, false));
+// };
+
+// export const changeItemsPerPage = (subj, limit) => async (
+//   dispatch,
+//   getState
+// ) => {
+//   const option = { ...getState()[subj].paging };
+//   option.limit = limit;
+//   option.offset = 0;
+// };
+
+export const changePaging = (subj, opt) => async (dispatch, getState) => {
+  dispatch(setLoadingAction(subj, true));
+  const options = { ...getState()[subj].paging };
+  opt.forEach(([key, value]) => {
+    console.log(key, value, opt);
+    options[key] = value;
+  });
+  console.log(options, "options");
+  dispatch(setPagingAction(subj, options));
+  await dispatch(_setItems(subj));
+  dispatch(setLoadingAction(subj, false));
 };

@@ -6,33 +6,35 @@ import {
   setFreeMasters,
   setWorkingHours,
   setNewOrder,
-  setToastMsg,
   setLoader,
 } from "../../redux/home-reducer";
 import { dateToRequest, getHoursArray } from "../utils/date-time-func";
 import { mergeWithForeignKeys } from "../utils/table-func";
 import {
-  getAdminInitState,
-  resetAdminState,
-  setItems,
-} from "../admin/admin-page-thunks";
-
-const _setHomePageToastMsg = (toast, dispatch) => {
-  dispatch(setToastMsg(toast));
-  setTimeout(() => {
-    dispatch(setToastMsg({ type: toast.type, msg: "" }));
-  }, 3000);
-};
+  _getAdminInitState,
+  _resetAdminState,
+  _setHomePageToastMsg,
+  _setItems,
+} from "../common";
 
 export const getInitState = async (dispatch, getState) => {
-  const city = await getItems("cities");
-  const service = await getItems("services");
-  const hours = getHoursArray(service.time);
-  const formData = Object.entries(getState().home.formData);
-  const keys = { city, service };
-  const res = mergeWithForeignKeys(formData, keys);
-  res.hours = hours;
-  dispatch(setFormData(res));
+  const isCityInit = getState().home.formData.city === "";
+  const isServiceInit = getState().home.formData.service === "";
+  const isLoading = getState().home.loading;
+
+  if (!isLoading && isCityInit && isServiceInit) {
+    dispatch(setLoader(true));
+    const data = { limit: "all", offset: 0, orderby: "id", order: "asc" };
+    const city = await getItems("cities", data);
+    const service = await getItems("services", data);
+    const hours = getHoursArray(service.time);
+    const formData = Object.entries(getState().home.formData);
+    const keys = { city: city.items, service: service.items };
+    const res = mergeWithForeignKeys(formData, keys);
+    res.hours = hours;
+    dispatch(setFormData(res));
+    dispatch(setLoader(false));
+  }
 };
 
 export const setOrderData = (data) => (dispatch) => {
@@ -78,8 +80,10 @@ export const acceptOrder = (id) => async (dispatch, getState) => {
   const data = { ...getState().home.newOrder };
   const res = await addItem(data, "orders");
   if (isAuth) {
-    await dispatch(setItems("orders"));
-    await dispatch(setItems("customers"));
+    const ordersOpt = getState().orders.paging;
+    const customersOpt = getState().customers.paging;
+    await dispatch(_setItems("orders", ordersOpt));
+    await dispatch(_setItems("customers", customersOpt));
   }
   dispatch(setLoader(false));
   if (res.type === "success") {
@@ -95,7 +99,7 @@ export const login = (data) => async (dispatch) => {
   if (res.token) {
     localStorage.setItem("token", res.token);
     dispatch(setAuth(true));
-    await getAdminInitState(dispatch);
+    await dispatch(_getAdminInitState);
     dispatch(setLoader(false));
     return { status: true, msg: "Success" };
   } else {
@@ -107,5 +111,5 @@ export const login = (data) => async (dispatch) => {
 export const logout = (dispatch) => {
   localStorage.removeItem("token");
   dispatch(setAuth(false));
-  dispatch(resetAdminState);
+  dispatch(_resetAdminState);
 };

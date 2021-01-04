@@ -11,11 +11,11 @@ const actions = {
 };
 
 export const setItemsAction = (subj, data) => {
-  return actions[subj][`get${subj}List`](data);
+  return actions[subj][`set${subj}List`](data);
 };
 
 export const setColumnsAction = (subj, data) => {
-  return actions[subj][`get${subj}Columns`](data);
+  return actions[subj][`set${subj}Columns`](data);
 };
 
 export const setInitStateAction = (subj) => {

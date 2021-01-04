@@ -5,11 +5,9 @@ const initState = () => ({
   columns: null,
   dataToChange: {},
   editState: null,
-  errors: {},
-  helper: null,
   toast: { type: "success", msg: "" },
   loading: false,
-  paging: { itemsPerPage: 5, offset: 0, orderBy: "id", order: "desc" },
+  paging: { limit: 5, offset: 0, orderby: "id", order: "asc" },
 });
 
 export const createTableReducers = (subj) => {
@@ -17,20 +15,14 @@ export const createTableReducers = (subj) => {
     name: subj,
     initialState: initState(subj),
     reducers: {
-      [`get${subj}List`]: (state, action) => {
+      [`set${subj}List`]: (state, action) => {
         state.list = action.payload;
       },
-      [`get${subj}Columns`]: (state, action) => {
+      [`set${subj}Columns`]: (state, action) => {
         state.columns = action.payload;
       },
       [`set${subj}State`]: (state, action) => {
         state.editState = action.payload;
-      },
-      [`set${subj}Errors`]: (state, action) => {
-        state.errors = { ...state.errors, ...action.payload };
-      },
-      [`set${subj}Helper`]: (state, action) => {
-        state.helper = { ...state.helper, ...action.payload };
       },
       [`toggle${subj}EditState`]: (state, action) => {
         state.editState = action.payload;

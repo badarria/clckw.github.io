@@ -13,9 +13,9 @@ import {
   accept,
   cancelInput,
   changeFreeHours,
+  changePaging,
   pushToChange,
   removeFromDB,
-  setPaging,
 } from "../../../middleware/admin/admin-page-thunks";
 
 export const containerStateProps = (subj) => (state) => {
@@ -38,7 +38,7 @@ export const containerDispatchProps = (subj, getKeys = false) => (dispatch) => {
     push: (data, state) => dispatch(pushToChange(subj, data, state, getKeys)),
     handleReset: () => dispatch(cancelInput(subj)),
     accept: (data) => dispatch(accept(subj, data)),
-    setPaging: (data) => dispatch(setPaging(subj, data)),
+    setPaging: (data) => dispatch(changePaging(subj, data)),
   };
 };
 
@@ -49,16 +49,14 @@ export const formStateProps = (subj) => (state) => {
     helper: helperState(subj, state),
   };
 };
+
 export const formDispatchProps = (subj) => (dispatch) => {
   return {
     handleReset: () => dispatch(cancelInput(subj)),
     accept: (data) => dispatch(accept(subj, data)),
     changeHours:
       subj === "orders"
-        ? (master_id, date, service_time, order_id) =>
-            dispatch(
-              changeFreeHours(subj, master_id, date, service_time, order_id)
-            )
+        ? (data) => dispatch(changeFreeHours(subj, data))
         : null,
   };
 };

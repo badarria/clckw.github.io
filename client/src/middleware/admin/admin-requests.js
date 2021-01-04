@@ -43,7 +43,6 @@ const _add = async (data, subj) => {
 
 const _get = async (subj, data) => {
   const { limit, order, orderby, offset } = data;
-  console.log(data, subj, "request");
   const res = await fetch(
     `${adminPath}/${subj}/${limit}/${offset}/${orderby}/${order}`
   );
@@ -57,7 +56,7 @@ const _getKeys = async (subj) => {
 
 const _getFilteredOrd = async ({ master_id, order_id, date }, subj) => {
   const res = await fetch(
-    `${adminPath}/${subj}/filtered/${date}/${master_id}/${order_id}`
+    `${adminPath}/${subj}/filtered/?date=${date}&master_id=${master_id}&order_id=${order_id}`
   );
   return res.json();
 };

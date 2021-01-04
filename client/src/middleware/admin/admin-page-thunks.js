@@ -77,32 +77,12 @@ export const changeFreeHours = (subj, data) => async (dispatch) => {
   dispatch(changeOrdersHoursAction(subj, newHours));
 };
 
-// export const changePage = (subj, page) => async (dispatch, getState) => {
-//   dispatch(setLoadingAction(subj, true));
-//   const option = { ...getState()[subj].paging };
-//   option.offset = option.limit * page;
-//   dispatch(_setPaging(subj, option));
-//   await _setItems(subj, option);
-//   dispatch(setLoadingAction(subj, false));
-// };
-
-// export const changeItemsPerPage = (subj, limit) => async (
-//   dispatch,
-//   getState
-// ) => {
-//   const option = { ...getState()[subj].paging };
-//   option.limit = limit;
-//   option.offset = 0;
-// };
-
 export const changePaging = (subj, opt) => async (dispatch, getState) => {
   dispatch(setLoadingAction(subj, true));
   const options = { ...getState()[subj].paging };
   opt.forEach(([key, value]) => {
-    console.log(key, value, opt);
     options[key] = value;
   });
-  console.log(options, "options");
   dispatch(setPagingAction(subj, options));
   await dispatch(_setItems(subj));
   dispatch(setLoadingAction(subj, false));

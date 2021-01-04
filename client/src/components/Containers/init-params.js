@@ -13,6 +13,6 @@ export const subjInitPaging = {
   customers: { limit: 10, offset: 0, orderby: "id", order: "desc" },
   services: { limit: 5, offset: 0, orderby: "time", order: "asc" },
   masters: { limit: 10, offset: 0, orderby: "id", order: "desc" },
-  orders: { limit: 15, offset: 0, orderby: "date", order: "asc" },
+  orders: { limit: 15, offset: 0, orderby: "date", order: "desc" },
   cities: { limit: 5, offset: 0, orderby: "id", order: "desc" },
 };

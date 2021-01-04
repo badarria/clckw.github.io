@@ -7,7 +7,6 @@ import { BasicTableForm } from "../../../Common/form/basic-table-form";
 import { formDispatchProps, formStateProps } from "../../utils/props-selector";
 import { compose } from "redux";
 import { connect } from "react-redux";
-import { dateToRequest } from "../../../../middleware/utils/date-time-func";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "../../../../validation/admin-schema";
 
@@ -41,10 +40,9 @@ const OrdersForm = (props) => {
 
   useEffect(() => {
     if (!disableHours) {
-      const normDate = dateToRequest(dateValue);
       const data = {
         master_id: masterValue,
-        date: normDate,
+        date: dateValue,
         service_time: serviceValue,
         order_id: fields.id,
       };

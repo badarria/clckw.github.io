@@ -14,9 +14,16 @@ const update = async (req, res) => {
 };
 
 const getList = async (req, res) => {
-  const { limit, offset } = req.params;
-  const list = await pool.query(
-    `SELECT
+  let { orderby, order, limit, offset } = req.params;
+  limit = limit === "-1" ? "all" : limit;
+  if (orderby === "date" || orderby === "begin") {
+    orderby = "beginat";
+  } else if (orderby === "end") {
+    orderby = "endat";
+  }
+
+  const list = await pool.any(
+    `SELECT json_agg(o) as item FROM ( SELECT
            o.id, o.master as master_id,
            o.service as service_id,
            s.time as service_time,
@@ -33,17 +40,20 @@ const getList = async (req, res) => {
            LEFT JOIN customers c ON o.customer = c.id
            LEFT JOIN services s ON o.service=s.id
            LEFT JOIN cities ci ON m.city = ci.id
-           ORDER BY id
-           LIMIT $1
-           OFFSET $2`,
-    [limit, offset]
+           ORDER BY $1:raw $2:raw
+           LIMIT $3:raw
+           OFFSET $4) o
+     UNION ALL
+     SELECT json_agg(o) FROM (SELECT count(*) FROM orders) o`,
+    [orderby, order, limit, offset]
   );
-  return res.json(list.rows);
+  const data = { items: list[0].item, count: list[1].item[0].count };
+  return res.json(data);
 };
 
 const getFiltered = async (req, res) => {
-  const { master_id, date, order_id } = req.params;
-  const filteredOrders = await pool.query(
+  const { master_id, date, order_id } = req.query;
+  const filteredOrders = await pool.any(
     `SELECT
         to_char(beginAt, 'HH24:MI') as begin,
         to_char(endAt, 'HH24:MI') as end
@@ -51,33 +61,34 @@ const getFiltered = async (req, res) => {
         and master = $2 and id != $3`,
     [date, master_id, order_id]
   );
-  return res.json(filteredOrders.rows);
+  return res.json(filteredOrders);
 };
 
 const getKeys = async (req, res) => {
-  const master = await pool.query(
-    `SELECT id, name || ' ' || surname as name, city as city_id from masters;`
-  );
-  const customer = await pool.query(
-    `SELECT id, name || ' ' || surname as name from customers;`
-  );
-  const service = await pool.query(`SELECT id, name, time from services;`);
-  return res.json({
-    master: [...master.rows],
-    customer: [...customer.rows],
-    service: [...service.rows],
-  });
+  const keys = await pool.any(`
+  select json_agg(m) as key from (SELECT id, name || ' ' || surname as name, city as city_id from masters) m
+  union all 
+  select json_agg(c) from (SELECT id, name || ' ' || surname as name from customers) c
+  union all
+  select json_agg(s) from (SELECT id, name, time from services) s
+ `);
+  const data = {
+    master: keys[0].key,
+    customer: keys[1].key,
+    service: keys[2].key,
+  };
+  return res.json(data);
 };
 
 const remove = async (req, res) => {
   const { id } = req.params;
-  await pool.query(`DELETE FROM orders WHERE id = $1`, [id]);
+  await pool.none(`DELETE FROM orders WHERE id = $1`, [id]);
   return res.json("Order was deleted");
 };
 
 const add = async (req, res) => {
   const { master, customer, service, begin, end } = req.body;
-  await pool.query(
+  await pool.none(
     `INSERT
         INTO orders(master, customer, service, beginAt, endAt)
         VALUES($1, $2, $3, $4, $5)`,

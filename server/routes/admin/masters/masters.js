@@ -14,7 +14,7 @@ const dataSelector = () => async (req, res, next) => {
   }
 };
 
-router.get("/:limit/:offset", dbTryCatch(getList));
+router.get("/:limit/:offset/:orderby/:order", dbTryCatch(getList));
 router.get("/foreignKeys", dbTryCatch(getKeys));
 router.put("/:id", validator(masters), dataSelector(), dbTryCatch(update));
 router.post("/", validator(masters), dataSelector(), dbTryCatch(add));

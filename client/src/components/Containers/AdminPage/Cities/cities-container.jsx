@@ -30,7 +30,7 @@ const CitiesContainer = (props) => {
 
   const { limit, offset, count, orderby, order } = paging;
   const optionPagn = { limit, offset, count };
-  const headProps = { columns, push };
+  const headProps = { columns, push, order, orderby, setChange: setPaging };
   const pagingProps = { option: optionPagn, setPaging };
 
   const tableProps = {

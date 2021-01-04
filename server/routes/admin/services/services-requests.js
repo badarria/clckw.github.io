@@ -14,15 +14,21 @@ const update = async (req, res) => {
 };
 
 const getList = async (req, res) => {
-  const { limit, offset } = req.params;
-  const list = await pool.query(
-    `SELECT * FROM services
-                    ORDER BY id
-                    LIMIT $1
-                    OFFSET $2`,
-    [limit, offset]
+  let { orderby, order, limit, offset } = req.params;
+  limit = limit === "-1" ? "all" : limit;
+
+  const list = await pool.any(
+    `SELECT json_agg(s) as item FROM
+         (SELECT * FROM services
+          ORDER BY $1:raw $2:raw
+          LIMIT $3:raw
+          OFFSET $4) s
+     UNION ALL
+     SELECT json_agg(s) FROM (SELECT count(*) FROM services) s`,
+    [orderby, order, limit, offset]
   );
-  return res.json(list.rows);
+  const data = { items: list[0].item, count: list[1].item[0].count };
+  return res.json(data);
 };
 
 const remove = async (req, res) => {

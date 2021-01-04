@@ -27,8 +27,8 @@ const dataSelector = () => (req, res, next) => {
   }
 };
 
-router.get("/:limit/:offset", dbTryCatch(getList));
-router.get("/filtered/:date/:master_id/:order_id", dbTryCatch(getFiltered));
+router.get("/:limit/:offset/:orderby/:order", dbTryCatch(getList));
+router.get("/filtered", dbTryCatch(getFiltered));
 router.get("/foreignKeys", dbTryCatch(getKeys));
 router.put(
   "/:id",

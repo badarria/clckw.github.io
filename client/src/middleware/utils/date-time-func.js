@@ -49,7 +49,8 @@ export const dateFromNewDate = () =>
     .set({ hours: 0, minutes: 0, seconds: 0 })
     .toJSDate();
 
-export const dateToRequest = (date) => DateTime.fromJSDate(date).toJSON();
+export const dateToRequest = (date) =>
+  DateTime.fromJSDate(date).toLocaleString();
 
 export const setDisabled = (data) => {
   return data.map((item) => {

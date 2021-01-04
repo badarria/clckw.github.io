@@ -14,7 +14,7 @@ const dataSelector = () => (req, res, next) => {
   }
 };
 
-router.get("/:limit/:offset", dbTryCatch(getList));
+router.get("/:limit/:offset/:orderby/:order", dbTryCatch(getList));
 router.put("/:id", validator(services), dataSelector(), dbTryCatch(update));
 router.delete("/:id", dbTryCatch(remove));
 router.post("/", validator(services), dataSelector(), dbTryCatch(add));

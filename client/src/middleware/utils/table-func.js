@@ -27,7 +27,6 @@ export const mergeWithForeignKeys = (data, keys) => {
       const editedObj = idToEdit
         ? _findEditedObj(keys[key], idToEdit)
         : _createNewEmptyObj(keys[key][0]);
-      console.log(keys[key], idToEdit);
       acc = { ...acc, [key]: [editedObj, ...filteredKeys] };
     } else if (!key.match(/_/)) {
       acc = { ...acc, [key]: value || "" };

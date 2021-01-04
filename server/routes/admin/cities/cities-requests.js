@@ -3,7 +3,7 @@ const pool = require("../../../db");
 const update = async (req, res) => {
   const { id } = req.params;
   const { name } = req.body;
-  await pool.query(
+  await pool.none(
     `UPDATE cities
                 SET name = $1
                 WHERE id = $2`,
@@ -13,27 +13,33 @@ const update = async (req, res) => {
 };
 
 const getList = async (req, res) => {
-  const { limit, offset } = req.params;
+  let { limit, order, offset, orderby } = req.params;
+  limit = limit === "-1" ? "all" : limit;
 
-  const citiesList = await pool.query(
-    `SELECT * FROM cities
-                    ORDER BY id
-                    LIMIT $1
-                    OFFSET $2`,
-    [limit, offset]
+  const list = await pool.any(
+    `SELECT json_agg(ci) as item FROM
+         (SELECT * FROM cities
+         order by $1:raw $2:raw
+         limit $3:raw
+         offset $4) ci
+     UNION ALL
+     SELECT json_agg(ci) FROM
+     (SELECT count(*) FROM cities) ci`,
+    [orderby, order, limit, offset]
   );
-  return res.json(citiesList.rows);
+  const data = { items: list[0].item, count: list[1].item[0].count };
+  return res.json(data);
 };
 
 const remove = async (req, res) => {
   const { id } = req.params;
-  await pool.query(`DELETE FROM cities WHERE id = $1`, [id]);
+  await pool.none(`DELETE FROM cities WHERE id = $1`, id);
   return res.json("City was deleted");
 };
 
 const add = async (req, res) => {
   const { name } = req.body;
-  await pool.query(`INSERT INTO cities (name) VALUES($1)`, [name]);
+  await pool.none(`INSERT INTO cities (name) VALUES($1)`, name);
   return res.json("City was added");
 };
 

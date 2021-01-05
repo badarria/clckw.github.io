@@ -5,7 +5,7 @@ import { LoginForm } from "./login-form";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { getAuthState } from "../../../middleware/state-selectors";
-import { login, logout } from "../../../middleware/home/home-page-thunks";
+import { login, logout } from "../../../middleware/home/home-client-thunks";
 import { useNavStyles } from "../../styles/styles";
 
 const Navigation = ({ logout, login, isAuth }) => {

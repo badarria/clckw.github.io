@@ -10,7 +10,7 @@ import {
   dateToRequest,
   getHoursArray,
   setDisabled,
-} from "./utils/date-time-func";
+} from "./utils/datetime-func";
 import { setToastMsg } from "../redux/home-reducer";
 import { subjects, subjInitPaging } from "../components/Containers/init-params";
 

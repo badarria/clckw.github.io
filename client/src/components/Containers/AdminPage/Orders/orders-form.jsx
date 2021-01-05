@@ -9,6 +9,10 @@ import { compose } from "redux";
 import { connect } from "react-redux";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "../../../../validation/admin-schema";
+import {
+  dateToRequest,
+  getBeginEnd,
+} from "../../../../middleware/utils/datetime-func";
 
 const subj = "orders";
 const mapStateToProps = formStateProps(subj);
@@ -39,10 +43,11 @@ const OrdersForm = (props) => {
   const disableHours = !(masterValue && serviceValue && dateValue);
 
   useEffect(() => {
+    const normDate = dateToRequest(dateValue);
     if (!disableHours) {
       const data = {
         master_id: masterValue,
-        date: dateValue,
+        date: normDate,
         service_time: serviceValue,
         order_id: fields.id,
       };
@@ -50,8 +55,22 @@ const OrdersForm = (props) => {
     }
   }, [masterValue, dateValue, serviceValue]);
 
+  const submit = (data) => {
+    const { id, master, customer, service, date, hours } = data;
+    const { begin, end } = getBeginEnd(date, hours, service.time);
+    data = {
+      id,
+      master: master.id,
+      customer: customer.id,
+      service: service.id,
+      begin,
+      end,
+    };
+    accept(data);
+  };
+
   const formProps = {
-    submit: handleSubmit((data) => accept(data)),
+    submit: handleSubmit((data) => submit(data)),
     reset: () => {
       handleReset();
       reset();

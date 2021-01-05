@@ -7,7 +7,7 @@ import {
   getToastMsgState,
   getLoadingState,
 } from "../../../middleware/state-selectors";
-import { acceptOrder } from "../../../middleware/home/home-page-thunks";
+import { acceptOrder } from "../../../middleware/home/home-client-thunks";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { Toast } from "../../Common/toast";

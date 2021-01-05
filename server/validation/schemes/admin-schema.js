@@ -3,47 +3,31 @@ const yup = require("yup");
 const schema = {};
 const name = yup
   .string()
-  .matches(/^[a-z -]+$/gi, "Incorrect symbols")
-  .min(2, "At least 2 characters")
-  .max(20, "Max 20 characters")
+  .matches(/^[a-z -]+$/gi)
+  .min(2)
+  .max(20)
   .required();
-const num = yup.string().matches(/\d+/g, "Have to be a number");
+const num = yup.string().matches(/\d+/g);
 
 schema.orders = yup.object().shape({
-  service: yup.object().shape({
-    id: num.required(),
-    time: yup.string().matches(/[1-8]/g, "From 1 to 8 hours").required(),
-  }),
-  date: yup.date().required(),
-  hours: yup
-    .string()
-    .matches(/(0[89]|1[0-9]):00/)
-    .required(),
-  customer: yup.object().shape({
-    id: num.required(),
-  }),
-  master: yup.object().shape({
-    id: num.required(),
-  }),
+  service: yup.string().matches(/[1-8]/g).required(),
+  begin: yup.date().required(),
+  end: yup.date().required(),
+  customer: num.required(),
+  master: num.required(),
 });
 
 schema.customers = yup.object().shape({
   id: num,
   name: name,
   surname: name,
-  email: yup.string().email("Enter correct email").required(),
+  email: yup.string().email().required(),
 });
 
 schema.services = yup.object().shape({
   id: num,
   name: name,
-  time: yup.object().shape({
-    id: yup.number().required(),
-    name: yup
-      .string()
-      .matches(/^[1-8]h$/, "From 1 to 8 hours")
-      .required(),
-  }),
+  time: yup.string().matches(/[1-8]/g).required(),
 });
 
 schema.cities = yup.object().shape({
@@ -55,9 +39,7 @@ schema.masters = yup.object().shape({
   id: num,
   name: name,
   surname: name,
-  city: yup.object().shape({
-    id: num.required(),
-  }),
+  city: num.required(),
 });
 
 module.exports = schema;

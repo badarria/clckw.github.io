@@ -8,11 +8,9 @@ const _wrapTryCatch = async (tryFunc) => {
   }
 };
 
-const _getMasters = async ({ city, date, service, hours }) => {
+const _getMasters = async ({ city, begin, end }) => {
   const url = `${homePath}/find`;
-  const params = `?city=${JSON.stringify(
-    city
-  )}&date=${date}&service=${JSON.stringify(service)}&hours=${hours}`;
+  const params = `?city=${city}&begin=${begin}&end=${end}`;
   const res = await fetch(`${url}${params}`);
   return res.json();
 };

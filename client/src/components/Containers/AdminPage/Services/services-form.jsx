@@ -24,8 +24,13 @@ const ServicesForm = ({ data, handleReset, accept }) => {
     resolver: yupResolver(schema.services),
   });
 
+  const submit = (data) => {
+    const { id, name, time } = data;
+    accept({ id, name, time: time.id });
+  };
+
   const formProps = {
-    submit: handleSubmit((data) => accept(data)),
+    submit: handleSubmit((data) => submit(data)),
     reset: () => {
       handleReset();
       reset();

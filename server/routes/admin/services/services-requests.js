@@ -5,9 +5,9 @@ const update = async (req, res) => {
   const { name, time } = req.body;
   await pool.query(
     `UPDATE services
-                    SET name = $1,
-                    time = $2
-                    WHERE id = $3`,
+       SET name = $1,
+       time = $2
+       WHERE id = $3`,
     [name, time, id]
   );
   return res.json("Service was updated");

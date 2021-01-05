@@ -16,7 +16,7 @@ import {
   changePaging,
   pushToChange,
   removeFromDB,
-} from "../../../middleware/admin/admin-page-thunks";
+} from "../../../middleware/admin/admin-client-thunks";
 
 export const containerStateProps = (subj) => (state) => {
   return {

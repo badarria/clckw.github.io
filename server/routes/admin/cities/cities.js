@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { dbTryCatch } = require("../../../middleware/common");
+const { dbTryCatch } = require("../../../middleware/wrap-func");
 const { cities } = require("../../../validation/schemes/admin-schema");
 const validator = require("../../../validation/validator");
 const { update, getList, remove, add } = require("./cities-requests");

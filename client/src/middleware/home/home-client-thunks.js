@@ -8,14 +8,14 @@ import {
   setNewOrder,
   setLoader,
 } from "../../redux/home-reducer";
-import { dateToRequest, getHoursArray } from "../utils/date-time-func";
+import { dateToRequest, getHoursArray } from "../utils/datetime-func";
 import { mergeWithForeignKeys } from "../utils/table-func";
 import {
   _getAdminInitState,
   _resetAdminState,
   _setHomePageToastMsg,
   _setItems,
-} from "../common";
+} from "../middleware-thunks";
 
 export const getInitState = async (dispatch, getState) => {
   const isCityInit = getState().home.formData.city === "";
@@ -67,7 +67,7 @@ export const findMasters = (data) => async (dispatch) => {
 export const checkCustomer = (data) => async (dispatch, getState) => {
   let id = await getCustomer(data);
   const order = { ...getState().home.newOrder };
-  order.customer = id[0];
+  order.customer = id[0].id;
   dispatch(setOrderData(order));
 };
 
@@ -75,7 +75,7 @@ export const acceptOrder = (id) => async (dispatch, getState) => {
   dispatch(setLoader(true));
   const order = { ...getState().home.newOrder };
   const isAuth = getState().home.isAuth;
-  order.master = { id };
+  order.master = id;
   dispatch(setOrderData(order));
   const data = { ...getState().home.newOrder };
   const res = await addItem(data, "orders");

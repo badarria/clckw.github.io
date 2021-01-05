@@ -16,7 +16,11 @@ import {
   getServiceTime,
   mergeWithForeignKeys,
 } from "../utils/table-func";
-import { _getFreeHours, _setAdminPageToastMsg, _setItems } from "../common";
+import {
+  _getFreeHours,
+  _setAdminPageToastMsg,
+  _setItems,
+} from "../middleware-thunks";
 
 export const removeFromDB = (subj, id) => async (dispatch, getState) => {
   dispatch(setLoadingAction(subj, true));

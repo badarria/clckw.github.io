@@ -25,8 +25,13 @@ const MastersForm = ({ data, handleReset, accept }) => {
     resolver: yupResolver(schema.masters),
   });
 
+  const submit = (data) => {
+    const { id, name, surname, city } = data;
+    accept({ id, name, surname, city: city.id });
+  };
+
   const formProps = {
-    submit: handleSubmit((data) => accept(data)),
+    submit: handleSubmit((data) => submit(data)),
     reset: () => {
       handleReset();
       reset();

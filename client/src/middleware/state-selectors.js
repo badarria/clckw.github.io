@@ -1,4 +1,4 @@
-import { dateFromFormatToObj, dateFromNewDate } from "./utils/date-time-func";
+import { dateFromFormatToObj, dateFromNewDate } from "./utils/datetime-func";
 
 export const getItemsState = (subj, state) => {
   return state[subj].list;

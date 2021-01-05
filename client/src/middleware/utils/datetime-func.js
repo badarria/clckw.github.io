@@ -25,7 +25,7 @@ const _findBookedTime = (orders) => {
   }, []);
 };
 
-const getHoursArray = (
+export const getHoursArray = (
   service_time,
   orders = [],
   dayBegin = 8,
@@ -49,8 +49,11 @@ export const dateFromNewDate = () =>
     .set({ hours: 0, minutes: 0, seconds: 0 })
     .toJSDate();
 
-export const dateToRequest = (date) =>
-  DateTime.fromJSDate(date).toLocaleString();
+export const dateToRequest = (date) => {
+  if (date instanceof Date) {
+    return DateTime.fromJSDate(date).toJSON().replace(/\+.+$/, "");
+  } else return date;
+};
 
 export const setDisabled = (data) => {
   return data.map((item) => {
@@ -65,4 +68,20 @@ export const setDisabled = (data) => {
   });
 };
 
-export { getHoursArray };
+export const getBeginEnd = (date, hours, service_time) => {
+  let begin = DateTime.fromJSDate(date)
+    .set({
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+    })
+    .plus({ hours: hours.split(":")[0] })
+    .toJSDate();
+  const interval = service_time;
+  const end = DateTime.fromJSDate(begin)
+    .plus({ hours: interval })
+    .toJSON()
+    .replace(/\+.+$/, "");
+  begin = DateTime.fromJSDate(begin).toJSON().replace(/\+.+$/, "");
+  return { end, begin };
+};

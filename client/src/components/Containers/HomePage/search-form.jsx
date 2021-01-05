@@ -11,13 +11,14 @@ import {
   findMasters,
   getInitState,
   setOrderData,
-} from "../../../middleware/home/home-page-thunks";
+} from "../../../middleware/home/home-client-thunks";
 import { ControlledDatePicker } from "../../Common/form/controlled-date-picker";
 import { ControlledSelect } from "../../Common/form/controlled-select";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "../../../validation/home-schema";
 import { useSearchFormStyles } from "../../styles/styles";
 import Typography from "@material-ui/core/Typography";
+import { getBeginEnd } from "../../../middleware/utils/datetime-func";
 
 export const MainSearchForm = (props) => {
   const classes = useSearchFormStyles();
@@ -71,9 +72,10 @@ export const MainSearchForm = (props) => {
 
   const submit = async (data) => {
     const { name, surname, email, service, city, date, hours } = data;
-    const res = await findMasters({ city, date, service, hours });
+    const { begin, end } = getBeginEnd(date, hours, service.time);
+    const res = await findMasters({ city: city.id, begin, end });
     if (res) {
-      setOrderData({ service, date, hours, city });
+      setOrderData({ service: service.id, begin, end });
       checkCustomer({ name, surname, email });
     }
   };

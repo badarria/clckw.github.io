@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { getList, update, remove, add } = require("./customers-requests");
-const { dbTryCatch } = require("../../../middleware/common");
+const { dbTryCatch } = require("../../../middleware/wrap-func");
 const validator = require("../../../validation/validator");
 const { customers } = require("../../../validation/schemes/admin-schema");
 

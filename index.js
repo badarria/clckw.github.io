@@ -3,15 +3,17 @@ const app = express();
 const cors = require("cors");
 const routes = require("./server/routes");
 const path = require("path");
+const config = require("./config");
+const env = app.get("env");
 
-const PORT = process.env.PORT || 5000;
+const PORT = config[env].port;
 
 app.use(cors());
 app.use(express.json());
 app.use("/", routes);
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "client/build")));
+if (env === "production") {
+  app.use(config[env].app);
 }
 
 app.get("*", function (req, res) {

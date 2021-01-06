@@ -6,9 +6,11 @@ const orders = require("./admin/orders/orders");
 const services = require("./admin/services/services");
 const adminPage = require("./admin/admin");
 const homePage = require("./home/home");
+const ratingPage = require("./rating/rating");
 
 index.use("/home", homePage);
 index.use("/admin", adminPage);
+index.use("/rating", ratingPage);
 index.use("/admin/customers", customers);
 index.use("/admin/masters", masters);
 index.use("/admin/cities", cities);

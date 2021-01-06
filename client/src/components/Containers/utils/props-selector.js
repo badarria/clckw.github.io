@@ -1,11 +1,9 @@
 import {
   editStateState,
-  errorsState,
   getToastMsgState,
   getColumnsState,
   getDataState,
   getItemsState,
-  helperState,
   getLoadingState,
   getPagingState,
 } from "../../../middleware/state-selectors";
@@ -24,8 +22,6 @@ export const containerStateProps = (subj) => (state) => {
     columns: getColumnsState(subj, state),
     dataToChange: getDataState(subj, state),
     editState: editStateState(subj, state),
-    errors: errorsState(subj, state),
-    helper: helperState(subj, state),
     toast: getToastMsgState(subj, state),
     loading: getLoadingState(subj, state),
     paging: getPagingState(subj, state),
@@ -45,8 +41,6 @@ export const containerDispatchProps = (subj, getKeys = false) => (dispatch) => {
 export const formStateProps = (subj) => (state) => {
   return {
     data: getDataState(subj, state),
-    errors: errorsState(subj, state),
-    helper: helperState(subj, state),
   };
 };
 

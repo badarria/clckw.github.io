@@ -195,3 +195,21 @@ export const useSearchFormStyles = makeStyles({
     margin: "10px",
   },
 });
+
+export const useRatingStyles = makeStyles({
+  blank: {
+    width: "50%",
+    padding: "40px 24px",
+    margin: "100px auto",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  btn: { margin: "30px 0 0" },
+  card: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  ratingTitle: { padding: "16px 0 24px" },
+});

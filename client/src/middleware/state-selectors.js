@@ -33,12 +33,12 @@ export const getDataState = (subj, state) => {
 export const editStateState = (subj, state) => {
   return state[subj].editState;
 };
-export const errorsState = (subj, state) => {
-  return state[subj].errors;
-};
-export const helperState = (subj, state) => {
-  return state[subj].helper;
-};
+// export const errorsState = (subj, state) => {
+//   return state[subj].errors;
+// };
+// export const helperState = (subj, state) => {
+//   return state[subj].helper;
+// };
 
 export const getFormDataState = (state) => {
   const data = state.home.formData;
@@ -69,4 +69,12 @@ export const getLoadingState = (subj, state) => {
 
 export const getPagingState = (subj, state) => {
   return state[subj].paging;
+};
+
+export const orderToRateState = (state) => {
+  return state.rating.orderToRate;
+};
+
+export const getStatusState = (state) => {
+  return state.rating.status;
 };

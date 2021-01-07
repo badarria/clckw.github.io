@@ -5,12 +5,12 @@ import React from "react";
 
 export const BasicCard = ({ id, name, surname, rating, accept }) => {
   const classes = useMasterListStyle();
-
+  const masterName = `${name} ${surname}`;
   return (
     <Card className={classes.card}>
       <CardContent className={classes.content}>
         <Typography gutterBottom variant="h5" component="h2" align="center">
-          {`${name} ${surname}`}
+          {masterName}
         </Typography>
         <Box
           component="fieldset"
@@ -28,7 +28,7 @@ export const BasicCard = ({ id, name, surname, rating, accept }) => {
         color="primary"
         fullWidth
         size="large"
-        onClick={() => accept(id)}
+        onClick={() => accept({ id, masterName })}
       >
         {" "}
         Choose!{" "}

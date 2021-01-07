@@ -10,7 +10,8 @@ import {
   checkCustomer,
   findMasters,
   getInitState,
-  setOrderData,
+  processData,
+  _setOrderData,
 } from "../../../middleware/home/home-client-thunks";
 import { ControlledDatePicker } from "../../Common/form/controlled-date-picker";
 import { ControlledSelect } from "../../Common/form/controlled-select";
@@ -23,14 +24,8 @@ import { getBeginEnd } from "../../../middleware/utils/datetime-func";
 export const MainSearchForm = (props) => {
   const classes = useSearchFormStyles();
 
-  const {
-    data,
-    initState,
-    changeHours,
-    findMasters,
-    checkCustomer,
-    setOrderData,
-  } = props;
+  const { data, initState, changeHours, findMasters, processData } = props;
+
   const { fields, date, hours } = data;
 
   useEffect(() => {
@@ -75,8 +70,15 @@ export const MainSearchForm = (props) => {
     const { begin, end } = getBeginEnd(date, hours, service.time);
     const res = await findMasters({ city: city.id, begin, end });
     if (res) {
-      setOrderData({ service: service.id, begin, end });
-      checkCustomer({ name, surname, email });
+      processData({
+        name,
+        email,
+        surname,
+        service,
+        city: city.name,
+        begin,
+        end,
+      });
     }
   };
 
@@ -124,8 +126,7 @@ const mapDispatchToProps = (dispatch) => {
     initState: () => dispatch(getInitState),
     changeHours: (service_time) => dispatch(changeHours(service_time)),
     findMasters: (data) => dispatch(findMasters(data)),
-    checkCustomer: (data) => dispatch(checkCustomer(data)),
-    setOrderData: (data) => dispatch(setOrderData(data)),
+    processData: (data) => dispatch(processData(data)),
   };
 };
 

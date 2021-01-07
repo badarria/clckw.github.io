@@ -11,8 +11,9 @@ import {
   getHoursArray,
   setDisabled,
 } from "./utils/datetime-func";
-import { setToastMsg } from "../redux/home-reducer";
+import { setNewOrder, setToastMsg } from "../redux/home-reducer";
 import { subjects, subjInitPaging } from "../components/Containers/init-params";
+import { sendConfirmLetter, sendRatingLetter } from "./home/home-requests";
 
 export const _setAdminPageToastMsg = (subj, toast, dispatch) => {
   dispatch(setToastMsgAction(subj, toast));
@@ -78,4 +79,21 @@ export const _getAdminInitState = async (dispatch) => {
     }
   }
   return true;
+};
+
+export const _sendMails = async (dispatch, getState) => {
+  const mailData = getState().home.mailData;
+  const result = await sendConfirmLetter(mailData);
+  console.log(result);
+  setTimeout(async () => {
+    const result = await sendRatingLetter(mailData);
+    console.log(result);
+  }, 10000);
+};
+
+export const _setOrderData = (data) => (dispatch) => {
+  if (data.date instanceof Date) {
+    data.date = dateToRequest(data.date);
+  }
+  dispatch(setNewOrder(data));
 };

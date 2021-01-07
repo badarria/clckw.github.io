@@ -24,85 +24,35 @@ const MailGenerator = new Mailgen({
   },
 });
 
-const sendConfirmingletter = (req, res) => {
-  const { userEmail, name } = req.body;
-
-  const response = {
-    body: {
-      name,
-      intro: ["Thanks for order!", "Your order details:"],
-      table: {
-        data: [
-          {
-            "Order date": "Tue, 02.01.2021 18:00",
-            City: "Dnipro",
-            "Your master": "Jo Jo 5star",
-            "Size of clock": "Middle clock",
-          },
-        ],
-      },
-    },
-  };
-
-  const mail = MailGenerator.generate(response);
-
-  const message = {
-    from: email,
-    to: userEmail,
-    subject: "Your order has been processed successfully",
-    html: mail,
-  };
-
-  transporter
-    .sendMail(message)
-    .then(() => {
-      return res
-        .status(200)
-        .json({ msg: "you should receive an email from us" });
-    })
-    .catch((error) => console.error(error));
+const createMail = (someMailFunc) => (req, res, next) => {
+  try {
+    const { userEmail, mail, subj } = someMailFunc(req.body);
+    const generatedMail = MailGenerator.generate(mail);
+    const message = {
+      from: email,
+      to: userEmail,
+      subject: subj,
+      html: generatedMail,
+    };
+    req.body = message;
+    next();
+  } catch {
+    res.status(400).send({ msg: "Mail does not configure" });
+  }
 };
 
-const sendRatingRequest = (req, res) => {
-  const { name, order_id } = req.body;
-
-  let response = {
-    body: {
-      name,
-      intro: "Your bill has arrived!",
-      table: {
-        data: [
-          {
-            item: "MERN stack book",
-            description: "A mern stack book",
-            price: "$10.99",
-          },
-        ],
-      },
-      outro: "Looking forward to do more business with you",
-    },
-  };
-
-  let mail = MailGenerator.generate(response);
-
-  let message = {
-    from: EMAIL,
-    to: userEmail,
-    subject: "transaction",
-    html: mail,
-  };
-
-  transporter
-    .sendMail(message)
-    .then(() => {
-      return res
-        .status(200)
-        .json({ msg: "you should receive an email from us" });
-    })
-    .catch((error) => console.error(error));
+const sendMail = () => async (req, res) => {
+  try {
+    const message = req.body;
+    await transporter.sendMail(message);
+    res.json({ msg: "you should receive an email from us" });
+  } catch (e) {
+    console.error(e.message);
+    res.status(400).send({ msg: "Something went wrong and mail was not sent" });
+  }
 };
 
 module.exports = {
-  sendConfirmingletter,
-  sendRatingRequest,
+  createMail,
+  sendMail,
 };

@@ -50,7 +50,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    accept: (master_id) => dispatch(acceptOrder(master_id)),
+    accept: (data) => dispatch(acceptOrder(data)),
   };
 };
 

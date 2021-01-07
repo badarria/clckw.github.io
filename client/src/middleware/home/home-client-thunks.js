@@ -1,4 +1,10 @@
-import { getCustomer, getFreeMasters, loginUser } from "./home-requests";
+import {
+  addNewOrder,
+  getCustomer,
+  getFreeMasters,
+  loginUser,
+  sendConfirmLetter,
+} from "./home-requests";
 import { addItem, getItems } from "../admin/admin-requests";
 import {
   setFormData,
@@ -7,14 +13,17 @@ import {
   setWorkingHours,
   setNewOrder,
   setLoader,
+  setMailData,
 } from "../../redux/home-reducer";
 import { dateToRequest, getHoursArray } from "../utils/datetime-func";
 import { mergeWithForeignKeys } from "../utils/table-func";
 import {
   _getAdminInitState,
   _resetAdminState,
+  _sendMails,
   _setHomePageToastMsg,
   _setItems,
+  _setOrderData,
 } from "../middleware-thunks";
 
 export const getInitState = async (dispatch, getState) => {
@@ -37,13 +46,6 @@ export const getInitState = async (dispatch, getState) => {
   }
 };
 
-export const setOrderData = (data) => (dispatch) => {
-  if (data.date instanceof Date) {
-    data.date = dateToRequest(data.date);
-  }
-  dispatch(setNewOrder(data));
-};
-
 export const changeHours = (service_time) => (dispatch) => {
   const newHours = getHoursArray(service_time);
   dispatch(setWorkingHours(newHours));
@@ -64,31 +66,44 @@ export const findMasters = (data) => async (dispatch) => {
   }
 };
 
-export const checkCustomer = (data) => async (dispatch, getState) => {
-  let id = await getCustomer(data);
-  const order = { ...getState().home.newOrder };
-  order.customer = id[0].id;
-  dispatch(setOrderData(order));
+export const processData = (data) => async (dispatch) => {
+  const { service, city, begin, end, email, name, surname } = data;
+  const id = await getCustomer({ email, name, surname });
+  if (typeof id === "number") {
+    const orderData = { service: service.id, begin, end, customer: id };
+    const mailData = {
+      name,
+      userEmail: email,
+      city,
+      begin,
+      service: service.name,
+    };
+    dispatch(_setOrderData(orderData));
+    dispatch(setMailData(mailData));
+  }
 };
 
-export const acceptOrder = (id) => async (dispatch, getState) => {
+export const acceptOrder = ({ id, masterName }) => async (
+  dispatch,
+  getState
+) => {
   dispatch(setLoader(true));
-  const order = { ...getState().home.newOrder };
   const isAuth = getState().home.isAuth;
-  order.master = id;
-  dispatch(setOrderData(order));
-  const data = { ...getState().home.newOrder };
-  const res = await addItem(data, "orders");
-  if (isAuth) {
-    const ordersOpt = getState().orders.paging;
-    const customersOpt = getState().customers.paging;
-    await dispatch(_setItems("orders", ordersOpt));
-    await dispatch(_setItems("customers", customersOpt));
-  }
+  dispatch(_setOrderData({ master: id }));
+  dispatch(setMailData({ master: masterName }));
+  const orderData = { ...getState().home.newOrder };
+  let res = await addNewOrder(orderData);
   dispatch(setLoader(false));
-  if (res.type === "success") {
-    dispatch(setOrderData({}));
+  if (res?.id) {
     dispatch(setFreeMasters([]));
+    dispatch(setMailData({ orderId: res.id }));
+    dispatch(_sendMails);
+    res = { type: "success", msg: res.msg };
+    dispatch(_setOrderData({}));
+  }
+  if (isAuth) {
+    await dispatch(_setItems("orders"));
+    await dispatch(_setItems("customers"));
   }
   _setHomePageToastMsg(res, dispatch);
 };

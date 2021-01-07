@@ -1,6 +1,11 @@
 const pool = require("../../db");
 const bcrypt = require("bcrypt");
 const jwtGenerator = require("../../utils/jwtGenerator");
+const app = require("express")();
+const config = require("../../../config");
+const env = app.get("env");
+const url = config[env].mailing.baseUrl;
+console.log(url);
 
 const findMasters = async (req, res) => {
   const { city, begin, end } = req.body;
@@ -37,7 +42,22 @@ const upsertCustomer = async (req, res) => {
                     Returning id`,
     [name, surname, email]
   );
-  return res.json(id);
+  return res.json(id[0].id);
+};
+
+const addNewOrder = async (req, res) => {
+  const { master, customer, service, begin, end } = req.body;
+  const id = await pool.any(
+    `INSERT
+        INTO orders(master, customer, service, beginAt, endAt)
+        VALUES($1, $2, $3, $4, $5)
+        RETURNING id`,
+    [master, customer, service, begin, end]
+  );
+  res.json({
+    id: id[0].id,
+    msg: "Your order is accepted. We will send you a mail with details",
+  });
 };
 
 const auth = async (req, res) => {
@@ -54,6 +74,49 @@ const auth = async (req, res) => {
   return res.json({ token });
 };
 
+const confirmingMail = (req) => {
+  const { userEmail, name, begin, city, service, master } = req;
+  const mail = {
+    body: {
+      name,
+      intro: "Your order details:",
+      table: {
+        data: [
+          {
+            "Order date": begin,
+            City: city,
+            "Your master": master,
+            "Size of clock": service,
+          },
+        ],
+      },
+      outro: "Thanks for choosing us!",
+    },
+  };
+  const subj = "Your order has been processed successfully";
+  return { mail, userEmail, subj };
+};
+
+const ratingRequestMail = (req) => {
+  const { userEmail, name, orderId } = req;
+  const mail = {
+    body: {
+      title: `Hi, ${name}! We need your feedback`,
+      action: {
+        instructions: "Please, follow the link below to rate the master's work",
+        button: {
+          color: "#3f51b5",
+          text: "Go to Rating",
+          link: `${url}/orderRate/${orderId}`,
+        },
+      },
+      outro: "Thanks for choosing us!",
+    },
+  };
+  const subj = "We need your feedback!";
+  return { mail, userEmail, subj };
+};
+
 // const newAdminPassword = async (req, res) => {
 // 	const {name, password} = req.body;
 // 	const saltRound = 10;
@@ -65,4 +128,11 @@ const auth = async (req, res) => {
 // }
 // const stayAuth = (req, res) => res.json(true)
 
-module.exports = { findMasters, upsertCustomer, auth };
+module.exports = {
+  findMasters,
+  upsertCustomer,
+  auth,
+  confirmingMail,
+  ratingRequestMail,
+  addNewOrder,
+};

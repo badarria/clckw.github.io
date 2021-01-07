@@ -12,6 +12,7 @@ export const initState = {
   },
   freeMasters: [],
   newOrder: {},
+  mailData: {},
   toast: { type: "success", msg: "" },
   loading: false,
   isAuth: false,
@@ -31,7 +32,17 @@ const homeReducer = createSlice({
       state.freeMasters = action.payload;
     },
     setNewOrder: (state, action) => {
-      state.newOrder = action.payload;
+      if (!Object.keys(action.payload).length) {
+        state.newOrder = {};
+      } else {
+        state.newOrder = {
+          ...state.newOrder,
+          ...action.payload,
+        };
+      }
+    },
+    setMailData: (state, action) => {
+      state.mailData = { ...state.mailData, ...action.payload };
     },
     setAuth: (state, action) => {
       state.isAuth = action.payload;
@@ -54,4 +65,5 @@ export const {
   setNewOrder,
   setToastMsg,
   setLoader,
+  setMailData,
 } = homeReducer.actions;

@@ -1,4 +1,5 @@
 const pool = require("../../db");
+const transporter = require("nodemailer");
 
 const getOrderToRate = async (req, res) => {
   const { orderId } = req.params;

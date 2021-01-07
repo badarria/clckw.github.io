@@ -11,7 +11,7 @@ const config = {
     mailing: {
       password: process.env.MAIL_PASSWORD,
       email: process.env.MAIL_ADRESS,
-      baseUrl: "https://test-clckw.herokuapp.com/",
+      baseUrl: "https://test-clckw.herokuapp.com",
     },
   },
   development: {
@@ -20,7 +20,7 @@ const config = {
     mailing: {
       password: process.env.MAIL_PASSWORD,
       email: process.env.MAIL_ADRESS,
-      baseUrl: "http://localhost:3000/",
+      baseUrl: "http://localhost:3000",
     },
   },
   jwt: process.env.JWT_SECRET,

@@ -44,7 +44,7 @@ export const createTableReducers = (subj) => {
         state.loading = action.payload;
       },
       [`set${subj}Paging`]: (state, action) => {
-        state.paging = action.payload;
+        state.paging = { ...state.paging, ...action.payload };
       },
     },
   });

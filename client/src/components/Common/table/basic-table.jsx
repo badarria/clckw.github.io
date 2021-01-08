@@ -1,20 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Paper,
   Table,
   TableBody,
-  TableCell,
   TableContainer,
   TableFooter,
   TableHead,
-  TablePagination,
   TableRow,
   Box,
 } from "@material-ui/core";
 import BasicTableList from "./basic-table-list";
 import { Toast } from "../toast";
 import { useTableStyles } from "../../styles/styles";
-import { Pagination } from "./pagination";
 
 export const BasicTable = (props) => {
   const {
@@ -45,17 +42,9 @@ export const BasicTable = (props) => {
               editState={editState}
               columns={columns}
             />
-            {/*{emptyRows > 0 && (*/}
-            {/*	<TableRow style={{height: 53 * emptyRows}}>*/}
-            {/*		<TableCell component='td'/>*/}
-            {/*	</TableRow>*/}
-            {/*)}*/}
           </TableBody>
           <TableFooter>
-            <TableRow>
-              {pagination}
-              {/*<Pagination {...paginationProps}/>*/}
-            </TableRow>
+            <TableRow>{pagination}</TableRow>
           </TableFooter>
         </Table>
       </TableContainer>

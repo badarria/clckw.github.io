@@ -10,10 +10,7 @@ const BasicTableHead = (props) => {
 
   const createSortHandler = (prop) => (event) => {
     const isAsc = orderby === prop && order === "asc";
-    const data = [
-      ["order", isAsc ? "desc" : "asc"],
-      ["orderby", prop],
-    ];
+    const data = { order: isAsc ? "desc" : "asc", orderby: prop };
     setChange(data);
   };
 

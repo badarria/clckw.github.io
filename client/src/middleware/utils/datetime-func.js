@@ -25,6 +25,9 @@ const _findBookedTime = (orders) => {
   }, []);
 };
 
+export const toFormat = (str) =>
+  DateTime.fromISO(str).toFormat("EEE dd.MM.yy HH:mm");
+
 export const getHoursArray = (
   service_time,
   orders = [],

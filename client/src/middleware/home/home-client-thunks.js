@@ -3,19 +3,17 @@ import {
   getCustomer,
   getFreeMasters,
   loginUser,
-  sendConfirmLetter,
 } from "./home-requests";
-import { addItem, getItems } from "../admin/admin-requests";
+import { getItems } from "../admin/admin-requests";
 import {
   setFormData,
   setAuth,
   setFreeMasters,
   setWorkingHours,
-  setNewOrder,
   setLoader,
   setMailData,
 } from "../../redux/home-reducer";
-import { dateToRequest, getHoursArray } from "../utils/datetime-func";
+import { getHoursArray, toFormat } from "../utils/datetime-func";
 import { mergeWithForeignKeys } from "../utils/table-func";
 import {
   _getAdminInitState,
@@ -75,7 +73,7 @@ export const processData = (data) => async (dispatch) => {
       name,
       userEmail: email,
       city,
-      begin,
+      begin: toFormat(begin),
       service: service.name,
     };
     dispatch(_setOrderData(orderData));

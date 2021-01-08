@@ -8,8 +8,7 @@ import {
 export const setRating = (data) => async (dispatch) => {
   const { orderId } = data;
   const result = await setOrderRating(data);
-  const msg =
-    result === orderId ? "Order has been successful rated!" : result.msg;
+  const msg = result === orderId ? "Order successfully rated!" : result.msg;
   dispatch(
     setStatus({
       rated: true,

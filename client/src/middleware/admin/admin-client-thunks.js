@@ -22,14 +22,13 @@ import {
   _setItems,
 } from "../middleware-thunks";
 
-export const removeFromDB = (subj, id) => async (dispatch, getState) => {
+export const removeFromDB = (subj, id) => async (dispatch) => {
   dispatch(setLoadingAction(subj, true));
   const res = await removeItem(id, subj);
   dispatch(setLoadingAction(subj, false));
   _setAdminPageToastMsg(subj, res, dispatch);
   if (res.type === "success") {
-    const data = getState()[subj].paging;
-    dispatch(_setItems(subj, data));
+    dispatch(_setItems(subj));
   }
 };
 
@@ -68,9 +67,8 @@ export const accept = (subj, data) => async (dispatch, getState) => {
       ? await updateItem(data, subj)
       : await addItem(data, subj);
   if (res) {
-    const data = getState()[subj].paging;
     await dispatch(cancelInput(subj, dispatch));
-    await dispatch(_setItems(subj, data));
+    await dispatch(_setItems(subj));
     _setAdminPageToastMsg(subj, res, dispatch);
   }
   dispatch(setLoadingAction(subj, false));
@@ -81,13 +79,9 @@ export const changeFreeHours = (subj, data) => async (dispatch) => {
   dispatch(changeOrdersHoursAction(subj, newHours));
 };
 
-export const changePaging = (subj, opt) => async (dispatch, getState) => {
+export const changePaging = (subj, opt) => async (dispatch) => {
   dispatch(setLoadingAction(subj, true));
-  const options = { ...getState()[subj].paging };
-  opt.forEach(([key, value]) => {
-    options[key] = value;
-  });
-  dispatch(setPagingAction(subj, options));
+  dispatch(setPagingAction(subj, opt));
   await dispatch(_setItems(subj));
   dispatch(setLoadingAction(subj, false));
 };

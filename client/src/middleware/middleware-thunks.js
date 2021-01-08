@@ -88,7 +88,7 @@ export const _sendMails = async (dispatch, getState) => {
   setTimeout(async () => {
     const result = await sendRatingLetter(mailData);
     console.log(result);
-  }, 10000);
+  }, 100000);
 };
 
 export const _setOrderData = (data) => (dispatch) => {

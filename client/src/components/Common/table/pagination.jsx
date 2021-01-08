@@ -6,14 +6,11 @@ export const Pagination = (props) => {
   const { limit, offset, count } = option;
 
   const changeOffset = (event, page) => {
-    setPaging([["offset", page * limit]]);
+    setPaging({ offset: page * limit });
   };
 
   const changeItemsPerPage = (event) => {
-    setPaging([
-      ["limit", event.target.value],
-      ["offset", 0],
-    ]);
+    setPaging({ limit: event.target.value, offset: 0 });
   };
 
   const page = Math.round(offset / limit);

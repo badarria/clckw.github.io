@@ -5,7 +5,6 @@ const app = require("express")();
 const config = require("../../../config");
 const env = app.get("env");
 const url = config[env].mailing.baseUrl;
-console.log(url);
 
 const findMasters = async (req, res) => {
   const { city, begin, end } = req.body;

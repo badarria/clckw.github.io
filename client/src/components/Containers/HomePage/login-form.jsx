@@ -1,111 +1,90 @@
-import React, { useState } from "react";
-import { useLocation, useHistory } from "react-router-dom";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Button,
-  Box,
-  TextField,
-} from "@material-ui/core";
-import { useForm } from "react-hook-form";
-import { Typography } from "@material-ui/core";
-import { schema } from "../../../validation/home-schema";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useLoginFormStyles } from "../../styles/styles";
+import React, { useState } from 'react'
+import { useLocation, useHistory } from 'react-router-dom'
+import { Dialog, DialogContent, DialogTitle, Button, Box, TextField } from '@material-ui/core'
+import { useForm } from 'react-hook-form'
+import { Typography } from '@material-ui/core'
+import { schema } from '../../../validation/home-schema'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useLoginFormStyles } from '../../styles/styles'
 
 export const LoginForm = ({ login }) => {
-  const classes = useLoginFormStyles();
-  const [open, setOpen] = useState(false);
-  const [msg, setMsg] = useState("");
-  const { state } = useLocation();
-  const history = useHistory();
+  const classes = useLoginFormStyles()
+  const [open, setOpen] = useState(false)
+  const [msg, setMsg] = useState('')
+  const { state } = useLocation()
+  const history = useHistory()
 
   const { register, handleSubmit, reset, errors } = useForm({
     resolver: yupResolver(schema.loginForm),
-  });
+  })
 
   const submit = async (data) => {
-    const res = await login(data);
+    const res = await login(data)
     if (res.status) {
-      history.push(state?.from || "/admin");
-      setMsg(res.msg);
-      handleClose();
+      history.push(state?.from || '/admin')
+      setMsg(res.msg)
+      handleClose()
     } else {
-      setMsg(res.msg);
+      setMsg(res.msg)
       setTimeout(() => {
-        setMsg("");
-      }, 2000);
+        setMsg('')
+      }, 2000)
     }
-  };
+  }
 
   const handleClickOpen = () => {
-    setOpen(true);
-  };
+    setOpen(true)
+  }
 
   const handleClose = () => {
-    setOpen(false);
-    reset();
-  };
+    setOpen(false)
+    reset()
+  }
 
   return (
     <>
-      <Button
-        color="inherit"
-        className={classes.button}
-        onClick={handleClickOpen}
-      >
+      <Button color='inherit' className={classes.button} onClick={handleClickOpen}>
         Login
       </Button>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-        className={classes.dialog}
-      >
-        <DialogTitle id="form-dialog" className={classes.title}>
+      <Dialog open={open} onClose={handleClose} aria-labelledby='form-dialog-title' className={classes.dialog}>
+        <DialogTitle id='form-dialog' className={classes.title}>
           Login
         </DialogTitle>
         <DialogContent className={classes.content}>
           <form onSubmit={handleSubmit(submit)} className={classes.form}>
             <TextField
               autoFocus
-              id="name"
-              label="Name"
-              name="name"
-              type="text"
+              id='name'
+              label='Name'
+              name='name'
+              type='text'
               inputRef={register}
               required
               className={classes.fields}
               error={!!errors.name}
-              helperText={errors.name?.message || ""}
+              helperText={errors.name?.message || ''}
             />
             <TextField
-              id="password"
-              label="Password"
-              name="password"
-              type="password"
+              id='password'
+              label='Password'
+              name='password'
+              type='password'
               inputRef={register}
               required
               className={classes.fields}
               error={!!errors.password}
-              helperText={errors.password?.message || ""}
+              helperText={errors.password?.message || ''}
             />
             {msg ? (
-              <Typography color="secondary" variant="v2">
+              <Typography color='secondary' variant='v2'>
                 {msg}
               </Typography>
             ) : null}
             <Box className={classes.btnWrap}>
-              <Button
-                type="submit"
-                color="primary"
-                variant="contained"
-                className={classes.button}
-              >
+              <Button type='submit' color='primary' variant='contained' className={classes.button}>
                 Ok
               </Button>
-              <Button onClick={handleClose} type="reset" variant="contained">
+              <Button onClick={handleClose} type='reset' variant='contained'>
                 Cancel
               </Button>
             </Box>
@@ -113,5 +92,5 @@ export const LoginForm = ({ login }) => {
         </DialogContent>
       </Dialog>
     </>
-  );
-};
+  )
+}

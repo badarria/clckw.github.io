@@ -1,25 +1,25 @@
-const express = require("express");
-const app = express();
-const cors = require("cors");
-const routes = require("./server/routes");
-const path = require("path");
-const config = require("./config");
-const env = app.get("env");
+const express = require('express')
+const app = express()
+const cors = require('cors')
+const routes = require('./server/routes')
+const path = require('path')
+const config = require('./config')
+const env = app.get('env')
 
-const PORT = config[env].port;
+const PORT = config.port
 
-app.use(cors());
-app.use(express.json());
-app.use("/", routes);
+app.use(cors())
+app.use(express.json())
+app.use('/', routes)
 
-if (env === "production") {
-  app.use(config[env].app);
+if (env === 'production') {
+  app.use(config.app)
 }
 
-app.get("*", function (req, res) {
-  res.sendFile(path.join(__dirname, "client/build", "index.html"));
-});
+app.get('*', function (req, res) {
+  res.sendFile(path.join(__dirname, 'client/build', 'index.html'))
+})
 
 app.listen(PORT, () => {
-  console.log(`Server has started on port ${PORT}..`);
-});
+  console.log(`Server has started on port ${PORT}..`)
+})

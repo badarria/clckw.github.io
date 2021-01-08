@@ -1,19 +1,17 @@
-const jwt = require("jsonwebtoken");
-const config = require("../../config");
+const jwt = require('jsonwebtoken')
+const config = require('../../config')
 
 module.exports = async (req, res, next) => {
   try {
-    const jwtToken = req.header("token");
-
+    const jwtToken = req.header('token')
     if (!jwtToken) {
-      return res.status(403).json("Not Authorize");
+      return res.status(403).json('Not Authorize')
     }
-    const payload = jwt.verify(jwtToken, config.jwt);
-
-    req.user = payload.user;
-    next();
+    const payload = jwt.verify(jwtToken, config.jwt)
+    req.user = payload.user
+    next()
   } catch (err) {
-    console.error(err.message);
-    return res.status(403).json("Not Authorize");
+    console.error(err.message)
+    return res.status(403).json('Not Authorize')
   }
-};
+}

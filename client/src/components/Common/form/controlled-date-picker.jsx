@@ -1,19 +1,16 @@
-import React from "react";
-import {
-  KeyboardDatePicker,
-  MuiPickersUtilsProvider,
-} from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
-import { Controller } from "react-hook-form";
-import { usePickerStyles } from "../../styles/styles";
+import React from 'react'
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import DateFnsUtils from '@date-io/date-fns'
+import { Controller } from 'react-hook-form'
+import { usePickerStyles } from '../../styles/styles'
 
 export const ControlledDatePicker = (props) => {
-  const { control } = props;
-  const classes = usePickerStyles();
+  const { control } = props
+  const classes = usePickerStyles()
 
   return (
     <Controller
-      name="date"
+      name='date'
       control={control}
       render={({ onChange, value }) => (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -23,12 +20,12 @@ export const ControlledDatePicker = (props) => {
             required
             onChange={(data) => onChange(data)}
             value={value}
-            variant="inline"
+            variant='inline'
             autoOk
-            format="dd/MM/yy"
-            margin="normal"
-            id="date-picker"
-            label="Select day"
+            format='dd/MM/yy'
+            margin='normal'
+            id='date-picker'
+            label='Select day'
             disablePast
             inputProps={{ className: classes.input }}
             {...props}
@@ -36,5 +33,5 @@ export const ControlledDatePicker = (props) => {
         </MuiPickersUtilsProvider>
       )}
     />
-  );
-};
+  )
+}

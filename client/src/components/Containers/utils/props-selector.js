@@ -6,7 +6,7 @@ import {
   getItemsState,
   getLoadingState,
   getPagingState,
-} from "../../../middleware/state-selectors";
+} from '../../../middleware/state-selectors'
 import {
   accept,
   cancelInput,
@@ -14,7 +14,7 @@ import {
   changePaging,
   pushToChange,
   removeFromDB,
-} from "../../../middleware/admin/admin-client-thunks";
+} from '../../../middleware/admin/admin-client-thunks'
 
 export const containerStateProps = (subj) => (state) => {
   return {
@@ -25,8 +25,8 @@ export const containerStateProps = (subj) => (state) => {
     toast: getToastMsgState(subj, state),
     loading: getLoadingState(subj, state),
     paging: getPagingState(subj, state),
-  };
-};
+  }
+}
 
 export const containerDispatchProps = (subj, getKeys = false) => (dispatch) => {
   return {
@@ -35,22 +35,19 @@ export const containerDispatchProps = (subj, getKeys = false) => (dispatch) => {
     handleReset: () => dispatch(cancelInput(subj)),
     accept: (data) => dispatch(accept(subj, data)),
     setPaging: (data) => dispatch(changePaging(subj, data)),
-  };
-};
+  }
+}
 
 export const formStateProps = (subj) => (state) => {
   return {
     data: getDataState(subj, state),
-  };
-};
+  }
+}
 
 export const formDispatchProps = (subj) => (dispatch) => {
   return {
     handleReset: () => dispatch(cancelInput(subj)),
     accept: (data) => dispatch(accept(subj, data)),
-    changeHours:
-      subj === "orders"
-        ? (data) => dispatch(changeFreeHours(subj, data))
-        : null,
-  };
-};
+    changeHours: subj === 'orders' ? (data) => dispatch(changeFreeHours(subj, data)) : null,
+  }
+}

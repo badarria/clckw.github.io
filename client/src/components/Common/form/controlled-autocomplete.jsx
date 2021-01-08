@@ -1,12 +1,12 @@
-import React from "react";
-import { TextField } from "@material-ui/core";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import { Controller } from "react-hook-form";
-import { useAutocompleteStyles } from "../../styles/styles";
+import React from 'react'
+import { TextField } from '@material-ui/core'
+import Autocomplete from '@material-ui/lab/Autocomplete'
+import { Controller } from 'react-hook-form'
+import { useAutocompleteStyles } from '../../styles/styles'
 
 export const ControlledAutocomplete = (props) => {
-  const { data, control, name, defaultValue } = props;
-  const classes = useAutocompleteStyles();
+  const { data, control, name, defaultValue } = props
+  const classes = useAutocompleteStyles()
 
   return (
     <Controller
@@ -27,7 +27,7 @@ export const ControlledAutocomplete = (props) => {
             <TextField
               {...params}
               label={name}
-              autoComplete="nope"
+              autoComplete='nope'
               InputLabelProps={{ className: classes.label }}
               required
               inputRef={ref}
@@ -37,5 +37,5 @@ export const ControlledAutocomplete = (props) => {
         />
       )}
     />
-  );
-};
+  )
+}

@@ -1,8 +1,7 @@
-const pool = require("../../db");
-const transporter = require("nodemailer");
+const pool = require('../../db')
 
 const getOrderToRate = async (req, res) => {
-  const { orderId } = req.params;
+  const { orderId } = req.params
 
   const order = await pool.any(
     `SELECT o.id, 
@@ -12,19 +11,19 @@ const getOrderToRate = async (req, res) => {
            LEFT JOIN customers c ON o.customer = c.id
            WHERE o.id=$1`,
     orderId
-  );
-  return res.json(order);
-};
+  )
+  return res.json(order)
+}
 
 const setOrderRating = async (req, res) => {
-  const { orderId, rating } = req.body;
+  const { orderId, rating } = req.body
   const result = await pool.any(
     `UPDATE orders SET rating=$1
            WHERE id=$2 RETURNING id`,
     [rating, orderId]
-  );
+  )
 
-  return res.json(result[0]?.id || null);
-};
+  return res.json(result[0]?.id || null)
+}
 
-module.exports = { getOrderToRate, setOrderRating };
+module.exports = { getOrderToRate, setOrderRating }

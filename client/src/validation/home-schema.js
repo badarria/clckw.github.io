@@ -1,12 +1,12 @@
-import * as yup from "yup";
-const schema = {};
+import * as yup from 'yup'
+const schema = {}
 
 const name = yup
   .string()
-  .matches(/^[a-z -]+$/gi, "Incorrect symbols")
-  .min(2, "At least 2 characters")
-  .max(20, "Max 20 characters")
-  .required();
+  .matches(/^[a-z -]+$/gi, 'Incorrect symbols')
+  .min(2, 'At least 2 characters')
+  .max(20, 'Max 20 characters')
+  .required()
 
 schema.form = yup.object().shape({
   city: yup.object().shape({
@@ -16,11 +16,7 @@ schema.form = yup.object().shape({
   service: yup.object().shape({
     id: yup.number().required(),
     name: yup.string().trim().required(),
-    time: yup
-      .number()
-      .min(1, "At least 1 hour")
-      .max(8, "Not over than 8 hours")
-      .required(),
+    time: yup.number().min(1, 'At least 1 hour').max(8, 'Not over than 8 hours').required(),
   }),
   date: yup.date().required(),
   hours: yup
@@ -29,12 +25,12 @@ schema.form = yup.object().shape({
     .required(),
   name: name,
   surname: name,
-  email: yup.string().email("Enter correct email").required(),
-});
+  email: yup.string().email('Enter correct email').required(),
+})
 
 schema.loginForm = yup.object().shape({
   name: name,
-  password: yup.string().min(5, "Min 5 symbols").required(),
-});
+  password: yup.string().min(5, 'Min 5 symbols').required(),
+})
 
-export { schema };
+export { schema }

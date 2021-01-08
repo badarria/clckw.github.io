@@ -1,8 +1,8 @@
-import { IconButton, Tooltip } from "@material-ui/core";
-import React from "react";
+import { IconButton, Tooltip } from '@material-ui/core'
+import React from 'react'
 
 export const ButtonIcon = (props) => {
-  const { title, icon, onClick, disabled = false, type = "button" } = props;
+  const { title, icon, onClick, disabled = false, type = 'button' } = props
 
   return (
     <Tooltip title={title}>
@@ -12,5 +12,5 @@ export const ButtonIcon = (props) => {
         </IconButton>
       </span>
     </Tooltip>
-  );
-};
+  )
+}

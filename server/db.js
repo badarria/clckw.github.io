@@ -1,10 +1,10 @@
-const pgp = require("pg-promise")({});
-const app = require("express")();
-const config = require("../config");
-const env = app.get("env");
+const pgp = require('pg-promise')({})
 
-const connectionString = config[env].db;
+const config = require('../config')
+// const env = app.get('env')
 
-const pool = pgp(connectionString);
+const connectionString = config.db
 
-module.exports = pool;
+const pool = pgp(connectionString)
+
+module.exports = pool

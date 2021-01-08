@@ -1,17 +1,14 @@
-const pool = require("../../db");
-const bcrypt = require("bcrypt");
-const jwtGenerator = require("../../utils/jwtGenerator");
-const app = require("express")();
-const config = require("../../../config");
-const env = app.get("env");
-const url = config[env].mailing.baseUrl;
+const pool = require('../../db')
+const bcrypt = require('bcrypt')
+const jwtGenerator = require('../../utils/jwtGenerator')
+const config = require('../../../config')
+const url = config.mailing.baseUrl
 
 const findMasters = async (req, res) => {
-  const { city, begin, end } = req.body;
+  const { city, begin, end } = req.body
   const find = await pool.any(
     `WITH excepted_masters as (
-       SELECT
-       m.id, m.name, m.surname FROM masters m where m.city=$1
+       SELECT m.id, m.name, m.surname FROM masters m where m.city=$1
        EXCEPT
        select o.master, m.name, m.surname
        FROM orders o JOIN masters m
@@ -25,96 +22,89 @@ const findMasters = async (req, res) => {
     LEFT JOIN orders o ON em.id=o.master
     GROUP BY em.id, em.name, em.surname`,
     [city, begin, end]
-  );
-  return res.json(find);
-};
+  )
+  return res.json(find)
+}
 
 const upsertCustomer = async (req, res) => {
-  const { email, name, surname } = req.body;
+  const { email, name, surname } = req.body
   const id = await pool.query(
     `INSERT INTO customers
-                    (name, surname, email)
-                    VALUES($1, $2, $3)
-                    ON CONFLICT (email)
-                    DO UPDATE SET name=$1, surname=$2
-                    WHERE customers.email=$3
-                    Returning id`,
+           (name, surname, email)
+           VALUES($1, $2, $3)
+           ON CONFLICT (email)
+           DO UPDATE SET name=$1, surname=$2
+           WHERE customers.email=$3
+           Returning id`,
     [name, surname, email]
-  );
-  return res.json(id[0].id);
-};
+  )
+  return res.json(id[0].id)
+}
 
 const addNewOrder = async (req, res) => {
-  const { master, customer, service, begin, end } = req.body;
+  const { master, customer, service, begin, end } = req.body
   const id = await pool.any(
     `INSERT
         INTO orders(master, customer, service, beginAt, endAt)
         VALUES($1, $2, $3, $4, $5)
         RETURNING id`,
     [master, customer, service, begin, end]
-  );
+  )
   res.json({
     id: id[0].id,
-    msg: "Your order is accepted. We will send you a mail with details",
-  });
-};
+    msg: 'Your order is accepted. We will send you a mail with details',
+  })
+}
 
 const auth = async (req, res) => {
-  const { name, password } = req.body;
-  const user = await pool.query("SELECT * FROM admin WHERE name = $1", [name]);
+  const { name, password } = req.body
+  const user = await pool.query('SELECT * FROM admin WHERE name = $1', [name])
   if (user.length === 0) {
-    return res.status(401).json("Password or name is incorrect");
+    return res.status(401).json('Password or name is incorrect')
   }
-  const isValidPassword = await bcrypt.compare(password, user[0].password);
+  const isValidPassword = await bcrypt.compare(password, user[0].password)
   if (!isValidPassword) {
-    return res.status(401).json("Password or name is incorrect");
+    return res.status(401).json('Password or name is incorrect')
   }
-  const token = jwtGenerator(user[0].id);
-  return res.json({ token });
-};
+  const token = jwtGenerator(user[0].id)
+  return res.json({ token })
+}
 
 const confirmingMail = (req) => {
-  const { userEmail, name, begin, city, service, master } = req;
+  const { userEmail, name, begin, city, service, master } = req
   const mail = {
     body: {
       name,
-      intro: "Your order details:",
+      intro: 'Your order details:',
       table: {
-        data: [
-          {
-            "Order date": begin,
-            City: city,
-            "Your master": master,
-            "Size of clock": service,
-          },
-        ],
+        data: [{ 'Order date': begin, City: city, 'Your master': master, 'Size of clock': service }],
       },
-      outro: "Thanks for choosing us!",
+      outro: 'Thanks for choosing us!',
     },
-  };
-  const subj = "Your order has been processed successfully";
-  return { mail, userEmail, subj };
-};
+  }
+  const subj = 'Your order has been processed successfully'
+  return { mail, userEmail, subj }
+}
 
 const ratingRequestMail = (req) => {
-  const { userEmail, name, orderId } = req;
+  const { userEmail, name, orderId } = req
   const mail = {
     body: {
       title: `Hi, ${name}! We need your feedback`,
       action: {
         instructions: "Please, follow the link below to rate the master's work",
         button: {
-          color: "#3f51b5",
-          text: "Go to Rating",
+          color: '#3f51b5',
+          text: 'Go to Rating',
           link: `${url}/orderRate/${orderId}`,
         },
       },
-      outro: "Thanks for choosing us!",
+      outro: 'Thanks for choosing us!',
     },
-  };
-  const subj = "We need your feedback!";
-  return { mail, userEmail, subj };
-};
+  }
+  const subj = 'We need your feedback!'
+  return { mail, userEmail, subj }
+}
 
 // const newAdminPassword = async (req, res) => {
 // 	const {name, password} = req.body;
@@ -134,4 +124,4 @@ module.exports = {
   confirmingMail,
   ratingRequestMail,
   addNewOrder,
-};
+}

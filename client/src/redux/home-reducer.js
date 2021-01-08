@@ -1,62 +1,59 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit'
 
 export const initState = {
   formData: {
-    name: "",
-    surname: "",
-    email: "",
-    city: "",
-    service: "",
-    date: "",
-    hours: "",
+    name: '',
+    surname: '',
+    email: '',
+    city: '',
+    service: '',
+    date: '',
+    hours: '',
   },
   freeMasters: [],
   newOrder: {},
   mailData: {},
-  toast: { type: "success", msg: "" },
+  toast: { type: 'success', msg: '' },
   loading: false,
   isAuth: false,
-};
+}
 
 const homeReducer = createSlice({
-  name: "home",
+  name: 'home',
   initialState: initState,
   reducers: {
     setFormData: (state, action) => {
-      state.formData = action.payload;
+      state.formData = action.payload
     },
     setWorkingHours: (state, action) => {
-      state.formData.hours = action.payload;
+      state.formData.hours = action.payload
     },
     setFreeMasters: (state, action) => {
-      state.freeMasters = action.payload;
+      state.freeMasters = action.payload
     },
     setNewOrder: (state, action) => {
       if (!Object.keys(action.payload).length) {
-        state.newOrder = {};
+        state.newOrder = {}
       } else {
-        state.newOrder = {
-          ...state.newOrder,
-          ...action.payload,
-        };
+        state.newOrder = { ...state.newOrder, ...action.payload }
       }
     },
     setMailData: (state, action) => {
-      state.mailData = { ...state.mailData, ...action.payload };
+      state.mailData = { ...state.mailData, ...action.payload }
     },
     setAuth: (state, action) => {
-      state.isAuth = action.payload;
+      state.isAuth = action.payload
     },
     setToastMsg: (state, action) => {
-      state.toast = action.payload;
+      state.toast = action.payload
     },
     setLoader: (state, action) => {
-      state.loading = action.payload;
+      state.loading = action.payload
     },
   },
-});
+})
 
-export const { reducer } = homeReducer;
+export const { reducer } = homeReducer
 export const {
   setFormData,
   setAuth,
@@ -66,4 +63,4 @@ export const {
   setToastMsg,
   setLoader,
   setMailData,
-} = homeReducer.actions;
+} = homeReducer.actions

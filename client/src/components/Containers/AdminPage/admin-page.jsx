@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Box, Container } from '@material-ui/core'
 import HorizontalTabs from '../../Common/horizontal-tabs'
 import Customers from './Customers/customers-container'
@@ -7,9 +7,15 @@ import Masters from './Masters/masters-container'
 import ServicesContainer from './Services/services-container'
 import OrdersContainer from './Orders/orders-container'
 import { useAdminStyles } from '../../styles/styles'
+import { acceptOrder, stayAuth } from '../../../middleware/home/home-client-thunks'
+import { compose } from 'redux'
+import { connect } from 'react-redux'
 
-export const AdminPage = () => {
+const AdminPage = ({ stayAuth }) => {
   const classes = useAdminStyles()
+  useEffect(() => {
+    stayAuth()
+  }, [])
 
   return (
     <Container className={classes.container}>
@@ -25,3 +31,11 @@ export const AdminPage = () => {
     </Container>
   )
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    stayAuth: () => dispatch(stayAuth),
+  }
+}
+
+export default compose(connect(null, mapDispatchToProps))(AdminPage)

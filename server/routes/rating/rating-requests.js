@@ -1,8 +1,9 @@
 const pool = require('../../db')
+const { jwtDecode } = require('../../utils/jwtGenerator')
 
 const getOrderToRate = async (req, res) => {
   const { orderId } = req.params
-
+  const id = jwtDecode(orderId)
   const order = await pool.any(
     `SELECT o.id, 
            c.name || ' ' || c.surname as customer,
@@ -10,7 +11,7 @@ const getOrderToRate = async (req, res) => {
            FROM orders o
            LEFT JOIN customers c ON o.customer = c.id
            WHERE o.id=$1`,
-    orderId
+    id
   )
   return res.json(order)
 }

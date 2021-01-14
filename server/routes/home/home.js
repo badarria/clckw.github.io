@@ -1,4 +1,13 @@
-const { findMasters, upsertCustomer, auth, confirmingMail, addNewOrder, ratingRequestMail } = require('./home-requests')
+const {
+  findMasters,
+  upsertCustomer,
+  auth,
+  confirmingMail,
+  stayAuth,
+  addNewOrder,
+  ratingRequestMail,
+} = require('./home-requests')
+const authorization = require('../../middleware/authorization')
 const router = require('express').Router()
 const { masters, customer, loginForm, order } = require('../../validation/schemes/home-schema')
 const validator = require('../../validation/validator')
@@ -11,7 +20,6 @@ router.post('/auth', validator(loginForm), dbTryCatch(auth))
 router.post('/newOrder', validator(order), dbTryCatch(addNewOrder))
 router.post('/confirm', createMail(confirmingMail), sendMail())
 router.post('/rating', createMail(ratingRequestMail), sendMail())
-// router.get("/auth/verify", authorization, dbTryCatch(stayAuth))
-// router.post("/auth/new", dbTryCatch(newAdminPassword))
+router.get('/verify/:token', authorization, dbTryCatch(stayAuth))
 
 module.exports = router

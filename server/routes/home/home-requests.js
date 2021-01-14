@@ -1,6 +1,6 @@
 const pool = require('../../db')
 const bcrypt = require('bcrypt')
-const jwtGenerator = require('../../utils/jwtGenerator')
+const { jwtGenerator } = require('../../utils/jwtGenerator')
 const config = require('../../../config')
 const url = config.mailing.baseUrl
 
@@ -88,6 +88,7 @@ const confirmingMail = (req) => {
 
 const ratingRequestMail = (req) => {
   const { userEmail, name, orderId } = req
+  const tokenId = jwtGenerator(orderId)
   const mail = {
     body: {
       title: `Hi, ${name}! We need your feedback`,
@@ -96,7 +97,7 @@ const ratingRequestMail = (req) => {
         button: {
           color: '#3f51b5',
           text: 'Go to Rating',
-          link: `${url}/orderRate/${orderId}`,
+          link: `${url}/orderRate/${tokenId}`,
         },
       },
       outro: 'Thanks for choosing us!',
@@ -107,21 +108,31 @@ const ratingRequestMail = (req) => {
 }
 
 // const newAdminPassword = async (req, res) => {
-// 	const {name, password} = req.body;
-// 	const saltRound = 10;
-// 	const salt = await bcrypt.genSalt(saltRound);
-// 	const bcryptPassword = await bcrypt.hash(password, salt);
-// 	const newUser = await pool.query("INSERT INTO admin (name, password) VALUES ($1, $2) RETURNING *", [name, bcryptPassword])
-// 	const token = jwtGenerator(newUser.rows[0].id);
-// 	return res.json({token})
+//   const { name, password } = req.body
+//   const saltRound = 10
+//   const salt = await bcrypt.genSalt(saltRound)
+//   const bcryptPassword = await bcrypt.hash(password, salt)
+//   const newUser = await pool.query('INSERT INTO admin (name, password) VALUES ($1, $2) RETURNING *', [
+//     name,
+//     bcryptPassword,
+//   ])
+//   const token = jwtGenerator(newUser.rows[0].id)
+//   return res.json({ token })
 // }
-// const stayAuth = (req, res) => res.json(true)
+
+const stayAuth = async (req, res) => {
+  const user = await pool.query(`SELECT id FROM admin WHERE id = $1`, [req.body])
+  if (user[0].id === req.body) {
+    res.json(true)
+  } else res.json(false)
+}
 
 module.exports = {
   findMasters,
   upsertCustomer,
   auth,
+  addNewOrder,
+  stayAuth,
   confirmingMail,
   ratingRequestMail,
-  addNewOrder,
 }

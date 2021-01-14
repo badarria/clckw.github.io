@@ -1,14 +1,9 @@
-const jwt = require('jsonwebtoken')
-const config = require('../../config')
+const { jwtDecode } = require('../utils/jwtGenerator')
 
 module.exports = async (req, res, next) => {
   try {
-    const jwtToken = req.header('token')
-    if (!jwtToken) {
-      return res.status(403).json('Not Authorize')
-    }
-    const payload = jwt.verify(jwtToken, config.jwt)
-    req.user = payload.user
+    const { token } = req.params
+    req.body = jwtDecode(token)
     next()
   } catch (err) {
     console.error(err.message)

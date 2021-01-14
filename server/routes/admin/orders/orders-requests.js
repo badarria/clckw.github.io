@@ -32,6 +32,7 @@ const getList = async (req, res) => {
            m.name || ' ' || m.surname as master,
            c.name || ' ' || c.surname as customer,
            ci.name as city,
+           o.rating as rating,
            to_char(o.beginAt, 'dy DD/MM/YYYY') as date,
            to_char(o.beginAt, 'HH24:MI') as begin,
            to_char(o.endAt, 'HH24:MI') as end

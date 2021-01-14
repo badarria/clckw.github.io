@@ -1,4 +1,4 @@
-import { addNewOrder, getCustomer, getFreeMasters, loginUser } from './home-requests'
+import { addNewOrder, checkAuth, getCustomer, getFreeMasters, loginUser } from './home-requests'
 import { getItems } from '../admin/admin-requests'
 import { setFormData, setAuth, setFreeMasters, setWorkingHours, setLoader, setMailData } from '../../redux/home-reducer'
 import { getHoursArray, toFormat } from '../utils/datetime-func'
@@ -106,6 +106,20 @@ export const login = (data) => async (dispatch) => {
   }
 }
 
+export const stayAuth = async (dispatch) => {
+  const token = localStorage.getItem('token')
+  if (token) {
+    dispatch(setLoader(true))
+    const isAuth = await checkAuth(token)
+    if (isAuth === true) {
+      dispatch(setAuth(true))
+      await dispatch(_getAdminInitState)
+    } else {
+      dispatch(logout)
+    }
+    dispatch(setLoader(false))
+  }
+}
 export const logout = (dispatch) => {
   localStorage.removeItem('token')
   dispatch(setAuth(false))

@@ -60,9 +60,15 @@ const _sendRatingLetter = async (data) => {
   return res.json()
 }
 
+const _checkAuth = async (token) => {
+  const res = await fetch(`${homePath}/verify/${token}`)
+  return res.json()
+}
+
 export const getFreeMasters = async (data) => _wrapTryCatch(_getMasters(data))
 export const getCustomer = async (data) => _wrapTryCatch(_upsertCustomer(data))
 export const loginUser = async (data) => _wrapTryCatch(_login(data))
 export const addNewOrder = async (data) => _wrapTryCatch(_addNewOrder(data))
 export const sendConfirmLetter = async (data) => _wrapTryCatch(_sendConfirmLetter(data))
 export const sendRatingLetter = async (data) => _wrapTryCatch(_sendRatingLetter(data))
+export const checkAuth = async (token) => _wrapTryCatch(_checkAuth(token))

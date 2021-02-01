@@ -1,17 +1,10 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { FieldsGenerator, TableForm } from '../../../ui'
-import { compose } from 'redux'
-import { connect } from 'react-redux'
-import { formDispatchProps, formStateProps } from '../props-selector'
+import { FieldsGenerator, TableForm } from '../components'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { schema } from '../../../../services/admin/validation/schema'
 
-const subj = 'services'
-const mapStateToProps = formStateProps(subj)
-const mapDispatchToProps = formDispatchProps(subj)
-
-const ServicesForm = ({ data, handleReset, accept }) => {
+export const ServicesForm = ({ data, cancel, accept }) => {
   const defaultValues = {
     id: data.id,
     name: data.name,
@@ -31,7 +24,7 @@ const ServicesForm = ({ data, handleReset, accept }) => {
   const formProps = {
     submit: handleSubmit((data) => submit(data)),
     reset: () => {
-      handleReset()
+      cancel()
       reset()
     },
   }
@@ -43,5 +36,3 @@ const ServicesForm = ({ data, handleReset, accept }) => {
     </TableForm>
   )
 }
-
-export default compose(connect(mapStateToProps, mapDispatchToProps))(ServicesForm)

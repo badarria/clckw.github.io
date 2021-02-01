@@ -1,70 +1,57 @@
-import { addItem, updateItem, removeItem, getForeignKeys } from './api'
-import {
-  setDataToChangeAction,
-  toggleStateAction,
-  changeOrdersHoursAction,
-  setPagingAction,
-  setLoadingAction,
-} from '../../store/selectors/admin-actions-selectors'
+import { addItem, updateItem, removeItem, getForeignKeys, getItems, getFilteredOrders } from './api'
+import { emptyFields, getServiceTime, mergeWithForeignKeys } from '../utils/table-func'
+import { dateFromFormatToObj, dateFromNewDate, dateToRequest, getHoursArray, setDisabled } from '../utils/datetime-func'
 
-import { emptyFields, getServiceTime, mergeWithForeignKeys } from './utils/table-func'
-import { _getFreeHours, _setAdminPageToastMsg, _setItems } from '../common'
+const sliceData = (obj, endSlice) => {
+  const res = Object.entries(obj).slice(0, endSlice)
+  return Object.fromEntries(res)
+}
 
-export const removeFromDB = (subj, id) => async (dispatch) => {
-  dispatch(setLoadingAction(subj, true))
-  const res = await removeItem(id, subj)
-  dispatch(setLoadingAction(subj, false))
-  _setAdminPageToastMsg(subj, res, dispatch)
-  if (res.type === 'success') {
-    dispatch(_setItems(subj))
+const getFreeHours = async (data) => {
+  const { master_id, date, service_time, order_id = 0 } = data
+  const normDate = dateToRequest(date)
+  const orders = await getFilteredOrders({ master_id, date: normDate, order_id }, 'orders')
+  return getHoursArray(service_time, orders)
+}
+
+export const loadItems = async (subj, paging) => {
+  const data = await getItems(subj, paging)
+  if (Array.isArray(data?.items)) {
+    let { items, count } = data
+    paging.count = count
+    if (subj === 'orders') items = setDisabled(items)
+    return { items, paging }
+  } else {
+    return { toast: { type: 'error', msg: 'Something went wrong' } }
   }
 }
 
-export const pushToChange = (subj, data, state, getKeys = false) => async (dispatch) => {
-  dispatch(setLoadingAction(subj, true))
-  const foreignKeys = getKeys ? await getForeignKeys(subj) : {}
+export const removeFromDB = async (subj, id) => await removeItem(id, subj)
+
+export const pushToChange = async (subj, data) => {
+  const needKeys = ['orders', 'masters']
+  const foreignKeys = needKeys.includes(subj) ? await getForeignKeys(subj) : null
   let res = Array.isArray(data) ? emptyFields(data) : { ...data }
-  if (foreignKeys) {
-    res = mergeWithForeignKeys(Object.entries(res), foreignKeys)
-  }
-  if (subj === 'orders') {
-    res.hours = [{ hour: data.begin, booked: false }]
-  }
+  if (foreignKeys) res = mergeWithForeignKeys(Object.entries(res), foreignKeys)
+  if (subj === 'orders') res.hours = [{ hour: data.begin, booked: false }]
   if (subj === 'services') {
     let keys = { time: getServiceTime() }
     res.time_id = Number(res.time)
     res = mergeWithForeignKeys(Object.entries(res), keys)
   }
-  dispatch(setDataToChangeAction(subj, res))
-  dispatch(toggleStateAction(subj, state))
-  dispatch(setLoadingAction(subj, false))
+  return res
 }
 
-export const cancelInput = (subj) => (dispatch) => {
-  dispatch(toggleStateAction(subj, null))
-  dispatch(setDataToChangeAction(subj, {}))
+export const acceptChanges = async (subj, data, state) =>
+  state === 'isEditing' ? await updateItem(data, subj) : await addItem(data, subj)
+
+export const changeFreeHours = async (data) => await getFreeHours(data)
+
+export const preparedOrdersData = (data) => {
+  const fields = sliceData(data, -6)
+  const date = data.date ? dateFromFormatToObj(data.date) : dateFromNewDate()
+  const hours = data.hours
+  return { fields, date, hours, begin: data.begin }
 }
 
-export const accept = (subj, data) => async (dispatch, getState) => {
-  dispatch(setLoadingAction(subj, true))
-  const state = getState()[`${subj}`].editState
-  const res = state === 'isEditing' ? await updateItem(data, subj) : await addItem(data, subj)
-  if (res) {
-    await dispatch(cancelInput(subj, dispatch))
-    await dispatch(_setItems(subj))
-    _setAdminPageToastMsg(subj, res, dispatch)
-  }
-  dispatch(setLoadingAction(subj, false))
-}
-
-export const changeFreeHours = (subj, data) => async (dispatch) => {
-  const newHours = await _getFreeHours(data)
-  dispatch(changeOrdersHoursAction(subj, newHours))
-}
-
-export const changePaging = (subj, opt) => async (dispatch) => {
-  dispatch(setLoadingAction(subj, true))
-  dispatch(setPagingAction(subj, opt))
-  await dispatch(_setItems(subj))
-  dispatch(setLoadingAction(subj, false))
-}
+export const preparedMastersData = (data) => sliceData(data, -1)

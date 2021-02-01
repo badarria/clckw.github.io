@@ -1,19 +1,19 @@
 import React from 'react'
-import { Nav } from './containers'
-import { BrowserRouter as Router, Switch } from 'react-router-dom'
+import { Header, Home } from './containers'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
-import { getAuthState } from '../store/selectors/state-selectors'
-import { RatingPage, AdminPage, HomePage } from './pages'
+import { getAuthState } from '../store/state-selectors'
+import { AdminRoute, RatingRoute } from './routes'
 
 const App = ({ isAuth }) => {
   return (
     <Router>
-      <Nav />
+      <Header />
       <Switch>
-        <HomePage path='/' exact />
-        <AdminPage path='/admin' exact isAuth={isAuth} />
-        <RatingPage />
+        <Route path='/' exact component={Home} />
+        <AdminRoute path='/admin' isAuth={isAuth} />
+        <RatingRoute path='/orderRate' />
       </Switch>
     </Router>
   )

@@ -1,24 +1,19 @@
 import { getOrderToRate, setOrderRating } from './api'
-import { setLoader, setOrderToRate, setStatus } from '../../store/reducers/rating-reducer'
 
-export const setRating = (data) => async (dispatch) => {
+export const setRating = async (data) => {
   const { orderId } = data
-  const result = await setOrderRating(data)
-  const msg = result === orderId ? 'Order successfully rated!' : result.msg
-  dispatch(setStatus({ rated: true, msg }))
+  const res = await setOrderRating(data)
+  if (res === orderId) {
+    let msg = 'Order successfully rated!'
+    return { rated: true, msg }
+  } else return { rated: false, msg: res.msg }
 }
 
-export const getOrder = (data) => async (dispatch) => {
-  dispatch(setLoader(true))
-  const result = await getOrderToRate(data)
-  if (result.length) {
-    dispatch(setOrderToRate(result[0]))
-    dispatch(setStatus({ rated: result[0].rating }))
-  } else if (!result.length) {
+export const getOrder = async (data) => {
+  const res = await getOrderToRate(data)
+  if (res.length) return res
+  else if (Array.isArray(res) && !res.length) {
     const msg = 'Sorry, no order found with this ID, please try another'
-    dispatch(setStatus({ rated: true, msg }))
-  } else {
-    dispatch(setStatus({ rated: true, msg: result.msg }))
-  }
-  dispatch(setLoader(false))
+    return { rated: true, msg }
+  } else return { rated: true, msg: res.msg }
 }

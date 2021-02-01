@@ -1,44 +1,44 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Container, Paper } from '@material-ui/core'
 import { getOrder, setRating } from '../../../services/rating'
-import { getLoadingState, getStatusState, orderToRateState } from '../../../store/selectors/state-selectors'
-import { compose } from 'redux'
-import { connect } from 'react-redux'
 import { useStyles } from './styles'
-import { NoRatingCard, RatingCard, Loader } from '../../ui'
+import { NoRatingCard, RatingCard, Loader } from './rating-cards'
 
-const Rating = (props) => {
-  const { orderId, orderToRate = {}, status, getOrder, setRating, loading } = props
+export const Rating = ({ orderId }) => {
   const { blank } = useStyles()
+  const [{ rated, msg }, setStatus] = useState({
+    rated: true,
+    msg: 'We are looking for your order, please wait...',
+  })
+  const [loading, setLoading] = useState(false)
+  const [order, setOrder] = useState({})
 
   useEffect(() => {
-    getOrder(orderId)
+    const orderData = async () => {
+      setLoading(true)
+      const res = await getOrder(orderId)
+      if (Array.isArray(res)) {
+        setOrder(res[0])
+        setStatus({ rated: !!res[0].rating, msg: 'Order already has been rated, thanks!' })
+      } else setStatus(res)
+      setLoading(false)
+    }
+    orderData()
   }, [])
 
-  const { rated, msg } = status
+  const submit = async (data) => {
+    setLoading(true)
+    const res = await setRating(data)
+    setStatus(res)
+    setLoading(false)
+  }
 
   return (
     <>
       <Loader loading={loading} />
       <Container>
-        <Paper className={blank}>
-          {rated ? <NoRatingCard {...{ msg }} /> : <RatingCard {...{ order: orderToRate, setRating }} />}
-        </Paper>
+        <Paper className={blank}>{rated ? <NoRatingCard {...{ msg }} /> : <RatingCard {...{ order, submit }} />}</Paper>
       </Container>
     </>
   )
 }
-
-export const mapDispatchToProps = (dispatch) => ({
-  getOrder: (orderId) => dispatch(getOrder(orderId)),
-  setRating: (data) => dispatch(setRating(data)),
-})
-
-export const mapStateToProps = (state, ownProps) => ({
-  orderToRate: orderToRateState(state),
-  orderId: ownProps,
-  loading: getLoadingState('rating', state),
-  status: getStatusState(state),
-})
-
-export default compose(connect(mapStateToProps, mapDispatchToProps))(Rating)

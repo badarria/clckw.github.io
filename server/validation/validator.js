@@ -6,7 +6,7 @@ const validator = (schema, opt = 'body') => async (req, res, next) => {
     next()
   } catch (err) {
     console.error(err.message)
-    res.status(400).send({ msg: 'Invalid data. Please, try again' })
+    res.status(400).send({ type: 'error', msg: 'Invalid data. Please, try again' })
   }
 }
 

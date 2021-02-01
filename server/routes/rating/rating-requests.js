@@ -1,5 +1,5 @@
 const pool = require('../../db')
-const { jwtDecode } = require('../../utils/jwtGenerator')
+const { jwtDecode, jwtGenerator } = require('../../utils/jwtGenerator')
 
 const getOrderToRate = async (req, res) => {
   const { orderId } = req.params

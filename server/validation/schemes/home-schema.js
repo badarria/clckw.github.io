@@ -1,6 +1,18 @@
 const { DateTime } = require('luxon')
 const yup = require('yup')
-const compareTime = (begin, end) => DateTime.fromJSDate(begin).set({ hours: 20, minutes: 0, seconds: 0 }) > end
+
+const checkThisDayTime = (date) => {
+  const now = DateTime.local()
+  const begin = DateTime.fromISO(date)
+  return begin >= now
+}
+const compareTime = (begin, end) => {
+  const endOfDay = DateTime.fromISO(begin).set({ hours: 20, minutes: 0, seconds: 0 })
+  const beginDate = DateTime.fromISO(begin)
+  const endDate = DateTime.fromISO(end)
+
+  return endOfDay >= endDate && beginDate < endDate
+}
 
 const schema = {}
 const name = yup
@@ -30,10 +42,12 @@ schema.loginForm = yup.object().shape({
 
 schema.order = yup.object().shape({
   service: yup.string().matches(/[1-8]/g).required(),
-  begin: yup.date().min(new Date()).required(),
+  begin: yup
+    .string()
+    .required()
+    .test('this day', (value) => checkThisDayTime(value)),
   end: yup
-    .date()
-    .min(yup.ref('begin'))
+    .string()
     .required()
     .test('day end', (value, context) => {
       const begin = context.parent.begin
@@ -42,4 +56,5 @@ schema.order = yup.object().shape({
   customer: num.required(),
   master: num.required(),
 })
+
 module.exports = schema

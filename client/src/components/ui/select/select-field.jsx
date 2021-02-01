@@ -32,4 +32,6 @@ export const SelectField = ({ control, data, defaultValue, name, disabled }) => 
 SelectField.defaultProps = {
   name: 'time',
   disabled: false,
+  defaultValue: [],
+  data: [],
 }

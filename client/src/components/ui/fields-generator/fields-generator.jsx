@@ -1,6 +1,6 @@
 import React from 'react'
 import { TextField } from '@material-ui/core'
-import { AutocompleteField } from '../_elements'
+import { AutocompleteField } from './autocomplete-field/autocomplete-field'
 import { useStyles } from './styles'
 
 export const FieldsGenerator = (props) => {

@@ -4,6 +4,9 @@ import './index.css'
 import App from './components/app'
 import { store } from './store'
 import { Provider } from 'react-redux'
+import { stayAuth } from './services/home'
+
+store.dispatch(stayAuth)
 
 ReactDOM.render(
   <Provider store={store}>

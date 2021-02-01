@@ -9,10 +9,10 @@ const ratingPage = require('./rating/rating')
 
 index.use('/home', homePage)
 index.use('/rating', ratingPage)
-index.use('/admin/customers', customers)
-index.use('/admin/masters', masters)
-index.use('/admin/cities', cities)
-index.use('/admin/orders', orders)
-index.use('/admin/services', services)
+index.use('/table/customers', customers)
+index.use('/table/masters', masters)
+index.use('/table/cities', cities)
+index.use('/table/orders', orders)
+index.use('/table/services', services)
 
 module.exports = index

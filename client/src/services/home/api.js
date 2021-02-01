@@ -1,6 +1,6 @@
 const homePath = '/home'
 
-const _wrapTryCatch = async (tryFunc) => {
+const wrapTryCatch = async (tryFunc) => {
   try {
     return await tryFunc
   } catch {
@@ -8,14 +8,14 @@ const _wrapTryCatch = async (tryFunc) => {
   }
 }
 
-const _getMasters = async ({ city, begin, end }) => {
+const getMasters = async ({ city, begin, end }) => {
   const url = `${homePath}/find`
   const params = `?city=${city}&begin=${begin}&end=${end}`
   const res = await fetch(`${url}${params}`)
   return res.json()
 }
 
-const _upsertCustomer = async (data) => {
+const upsertCustomer = async (data) => {
   const res = await fetch(`${homePath}/customer`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -24,7 +24,7 @@ const _upsertCustomer = async (data) => {
   return res.json()
 }
 
-const _login = async (data) => {
+const login = async (data) => {
   const res = await fetch(`${homePath}/auth`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -33,7 +33,7 @@ const _login = async (data) => {
   return res.json()
 }
 
-const _addNewOrder = async (data) => {
+const add = async (data) => {
   const res = await fetch(`${homePath}/newOrder`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -42,7 +42,7 @@ const _addNewOrder = async (data) => {
   return res.json()
 }
 
-const _sendConfirmLetter = async (data) => {
+const sendFirstLetter = async (data) => {
   const res = await fetch(`${homePath}/confirm`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -51,7 +51,7 @@ const _sendConfirmLetter = async (data) => {
   return res.json()
 }
 
-const _sendRatingLetter = async (data) => {
+const sendSecondLetter = async (data) => {
   const res = await fetch(`${homePath}/rating`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -60,15 +60,15 @@ const _sendRatingLetter = async (data) => {
   return res.json()
 }
 
-const _checkAuth = async (token) => {
+const check = async (token) => {
   const res = await fetch(`${homePath}/verify/${token}`)
   return res.json()
 }
 
-export const getFreeMasters = async (data) => _wrapTryCatch(_getMasters(data))
-export const getCustomer = async (data) => _wrapTryCatch(_upsertCustomer(data))
-export const loginUser = async (data) => _wrapTryCatch(_login(data))
-export const addNewOrder = async (data) => _wrapTryCatch(_addNewOrder(data))
-export const sendConfirmLetter = async (data) => _wrapTryCatch(_sendConfirmLetter(data))
-export const sendRatingLetter = async (data) => _wrapTryCatch(_sendRatingLetter(data))
-export const checkAuth = async (token) => _wrapTryCatch(_checkAuth(token))
+export const getFreeMasters = async (data) => wrapTryCatch(getMasters(data))
+export const getCustomer = async (data) => wrapTryCatch(upsertCustomer(data))
+export const loginUser = async (data) => wrapTryCatch(login(data))
+export const addNewOrder = async (data) => wrapTryCatch(add(data))
+export const sendConfirmLetter = async (data) => wrapTryCatch(sendFirstLetter(data))
+export const sendRatingLetter = async (data) => wrapTryCatch(sendSecondLetter(data))
+export const checkAuth = async (token) => wrapTryCatch(check(token))

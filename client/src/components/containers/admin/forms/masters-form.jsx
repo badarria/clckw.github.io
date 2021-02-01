@@ -1,23 +1,18 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { FieldsGenerator, TableForm } from '../../../ui'
-import { compose } from 'redux'
-import { connect } from 'react-redux'
-import { formDispatchProps, formStateProps } from '../props-selector'
+import { FieldsGenerator, TableForm } from '../components'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { schema } from '../../../../services/admin/validation/schema'
+import { preparedMastersData } from '../../../../services/admin'
 
-const subj = 'masters'
-const mapStateToProps = formStateProps(subj)
-const mapDispatchToProps = formDispatchProps(subj)
-
-const MastersForm = ({ data, handleReset, accept }) => {
+export const MastersForm = ({ data, cancel, accept }) => {
   const defaultValues = {
     id: data.id,
     name: data.name,
     surname: data.surname,
     city: data.city[0],
   }
+  const preparedData = preparedMastersData(data)
 
   const { register, handleSubmit, control, reset, errors } = useForm({
     defaultValues,
@@ -32,11 +27,11 @@ const MastersForm = ({ data, handleReset, accept }) => {
   const formProps = {
     submit: handleSubmit((data) => submit(data)),
     reset: () => {
-      handleReset()
+      cancel()
       reset()
     },
   }
-  const formFieldsProps = { data, register, control, errors, defaultValues }
+  const formFieldsProps = { data: preparedData, register, control, errors, defaultValues }
 
   return (
     <TableForm {...formProps}>
@@ -44,5 +39,3 @@ const MastersForm = ({ data, handleReset, accept }) => {
     </TableForm>
   )
 }
-
-export default compose(connect(mapStateToProps, mapDispatchToProps))(MastersForm)

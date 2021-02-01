@@ -1,20 +1,16 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { FieldsGenerator, TableForm, DatePicker, SelectField } from '../../../ui'
-import { formDispatchProps, formStateProps } from '../props-selector'
-import { compose } from 'redux'
-import { connect } from 'react-redux'
+import { FieldsGenerator, TableForm, DatePicker, SelectField } from '../components'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { schema } from '../../../../services/admin/validation/schema'
-import { dateToRequest, getBeginEnd } from '../../../../services/common/utils/datetime-func'
+import { dateToRequest, getBeginEnd } from '../../../../services/utils/datetime-func'
+import { changeFreeHours, preparedOrdersData } from '../../../../services/admin'
 
-const subj = 'orders'
-const mapStateToProps = formStateProps(subj)
-const mapDispatchToProps = formDispatchProps(subj)
-
-const OrdersForm = (props) => {
-  const { data, handleReset, changeHours, accept } = props
-  const { fields, date, hours, begin } = data
+export const OrdersForm = (props) => {
+  const { data, cancel, accept } = props
+  const { fields, date, hours, begin } = preparedOrdersData(data)
+  const [newHours, setNewHours] = useState(hours)
+  console.log(newHours, 'newHours')
 
   const defaultValues = {
     id: fields.id,
@@ -37,15 +33,19 @@ const OrdersForm = (props) => {
   const disableHours = !(masterValue && serviceValue && dateValue)
 
   useEffect(() => {
-    const normDate = dateToRequest(dateValue)
     if (!disableHours) {
-      const data = {
-        master_id: masterValue,
-        date: normDate,
-        service_time: serviceValue,
-        order_id: fields.id,
+      const changeHours = async () => {
+        const normDate = dateToRequest(dateValue)
+        const data = {
+          master_id: masterValue,
+          date: normDate,
+          service_time: serviceValue,
+          order_id: fields.id,
+        }
+        const res = await changeFreeHours(data)
+        setNewHours(res)
       }
-      changeHours(data)
+      changeHours()
     }
   }, [masterValue, dateValue, serviceValue])
 
@@ -66,7 +66,7 @@ const OrdersForm = (props) => {
   const formProps = {
     submit: handleSubmit((data) => submit(data)),
     reset: () => {
-      handleReset()
+      cancel()
       reset()
     },
   }
@@ -80,7 +80,7 @@ const OrdersForm = (props) => {
   }
 
   const selectProps = {
-    data: hours,
+    data: newHours,
     control,
     defaultValue: defaultValues.hours,
     name: 'hours',
@@ -95,5 +95,3 @@ const OrdersForm = (props) => {
     </TableForm>
   )
 }
-
-export default compose(connect(mapStateToProps, mapDispatchToProps))(OrdersForm)

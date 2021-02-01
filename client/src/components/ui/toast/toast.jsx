@@ -14,3 +14,7 @@ export const Toast = ({ toast: { type, msg } }) => {
     </Slide>
   )
 }
+
+Toast.defaultProps = {
+  toast: { type: 'success', msg: '' },
+}

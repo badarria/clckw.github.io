@@ -1,6 +1,6 @@
 const ratingPath = '/rating'
 
-const _wrapTryCatch = async (tryFunc) => {
+const wrapTryCatch = async (tryFunc) => {
   try {
     return await tryFunc
   } catch {
@@ -8,7 +8,7 @@ const _wrapTryCatch = async (tryFunc) => {
   }
 }
 
-const _setRating = async (data) => {
+const setRating = async (data) => {
   const res = await fetch(`${ratingPath}/setRating`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
@@ -17,10 +17,11 @@ const _setRating = async (data) => {
   return res.json()
 }
 
-const _getOrderToRate = async ({ orderId }) => {
+const getOrder = async (orderId) => {
+  console.log(orderId, 'api')
   const res = await fetch(`${ratingPath}/getOrder/${orderId}`)
   return res.json()
 }
 
-export const setOrderRating = async (data) => _wrapTryCatch(_setRating(data))
-export const getOrderToRate = async (data) => _wrapTryCatch(_getOrderToRate(data))
+export const setOrderRating = async (data) => wrapTryCatch(setRating(data))
+export const getOrderToRate = async (data) => wrapTryCatch(getOrder(data))

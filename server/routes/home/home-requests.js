@@ -2,7 +2,17 @@ const pool = require('../../db')
 const bcrypt = require('bcrypt')
 const { jwtGenerator } = require('../../utils/jwtGenerator')
 const config = require('../../../config')
+const { jwtDecode } = require('../../utils/jwtGenerator')
 const url = config.mailing.baseUrl
+
+const getInitState = async (req, res) => {
+  const [city, service] = await pool.any(
+    `SELECT json_agg(ci) as key FROM (SELECT * FROM cities) ci
+           UNION all 
+           SELECT json_agg(s) as key FROM (SELECT * FROM services) s `
+  )
+  return res.json({ city: city.key, service: service.key })
+}
 
 const findMasters = async (req, res) => {
   const { city, begin, end } = req.body
@@ -121,8 +131,11 @@ const ratingRequestMail = (req) => {
 // }
 
 const stayAuth = async (req, res) => {
-  const user = await pool.query(`SELECT id FROM admin WHERE id = $1`, [req.body])
-  if (user[0].id === req.body) {
+  const { token } = req.params
+  const uuid = jwtDecode(token)
+  const user = await pool.query(`SELECT id FROM admin WHERE id = $1`, uuid)
+
+  if (user[0].id === uuid) {
     res.json(true)
   } else res.json(false)
 }
@@ -135,4 +148,5 @@ module.exports = {
   stayAuth,
   confirmingMail,
   ratingRequestMail,
+  getInitState,
 }

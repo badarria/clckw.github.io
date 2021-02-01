@@ -1,4 +1,4 @@
-const { dbTryCatch } = require('../../middleware/wrap-func')
+const { dbTryCatch } = require('../../utils')
 const { getOrderToRate, setOrderRating } = require('./rating-requests')
 
 const router = require('express').Router()

@@ -10,4 +10,4 @@ const validator = (schema, opt = 'body') => async (req, res, next) => {
   }
 }
 
-module.exports = validator
+module.exports = { validator }

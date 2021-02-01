@@ -65,6 +65,11 @@ const check = async (token) => {
   return res.json()
 }
 
+const init = async () => {
+  const res = await fetch(`${homePath}/init`)
+  return res.json()
+}
+
 export const getFreeMasters = async (data) => wrapTryCatch(getMasters(data))
 export const getCustomer = async (data) => wrapTryCatch(upsertCustomer(data))
 export const loginUser = async (data) => wrapTryCatch(login(data))
@@ -72,3 +77,4 @@ export const addNewOrder = async (data) => wrapTryCatch(add(data))
 export const sendConfirmLetter = async (data) => wrapTryCatch(sendFirstLetter(data))
 export const sendRatingLetter = async (data) => wrapTryCatch(sendSecondLetter(data))
 export const checkAuth = async (token) => wrapTryCatch(check(token))
+export const getInit = async () => wrapTryCatch(init())

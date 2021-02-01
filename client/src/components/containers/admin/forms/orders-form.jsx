@@ -10,7 +10,6 @@ export const OrdersForm = (props) => {
   const { data, cancel, accept } = props
   const { fields, date, hours, begin } = preparedOrdersData(data)
   const [newHours, setNewHours] = useState(hours)
-  console.log(newHours, 'newHours')
 
   const defaultValues = {
     id: fields.id,

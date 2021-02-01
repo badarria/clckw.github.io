@@ -4,6 +4,7 @@ import {
   checkAuth,
   getCustomer,
   getFreeMasters,
+  getInit,
   loginUser,
   sendConfirmLetter,
   sendRatingLetter,
@@ -47,10 +48,9 @@ export const stayAuth = async (dispatch) => {
 }
 
 export const getInitState = async (data) => {
-  const paging = { limit: 'all', offset: 0, orderby: 'id', order: 'asc' }
-  const city = await getItems('cities', paging)
-  const service = await getItems('services', paging)
-  const fields = { ...data, city: [data.city, ...city.items], service: [data.service, ...service.items] }
+  const { city, service } = await getInit()
+  console.log(city, service)
+  const fields = { ...data, city: [data.city, ...city], service: [data.service, ...service] }
   const hours = getHoursArray(service.time)
   const date = dateFromNewDate()
 

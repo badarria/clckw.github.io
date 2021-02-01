@@ -1,12 +1,11 @@
 const router = require('express').Router()
-const { dbTryCatch } = require('../../../middleware/wrap-func')
-const { cities } = require('../../../validation/schemes/admin-schema')
-const validator = require('../../../validation/validator')
+const { cities } = require('../../../validation/admin-schema')
+const { checkToken, dbTryCatch, validator } = require('../../../utils')
 const { update, getList, remove, add } = require('./cities-requests')
 
-router.get('/:limit/:offset/:orderby/:order', dbTryCatch(getList))
-router.put('/:id', validator(cities), dbTryCatch(update))
-router.delete('/:id', dbTryCatch(remove))
-router.post('/', validator(cities), dbTryCatch(add))
+router.get('/:token/:limit/:offset/:orderby/:order', checkToken(), dbTryCatch(getList))
+router.put('/:id', checkToken('body'), validator(cities), dbTryCatch(update))
+router.delete('/:token/:id', checkToken(), dbTryCatch(remove))
+router.post('/', checkToken('body'), validator(cities), dbTryCatch(add))
 
 module.exports = router

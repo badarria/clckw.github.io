@@ -9,7 +9,7 @@ export const useStyles = makeStyles({
     width: 'fit-content',
     margin: '0px auto 80px',
   },
-  box: { margin: '0 0 16px' },
+  box: { margin: '16px 0 16px' },
   table: {
     minWidth: '600px',
     width: 'auto',

@@ -1,4 +1,4 @@
-const adminPath = '/table'
+const adminPath = '/admin'
 
 const wrapTryCatch = async (tryFunc) => {
   try {
@@ -15,8 +15,8 @@ const changeEventErr = async (changeFunc) => {
   } else return { type: 'error', msg: res.msg }
 }
 
-const update = async (data, subj) => {
-  const id = data.id
+const update = async (subj, data) => {
+  const { id } = data
   const res = await fetch(`${adminPath}/${subj}/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
@@ -25,14 +25,14 @@ const update = async (data, subj) => {
   return res.json()
 }
 
-const remove = async (id, subj) => {
-  const res = await fetch(`${adminPath}/${subj}/${id}`, {
+const remove = async (subj, id, token) => {
+  const res = await fetch(`${adminPath}/${subj}/${token}/${id}`, {
     method: 'DELETE',
   })
   return res.json()
 }
 
-const add = async (data, subj) => {
+const add = async (subj, data) => {
   const res = await fetch(`${adminPath}/${subj}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -41,14 +41,14 @@ const add = async (data, subj) => {
   return res.json()
 }
 
-const get = async (subj, data) => {
-  const { limit, order, orderby, offset } = data
-  const res = await fetch(`${adminPath}/${subj}/${limit}/${offset}/${orderby}/${order}`)
+const get = async (subj, paging, token) => {
+  const { limit, order, orderby, offset } = paging
+  const res = await fetch(`${adminPath}/${subj}/${token}/${limit}/${offset}/${orderby}/${order}`)
   return res.json()
 }
 
-const getKeys = async (subj) => {
-  const res = await fetch(`${adminPath}/${subj}/foreignKeys`)
+const getKeys = async (subj, token) => {
+  const res = await fetch(`${adminPath}/${subj}/foreignKeys/${token}`)
   return res.json()
 }
 
@@ -57,9 +57,9 @@ const getFiltered = async ({ master_id, order_id, date }, subj) => {
   return res.json()
 }
 
-export const updateItem = async (data, subj) => wrapTryCatch(changeEventErr(update(data, subj)))
-export const removeItem = async (data, subj) => wrapTryCatch(changeEventErr(remove(data, subj)))
-export const addItem = async (data, subj) => wrapTryCatch(changeEventErr(add(data, subj)))
-export const getItems = async (subj, data) => wrapTryCatch(get(subj, data))
-export const getForeignKeys = async (subj) => wrapTryCatch(getKeys(subj))
+export const updateItem = async (subj, data) => wrapTryCatch(changeEventErr(update(subj, data)))
+export const removeItem = async (subj, data, token) => wrapTryCatch(changeEventErr(remove(subj, data, token)))
+export const addItem = async (subj, data) => wrapTryCatch(changeEventErr(add(subj, data)))
+export const getItems = async (subj, data, token) => wrapTryCatch(get(subj, data, token))
+export const getForeignKeys = async (subj, token) => wrapTryCatch(getKeys(subj, token))
 export const getFilteredOrders = async (data, subj) => wrapTryCatch(getFiltered(data, subj))

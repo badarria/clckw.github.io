@@ -1,6 +1,6 @@
 import React from 'react'
 import { useRouteMatch, Redirect } from 'react-router-dom'
-import { Rating } from '../containers'
+import { Rating } from '../components/containers'
 
 export const RatingRoute = () => {
   const match = useRouteMatch('/orderRate/:orderId')

@@ -16,7 +16,7 @@ export const LoginForm = ({ login }) => {
   const { state } = useLocation()
   const history = useHistory()
 
-  const { register, handleSubmit, reset, errors } = useForm({
+  const { register, handleSubmit, errors } = useForm({
     resolver: yupResolver(schema.loginForm),
   })
 
@@ -24,9 +24,9 @@ export const LoginForm = ({ login }) => {
     setLoading(true)
     const res = await login(data)
     if (res.status) {
-      history.push(state?.from || '/admin/customers')
       handleClose()
       setLoading(false)
+      history.push(state?.from || '/admin/customers')
     } else {
       setMsg(res.msg)
       setTimeout(() => {
@@ -39,7 +39,6 @@ export const LoginForm = ({ login }) => {
 
   const handleClose = () => {
     setOpen(false)
-    reset()
   }
 
   return (

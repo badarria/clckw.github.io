@@ -9,7 +9,6 @@ import {
   sendConfirmLetter,
   sendRatingLetter,
 } from './api'
-import { getItems } from '../admin/api'
 import { dateFromNewDate, getBeginEnd, getHoursArray, toFormat } from '../utils/datetime-func'
 
 const sendMails = async (dispatch, getState) => {
@@ -49,7 +48,6 @@ export const stayAuth = async (dispatch) => {
 
 export const getInitState = async (data) => {
   const { city, service } = await getInit()
-  console.log(city, service)
   const fields = { ...data, city: [data.city, ...city], service: [data.service, ...service] }
   const hours = getHoursArray(service.time)
   const date = dateFromNewDate()

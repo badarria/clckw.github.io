@@ -1,20 +1,20 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { Tabs, Tab, AppBar, Container } from '@material-ui/core'
 
 export const LinkTabs = ({ names }) => {
-  const [value, setValue] = React.useState(0)
-
+  const match = useLocation('/admin')
+  const [value, setValue] = React.useState(match.pathname)
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
 
   return (
     <Container>
-      <AppBar position='static' color='transparent' elevation='0'>
+      <AppBar position='static' color='transparent' elevation={0}>
         <Tabs value={value} onChange={handleChange} indicatorColor='secondary' textColor='primary' centered>
           {names.map((name, inx) => (
-            <Tab key={inx} label={name} to={`/admin/${name}`} component={Link} />
+            <Tab key={inx} label={name} to={`/admin/${name}`} component={Link} value={`/admin/${name}`} />
           ))}
         </Tabs>
       </AppBar>

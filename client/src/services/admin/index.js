@@ -1,7 +1,8 @@
 import { addItem, updateItem, removeItem, getForeignKeys, getItems, getFilteredOrders } from './api'
 import { emptyFields, getServiceTime, mergeWithForeignKeys } from '../utils/table-func'
 import { dateFromFormatToObj, dateFromNewDate, dateToRequest, getHoursArray, setDisabled } from '../utils/datetime-func'
-const token = localStorage.getItem('token')
+
+const getToken = () => localStorage.getItem('token')
 
 const sliceData = (obj, endSlice) => {
   const res = Object.entries(obj).slice(0, endSlice)
@@ -16,6 +17,7 @@ const getFreeHours = async (data) => {
 }
 
 export const loadItems = async (subj, paging) => {
+  const token = getToken()
   const data = await getItems(subj, paging, token)
   if (Array.isArray(data?.items)) {
     let { items, count } = data
@@ -27,9 +29,13 @@ export const loadItems = async (subj, paging) => {
   }
 }
 
-export const removeFromDB = async (subj, id) => await removeItem(subj, id, token)
+export const removeFromDB = async (subj, id) => {
+  const token = getToken()
+  return await removeItem(subj, id, token)
+}
 
 export const pushToChange = async (subj, data) => {
+  const token = getToken()
   const needKeys = ['orders', 'masters']
   const foreignKeys = needKeys.includes(subj) ? await getForeignKeys(subj, token) : null
   let res = Array.isArray(data) ? emptyFields(data) : { ...data }
@@ -44,7 +50,7 @@ export const pushToChange = async (subj, data) => {
 }
 
 export const acceptChanges = async (subj, data, state) => {
-  data.token = token
+  data.token = getToken()
   return state === 'isEditing' ? await updateItem(subj, data) : await addItem(subj, data)
 }
 

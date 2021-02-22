@@ -8,10 +8,8 @@ const wrapTryCatch = async (tryFunc) => {
   }
 }
 
-const getMasters = async ({ city, begin, end }) => {
-  const url = `${homePath}/find`
-  const params = `?city=${city}&begin=${begin}&end=${end}`
-  const res = await fetch(`${url}${params}`)
+const getMasters = async ({ city, begin, finish }) => {
+  const res = await fetch(`${homePath}/find`, { headers: { city, begin, finish } })
   return res.json()
 }
 
@@ -61,7 +59,7 @@ const sendSecondLetter = async (data) => {
 }
 
 const check = async (token) => {
-  const res = await fetch(`${homePath}/verify/${token}`)
+  const res = await fetch(`${homePath}/verify`, { headers: { token } })
   return res.json()
 }
 

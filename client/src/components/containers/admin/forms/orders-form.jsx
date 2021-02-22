@@ -3,21 +3,22 @@ import { useForm } from 'react-hook-form'
 import { FieldsGenerator, TableForm, DatePicker, SelectField } from '../components'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { schema } from '../../../../services/admin/validation/schema'
-import { dateToRequest, getBeginEnd } from '../../../../services/utils/datetime-func'
-import { changeFreeHours, preparedOrdersData } from '../../../../services/admin'
+import { dateFromFormatToObj, dateFromNewDate, dateToRequest, getBeginFinish } from '../../../../services/utils/datetime-func'
+import { changeFreeHours } from '../../../../services/admin'
 
-export const OrdersForm = (props) => {
-  const { data, cancel, accept } = props
-  const { fields, date, hours, begin } = preparedOrdersData(data)
+export const OrdersForm = ({ data, cancel, accept }) => {
+  const { id = 0, master, customer, service, date, hours } = data
+  const fields = { id, master, customer, service }
   const [newHours, setNewHours] = useState(hours)
+  const dateToObj = date ? dateFromFormatToObj(data.date) : dateFromNewDate()
 
   const defaultValues = {
-    id: fields.id,
-    master: fields.master[0],
-    customer: fields.customer[0],
-    service: fields.service[0],
-    date: date,
-    hours: begin,
+    id,
+    master: master[0],
+    customer: customer[0],
+    service: service[0],
+    date: dateToObj,
+    hours: hours[0].hour,
   }
 
   const { register, handleSubmit, control, reset, watch, errors } = useForm({
@@ -39,7 +40,7 @@ export const OrdersForm = (props) => {
           master_id: masterValue,
           date: normDate,
           service_time: serviceValue,
-          order_id: fields.id,
+          order_id: id,
         }
         const res = await changeFreeHours(data)
         setNewHours(res)
@@ -50,14 +51,14 @@ export const OrdersForm = (props) => {
 
   const submit = (data) => {
     const { id, master, customer, service, date, hours } = data
-    const { begin, end } = getBeginEnd(date, hours, service.time)
+    const { begin, finish } = getBeginFinish(date, hours, service.time)
     data = {
       id,
       master: master.id,
       customer: customer.id,
       service: service.id,
       begin,
-      end,
+      finish,
     }
     accept(data)
   }

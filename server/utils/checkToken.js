@@ -1,11 +1,12 @@
 const { jwtDecode } = require('./jwtGenerator')
-const pool = require('../db')
+const { Admin } = require('../db/models')
 
-const checkToken = (params = 'params') => async (req, res, next) => {
+const checkToken = () => async (req, res, next) => {
   try {
-    const { token } = req[params]
+    const { token } = req.headers
     const uuid = jwtDecode(token)
-    const user = await pool.query(`SELECT id FROM admin WHERE id = $1`, uuid)
+    const user = await Admin.findAll({ where: { id: uuid } })
+
     if (user[0].id === uuid) {
       next()
     } else return res.status(403).json('Not Authorize')

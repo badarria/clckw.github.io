@@ -4,11 +4,9 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { schema } from '../../../../services/admin/validation/schema'
 import { FieldsGenerator, TableForm } from '../components'
 
-export const CitiesForm = ({ data, cancel, accept }) => {
-  const defaultValues = {
-    id: data.id,
-    name: data.name,
-  }
+export const CitiesForm = ({ data: { id = 0, name }, cancel, accept }) => {
+  const defaultValues = { id, name }
+  const fields = { id: id, name }
 
   const { register, handleSubmit, control, reset, errors } = useForm({
     defaultValues,
@@ -23,7 +21,7 @@ export const CitiesForm = ({ data, cancel, accept }) => {
     },
   }
 
-  const formFieldsProps = { data, register, control, errors, defaultValues }
+  const formFieldsProps = { data: fields, register, control, errors, defaultValues }
 
   return (
     <TableForm {...formProps}>

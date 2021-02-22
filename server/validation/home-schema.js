@@ -1,18 +1,5 @@
-const { DateTime } = require('luxon')
+const { checkThisDayTime, compareTime } = require('../utils/datetimefunc')
 const yup = require('yup')
-
-const checkThisDayTime = (date) => {
-  const now = DateTime.local()
-  const begin = DateTime.fromISO(date)
-  return begin >= now
-}
-const compareTime = (begin, end) => {
-  const endOfDay = DateTime.fromISO(begin).set({ hours: 20, minutes: 0, seconds: 0 })
-  const beginDate = DateTime.fromISO(begin)
-  const endDate = DateTime.fromISO(end)
-
-  return endOfDay >= endDate && beginDate < endDate
-}
 
 const schema = {}
 const name = yup
@@ -26,7 +13,7 @@ const num = yup.string().matches(/\d+/g)
 schema.masters = yup.object().shape({
   city: yup.number().required(),
   begin: yup.date().required(),
-  end: yup.date().required(),
+  finish: yup.date().required(),
 })
 
 schema.customer = yup.object().shape({
@@ -46,7 +33,7 @@ schema.order = yup.object().shape({
     .string()
     .required()
     .test('this day', (value) => checkThisDayTime(value)),
-  end: yup
+  finish: yup
     .string()
     .required()
     .test('day end', (value, context) => {

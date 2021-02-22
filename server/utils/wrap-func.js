@@ -3,7 +3,7 @@ const dbTryCatch = (func) => async (req, res) => {
     return await func(req, res)
   } catch (e) {
     console.error(e.message)
-    res.status(400).send({ msg: 'Database error. Please, try again later' })
+    res.status(400).send({ type: 'error', msg: 'Database error. Please, try again later' })
   }
 }
 

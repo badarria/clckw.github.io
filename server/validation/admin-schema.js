@@ -1,6 +1,5 @@
-const { DateTime } = require('luxon')
 const yup = require('yup')
-const compareTime = (begin, end) => DateTime.fromJSDate(begin).set({ hours: 20, minutes: 0, seconds: 0 }) > end
+const { checkThisDayTime, compareTime } = require('../utils/datetimefunc')
 
 const schema = {}
 const name = yup
@@ -13,10 +12,12 @@ const num = yup.string().matches(/\d+/g)
 
 schema.orders = yup.object().shape({
   service: yup.string().matches(/[1-8]/g).required(),
-  begin: yup.date().min(new Date()).required(),
-  end: yup
-    .date()
-    .min(yup.ref('begin'))
+  begin: yup
+    .string()
+    .required()
+    .test('this day', (value) => checkThisDayTime(value)),
+  finish: yup
+    .string()
     .required()
     .test('day end', (value, context) => {
       const begin = context.parent.begin

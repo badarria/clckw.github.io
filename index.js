@@ -16,7 +16,8 @@ if (env === 'production') {
   app.use(config.app)
 }
 
-app.get('*', function (req, res) {
+app.get('*', (req, res) => {
+  console.log(req, 'req')
   res.sendFile(path.join(__dirname, 'client/build', 'index.html'))
 })
 

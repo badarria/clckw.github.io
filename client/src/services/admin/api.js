@@ -15,27 +15,27 @@ const changeEventErr = async (changeFunc) => {
   } else return { type: 'error', msg: res.msg }
 }
 
-const update = async (subj, data) => {
-  const { id } = data
-  const res = await fetch(`${adminPath}/${subj}/${id}`, {
+const update = async (subj, data, token) => {
+  const res = await fetch(`${adminPath}/${subj}`, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', token },
     body: JSON.stringify(data),
   })
   return res.json()
 }
 
 const remove = async (subj, id, token) => {
-  const res = await fetch(`${adminPath}/${subj}/${token}/${id}`, {
+  const res = await fetch(`${adminPath}/${subj}/${id}`, {
     method: 'DELETE',
+    headers: { token },
   })
   return res.json()
 }
 
-const add = async (subj, data) => {
+const add = async (subj, data, token) => {
   const res = await fetch(`${adminPath}/${subj}`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', token },
     body: JSON.stringify(data),
   })
   return res.json()
@@ -43,23 +43,26 @@ const add = async (subj, data) => {
 
 const get = async (subj, paging, token) => {
   const { limit, order, orderby, offset } = paging
-  const res = await fetch(`${adminPath}/${subj}/${token}/${limit}/${offset}/${orderby}/${order}`)
+  const res = await fetch(`${adminPath}/${subj}/${limit}/${offset}/${order}/${orderby}`, {
+    headers: { token },
+  })
+
   return res.json()
 }
 
 const getKeys = async (subj, token) => {
-  const res = await fetch(`${adminPath}/${subj}/foreignKeys/${token}`)
+  const res = await fetch(`${adminPath}/${subj}/foreignKeys`, { headers: { token } })
   return res.json()
 }
 
-const getFiltered = async ({ master_id, order_id, date }, subj) => {
-  const res = await fetch(`${adminPath}/${subj}/filtered/?date=${date}&master_id=${master_id}&order_id=${order_id}`)
+const getFiltered = async (subj, { master_id, order_id, date }) => {
+  const res = await fetch(`${adminPath}/${subj}/filtered/${date}/${master_id}/${order_id}`)
   return res.json()
 }
 
-export const updateItem = async (subj, data) => wrapTryCatch(changeEventErr(update(subj, data)))
+export const updateItem = async (subj, data, token) => wrapTryCatch(changeEventErr(update(subj, data, token)))
 export const removeItem = async (subj, data, token) => wrapTryCatch(changeEventErr(remove(subj, data, token)))
-export const addItem = async (subj, data) => wrapTryCatch(changeEventErr(add(subj, data)))
+export const addItem = async (subj, data, token) => wrapTryCatch(changeEventErr(add(subj, data, token)))
 export const getItems = async (subj, data, token) => wrapTryCatch(get(subj, data, token))
 export const getForeignKeys = async (subj, token) => wrapTryCatch(getKeys(subj, token))
-export const getFilteredOrders = async (data, subj) => wrapTryCatch(getFiltered(data, subj))
+export const getFilteredOrders = async (subj, data) => wrapTryCatch(getFiltered(subj, data))

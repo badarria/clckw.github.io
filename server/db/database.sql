@@ -1,5 +1,3 @@
-
-
 create
 DATABASE clockware;
 
@@ -42,22 +40,11 @@ id serial primary key,
     master   integer   REFERENCES masters ON delete SET NULL,
     customer integer   REFERENCES customers ON delete SET NULL,
     service  integer   REFERENCES services ON delete SET NULL,
-    beginAt timestamptz not null,
-    endAt timestamptz not null
+    beginAt timestamp not null,
+    endAt timestamp not null
 );
---alter table masters drop rating;
 
-
-insert into orders (master, customer, service, orderDate, beginAt, endAt)
-values (5, 27,  1, '2020-11-08', '16:00:00', '19:00:00');
-insert into orders (master, customer, service, orderDate, beginAt, endAt)
-values (9, 24,  2, '13/12/2020', '16:00:00', '19:00:00');
-insert into newOrders (master, customer, service, beginAt, endAt)
-values (9, 42,  2, 'Wed Dec 16 2020 12:14:00', '2020-12-16 16:00:00');
-insert into orders (master, customer, service, beginAt, endAt)
-values (9, 42,  2, 'Wed Dec 24 2020 12:00:00', '2020-12-24 13:00:00');
-insert into orders (master, customer, service, beginAt, endAt)
-values (1, 1,  2, 'Wed Dec 24 2020 12:00:00', '2020-12-24 13:00:00');
+--alter table orders rename endat to finishAt;
 
 
 

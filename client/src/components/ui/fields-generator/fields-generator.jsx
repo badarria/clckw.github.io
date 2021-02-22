@@ -12,13 +12,7 @@ export const FieldsGenerator = (props) => {
     <>
       {labels.map((label, inx) => {
         return Array.isArray(data[label]) ? (
-          <AutocompleteField
-            key={inx}
-            control={control}
-            name={label}
-            data={data[label]}
-            defaultValue={defaultValues[label]}
-          />
+          <AutocompleteField key={inx} control={control} name={label} data={data[label]} defaultValue={defaultValues[label]} />
         ) : (
           <TextField
             className={fields}

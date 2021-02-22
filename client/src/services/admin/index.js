@@ -9,10 +9,9 @@ const sliceData = (obj, endSlice) => {
   return Object.fromEntries(res)
 }
 
-const getFreeHours = async (data) => {
+export const changeFreeHours = async (data) => {
   const { master_id, date, service_time, order_id = 0 } = data
-  const normDate = dateToRequest(date)
-  const orders = await getFilteredOrders({ master_id, date: normDate, order_id }, 'orders')
+  const orders = await getFilteredOrders('orders', { master_id, date, order_id })
   return getHoursArray(service_time, orders)
 }
 
@@ -38,7 +37,9 @@ export const pushToChange = async (subj, data) => {
   const token = getToken()
   const needKeys = ['orders', 'masters']
   const foreignKeys = needKeys.includes(subj) ? await getForeignKeys(subj, token) : null
+
   let res = Array.isArray(data) ? emptyFields(data) : { ...data }
+
   if (foreignKeys) res = mergeWithForeignKeys(Object.entries(res), foreignKeys)
   if (subj === 'orders') res.hours = [{ hour: data.begin, booked: false }]
   if (subj === 'services') {
@@ -50,17 +51,13 @@ export const pushToChange = async (subj, data) => {
 }
 
 export const acceptChanges = async (subj, data, state) => {
-  data.token = getToken()
-  return state === 'isEditing' ? await updateItem(subj, data) : await addItem(subj, data)
+  const token = getToken()
+  return state === 'isEditing' ? await updateItem(subj, data, token) : await addItem(subj, data, token)
 }
 
-export const changeFreeHours = async (data) => await getFreeHours(data)
-
-export const preparedOrdersData = (data) => {
-  const fields = sliceData(data, -6)
-  const date = data.date ? dateFromFormatToObj(data.date) : dateFromNewDate()
-  const hours = data.hours
-  return { fields, date, hours, begin: data.begin }
-}
-
-export const preparedMastersData = (data) => sliceData(data, -1)
+//export const preparedOrdersData = (data) => {
+//  const fields = sliceData(data, -6)
+//  const date = data.date ? dateFromFormatToObj(data.date) : dateFromNewDate()
+// const hours = data.hours
+//  return { fields, date, hours, begin: data.begin }
+//}

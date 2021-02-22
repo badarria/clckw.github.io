@@ -1,30 +1,22 @@
-const pool = require('../../db')
-const { jwtDecode, jwtGenerator } = require('../../utils/jwtGenerator')
+const { jwtDecode } = require('../../utils/jwtGenerator')
+const { Order, Customer } = require('../../db/models')
 
 const getOrderToRate = async (req, res) => {
   const { orderId } = req.params
   const id = jwtDecode(orderId)
-  const order = await pool.any(
-    `SELECT o.id, 
-           c.name || ' ' || c.surname as customer,
-           coalesce(o.rating, null) as rating
-           FROM orders o
-           LEFT JOIN customers c ON o.customer = c.id
-           WHERE o.id=$1`,
-    id
-  )
+  const order = await Order.findAll({
+    attributes: ['id', 'customer', 'rating'],
+    where: { id },
+    include: { model: Customer, as: 'c', attributes: ['name', 'surname', 'fullName'] },
+  })
   return res.json(order)
 }
 
 const setOrderRating = async (req, res) => {
   const { orderId, rating } = req.body
-  const result = await pool.any(
-    `UPDATE orders SET rating=$1
-           WHERE id=$2 RETURNING id`,
-    [rating, orderId]
-  )
+  const result = await Order.update({ rating }, { where: { id: orderId }, returning: true })
 
-  return res.json(result[0]?.id || null)
+  return res.json(result[1][0]?.id)
 }
 
 module.exports = { getOrderToRate, setOrderRating }

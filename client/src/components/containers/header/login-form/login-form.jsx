@@ -29,6 +29,7 @@ export const LoginForm = ({ login }) => {
       history.push(state?.from || '/admin/customers')
     } else {
       setMsg(res.msg)
+      setLoading(false)
       setTimeout(() => {
         setMsg('')
       }, 2000)

@@ -1,10 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Tabs, Tab, AppBar, Container } from '@material-ui/core'
 
 export const LinkTabs = ({ names }) => {
   const match = useLocation('/admin')
   const [value, setValue] = React.useState(match.pathname)
+
+  useEffect(() => {
+    setValue(match.pathname)
+  }, [match])
+
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }

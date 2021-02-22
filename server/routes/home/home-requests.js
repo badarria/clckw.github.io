@@ -1,80 +1,82 @@
-const pool = require('../../db')
+const { toObjFromStr, toObjFromJSDate } = require('../../utils/datetimefunc')
 const bcrypt = require('bcrypt')
 const { jwtGenerator } = require('../../utils/jwtGenerator')
 const config = require('../../../config')
+const { City, Service, Order, Master, Customer, Admin } = require('../../db/models')
 const { jwtDecode } = require('../../utils/jwtGenerator')
 const url = config.mailing.baseUrl
 
 const getInitState = async (req, res) => {
-  const [city, service] = await pool.any(
-    `SELECT json_agg(ci) as key FROM (SELECT * FROM cities) ci
-           UNION all 
-           SELECT json_agg(s) as key FROM (SELECT * FROM services) s `
-  )
-  return res.json({ city: city.key, service: service.key })
+  const city = await City.findAll()
+  const service = await Service.findAll()
+  return res.json({ city, service })
 }
 
 const findMasters = async (req, res) => {
-  const { city, begin, end } = req.body
-  const find = await pool.any(
-    `WITH excepted_masters as (
-       SELECT m.id, m.name, m.surname FROM masters m where m.city=$1
-       EXCEPT
-       select o.master, m.name, m.surname
-       FROM orders o JOIN masters m
-       ON o.master=m.id
-       WHERE ($2::timestamp, $3::timestamp )
-       OVERLAPS (o.beginAt, o.endAt)
-    )
-    SELECT em.id, em.name, em.surname,
-    COALESCE(round(avg(o.rating)::numeric), 5) as rating
-    FROM excepted_masters em
-    LEFT JOIN orders o ON em.id=o.master
-    GROUP BY em.id, em.name, em.surname`,
-    [city, begin, end]
-  )
-  return res.json(find)
+  const { city, begin, finish } = req.headers
+
+  const list = await Master.findAll({
+    attributes: ['rating', 'name', 'surname', 'id'],
+    include: [
+      { model: City, as: 'ci', where: { id: city } },
+      {
+        model: Order,
+        as: 'o',
+        required: false,
+        attributes: ['rating', 'beginat', 'finishat'],
+      },
+    ],
+  })
+
+  const result = []
+  list.forEach(({ rating, name, surname, id, o }) => {
+    let reqBegin = toObjFromStr(begin),
+      reqFinish = toObjFromStr(finish)
+
+    const isBusy = o.reduce((acc, { beginat, finishat }) => {
+      if (reqFinish <= toObjFromJSDate(beginat) || reqBegin >= toObjFromJSDate(finishat)) {
+        acc += 1
+      }
+      return acc
+    }, 0)
+
+    if (isBusy === o.length) {
+      result.push({ id, surname, name, rating })
+    }
+  })
+
+  return res.json(result)
 }
 
 const upsertCustomer = async (req, res) => {
   const { email, name, surname } = req.body
-  const id = await pool.query(
-    `INSERT INTO customers
-           (name, surname, email)
-           VALUES($1, $2, $3)
-           ON CONFLICT (email)
-           DO UPDATE SET name=$1, surname=$2
-           WHERE customers.email=$3
-           Returning id`,
-    [name, surname, email]
-  )
+  const id = await Customer.findOrCreate({ where: { email }, defaults: { name, surname, email } })
+
   return res.json(id[0].id)
 }
 
 const addNewOrder = async (req, res) => {
-  const { master, customer, service, begin, end } = req.body
-  const id = await pool.any(
-    `INSERT
-        INTO orders(master, customer, service, beginAt, endAt)
-        VALUES($1, $2, $3, $4, $5)
-        RETURNING id`,
-    [master, customer, service, begin, end]
-  )
+  const { master, customer, service, begin, finish } = req.body
+  const id = await Order.create({ master_id: master, customer_id: customer, service_id: service, beginat: begin, finishat: finish })
+
   res.json({
-    id: id[0].id,
+    type: 'success',
+    id: id.id,
     msg: 'Your order is accepted. We will send you a mail with details',
   })
 }
 
 const auth = async (req, res) => {
   const { name, password } = req.body
-  const user = await pool.query('SELECT * FROM admin WHERE name = $1', [name])
+
+  const user = await Admin.findAll({ where: { name } })
   if (user.length === 0) {
-    return res.status(401).json('Password or name is incorrect')
+    return res.json('Password or name is incorrect')
   }
+
   const isValidPassword = await bcrypt.compare(password, user[0].password)
   if (!isValidPassword) {
-    return res.status(401).json('Password or name is incorrect')
+    return res.json('Password or name is incorrect')
   }
   const token = jwtGenerator(user[0].id)
   return res.json({ token })
@@ -131,10 +133,9 @@ const ratingRequestMail = (req) => {
 // }
 
 const stayAuth = async (req, res) => {
-  const { token } = req.params
+  const { token } = req.headers
   const uuid = jwtDecode(token)
-  const user = await pool.query(`SELECT id FROM admin WHERE id = $1`, uuid)
-
+  const user = await Admin.findAll({ where: { id: uuid } })
   if (user[0].id === uuid) {
     res.json(true)
   } else res.json(false)

@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 
 const beginKey = 'begin'
-const endKey = 'end'
+const endKey = 'finish'
 
 const getNum = (str) => Number(str.split(':')[0])
 
@@ -25,7 +25,7 @@ const findBookedTime = (orders) => {
   }, [])
 }
 
-export const toFormat = (str) => DateTime.fromISO(str).toFormat('EEE dd.MM.yy HH:mm')
+export const toMailFormat = (str) => DateTime.fromISO(str).toFormat('EEE dd.MM.yy HH:mm')
 
 export const getHoursArray = (service_time, orders = [], dayBegin = 8, dayEnd = 20) => {
   const workDay = getWorkingHours(dayBegin, dayEnd, service_time)
@@ -39,8 +39,7 @@ export const getHoursArray = (service_time, orders = [], dayBegin = 8, dayEnd = 
 
 export const dateFromFormatToObj = (date) => DateTime.fromFormat(date, 'EEE dd/MM/yyyy').toJSDate()
 
-export const dateFromNewDate = () =>
-  DateTime.fromJSDate(new Date()).set({ hours: 0, minutes: 0, seconds: 0 }).toJSDate()
+export const dateFromNewDate = () => DateTime.fromJSDate(new Date()).set({ hours: 0, minutes: 0, seconds: 0 }).toJSDate()
 
 export const dateToRequest = (date) => {
   if (date instanceof Date) {
@@ -50,7 +49,7 @@ export const dateToRequest = (date) => {
 
 export const setDisabled = (data) => {
   return data.map((item) => {
-    const endAt = DateTime.fromFormat(`${item.date} ${item.end}`, 'EEE dd/MM/yyyy HH:mm').diffNow()
+    const endAt = DateTime.fromFormat(`${item.date} ${item.finish}`, 'EEE dd/MM/yyyy HH:mm').diffNow()
     if (endAt.values.milliseconds < 1) {
       item.disabled = true
     }
@@ -58,13 +57,13 @@ export const setDisabled = (data) => {
   })
 }
 
-export const getBeginEnd = (date, hours, service_time) => {
+export const getBeginFinish = (date, hours, service_time) => {
   let begin = DateTime.fromJSDate(date)
     .set({ hours: 0, minutes: 0, seconds: 0, milliseconds: 0 })
     .plus({ hours: hours.split(':')[0] })
     .toJSDate()
-  const end = DateTime.fromJSDate(begin).plus({ hours: service_time }).toISO({ includeOffset: false })
-  begin = DateTime.fromJSDate(begin).toISO({ includeOffset: false })
+  const finish = DateTime.fromJSDate(begin).plus({ hours: service_time }).toISO().replace(/\+.+$/, '+0000')
+  begin = DateTime.fromJSDate(begin).toISO().replace(/\+.+$/, '+0000')
 
-  return { end, begin }
+  return { finish, begin }
 }

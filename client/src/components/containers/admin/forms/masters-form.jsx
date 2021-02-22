@@ -3,16 +3,10 @@ import { useForm } from 'react-hook-form'
 import { FieldsGenerator, TableForm } from '../components'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { schema } from '../../../../services/admin/validation/schema'
-import { preparedMastersData } from '../../../../services/admin'
 
-export const MastersForm = ({ data, cancel, accept }) => {
-  const defaultValues = {
-    id: data.id,
-    name: data.name,
-    surname: data.surname,
-    city: data.city[0],
-  }
-  const preparedData = preparedMastersData(data)
+export const MastersForm = ({ data: { id = 0, name, surname, city }, cancel, accept }) => {
+  const defaultValues = { id, name, surname, city: city[0] }
+  const fields = { id, name, surname, city }
 
   const { register, handleSubmit, control, reset, errors } = useForm({
     defaultValues,
@@ -31,7 +25,7 @@ export const MastersForm = ({ data, cancel, accept }) => {
       reset()
     },
   }
-  const formFieldsProps = { data: preparedData, register, control, errors, defaultValues }
+  const formFieldsProps = { data: fields, register, control, errors, defaultValues }
 
   return (
     <TableForm {...formProps}>

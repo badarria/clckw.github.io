@@ -19,7 +19,8 @@ module.exports = {
             allowNull: false,
           },
           email: {
-            type: Sequelize.CITEXT,
+            type: Sequelize.STRING,
+            unique : true,
             allowNull: false,
           },
         })

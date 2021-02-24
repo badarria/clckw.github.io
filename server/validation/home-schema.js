@@ -28,7 +28,7 @@ schema.loginForm = yup.object().shape({
 })
 
 schema.order = yup.object().shape({
-  service: yup.string().matches(/[1-8]/g).required(),
+  service_id: yup.string().matches(/[1-8]/g).required(),
   begin: yup
     .string()
     .required()
@@ -40,8 +40,8 @@ schema.order = yup.object().shape({
       const begin = context.parent.begin
       return compareTime(begin, value)
     }),
-  customer: num.required(),
-  master: num.required(),
+  customer_id: num.required(),
+  master_id: num.required(),
 })
 
 module.exports = schema

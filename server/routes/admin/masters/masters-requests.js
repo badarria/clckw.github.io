@@ -2,7 +2,7 @@ const { Master, City, Order } = require('../../../db/models')
 
 const getKeys = async (req, res) => {
   const city = await City.findAll()
-  return res.json({ city })
+  return res.json(city)
 }
 
 const update = async (req, res) => {
@@ -14,8 +14,8 @@ const update = async (req, res) => {
       returning: true,
     }
   )
-
-  return res.json(result[0] ? 'Master was updated' : 'Master not found')
+  const msg = result[0] ? 'Master was updated' : 'Master not found'
+  return res.json({ type: 'success', msg })
 }
 
 const getList = async (req, res) => {
@@ -54,13 +54,13 @@ const remove = async (req, res) => {
   const { id } = req.params
   await Master.destroy({ where: { id } })
 
-  return res.json('Master was deleted')
+  return res.json({ type: 'success', msg: 'Master was deleted' })
 }
 
 const add = async (req, res) => {
   const { name, surname, city } = req.body
   await Master.create({ name, surname, city_id: city })
-  return res.json('Master was added')
+  return res.json({ type: 'success', msg: 'Master was added' })
 }
 
 module.exports = { update, add, remove, getList, getKeys }

@@ -8,8 +8,8 @@ const update = async (req, res) => {
     { master_id: master, customer_id: customer, service_id: service, beginat: begin, finishat: finish },
     { where: { id } }
   )
-
-  return res.json(result[0] ? 'Order was updated' : 'Order not found')
+  const msg = result[0] ? 'Order was updated' : 'Order not found'
+  return res.json({ type: 'success', msg })
 }
 
 const getList = async (req, res) => {
@@ -34,8 +34,7 @@ const getList = async (req, res) => {
 }
 
 const getFiltered = async (req, res) => {
-  const { master_id, date, order_id } = req.params
-
+  const { master_id, date, order_id } = req.query
   const filteredOrders = await Order.findAll({
     attributes: ['finishat', 'beginat', 'finish', 'begin'],
 
@@ -52,7 +51,9 @@ const getFiltered = async (req, res) => {
 const getKeys = async (req, res) => {
   const master = await Master.findAll()
   const customer = await Customer.findAll()
-  const service = await Service.findAll()
+  const service = await Service.findAll({
+    attributes: ['id', ['name', 'service'], ['time', 'service_time']],
+  })
 
   return res.json({ master, customer, service })
 }
@@ -60,13 +61,19 @@ const getKeys = async (req, res) => {
 const remove = async (req, res) => {
   const { id } = req.params
   await Order.destroy({ where: { id } })
-  return res.json('Order was deleted')
+  return res.json({ type: 'success', msg: 'Order was deleted' })
 }
 
 const add = async (req, res) => {
   const { master, customer, service, begin, finish } = req.body
-  await Order.create({ master_id: master, customer_id: customer, service_id: service, beginat: begin, finishat: finish })
-  return res.json('Order was added')
+  await Order.create({
+    master_id: master,
+    customer_id: customer,
+    service_id: service,
+    beginat: begin,
+    finishat: finish,
+  })
+  return res.json({ type: 'success', msg: 'Order was added' })
 }
 
 module.exports = { remove, add, getKeys, getFiltered, getList, update }

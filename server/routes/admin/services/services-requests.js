@@ -3,8 +3,8 @@ const { Service } = require('../../../db/models')
 const update = async (req, res) => {
   const { name, time, id } = req.body
   const result = await Service.update({ name, time }, { where: { id } })
-
-  return res.json(result[0] ? 'Service was updated' : 'Service not found')
+  const msg = result[0] ? 'Service was updated' : 'Service not found'
+  return res.json({ type: 'success', msg })
 }
 
 const getList = async (req, res) => {
@@ -18,13 +18,13 @@ const getList = async (req, res) => {
 const remove = async (req, res) => {
   const { id } = req.params
   await Service.destroy({ where: { id } })
-  return res.json(`Service was deleted`)
+  return res.json({ type: 'success', msg: `Service was deleted` })
 }
 
 const add = async (req, res) => {
   const { name, time } = req.body
   await Service.create({ name, time })
-  return res.json('Service was added')
+  return res.json({ type: 'success', msg: 'Service was added' })
 }
 
 module.exports = { add, remove, getList, update }

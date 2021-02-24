@@ -1,6 +1,11 @@
 const { DataTypes } = require('sequelize')
 const { sequelize } = require('../db')
-const { toTime, toDate } = require('../../utils/datetimefunc')
+const { toTime, toDate, tsToLocale } = require('../../utils/datetimefunc')
+const { DateTime } = require('luxon')
+require('pg').types.setTypeParser(1114, (stringValue) => {
+  return new Date(stringValue + '+0000')
+  // e.g., UTC offset. Use any offset that you would like.
+})
 
 const Admin = sequelize.define(
   'admin',
@@ -207,21 +212,18 @@ const Order = sequelize.define(
           {
             model: Master,
             as: 'm',
-            attributes: ['name', 'surname', 'fullName'],
+            attributes: ['id', 'name', 'surname', 'fullName'],
             include: {
               model: City,
               as: 'ci',
               attributes: [['name', 'city']],
             },
           },
-          { model: Customer, as: 'c', attributes: ['name', 'surname', 'fullName'] },
+          { model: Customer, as: 'c', attributes: ['id', 'name', 'surname', 'fullName'] },
           {
             model: Service,
             as: 's',
-            attributes: [
-              ['name', 'service'],
-              ['time', 'service_time'],
-            ],
+            attributes: ['id', ['name', 'service'], ['time', 'service_time']],
           },
         ],
       },

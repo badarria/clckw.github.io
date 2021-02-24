@@ -3,7 +3,8 @@ const { Customer } = require('../../../db/models')
 const update = async (req, res) => {
   const { name, surname, email, id } = req.body
   const result = await Customer.update({ name, surname, email }, { where: { id } })
-  return res.json(result[0] ? 'Customer was updated' : 'Customer not found')
+  const msg = result[0] ? 'Customer was updated' : 'Customer not found'
+  return res.json({ type: 'success', msg })
 }
 
 const getList = async (req, res) => {
@@ -18,14 +19,14 @@ const getList = async (req, res) => {
 const remove = async (req, res) => {
   const { id } = req.params
   await Customer.destroy({ where: { id } })
-  return res.json('Customer was deleted')
+  return res.json({ type: 'success', msg: 'Customer was deleted' })
 }
 
 const add = async (req, res) => {
   const { name, surname, email } = req.body
   await Customer.create({ name, surname, email })
 
-  return res.json('Customer was added')
+  return res.json({ type: 'success', msg: 'Customer was added' })
 }
 
 module.exports = { add, remove, getList, update }

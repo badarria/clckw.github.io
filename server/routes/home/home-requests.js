@@ -13,7 +13,7 @@ const getInitState = async (req, res) => {
 }
 
 const findMasters = async (req, res) => {
-  const { city, begin, finish } = req.headers
+  const { city, begin, finish } = req.params
 
   const list = await Master.findAll({
     attributes: ['rating', 'name', 'surname', 'id'],
@@ -56,8 +56,15 @@ const upsertCustomer = async (req, res) => {
 }
 
 const addNewOrder = async (req, res) => {
-  const { master, customer, service, begin, finish } = req.body
-  const id = await Order.create({ master_id: master, customer_id: customer, service_id: service, beginat: begin, finishat: finish })
+  const { master_id, customer_id, service_id, begin, finish } = req.body
+
+  const id = await Order.create({
+    master_id,
+    customer_id,
+    service_id,
+    beginat: begin,
+    finishat: finish,
+  })
 
   res.json({
     type: 'success',

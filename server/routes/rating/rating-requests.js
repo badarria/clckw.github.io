@@ -15,8 +15,8 @@ const getOrderToRate = async (req, res) => {
 const setOrderRating = async (req, res) => {
   const { orderId, rating } = req.body
   const result = await Order.update({ rating }, { where: { id: orderId }, returning: true })
-
-  return res.json(result[1][0]?.id)
+  const msg = result[1][0]?.id
+  return res.json({ msg })
 }
 
 module.exports = { getOrderToRate, setOrderRating }

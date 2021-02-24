@@ -2,6 +2,7 @@ const yup = require('yup')
 
 const validator = (schema, opt = 'body') => async (req, res, next) => {
   try {
+    console.log(req[opt])
     req.body = await schema.validate(req[opt])
     next()
   } catch (err) {

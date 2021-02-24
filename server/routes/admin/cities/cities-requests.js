@@ -3,8 +3,8 @@ const { City } = require('../../../db/models')
 const update = async (req, res) => {
   const { name, id } = req.body
   const result = await City.update({ name }, { where: { id } })
-
-  return res.json(result[0] ? 'City was updated' : 'City not found')
+  const msg = result[0] ? 'City was updated' : 'City not found'
+  return res.json({ type: 'success', msg })
 }
 
 const getList = async (req, res) => {
@@ -19,14 +19,14 @@ const remove = async (req, res) => {
   const { id } = req.params
   await City.destroy({ where: { id } })
 
-  return res.json('City was deleted')
+  return res.json({ type: 'success', msg: 'City was deleted' })
 }
 
 const add = async (req, res) => {
   const { name } = req.body
   await City.create({ name })
 
-  return res.json('City was added')
+  return res.json({ type: 'success', msg: 'City was added' })
 }
 
 module.exports = { add, remove, getList, update }

@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize')
-const { sequelize } = require('./db')
-const { toTime, toDate } = require('../utils/datetimefunc')
+const { sequelize } = require('../db')
+const { toTime, toDate } = require('../../utils/datetimefunc')
 
 const Admin = sequelize.define(
   'admin',

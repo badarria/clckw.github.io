@@ -221,7 +221,7 @@ export type DataForLetter = {
   orderId: number
 }
 
-export type ParamsForSearching = { city: number | null; begin: string; finish: string }
+export type ParamsForSearching = { city: number; begin: string; finish: string }
 export type RawParamsForSearching = {
   date: Date
   hours: string

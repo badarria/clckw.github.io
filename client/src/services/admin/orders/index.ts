@@ -1,4 +1,4 @@
-import { Order, OrdersKey, Method, State, TypicalResponse, FilteredOrders, NewOrderData } from 'types'
+import { OrdersKey, Method, State, TypicalResponse, FilteredOrders, NewOrderData } from 'types'
 import { OrdersList, Paging } from 'types'
 const adminPath = '/admin/orders'
 const getToken = () => localStorage.getItem('token') || ''

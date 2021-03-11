@@ -71,5 +71,5 @@ export const getBeginFinish = (date: Date, hours: string, service_time: string) 
     .replace(/\+.+$/, '+0000')
   begin = DateTime.fromJSDate(begin).toISO().replace(/\+.+$/, '+0000')
 
-  return { finish, begin }
+  return { finish, begin } as { finish: string; begin: string }
 }

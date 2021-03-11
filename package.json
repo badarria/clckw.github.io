@@ -16,9 +16,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@material-ui/core": "^4.11.0",
-    "@material-ui/icons": "^4.9.1",
-    "@material-ui/lab": "^4.0.0-alpha.57",
     "bcrypt": "^5.0.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
@@ -29,15 +26,9 @@
     "nodemailer": "^6.4.17",
     "pg": "^8.5.1",
     "pg-hstore": "^2.3.3",
-    "prettier": "^2.2.1",
     "sequelize": "^6.5.0",
     "uuid": "^8.3.2",
-    "webpack-dev-server": "^3.11.0",
-    "yup": "^0.32.8"
-  },
-  "devDependencies": {
-    "@material-ui/pickers": "^3.2.10",
-    "dotenv": "^8.2.0",
+    "yup": "^0.32.8",
     "sequelize-cli": "^6.2.0"
   }
 }

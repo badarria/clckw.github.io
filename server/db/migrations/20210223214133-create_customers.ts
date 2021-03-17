@@ -1,6 +1,10 @@
-'use strict'
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
+import { INTEGER, STRING } from 'sequelize'
+;('use strict')
+
+import { QueryInterface } from 'sequelize/types'
+
+export default {
+  up: async (queryInterface: QueryInterface) => {
     try {
       await queryInterface.sequelize.transaction(async (t) => {
         await queryInterface.createTable('customers', {
@@ -8,19 +12,19 @@ module.exports = {
             allowNull: false,
             autoIncrement: true,
             primaryKey: true,
-            type: Sequelize.INTEGER,
+            type: INTEGER,
           },
           name: {
-            type: Sequelize.STRING,
+            type: STRING,
             allowNull: false,
           },
           surname: {
-            type: Sequelize.STRING,
+            type: STRING,
             allowNull: false,
           },
           email: {
-            type: Sequelize.STRING,
-            unique : true,
+            type: STRING,
+            unique: true,
             allowNull: false,
           },
         })
@@ -30,7 +34,7 @@ module.exports = {
       console.error(e.message)
     }
   },
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface: QueryInterface) => {
     try {
       await queryInterface.sequelize.transaction(async (t) => {
         await queryInterface.dropTable('customers', { transaction: t })

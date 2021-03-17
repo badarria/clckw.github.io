@@ -1,5 +1,6 @@
-module.exports = {
-  up: (queryInterface, Sequelize) => {
+import { QueryInterface } from 'sequelize/types'
+export default {
+  up: (queryInterface: QueryInterface) => {
     return queryInterface.bulkInsert('orders', [
       {
         service_id: 1,
@@ -10,7 +11,7 @@ module.exports = {
       },
     ])
   },
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('orders', null, {})
+  down: (queryInterface: QueryInterface) => {
+    return queryInterface.bulkDelete('orders', {})
   },
 }

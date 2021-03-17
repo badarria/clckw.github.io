@@ -84,7 +84,6 @@ export const SearchForm = () => {
 
   useEffect(() => {
     const newHours = pastTime(getHoursArray(service.time), dateValue)
-    console.log(newHours, dateValue)
     setHours(newHours)
   }, [service, dateValue])
 

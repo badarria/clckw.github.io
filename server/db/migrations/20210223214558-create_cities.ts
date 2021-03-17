@@ -1,6 +1,7 @@
-'use strict'
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
+import { QueryInterface, INTEGER, STRING } from 'sequelize/types'
+;('use strict')
+export default {
+  up: async (queryInterface: QueryInterface) => {
     try {
       await queryInterface.sequelize.transaction(async (t) => {
         await queryInterface.createTable('cities', {
@@ -8,10 +9,10 @@ module.exports = {
             allowNull: false,
             autoIncrement: true,
             primaryKey: true,
-            type: Sequelize.INTEGER,
+            type: INTEGER,
           },
           name: {
-            type: Sequelize.STRING,
+            type: STRING,
             unique: true,
             allowNull: false,
           },
@@ -22,7 +23,7 @@ module.exports = {
       console.error(e.message)
     }
   },
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface: QueryInterface) => {
     try {
       await queryInterface.sequelize.transaction(async (t) => {
         await queryInterface.dropTable('cities', { transaction: t })

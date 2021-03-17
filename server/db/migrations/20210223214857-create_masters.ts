@@ -1,6 +1,7 @@
-'use strict'
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
+import { INTEGER, QueryInterface, STRING } from 'sequelize/types'
+;('use strict')
+export default {
+  up: async (queryInterface: QueryInterface) => {
     try {
       await queryInterface.sequelize.transaction(async (t) => {
         await queryInterface.createTable('masters', {
@@ -8,23 +9,23 @@ module.exports = {
             allowNull: false,
             autoIncrement: true,
             primaryKey: true,
-            type: Sequelize.INTEGER,
+            type: INTEGER,
           },
           name: {
-            type: Sequelize.STRING,
+            type: STRING,
             allowNull: false,
           },
           surname: {
-            type: Sequelize.STRING,
+            type: STRING,
             allowNull: false,
           },
           city_id: {
-            type: Sequelize.INTEGER,
+            type: INTEGER,
             references: {
               model: 'cities',
               key: 'id',
-              onUpdate: 'SET NULL',
-              onDelete: 'SET NULL',
+              // onUpdate: 'SET NULL',
+              // onDelete: 'SET NULL',
             },
           },
         })
@@ -33,7 +34,7 @@ module.exports = {
       console.error(e.message)
     }
   },
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface: QueryInterface) => {
     try {
       await queryInterface.sequelize.transaction(async (t) => {
         await queryInterface.dropTable('masters', { transaction: t })

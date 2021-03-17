@@ -1,6 +1,7 @@
-'use strict'
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
+import { DATE, INTEGER, QueryInterface } from 'sequelize/types'
+;('use strict')
+export default {
+  up: async (queryInterface: QueryInterface) => {
     try {
       await queryInterface.sequelize.transaction(async (t) => {
         await queryInterface.createTable('orders', {
@@ -8,42 +9,42 @@ module.exports = {
             allowNull: false,
             autoIncrement: true,
             primaryKey: true,
-            type: Sequelize.INTEGER,
+            type: INTEGER,
           },
-          rating: Sequelize.INTEGER,
+          rating: INTEGER,
           beginat: {
-            type: Sequelize.DATE,
+            type: DATE,
             allowNull: false,
           },
           finishat: {
-            type: Sequelize.DATE,
+            type: DATE,
             allowNull: false,
           },
           customer_id: {
-            type: Sequelize.INTEGER,
+            type: INTEGER,
             references: {
               model: 'customers',
               key: 'id',
-              onUpdate: 'SET NULL',
-              onDelete: 'SET NULL',
+              // onUpdate: 'SET NULL',
+              // onDelete: 'SET NULL',
             },
           },
           master_id: {
-            type: Sequelize.INTEGER,
+            type: INTEGER,
             references: {
               model: 'masters',
               key: 'id',
-              onUpdate: 'SET NULL',
-              onDelete: 'SET NULL',
+              // onUpdate: 'SET NULL',
+              // onDelete: 'SET NULL',
             },
           },
           service_id: {
-            type: Sequelize.INTEGER,
+            type: INTEGER,
             references: {
               model: 'services',
               key: 'id',
-              onUpdate: 'SET NULL',
-              onDelete: 'SET NULL',
+              // onUpdate: 'SET NULL',
+              // onDelete: 'SET NULL',
             },
           },
         })
@@ -52,7 +53,7 @@ module.exports = {
       console.error(e.message)
     }
   },
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface: QueryInterface) => {
     try {
       await queryInterface.sequelize.transaction(async (t) => {
         await queryInterface.dropTable('orders', { transaction: t })

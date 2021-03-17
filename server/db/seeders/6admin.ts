@@ -1,5 +1,6 @@
-const bcrypt = require('bcrypt')
-const uuid = require('uuid')
+import { QueryInterface } from 'sequelize/types'
+import bcrypt from 'bcrypt'
+import uuid from 'uuid'
 
 const pass = process.env.ADMIN_PASSWORD
 const login = process.env.ADMIN_LOGIN
@@ -7,8 +8,8 @@ const saltRound = 10
 const salt = bcrypt.genSaltSync(saltRound)
 const cryptPass = bcrypt.hashSync(pass, salt)
 
-module.exports = {
-  up: (queryInterface, Sequelize) => {
+export default {
+  up: (queryInterface: QueryInterface) => {
     return queryInterface.bulkInsert('admin', [
       {
         id: uuid.v4(),
@@ -17,7 +18,7 @@ module.exports = {
       },
     ])
   },
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('admin', null, {})
+  down: (queryInterface: QueryInterface) => {
+    return queryInterface.bulkDelete('admin', {})
   },
 }

@@ -73,10 +73,8 @@ export const OrdersForm = ({ data, cancel, accept }: OrdersFormProps) => {
       const changeHours = async () => {
         const normDate = dateToRequest(dateValue)
         const orders = await getFilteredOrders(masterValue, id, normDate)
-        console.log(orders, 'orders')
         if (Array.isArray(orders)) {
           let res = getHoursArray(serviceValue, orders)
-          console.log(res, 'serviceValue res array')
           setNewHours(res)
         }
       }
@@ -93,7 +91,7 @@ export const OrdersForm = ({ data, cancel, accept }: OrdersFormProps) => {
       date,
       hours,
     } = data
-    console.log(data, 'datatosubmit')
+
     const { begin, finish } = getBeginFinish(date, hours, service_time)
     const dataToReq = {
       id,

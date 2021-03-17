@@ -1,19 +1,20 @@
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
+import { QueryInterface, TEXT, UUID } from 'sequelize/types'
+export default {
+  up: async (queryInterface: QueryInterface) => {
     try {
       await queryInterface.sequelize.transaction(async (t) => {
         await queryInterface.createTable('admin', {
           id: {
-            type: Sequelize.UUID,
+            type: UUID,
             allowNull: false,
             primaryKey: true,
           },
           name: {
-            type: Sequelize.TEXT,
+            type: TEXT,
             allowNull: false,
           },
           password: {
-            type: Sequelize.TEXT,
+            type: TEXT,
             allowNull: false,
           },
         })
@@ -22,7 +23,7 @@ module.exports = {
       console.error(e.message)
     }
   },
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface: QueryInterface) => {
     try {
       await queryInterface.sequelize.transaction(async (t) => {
         await queryInterface.dropTable('admin', { transaction: t })

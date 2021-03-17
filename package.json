@@ -8,7 +8,7 @@
     "npm": "6.14.4"
   },
   "scripts": {
-    "start": "yarn run dev",
+    "start": "tsc && node dist/index.js",
     "heroku-postbuild": "cd client && yarn && yarn build",
     "migrations:up": "sequelize-cli db:migrate",
     "migrations:down": "sequelize-cli db:migrate:undo",

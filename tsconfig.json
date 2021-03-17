@@ -16,6 +16,8 @@
     "moduleResolution": "node",
     "isolatedModules": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "outDir": "dist"
   },
+  "exclude": ["client"],
 }

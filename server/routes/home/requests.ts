@@ -41,12 +41,10 @@ type MailType = {
 }
 
 const getInitState = async (req: Request, res: Response) => {
-  console.log('init')
-  // throw new Error('dfdzfbdf')
   const city = await sequelize.models.City.findAll().catch((err) => new Error(err.message))
-  const service = await sequelize.models.Service.findAll()
+  const service = await sequelize.models.Service.findAll().catch((err) => new Error(err.message))
 
-  res.json({ city, service })
+  return city && service && res.json({ city, service })
 }
 
 const findMasters = async (req: Request, res: Response, next: NextFunction) => {
@@ -97,9 +95,7 @@ const upsertCustomer = async (req: Request, res: Response, next: NextFunction) =
     const id = await Customer.findOrCreate({ where: { email }, defaults: { name, surname, email } }).catch((err) =>
       next(err)
     )
-    if (id) {
-      res.json(id[0].id)
-    }
+    return id && res.json(id[0].id)
   }
 }
 
@@ -114,7 +110,7 @@ const addNewOrder = async (req: Request, res: Response, next: NextFunction) => {
       beginat: begin,
       finishat: finish,
     }).catch((err) => next(err))
-    if (id)
+    id &&
       res.json({
         type: 'success',
         id: id.id,
@@ -133,11 +129,11 @@ const auth = async (req: Request, res: Response, next: NextFunction) => {
       if (user.length === 0) {
         res.json('Password or name is incorrect')
       }
-      const isValidPassword = await bcrypt.compare(password, user[0].password)
+      const isValidPassword = await bcrypt.compare(password, user[0].password).catch((err) => next(err))
       if (isValidPassword) {
         const token = jwtGenerator(user[0].id)
         res.json({ token })
-      } else next(new Error('Password or name is incorrect'))
+      }
     }
   }
 }

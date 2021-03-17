@@ -113,11 +113,11 @@ export type OrderToReq = {
 }
 
 export type DataForNewOrder = {
-  service_id: number
+  service: number
   begin: string
   finish: string
-  customer_id: number
-  master_id: number
+  customer: number
+  master: number
 }
 
 export type AutocompleteFieldProps = {

@@ -20,7 +20,7 @@ import { dateFromNewDate, getBeginFinish, getHoursArray, pastTime, toMailFormat 
 export const SearchForm = () => {
   const { container, form, wrap, btn, msgBox } = useStyles()
   const initKeys = { city: [{ id: 0, name: '' }], service: [{ id: 0, name: '', time: '' }] }
-  const initOrder = { service_id: 0, begin: '', finish: '', customer_id: 0, master_id: 0 }
+  const initOrder = { service: 0, begin: '', finish: '', customer: 0, master: 0 }
   const initMail = { name: '', userEmail: '', city: '', begin: '', service: 'service.name', master: '', orderId: 0 }
   const initHours = pastTime(getHoursArray('1'))
   const findDefaultHour = () => {
@@ -98,7 +98,7 @@ export const SearchForm = () => {
       setMasters(masters)
       const id = await getCustomer({ email, name, surname })
       if (typeof id === 'number') {
-        const orderData = { service_id: service.id, begin, finish, customer_id: id }
+        const orderData = { service: service.id, begin, finish, customer: id }
         const mailData = {
           name,
           userEmail: email,
@@ -116,7 +116,7 @@ export const SearchForm = () => {
   }
 
   const confirm = async ({ id, masterName }: { id: number; masterName: string }) => {
-    setOrder((prevorder) => ({ ...prevorder, master_id: id }))
+    setOrder((prevorder) => ({ ...prevorder, master: id }))
     setMail({ ...mail, master: masterName })
   }
 
@@ -138,14 +138,14 @@ export const SearchForm = () => {
       }
       setToastMsg(res)
     }
-    if (order.master_id !== 0) {
+    if (order.master !== 0) {
       addOrder()
     }
   }, [order])
 
   const selectProps = { control, data: hours, name: 'hours' }
   const inputs = ['name', 'surname', 'email']
-  console.log(errors)
+
   return (
     <>
       <Loader loading={loading} />

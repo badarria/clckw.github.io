@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "esnext",
+    "lib": [
+      "esnext",
+    ],
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": "server",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "allowUmdGlobalAccess": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "isolatedModules": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+}

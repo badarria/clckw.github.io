@@ -61,15 +61,15 @@ export const setDisabled = (data: Order[]) =>
   })
 
 export const getBeginFinish = (date: Date, hours: string, service_time: string) => {
-  let begin: Date | string = DateTime.fromJSDate(date)
+  const beginJs = DateTime.fromJSDate(date)
     .set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
     .plus({ hours: Number(hours.split(':')[0]) })
     .toJSDate()
-  const finish = DateTime.fromJSDate(begin)
+  const finish: string = DateTime.fromJSDate(beginJs)
     .plus({ hours: Number(service_time) })
     .toISO()
     .replace(/\+.+$/, '+0000')
-  begin = DateTime.fromJSDate(begin).toISO().replace(/\+.+$/, '+0000')
+  const begin = DateTime.fromJSDate(beginJs).toISO().replace(/\+.+$/, '+0000')
 
-  return { finish, begin } as { finish: string; begin: string }
+  return { finish, begin }
 }

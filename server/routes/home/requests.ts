@@ -14,10 +14,7 @@ import {
   secondMailSchema,
 } from '../../validation'
 import { createMail } from '../../utils'
-import { sequelize } from '../../db'
-import { error } from 'node:console'
 const url = config.mailing.baseUrl
-// const { City, Service, Order, Master, Customer, Admin } = sequelize.models
 
 type InitState = { city: typeof City[]; service: typeof Service[] }
 type FreeMasters = { id: number; surname: string; name: string; rating: number }[]
@@ -41,8 +38,8 @@ type MailType = {
 }
 
 const getInitState = async (req: Request, res: Response) => {
-  const city = await sequelize.models.City.findAll().catch((err) => new Error(err.message))
-  const service = await sequelize.models.Service.findAll().catch((err) => new Error(err.message))
+  const city = await City.findAll().catch((err) => new Error(err.message))
+  const service = await Service.findAll().catch((err) => new Error(err.message))
 
   return city && service && res.json({ city, service })
 }

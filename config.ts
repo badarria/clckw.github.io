@@ -9,7 +9,7 @@ const allConfig = {
   production: {
     db: process.env.DATABASE_URL,
     port: process.env.PORT,
-    app: express.static(path.join(__dirname, 'client/build')),
+    app: express.static(path.join(__dirname, '../client/build')),
     mailing: {
       password: process.env.MAIL_PASSWORD,
       email: process.env.MAIL_ADRESS,

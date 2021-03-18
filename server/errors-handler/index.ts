@@ -1,6 +1,4 @@
-import { VerifyErrors } from 'jsonwebtoken'
 import { Response, Request, NextFunction } from 'express'
-import { ValidationErrorItem } from 'sequelize'
 import { ValidationError } from 'yup'
 
 export const errorsHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
@@ -21,6 +19,6 @@ export const errorsHandler = (err: Error, req: Request, res: Response, next: Nex
     res.status(500).send({ type: 'error', msg: 'Database error', detail: err.name })
     return
   }
-  // console.error(err, 'inda ErrorHandler')
-  res.status(500).send({ type: 'error', msg: err.message })
+  console.error(err, 'inda ErrorHandler')
+  res.status(500).send({ type: 'error', msg: err.message || 'something went wrong' })
 }

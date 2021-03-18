@@ -14,7 +14,9 @@ import {
   secondMailSchema,
 } from '../../validation'
 import { createMail } from '../../utils'
+import { sequelize } from '../../db'
 const url = config.mailing.baseUrl
+const admin = sequelize.models.Admin
 
 type InitState = { city: typeof City[]; service: typeof Service[] }
 type FreeMasters = { id: number; surname: string; name: string; rating: number }[]

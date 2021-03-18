@@ -3,6 +3,7 @@ import { deleteSchema, orderSchema, pagingSchema, searchParamsSchema } from '../
 import { Order, Customer, Master, Service, City } from '../../../db/models'
 import { Op } from 'sequelize'
 import { Sequelize } from 'sequelize-typescript'
+import { sequelize } from '../../../db'
 
 const update = async (req: Request, res: Response, next: NextFunction) => {
   const validData = await orderSchema.validate(req.body).catch((err) => next(err))

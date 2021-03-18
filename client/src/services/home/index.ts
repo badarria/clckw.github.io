@@ -1,4 +1,4 @@
-import { setUserAuth } from '../../store/reducer'
+import { setChecking, setUserAuth } from '../../store/reducer'
 import { checkUserAuth, loginUser } from './api'
 import { LoginData } from 'types'
 import { Dispatch } from 'redux'
@@ -18,6 +18,7 @@ export const login = (data: LoginData) => async (dispatch: Dispatch) => {
 export const stayAuth = async (dispatch: Dispatch) => {
   const token = localStorage.getItem('token')
   if (token) {
+    dispatch(setChecking(true))
     const res = await checkUserAuth(token)
     if (res && 'role' in res) {
       const { role, user_id } = res
@@ -27,6 +28,7 @@ export const stayAuth = async (dispatch: Dispatch) => {
       dispatch(setUserAuth({ auth: false }))
     }
   }
+  dispatch(setChecking(false))
 }
 
 export const stayMasterAuth = async (dispatch: Dispatch) => {

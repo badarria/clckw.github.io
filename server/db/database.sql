@@ -67,7 +67,8 @@ create table users (
         name varchar(255) not null,
     pass varchar(255) not null,
 salt varchar(255) not null,
-token varchar(255)
+token varchar(255),
+user_id integer references masters on delete set null
 )
 
 -- alter table masters add column user_id integer references users on delete set null;

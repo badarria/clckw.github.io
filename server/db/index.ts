@@ -5,7 +5,10 @@ const connectionString = config.db
 
 const sequelize = new Sequelize(connectionString, {
   dialectOptions: {
-    ssl: true,
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
   },
 })
 sequelize.addModels([City, Customer, Service, Master, Admin, Order])

@@ -56,3 +56,18 @@ create TABLE admin
 );
 --create extension if not exists "uuid-ossp";
 --insert into admin (name, password) values ('admin', 'admin123');
+-- alter table admin rename to users;
+-- alter table users rename column id to token;
+-- alter table users rename column name to role;
+-- alter table users add column id integer;
+
+create table users (
+    id serial primary key,
+    role varchar(255) not null,
+        name varchar(255) not null,
+    pass varchar(255) not null,
+salt varchar(255) not null,
+token varchar(255)
+)
+
+-- alter table masters add column user_id integer references users on delete set null;

@@ -4,21 +4,16 @@ import { Container, AppBar, Toolbar, Button, Box } from '@material-ui/core'
 import { LoginForm } from './login-form/login-form'
 import { Action, compose } from 'redux'
 import { connect } from 'react-redux'
-import { getAuthState } from '../../../store/state-selectors'
+import { getUserAuthState } from '../../../store/state-selectors'
 import { useStyles } from './styles'
 import { login, logout } from '../../../services/home'
-import { LoginData } from 'types'
+import { HeaderProps, LoginData, User } from 'types'
 import { ThunkDispatch } from '@reduxjs/toolkit'
 
-const Header = ({
-  logoutFrom,
-  loginTo,
-  isAuth,
-}: {
-  logoutFrom: () => void
-  loginTo: (data: LoginData) => Promise<any>
-  isAuth: boolean
-}) => {
+const Header = ({ logoutFrom, loginTo, user }: HeaderProps) => {
+  const { auth, role } = user
+  const isAdmin = role === 'admin' && auth
+  const isMaster = role === 'master' && auth
   const { root, title, btns } = useStyles()
 
   return (
@@ -29,12 +24,17 @@ const Header = ({
             Clockware
           </Button>
           <Box className={btns}>
-            {isAuth && (
+            {isAdmin && (
               <Button color='inherit' component={Link} to={'/admin/customers'}>
                 Admin
               </Button>
             )}
-            {isAuth ? (
+            {isMaster && (
+              <Button color='inherit' component={Link} to={'/master'}>
+                Master
+              </Button>
+            )}
+            {isAdmin || isMaster ? (
               <Button color='inherit' onClick={logoutFrom}>
                 Logout
               </Button>
@@ -48,9 +48,9 @@ const Header = ({
   )
 }
 
-const mapStateToProps = (state: { isAuth: boolean }) => {
+const mapStateToProps = (state: { user: User }) => {
   return {
-    isAuth: getAuthState(state),
+    user: getUserAuthState(state),
   }
 }
 const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, Action>) => {

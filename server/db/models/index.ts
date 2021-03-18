@@ -4,8 +4,9 @@ import { City } from './City'
 import { Service } from './Service'
 import { Admin } from './Admin'
 import { Order } from './Order'
+import { User } from './Users'
 
-export { Admin, Customer, Order, City, Master, Service }
+export { Admin, Customer, Order, City, Master, Service, User }
 
 // Master.hasMany(Order, {
 //   as: 'o',

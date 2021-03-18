@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 export const initState = {
   newOrder: {},
   mailData: {},
-  isAuth: true,
+  user: { id: 0, auth: true, role: 'master' },
 }
 
 const rootReducer = createSlice({
@@ -20,11 +20,11 @@ const rootReducer = createSlice({
     setMailData: (state, action) => {
       state.mailData = { ...state.mailData, ...action.payload }
     },
-    setAuth: (state, action) => {
-      state.isAuth = action.payload
+    setUserAuth: (state, action) => {
+      state.user = { ...state.user, ...action.payload }
     },
   },
 })
 
 export const { reducer } = rootReducer
-export const { setAuth, setNewOrder, setMailData } = rootReducer.actions
+export const { setNewOrder, setMailData, setUserAuth } = rootReducer.actions

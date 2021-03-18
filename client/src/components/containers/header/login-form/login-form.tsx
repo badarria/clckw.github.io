@@ -25,10 +25,11 @@ export const LoginForm = ({ login }: { login: Function }) => {
   const submit = async (data: LoginData) => {
     setLoading(true)
     const res = await login(data)
-    if (res.status) {
-      handleClose()
+    if ('role' in res) {
       setLoading(false)
-      history.push(state?.from || '/admin/customers')
+      handleClose()
+      const path = res.role === 'admin' ? '/admin/customers' : '/master'
+      history.push(state?.from || path)
     } else {
       setMsg(res.msg)
       setLoading(false)

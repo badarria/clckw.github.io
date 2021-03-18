@@ -3,18 +3,19 @@ import { Header, Home } from './containers'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
-import { getAuthState } from '../store/state-selectors'
-import { AdminRoute, RatingRoute } from '../routes'
+import { getUserAuthState } from '../store/state-selectors'
+import { AdminRoute, MasterRoute, RatingRoute } from '../routes'
 import { Cities, Customers, Masters, Orders, Services } from './containers/admin/pages'
+import { User } from 'types'
 
-const App = ({ isAuth }: { isAuth: boolean }) => {
+const App = (props) => {
   return (
     <Router>
       <Header />
       <Switch>
         <Route path='/' exact component={Home} />
         <Route exact path='/admin' render={() => <Redirect to='/admin/customers' />} />
-        <AdminRoute path='/admin' isAuth={isAuth}>
+        <AdminRoute path='/admin' user={props.user}>
           <Switch>
             <Route path='/admin/customers' exact component={Customers} />
             <Route path='/admin/masters' exact component={Masters} />
@@ -25,15 +26,16 @@ const App = ({ isAuth }: { isAuth: boolean }) => {
           </Switch>
         </AdminRoute>
         <RatingRoute path='/orderRate' />
+        <MasterRoute path='/master' user={props.user} />
         <Redirect to='/' />
       </Switch>
     </Router>
   )
 }
 
-const mapStateToProps = (state: { isAuth: boolean }, ownProps: any = {}) => {
+const mapStateToProps = (state: { user: User }, ownProps: any = {}) => {
   return {
-    isAuth: getAuthState(state),
+    user: getUserAuthState(state),
   }
 }
 

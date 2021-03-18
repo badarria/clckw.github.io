@@ -2,7 +2,6 @@ import {
   Customer,
   ParamsForSearching,
   LoginData,
-  Order,
   DataForLetter,
   FreeMastersList,
   CustomerResponse,
@@ -12,6 +11,7 @@ import {
   InitData,
   OrderResponse,
   DataForNewOrder,
+  UserResponse,
 } from 'types'
 
 const homePath = '/home'
@@ -75,7 +75,7 @@ const sendSecondLetter = async (data: DataForLetter): Promise<MailResponse> => {
   return res.json()
 }
 
-const check = async (token: string): Promise<boolean> => {
+const check = async (token: string): Promise<UserResponse> => {
   const res = await fetch(`${homePath}/verify`, { headers: { token } })
   return res.json()
 }
@@ -91,5 +91,5 @@ export const loginUser = async (data: LoginData) => await wrapTryCatch(login(dat
 export const addNewOrder = async (data: DataForNewOrder) => await wrapTryCatch(add(data))
 export const sendConfirmLetter = async (data: DataForLetter) => await wrapTryCatch(sendFirstLetter(data))
 export const sendRatingLetter = async (data: DataForLetter) => await wrapTryCatch(sendSecondLetter(data))
-export const checkAuth = async (token: string) => await wrapTryCatch(check(token))
 export const getInit = async () => await wrapTryCatch(init())
+export const checkUserAuth = async (token: string) => await wrapTryCatch(check(token))

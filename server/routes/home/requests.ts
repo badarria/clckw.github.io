@@ -2,7 +2,7 @@ import { toObjFromStr, toObjFromJSDate } from '../../utils/datetimefunc'
 import bcrypt from 'bcrypt'
 import { jwtGenerator } from '../../utils/jwtGenerator'
 import { config } from '../../../config'
-import { City, Service, Order, Master, Customer, Admin } from '../../db/models'
+import { City, Service, Order, Master, Customer, Admin, User } from '../../db/models'
 import { jwtDecode } from '../../utils/jwtGenerator'
 import { NextFunction, Request, Response } from 'express'
 import {
@@ -17,6 +17,7 @@ import { createMail } from '../../utils'
 import { sequelize } from '../../db'
 const url = config.mailing.baseUrl
 const admin = sequelize.models.Admin
+import { v4 } from 'uuid'
 
 type InitState = { city: typeof City[]; service: typeof Service[] }
 type FreeMasters = { id: number; surname: string; name: string; rating: number }[]
@@ -122,17 +123,13 @@ const auth = async (req: Request, res: Response, next: NextFunction) => {
   const validData = await loginFormSchema.validate(req.body).catch((err) => next(err))
   if (validData) {
     const { name, password } = validData
-    const user = await Admin.findAll({ where: { name } }).catch((err) => next(err))
+    const user = await User.findOne({ where: { name } }).catch((err) => next(err))
 
     if (user) {
-      if (user.length === 0) {
-        res.json('Password or name is incorrect')
-      }
-      const isValidPassword = await bcrypt.compare(password, user[0].password).catch((err) => next(err))
-      if (isValidPassword) {
-        const token = jwtGenerator(user[0].id)
-        res.json({ token })
-      }
+      const { salt, pass, token, role, user_id } = user
+      const bcryptPassword = await bcrypt.hash(password, salt).catch((err) => next(err))
+      const isMatch = bcryptPassword === pass
+      isMatch && res.json({ token, role, user_id })
     }
   }
 }
@@ -161,7 +158,7 @@ const ratingRequestMail = async (req: Request, res: Response, next: NextFunction
   const validData = await secondMailSchema.validate(req.body).catch((err) => next(err))
   if (validData) {
     const { userEmail, name, orderId } = validData
-    const tokenId = jwtGenerator(orderId)
+    const adminTokenId = jwtGenerator(orderId)
     const mail = {
       body: {
         title: `Hi, ${name}! We need your feedback`,
@@ -170,7 +167,7 @@ const ratingRequestMail = async (req: Request, res: Response, next: NextFunction
           button: {
             color: '#3f51b5',
             text: 'Go to Rating',
-            link: `${url}/orderRate/${tokenId}`,
+            link: `${url}/orderRate/${adminTokenId}`,
           },
         },
         outro: 'Thanks for choosing us!',
@@ -182,29 +179,31 @@ const ratingRequestMail = async (req: Request, res: Response, next: NextFunction
   }
 }
 
-// const newAdminPassword = async (req, res) => {
+// const newUser = async (req: Request, res: Response, next: NextFunction) => {
 //   const { name, password } = req.body
 //   const saltRound = 10
 //   const salt = await bcrypt.genSalt(saltRound)
-//   const bcryptPassword = await bcrypt.hash(password, salt)
-//   const newUser = await pool.query('INSERT INTO admin (name, password) VALUES ($1, $2) RETURNING *', [
+//   const bcPass = await bcrypt.hash(password, salt)
+//   const userToken = v4()
+//   console.log(userToken)
+//   const user = await User.create({
+//     salt,
+//     pass: bcPass,
+//     token: userToken,
 //     name,
-//     bcryptPassword,
-//   ])
-//   const token = jwtGenerator(newUser.rows[0].id)
-//   return res.json({ token })
+//     role: 'master',
+//     user_id: 2,
+//   }).catch((err) => next(err))
+//   return user && res.json({ userToken })
 // }
 
 const stayAuth = async (req: Request, res: Response, next: NextFunction) => {
   const { token } = req.headers
+  console.log()
   if (typeof token === 'string') {
-    const uuid = jwtDecode(token)
-    if (uuid instanceof Error) next(uuid)
-    if (typeof uuid === 'string') {
-      const user = await Admin.findAll({ where: { id: uuid } }).catch((err) => next(err))
-      if (user && user[0].id === uuid) {
-        return res.json(true)
-      }
+    const user = await User.findOne({ where: { token } }).catch((err) => next(err))
+    if (user && user.token === token) {
+      return res.json(user)
     }
   } else return res.json(false)
 }

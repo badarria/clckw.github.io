@@ -1,13 +1,17 @@
-import { Column, HasMany, Model, Table } from 'sequelize-typescript'
+import { BelongsTo, Column, HasMany, HasOne, Model, Table } from 'sequelize-typescript'
 import { DataTypes } from 'sequelize'
 import { Order } from './Order'
+import { User } from '.'
 
 @Table({ tableName: 'customers', timestamps: false })
 export class Customer extends Model {
-  @HasMany(() => Order, 'customer_id')
+  @HasMany(() => Order, 'id')
   orders!: Order[]
+
+  @HasOne(() => User, 'id')
+  user!: User
   @Column({ type: DataTypes.INTEGER, allowNull: false, primaryKey: true, autoIncrement: true })
-  id?: number
+  id!: number
 
   @Column({ type: DataTypes.STRING, allowNull: false })
   name!: string

@@ -1,13 +1,10 @@
-import React, {FC} from 'react'
+import React, { FC } from 'react'
 import { Redirect } from 'react-router-dom'
+import { User } from 'types'
 import { Admin } from '../components/containers'
 
-export const AdminRoute: FC<{isAuth: boolean, path:string}> = ({ isAuth, children }) => {
-  return isAuth ? (
-    <>
-      <Admin>{children}</Admin>
-    </>
-  ) : (
-    <Redirect to='/' />
-  )
+export const AdminRoute: FC<{ user: User; path: string }> = ({ user, children }) => {
+  const { auth, role } = user
+
+  return auth && role === 'admin' ? <Admin>{children}</Admin> : <Redirect to='/' />
 }

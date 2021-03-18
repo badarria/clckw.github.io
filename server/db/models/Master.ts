@@ -1,14 +1,15 @@
-import { BelongsTo, Column, HasMany, Model, Table } from 'sequelize-typescript'
+import { BelongsTo, Column, HasMany, Model, Table, HasOne } from 'sequelize-typescript'
 import { DataTypes } from 'sequelize'
 
-import { City } from './City'
-import { Order } from './Order'
+import { User, Order, City } from '.'
 
 @Table({ tableName: 'masters', timestamps: false })
 export class Master extends Model {
   @HasMany(() => Order, { foreignKey: 'master_id' })
   o!: Order[]
 
+  @HasOne(() => User, 'id')
+  user!: User
   @Column({ type: DataTypes.INTEGER, allowNull: false, primaryKey: true, autoIncrement: true })
   id!: number
 
@@ -31,6 +32,7 @@ export class Master extends Model {
   get fullName(): string {
     return `${this.name} ${this.surname}`
   }
+
   @Column({ type: DataTypes.VIRTUAL })
   get city(): string {
     return this.getDataValue('ci')?.name

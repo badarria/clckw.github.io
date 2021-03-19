@@ -48,7 +48,6 @@ const getList = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 const getFiltered = async (req: Request, res: Response, next: NextFunction) => {
-  console.log(req.query)
   let validData = await searchParamsSchema.validate(req.query).catch((err) => next(err))
   if (validData) {
     const { master_id, date, order_id } = validData

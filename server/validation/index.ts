@@ -101,6 +101,10 @@ const firstMailSchema = yup.object().shape({
   service: yup.string().required(),
   master: yup.string().required(),
 })
+const mastersOrderSchema =
+  yup.object().shape({
+    id: yup.number().required(),
+  }) && pagingSchema
 
 export {
   orderRatingSchema,
@@ -117,4 +121,5 @@ export {
   orderSchema,
   firstMailSchema,
   secondMailSchema,
+  mastersOrderSchema,
 }

@@ -72,3 +72,5 @@ user_id integer references masters on delete set null
 )
 
 -- alter table masters add column user_id integer references users on delete set null;
+-- insert into users (role, name, pass, salt, token) values('admin', 'admin', '$2b$10$M1fwwd6fVVwFAOfwbO9tvOUxRCdOiC.k3GBEnXPIhefHBo5k7wLtS', '$2b$10$M1fwwd6fVVwFAOfwbO9tvO', '9cabc8a1-c6c2-4981-92bb-560477e5e0b6')
+-- insert into users (role, name, pass, salt, token, user_id) values('master', 'master', '$2b$10$iq2AAu6NbSsPIuwbnZ0hH.S93rUfqRUzOr/Lwtpy9yciSFFTIu5ku', '$2b$10$iq2AAu6NbSsPIuwbnZ0hH.', '3b12b2d5-7917-4682-981f-ed7892a18018', 2)

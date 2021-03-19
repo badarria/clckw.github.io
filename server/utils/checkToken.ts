@@ -7,6 +7,6 @@ export const checkToken = () => async (req: Request, res: Response, next: NextFu
     const user = await User.findOne({ where: { token } }).catch((err) => next(err))
     if (user && user.token === token) {
       next()
-    }
+    } else next(new Error('Not Authorize'))
   } else next(new Error('Not Authorize'))
 }

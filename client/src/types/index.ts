@@ -21,6 +21,18 @@ export type Order = {
   date: string
   city: string
 }
+export type MastersOrder = {
+  id: number
+  m: { fullName: string }
+  c: { fullName: string }
+  s: { service: string }
+  begin: string
+  finish: string
+  rating: number
+  date: string
+}
+export type getMastersOrderData = Paging & { id: number }
+
 export type OrderWithDisabled = Order & { disabled: boolean }
 export type Service = { id: number; name: string; time: string }
 export type ServiceWithKeys = Service & {
@@ -150,6 +162,13 @@ export type AdminTableHeadProps = {
   orderby: string
   setChange: Function
 }
+export type MasterTableHeadProps = {
+  columns: string[]
+  order: 'desc' | 'asc' | undefined
+  orderby: string
+  setChange: Function
+}
+
 export type AdminTableListProps = {
   remove: Function
   data: Array<AllSubjectsDataUi>
@@ -157,6 +176,11 @@ export type AdminTableListProps = {
   editState: State
   push: Function
 }
+export type MasterTableListProps = {
+  data: MastersOrder[]
+  columns: string[]
+}
+
 export type AdminTableProps = {
   items: Array<AllSubjectsDataUi>
   columns: string[]

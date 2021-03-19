@@ -19,6 +19,6 @@ export const errorsHandler = (err: Error, req: Request, res: Response, next: Nex
     res.status(500).send({ type: 'error', msg: 'Database error', detail: err.name })
     return
   }
-  console.error(err, 'inda ErrorHandler')
+  // console.error(err, 'inda ErrorHandler')
   res.status(500).send({ type: 'error', msg: err.message || 'something went wrong' })
 }

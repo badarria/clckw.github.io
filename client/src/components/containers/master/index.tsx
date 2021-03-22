@@ -53,9 +53,9 @@ export const Master = ({ id }: { id: number }) => {
       list.forEach(({ id, c, s, date, begin, finish, rating, completed }) => {
         const dataForList = {
           id,
-          customer: c.fullName,
-          userEmail: c.email,
-          service: s.service,
+          customer: c?.fullName,
+          userEmail: c?.email,
+          service: s?.service,
           date,
           begin,
           finish,

@@ -35,7 +35,6 @@ export type MastersOrder = {
 }
 export type getMastersOrderData = Paging & { id: number }
 
-export type OrderWithDisabled = Order
 export type Service = { id: number; name: string; time: string }
 export type ServiceWithKeys = Service & {
   time: { id: number; name: string; time: string }[]

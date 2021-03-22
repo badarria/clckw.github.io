@@ -47,25 +47,27 @@ export const changeStatus = async (req: Request, res: Response, next: NextFuncti
 
 export const ratingRequestMail = async (req: Request, res: Response, next: NextFunction) => {
   const validData = await secondMailSchema.validate(req.body).catch((err) => next(err))
-  if (validData) {
+  if (validData && 'userEmail' in validData) {
     const { userEmail, name, id } = validData
     const token = jwtGenerator(id)
-    const mail = {
-      body: {
-        title: `Hi, ${name}! We need your feedback`,
-        action: {
-          instructions: "Please, follow the link below to rate the master's work",
-          button: {
-            color: '#3f51b5',
-            text: 'Go to Rating',
-            link: `${url}/orderRate/${token}`,
+    if (userEmail && name) {
+      const mail = {
+        body: {
+          title: `Hi, ${name}! We need your feedback`,
+          action: {
+            instructions: "Please, follow the link below to rate the master's work",
+            button: {
+              color: '#3f51b5',
+              text: 'Go to Rating',
+              link: `${url}/orderRate/${token}`,
+            },
           },
+          outro: 'Thanks for choosing us!',
         },
-        outro: 'Thanks for choosing us!',
-      },
+      }
+      const subj = 'We need your feedback!'
+      req.body = createMail(mail, userEmail, subj)
     }
-    const subj = 'We need your feedback!'
-    req.body = createMail(mail, userEmail, subj)
     next()
   }
 }

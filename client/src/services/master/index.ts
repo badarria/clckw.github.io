@@ -19,7 +19,7 @@ const get = async (data: getMastersOrderData): Promise<MastersOrder[]> => {
 
 const done = async (data: DataForRatingRequest): Promise<TypicalResponse> => {
   const token = getToken()
-  console.log('inds')
+
   const res = await fetch(`${masterPath}/status`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json', token },

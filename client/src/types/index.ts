@@ -255,7 +255,7 @@ export type DataForLetter = {
   begin: string
   name: string
   city: string
-  orderId: number
+  id: number
 }
 
 export type ParamsForSearching = { city: number; begin: string; finish: string }

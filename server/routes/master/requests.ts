@@ -71,9 +71,3 @@ export const ratingRequestMail = async (req: Request, res: Response, next: NextF
     next()
   }
 }
-
-export const getResponse = (err: Error, req: Request, res: Response, next: NextFunction) => {
-  if (err) res.json({ type: 'warning', msg: "Order was updated, but message with rating request wasn't sent" })
-  else res.json({ type: 'success', msg: 'Order was updated and request message was sent' })
-  next()
-}

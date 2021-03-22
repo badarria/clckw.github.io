@@ -13,7 +13,7 @@ export const RatingCard = ({
   const { card, title, btn } = useStyles()
   const [value, setRatingValue] = useState<number | null>(0)
 
-  const setRating = () => submit({ orderId: id, rating: value })
+  const setRating = () => submit({ id, rating: value })
   const changeValue = (e: ChangeEvent<{}>, rating: number | null) => setRatingValue(rating)
 
   return (

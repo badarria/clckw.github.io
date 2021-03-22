@@ -1,9 +1,9 @@
 import { getOrderToRate, setOrderRating } from './api'
 
-export const setRating = async (data: { orderId: string, rating: number }) => {
-  const { orderId } = data
+export const setRating = async (data: { id: string; rating: number }) => {
+  const { id } = data
   const res = await setOrderRating(data)
-  if (res.msg === orderId) {
+  if (res.msg === id) {
     let msg = 'Order successfully rated!'
     return { rated: true, msg }
   } else return { rated: false, msg: res.msg }

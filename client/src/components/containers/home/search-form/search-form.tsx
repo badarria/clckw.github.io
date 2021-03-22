@@ -7,21 +7,14 @@ import { useStyles } from './styles'
 import { TypicalResponse, Master, RawParamsForSearching } from 'types'
 import { MastersList, DatePicker, AutocompleteField, Loader, Toast, InputField } from '../components'
 import { SelectHours } from 'components/ui/select/select-hours'
-import {
-  addNewOrder,
-  getCustomer,
-  getFreeMasters,
-  getInit,
-  sendConfirmLetter,
-  sendRatingLetter,
-} from 'services/home/api'
+import { addNewOrder, getCustomer, getFreeMasters, getInit, sendConfirmLetter } from 'services/home/api'
 import { dateFromNewDate, getBeginFinish, getHoursArray, pastTime, toMailFormat } from 'services/utils/datetime-func'
 
 export const SearchForm = () => {
   const { container, form, wrap, btn, msgBox } = useStyles()
   const initKeys = { city: [{ id: 0, name: '' }], service: [{ id: 0, name: '', time: '' }] }
   const initOrder = { service: 0, begin: '', finish: '', customer: 0, master: 0 }
-  const initMail = { name: '', userEmail: '', city: '', begin: '', service: 'service.name', master: '', orderId: 0 }
+  const initMail = { name: '', userEmail: '', city: '', begin: '', service: 'service.name', master: '', id: 0 }
   const initHours = pastTime(getHoursArray('1'))
   const findDefaultHour = () => {
     for (let item of initHours) {
@@ -124,10 +117,10 @@ export const SearchForm = () => {
       let res = await setLoader(addNewOrder(order))
       if ('id' in res) {
         setOrder(initOrder)
-        const first = await sendConfirmLetter({ ...mail, orderId: res.id })
+        const first = await sendConfirmLetter({ ...mail, id: res.id })
         console.log(first)
         // setTimeout(async () => {
-        //   const second = await sendRatingLetter({ ...mail, orderId: res.id })
+        //   const second = await sendRatingLetter({ ...mail, id: res.id })
         //   console.log(second)
         // }, 10000)
       }

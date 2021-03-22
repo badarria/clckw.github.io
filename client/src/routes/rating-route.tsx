@@ -3,9 +3,9 @@ import { useRouteMatch, Redirect } from 'react-router-dom'
 import { Rating } from '../components/containers'
 
 export const RatingRoute = ({ path }: { path: string }) => {
-  const match: { params: { orderId?: string } } | null = useRouteMatch('/orderRate/:orderId')
-  if (match?.params?.orderId) {
-    const orderId: string = match?.params?.orderId
-    return <Rating {...{ orderId }} />
+  const match: { params: { id?: string } } | null = useRouteMatch('/orderRate/:id')
+  if (match?.params?.id) {
+    const id: string = match?.params?.id
+    return <Rating {...{ id }} />
   } else return <Redirect to='/' />
 }

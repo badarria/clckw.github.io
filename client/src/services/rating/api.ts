@@ -10,7 +10,7 @@ const wrapTryCatch = async <T>(tryFunc: T) => {
   }
 }
 
-const setRating = async (data: { orderId: string; rating: number }): Promise<{ msg: string }> => {
+const setRating = async (data: { id: string; rating: number }): Promise<{ msg: string }> => {
   const res = await fetch(`${ratingPath}/setRating`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
@@ -19,11 +19,10 @@ const setRating = async (data: { orderId: string; rating: number }): Promise<{ m
   return res.json()
 }
 
-const getOrder = async (orderId: string): Promise<{ id: number; customer: string; rating: number }[]> => {
-  console.log(orderId, 'api')
-  const res = await fetch(`${ratingPath}/getOrder/${orderId}`)
+const getOrder = async (id: string): Promise<{ id: number; customer: string; rating: number }[]> => {
+  const res = await fetch(`${ratingPath}/getOrder/${id}`)
   return res.json()
 }
 
-export const setOrderRating = async (data: { orderId: string; rating: number }) => wrapTryCatch(setRating(data))
+export const setOrderRating = async (data: { id: string; rating: number }) => wrapTryCatch(setRating(data))
 export const getOrderToRate = async (data: string) => wrapTryCatch(getOrder(data))

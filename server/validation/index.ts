@@ -84,7 +84,7 @@ const orderIdSchema = yup.object().shape({
 })
 
 const orderRatingSchema = yup.object().shape({
-  orderId: yup.number().required(),
+  id: yup.number().required(),
   rating: yup.number().required(),
 })
 

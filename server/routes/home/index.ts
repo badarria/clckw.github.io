@@ -9,7 +9,6 @@ index.post('/customer', upsertCustomer)
 index.post('/auth', auth)
 index.post('/newOrder', addNewOrder)
 index.post('/confirm', confirmingMail, sendMail())
-// index.post('/rating', ratingRequestMail, sendMail())
 index.get('/verify', stayAuth)
 
 export { index }

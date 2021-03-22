@@ -4,6 +4,7 @@ import { Router } from 'express'
 const index = Router()
 
 index.get('/:id/:limit/:offset/:order/:orderby', checkToken(), getOrders)
-index.put('/status', checkToken(), changeStatus, ratingRequestMail, sendMail(), getResponse)
+index.put('/status', checkToken(), changeStatus, getResponse)
+index.post('/sendMail', checkToken(), ratingRequestMail, sendMail())
 
 export { index }

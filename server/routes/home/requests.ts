@@ -79,6 +79,7 @@ const addNewOrder = async (req: Request, res: Response, next: NextFunction) => {
       beginat: begin,
       finishat: finish,
     }).catch((err) => next(err))
+
     id &&
       res.json({
         type: 'success',

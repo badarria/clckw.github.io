@@ -36,10 +36,10 @@ export const createMail = (mail: any, userEmail: string, subj: string) => {
 export const sendMail = () => async (req: Request, res: Response, next: NextFunction) => {
   // try {
   const message = req.body
-  await transporter.sendMail(message).catch((err) => next(err))
-  next()
+  const result = await transporter.sendMail(message).catch((err) => next(err))
+  result && res.json({ msg: 'Mail was sent' })
   // } catch (e) {
   //   console.error(e.message)
-  //   res.status(400).send({ type: 'error', msg: 'Something went wrong and mail was not sent' })
+  //   res.status(400).send({ msg: 'Something went wrong and mail was not sent' })
   // }
 }

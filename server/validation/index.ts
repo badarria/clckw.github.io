@@ -89,8 +89,8 @@ const orderRatingSchema = yup.object().shape({
 })
 
 const secondMailSchema = yup.object().shape({
-  userEmail: yup.string().email(),
-  name: yup.string(),
+  userEmail: yup.string().email().required(),
+  name: yup.string().required(),
   id: yup.string().required(),
 })
 const firstMailSchema = yup.object().shape({

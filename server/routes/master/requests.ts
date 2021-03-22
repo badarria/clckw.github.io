@@ -35,39 +35,39 @@ export const getOrders = async (req: Request, res: Response, next: NextFunction)
 }
 
 export const changeStatus = async (req: Request, res: Response, next: NextFunction) => {
-  const validData = await secondMailSchema.validate(req.body).catch((err) => next(err))
+  const validData = await orderIdSchema.validate(req.body).catch((err) => next(err))
   if (validData) {
     const { id } = validData
     const result = await Order.update({ completed: true }, { where: { id } }).catch((err) => next(err))
-
-    result && result[0] && next()
-    return result && !result[0] && res.json({ type: 'warning', msg: 'Order not found' })
+    if (result) {
+      const msg = result[0] ? 'Order was updated' : 'Order not found'
+      const type = result[0] ? 'success' : 'warning'
+      return res.json({ type, msg })
+    }
   }
 }
 
 export const ratingRequestMail = async (req: Request, res: Response, next: NextFunction) => {
   const validData = await secondMailSchema.validate(req.body).catch((err) => next(err))
-  if (validData && 'userEmail' in validData) {
+  if (validData) {
     const { userEmail, name, id } = validData
     const token = jwtGenerator(id)
-    if (userEmail && name) {
-      const mail = {
-        body: {
-          title: `Hi, ${name}! We need your feedback`,
-          action: {
-            instructions: "Please, follow the link below to rate the master's work",
-            button: {
-              color: '#3f51b5',
-              text: 'Go to Rating',
-              link: `${url}/orderRate/${token}`,
-            },
+    const mail = {
+      body: {
+        title: `Hi, ${name}! We need your feedback`,
+        action: {
+          instructions: "Please, follow the link below to rate the master's work",
+          button: {
+            color: '#3f51b5',
+            text: 'Go to Rating',
+            link: `${url}/orderRate/${token}`,
           },
-          outro: 'Thanks for choosing us!',
         },
-      }
-      const subj = 'We need your feedback!'
-      req.body = createMail(mail, userEmail, subj)
+        outro: 'Thanks for choosing us!',
+      },
     }
+    const subj = 'We need your feedback!'
+    req.body = createMail(mail, userEmail, subj)
     next()
   }
 }

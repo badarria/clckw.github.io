@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { DataForRatingRequest, MasterOrdersList, Paging, TypicalResponse } from 'types'
 import { Pagination, MasterTableHead, MasterTableList } from './components'
 import { useStyles } from './styles'
-import { getList, setDone } from '../../../services/master'
+import { getList, sendRatingMail, setDone } from '../../../services/master'
 
 export const Master = ({ id }: { id: number }) => {
   const initOrder: MasterOrdersList = {
@@ -25,7 +25,7 @@ export const Master = ({ id }: { id: number }) => {
   const [loading, setLoading] = useState(false)
   const [toast, setToast] = useState<TypicalResponse>({ type: 'success', msg: '' })
   const [paging, setPaging] = useState(initPaging)
-  const { wrap, box, root, table } = useStyles()
+  const { wrap, box, root, table, container } = useStyles()
   const { order, orderby, limit, offset, count } = paging
 
   const setLoader = async <T extends any>(doSomething: T) => {
@@ -76,7 +76,6 @@ export const Master = ({ id }: { id: number }) => {
   }, [])
 
   const setChange = async (data: Paging) => {
-    console.log(data, 'setchange')
     setPaging((paging) => ({ ...paging, ...data }))
   }
 
@@ -85,10 +84,12 @@ export const Master = ({ id }: { id: number }) => {
   }, [paging])
 
   const changeStatus = async (data: DataForRatingRequest) => {
-    const result = await setLoader(setDone(data))
+    const result = await setLoader(setDone(data.id))
     setToastMsg(result)
     if (result.type !== 'error') {
       getOrdersList()
+      const ratingRequest = await sendRatingMail(data)
+      console.log(ratingRequest)
     }
   }
 
@@ -96,7 +97,7 @@ export const Master = ({ id }: { id: number }) => {
   const paginatorProps = { option: { limit, offset, count }, setPaging: setChange }
 
   return (
-    <Container>
+    <Container className={container}>
       <Loader loading={loading} />
       <Box className={wrap}>
         <Box className={box}>

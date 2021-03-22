@@ -2,6 +2,7 @@ import { DataForRatingRequest, getMastersOrderData, MastersOrder, TypicalRespons
 
 const getToken = () => localStorage.getItem('token') || ''
 const masterPath = 'master'
+
 const wrapTryCatch = async <T>(tryFunc: T) => {
   try {
     return await tryFunc
@@ -17,16 +18,27 @@ const get = async (data: getMastersOrderData): Promise<MastersOrder[]> => {
   return res.json()
 }
 
-const done = async (data: DataForRatingRequest): Promise<TypicalResponse> => {
+const done = async (id: number): Promise<TypicalResponse> => {
   const token = getToken()
 
   const res = await fetch(`${masterPath}/status`, {
     method: 'PUT',
+    headers: { 'Content-Type': 'application/json', token },
+    body: JSON.stringify({ id }),
+  })
+  return res.json()
+}
+
+const send = async (data: DataForRatingRequest): Promise<TypicalResponse> => {
+  const token = getToken()
+  const res = await fetch(`${masterPath}/sendMail`, {
+    method: 'POST',
     headers: { 'Content-Type': 'application/json', token },
     body: JSON.stringify(data),
   })
   return res.json()
 }
 
-export const setDone = async (data: DataForRatingRequest) => await wrapTryCatch(done(data))
+export const setDone = async (id: number) => await wrapTryCatch(done(id))
 export const getList = async (data: getMastersOrderData) => await wrapTryCatch(get(data))
+export const sendRatingMail = async (data: DataForRatingRequest) => await wrapTryCatch(send(data))

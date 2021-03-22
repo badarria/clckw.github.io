@@ -51,6 +51,8 @@ export class Order extends Model {
   s!: Service[]
   @Column
   service_id!: number
+  @Column({ type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false })
+  completed!: boolean
 
   @Column({ type: DataTypes.VIRTUAL })
   get date(): string {

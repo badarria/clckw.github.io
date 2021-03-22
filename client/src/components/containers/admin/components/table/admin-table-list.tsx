@@ -21,13 +21,13 @@ export const AdminTableList = (props: AdminTableListProps) => {
         }
 
         const getDisabled = (data: AllSubjectsDataUi) => {
-          if ('disabled' in data) return data.disabled
+          if ('completed' in data) return data.completed
           else return !!editState
         }
 
         const getTitle = (data: AllSubjectsDataUi) => {
           if (!!editState) return 'You have to submit form first'
-          else if ('disabled' in data && data.disabled) return 'Past is gone'
+          else if ('completed' in data && data.completed) return 'You cannot change completed order'
           else return 'Edit item'
         }
 

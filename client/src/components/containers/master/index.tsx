@@ -1,30 +1,31 @@
 import { Container, Box, Paper, TableBody, Table, TableContainer, TableFooter } from '@material-ui/core'
 import { Loader, Toast } from 'components/ui'
 import React, { useEffect, useState } from 'react'
-import { MastersOrder, Paging, TypicalResponse } from 'types'
+import { DataForRatingRequest, MasterOrdersList, Paging, TypicalResponse } from 'types'
 import { Pagination, MasterTableHead, MasterTableList } from './components'
 import { useStyles } from './styles'
-import { getList } from '../../../services/master'
+import { getList, setDone } from '../../../services/master'
 
 export const Master = ({ id }: { id: number }) => {
-  const initOrder: MastersOrder = {
+  const initOrder: MasterOrdersList = {
     id: 0,
-    c: { fullName: '' },
-    m: { fullName: '' },
-    s: { service: '' },
+    customer: '',
+    userEmail: '',
+    service: '',
+    completed: false,
     begin: '',
     date: '',
     finish: '',
     rating: 0,
   }
   const initPaging: Paging = { limit: 10, offset: 0, order: 'desc', orderby: 'date', count: 50 }
-  const columns = ['id', 'customer', 'service', 'date', 'begin', 'finish', 'rating']
+  const columns = ['id', 'customer', 'service', 'date', 'begin', 'finish', 'rating', 'completed']
 
   const [orders, setOrders] = useState([initOrder])
   const [loading, setLoading] = useState(false)
   const [toast, setToast] = useState<TypicalResponse>({ type: 'success', msg: '' })
   const [paging, setPaging] = useState(initPaging)
-  const { wrap, box, root, table, head } = useStyles()
+  const { wrap, box, root, table } = useStyles()
   const { order, orderby, limit, offset, count } = paging
 
   const setLoader = async <T extends any>(doSomething: T) => {
@@ -48,7 +49,22 @@ export const Master = ({ id }: { id: number }) => {
       const toast: TypicalResponse = { type: 'warning', msg: "You haven't orders" }
       setToastMsg(toast)
     } else {
-      setOrders(list)
+      const data: MasterOrdersList[] = []
+      list.forEach(({ id, c, s, date, begin, finish, rating, completed }) => {
+        const dataForList = {
+          id,
+          customer: c.fullName,
+          userEmail: c.email,
+          service: s.service,
+          date,
+          begin,
+          finish,
+          rating,
+          completed,
+        }
+        data.push(dataForList)
+      })
+      setOrders(data)
       if (list.length !== orders.length) setPaging((paging) => ({ ...paging, count: list.length }))
     }
   }
@@ -68,6 +84,14 @@ export const Master = ({ id }: { id: number }) => {
     getOrdersList()
   }, [paging])
 
+  const changeStatus = async (data: DataForRatingRequest) => {
+    const result = await setLoader(setDone(data))
+    setToastMsg(result)
+    if (result.type !== 'error') {
+      getOrdersList()
+    }
+  }
+
   const headerProps = { columns, order, orderby, setChange }
   const paginatorProps = { option: { limit, offset, count }, setPaging: setChange }
 
@@ -82,7 +106,7 @@ export const Master = ({ id }: { id: number }) => {
           <Table className={table} aria-label={`table`}>
             <MasterTableHead {...headerProps} />
             <TableBody>
-              <MasterTableList data={orders} columns={columns} />
+              <MasterTableList data={orders} columns={columns} change={changeStatus} />
             </TableBody>
             <TableFooter>
               <Pagination {...paginatorProps} />

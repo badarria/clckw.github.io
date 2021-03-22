@@ -80,7 +80,7 @@ const freeMastersSchema = yup.object().shape({
 })
 
 const orderIdSchema = yup.object().shape({
-  orderId: yup.string().required(),
+  id: yup.string().required(),
 })
 
 const orderRatingSchema = yup.object().shape({
@@ -91,7 +91,7 @@ const orderRatingSchema = yup.object().shape({
 const secondMailSchema = yup.object().shape({
   userEmail: yup.string().email().required(),
   name: yup.string().required(),
-  orderId: yup.string().required(),
+  id: yup.string().required(),
 })
 const firstMailSchema = yup.object().shape({
   userEmail: yup.string().email().required(),

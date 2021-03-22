@@ -1,4 +1,4 @@
-import { getMastersOrderData, MastersOrder, TypicalResponse } from '../../types'
+import { DataForRatingRequest, getMastersOrderData, MastersOrder, TypicalResponse } from '../../types'
 
 const getToken = () => localStorage.getItem('token') || ''
 const masterPath = 'master'
@@ -17,4 +17,16 @@ const get = async (data: getMastersOrderData): Promise<MastersOrder[]> => {
   return res.json()
 }
 
+const done = async (data: DataForRatingRequest): Promise<TypicalResponse> => {
+  const token = getToken()
+  console.log('inds')
+  const res = await fetch(`${masterPath}/status`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', token },
+    body: JSON.stringify(data),
+  })
+  return res.json()
+}
+
+export const setDone = async (data: DataForRatingRequest) => await wrapTryCatch(done(data))
 export const getList = async (data: getMastersOrderData) => await wrapTryCatch(get(data))

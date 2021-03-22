@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { AdminTable, AdminTableHead, Loader, Pagination } from '../components'
-import { TypicalResponse, Paging, State, Order, OrderWithDisabled, NewOrderData } from 'types'
+import { TypicalResponse, Paging, State, Order, NewOrderData } from 'types'
 import { acceptOrder, deleteOrder, getOrders } from 'services/admin/orders'
 import { OrdersForm } from '../forms'
 import { setDisabled } from 'services/utils/datetime-func'
 
 export const Orders = () => {
-  const columns = ['id', 'service', 'master', 'customer', 'city', 'date', 'begin', 'finish', 'rating']
+  const columns = ['id', 'service', 'master', 'customer', 'city', 'date', 'begin', 'finish', 'rating', 'completed']
   const initPaging: Paging = { limit: 15, offset: 0, orderby: 'date', order: 'desc', count: 50 }
   const initDataToChange = {
     id: 0,
@@ -15,12 +15,13 @@ export const Orders = () => {
     s: { id: 0, service: '', service_time: '' },
     begin: '',
     date: '',
+    completed: false,
   }
 
   const [editState, setEditState] = useState<State>(null)
   const [toast, setToast] = useState<TypicalResponse>({ type: 'success', msg: '' })
   const [loading, setLoading] = useState(false)
-  const [items, setItems] = useState<OrderWithDisabled[]>([])
+  const [items, setItems] = useState<Order[]>([])
   const [paging, setPaging] = useState<Paging>(initPaging)
   const [dataToChange, setDataToChange] = useState(initDataToChange)
   const { limit, offset, count, orderby, order } = paging
@@ -48,8 +49,8 @@ export const Orders = () => {
           return { ...paging, count }
         })
       }
-      const itemsWithDisabled = setDisabled(items)
-      setItems(itemsWithDisabled)
+
+      setItems(items)
     } else {
       setToastMsg(res)
     }

@@ -1,44 +1,14 @@
 import { toObjFromStr, toObjFromJSDate } from '../../utils/datetimefunc'
 import bcrypt from 'bcrypt'
-import { jwtGenerator } from '../../utils/jwtGenerator'
 import { config } from '../../../config'
 import { City, Service, Order, Master, Customer, Admin, User } from '../../db/models'
-import { jwtDecode } from '../../utils/jwtGenerator'
 import { NextFunction, Request, Response } from 'express'
-import {
-  customerSchema,
-  orderSchema,
-  freeMastersSchema,
-  loginFormSchema,
-  firstMailSchema,
-  secondMailSchema,
-} from '../../validation'
+import { customerSchema, orderSchema, freeMastersSchema, loginFormSchema, firstMailSchema } from '../../validation'
 import { createMail } from '../../utils'
 import { sequelize } from '../../db'
 const url = config.mailing.baseUrl
 const admin = sequelize.models.Admin
 import { v4 } from 'uuid'
-
-type InitState = { city: typeof City[]; service: typeof Service[] }
-type FreeMasters = { id: number; surname: string; name: string; rating: number }[]
-type newOrder = { type: string; id: number; msg: string }
-type ConfirmMailType = { userEmail: string; name: string; begin: string; city: string; service: string; master: string }
-type DataForRatingRequest = { userEmail: string; name: string; orderId: string }
-type MailType = {
-  body: {
-    name: string
-    intro: string
-    table: {
-      data: {
-        'Order date': string
-        City: string
-        'Your master': string
-        'Size of clock': string
-      }[]
-    }
-    outro: string
-  }
-}
 
 const getInitState = async (req: Request, res: Response) => {
   const city = await City.findAll().catch((err) => new Error(err.message))
@@ -49,7 +19,6 @@ const getInitState = async (req: Request, res: Response) => {
 
 const findMasters = async (req: Request, res: Response, next: NextFunction) => {
   const validData = await freeMastersSchema.validate(req.params).catch((err) => next(err))
-
   if (validData) {
     const { city, begin, finish } = validData
 
@@ -154,31 +123,6 @@ const confirmingMail = async (req: Request, res: Response, next: NextFunction) =
   }
 }
 
-const ratingRequestMail = async (req: Request, res: Response, next: NextFunction) => {
-  const validData = await secondMailSchema.validate(req.body).catch((err) => next(err))
-  if (validData) {
-    const { userEmail, name, orderId } = validData
-    const adminTokenId = jwtGenerator(orderId)
-    const mail = {
-      body: {
-        title: `Hi, ${name}! We need your feedback`,
-        action: {
-          instructions: "Please, follow the link below to rate the master's work",
-          button: {
-            color: '#3f51b5',
-            text: 'Go to Rating',
-            link: `${url}/orderRate/${adminTokenId}`,
-          },
-        },
-        outro: 'Thanks for choosing us!',
-      },
-    }
-    const subj = 'We need your feedback!'
-    req.body = createMail(mail, userEmail, subj)
-    next()
-  }
-}
-
 // const newUser = async (req: Request, res: Response, next: NextFunction) => {
 //   const { name, password } = req.body
 //   const saltRound = 10
@@ -208,4 +152,4 @@ const stayAuth = async (req: Request, res: Response, next: NextFunction) => {
   } else return res.json(false)
 }
 
-export { findMasters, upsertCustomer, auth, addNewOrder, stayAuth, confirmingMail, ratingRequestMail, getInitState }
+export { findMasters, upsertCustomer, auth, addNewOrder, stayAuth, confirmingMail, getInitState }

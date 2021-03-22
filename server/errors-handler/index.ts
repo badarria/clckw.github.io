@@ -6,10 +6,6 @@ export const errorsHandler = (err: Error, req: Request, res: Response, next: Nex
     res.status(500).send({ type: 'error', msg: 'Data is incorrect', detail: err.errors[0] })
     return
   }
-  // if (err.name === 'SequelizeValidationError') {
-  //   res.status(500).send({ type: 'error', msg: err.message })
-  //   return
-  // }
   if (err.name === 'JsonWebTokenError') {
     res.status(500).send({ type: 'error', msg: 'Incorrect token' })
     return

@@ -20,20 +20,22 @@ export type Order = {
   rating: number
   date: string
   city: string
+  completed: boolean
 }
 export type MastersOrder = {
   id: number
   m: { fullName: string }
-  c: { fullName: string }
+  c: { fullName: string; email: string }
   s: { service: string }
   begin: string
   finish: string
   rating: number
   date: string
+  completed: boolean
 }
 export type getMastersOrderData = Paging & { id: number }
 
-export type OrderWithDisabled = Order & { disabled: boolean }
+export type OrderWithDisabled = Order
 export type Service = { id: number; name: string; time: string }
 export type ServiceWithKeys = Service & {
   time: { id: number; name: string; time: string }[]
@@ -52,7 +54,7 @@ export type City = {
 }
 
 export type AllSubjectsData = City | Order | Master | Customer | Service
-export type AllSubjectsDataUi = City | OrderWithDisabled | Master | Customer | ServiceWithKeys
+export type AllSubjectsDataUi = City | Order | Master | Customer | ServiceWithKeys
 ///Subjects List
 export type MastersList = { items: Master[]; count: number }
 export type CustomersList = { items: Customer[]; count: number }
@@ -123,7 +125,7 @@ export type OrderToReq = {
   begin: string
   finish: string
 }
-
+export type DataForRatingRequest = { userEmail: string; name: string; id: number }
 export type DataForNewOrder = {
   service: number
   begin: string
@@ -176,9 +178,21 @@ export type AdminTableListProps = {
   editState: State
   push: Function
 }
+export type MasterOrdersList = {
+  id: number
+  customer: string
+  userEmail: string
+  service: string
+  date: string
+  finish: string
+  begin: string
+  rating: number
+  completed: boolean
+}
 export type MasterTableListProps = {
-  data: MastersOrder[]
+  data: MasterOrdersList[]
   columns: string[]
+  change: (data: DataForRatingRequest) => void
 }
 
 export type AdminTableProps = {

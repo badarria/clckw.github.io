@@ -1,6 +1,9 @@
 import { Customer, Master, Order, Service } from '../../db/models'
 import { NextFunction, Request, Response } from 'express'
-import { mastersOrderSchema } from '../../validation'
+import { mastersOrderSchema, orderIdSchema, secondMailSchema } from '../../validation'
+import { createMail, jwtGenerator } from '../../utils'
+import { config } from '../../../config'
+const url = config.mailing.baseUrl
 
 export const getOrders = async (req: Request, res: Response, next: NextFunction) => {
   const validData = await mastersOrderSchema.validate(req.params).catch((err) => next(err))
@@ -20,13 +23,55 @@ export const getOrders = async (req: Request, res: Response, next: NextFunction)
 
     const list = await Order.findAll({
       ...params,
-      attributes: ['id', 'date', 'begin', 'finish', 'rating', 'beginat', 'finishat'],
+      attributes: ['id', 'date', 'begin', 'finish', 'rating', 'beginat', 'finishat', 'completed'],
       include: [
-        { model: Customer, as: 'c', attributes: ['name', 'surname', 'fullName'] },
+        { model: Customer, as: 'c', attributes: ['name', 'surname', 'fullName', 'email'] },
         { model: Master, as: 'm', attributes: ['id', 'name', 'surname', 'fullName'], where: { id } },
         { model: Service, as: 's', attributes: [['name', 'service']] },
       ],
     }).catch((err) => next(err))
     list && res.json(list)
   }
+}
+
+export const changeStatus = async (req: Request, res: Response, next: NextFunction) => {
+  const validData = await secondMailSchema.validate(req.body).catch((err) => next(err))
+  if (validData) {
+    const { id } = validData
+    const result = await Order.update({ completed: true }, { where: { id } }).catch((err) => next(err))
+
+    result && result[0] && next()
+    return result && !result[0] && res.json({ type: 'warning', msg: 'Order not found' })
+  }
+}
+
+export const ratingRequestMail = async (req: Request, res: Response, next: NextFunction) => {
+  const validData = await secondMailSchema.validate(req.body).catch((err) => next(err))
+  if (validData) {
+    const { userEmail, name, id } = validData
+    const token = jwtGenerator(id)
+    const mail = {
+      body: {
+        title: `Hi, ${name}! We need your feedback`,
+        action: {
+          instructions: "Please, follow the link below to rate the master's work",
+          button: {
+            color: '#3f51b5',
+            text: 'Go to Rating',
+            link: `${url}/orderRate/${token}`,
+          },
+        },
+        outro: 'Thanks for choosing us!',
+      },
+    }
+    const subj = 'We need your feedback!'
+    req.body = createMail(mail, userEmail, subj)
+    next()
+  }
+}
+
+export const getResponse = (err: Error, req: Request, res: Response, next: NextFunction) => {
+  if (err) res.json({ type: 'warning', msg: "Order was updated, but message with rating request wasn't sent" })
+  else res.json({ type: 'success', msg: 'Order was updated and request message was sent' })
+  next()
 }

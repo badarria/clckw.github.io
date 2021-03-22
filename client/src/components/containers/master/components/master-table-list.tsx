@@ -1,25 +1,28 @@
 import React from 'react'
 import { TableCell, TableRow } from '@material-ui/core'
-import { MasterTableListProps, MastersOrder } from '../../../../types'
+import { MasterTableListProps, MasterOrdersList } from '../../../../types'
+import { ButtonDialog } from '.'
 
-export const MasterTableList = (props: MasterTableListProps) => {
-  const { data, columns } = props
-  console.log(data)
+export const MasterTableList = ({ data, columns, change }: MasterTableListProps) => {
   return (
     <>
-      {data.map((item: MastersOrder, inx: number) => {
-        const { id, c, s, date, begin, finish, rating } = item
+      {data.map((item: MasterOrdersList, inx: number) => {
+        const { id, completed, userEmail, customer } = item
+        const dataForLetter = { id, userEmail, name: customer }
 
         return (
           <TableRow key={id} component='tr'>
             <TableCell component='td'>{inx + 1}</TableCell>
-            <TableCell component='td'>{id}</TableCell>
-            <TableCell component='td'>{c.fullName}</TableCell>
-            <TableCell component='td'>{s.service}</TableCell>
-            <TableCell component='td'>{date}</TableCell>
-            <TableCell component='td'>{begin}</TableCell>
-            <TableCell component='td'>{finish}</TableCell>
-            <TableCell component='td'>{rating}</TableCell>
+            {columns.map((col) => {
+              const thisItem: any = { ...item }
+              return col !== 'completed' ? (
+                <TableCell component='td'>{thisItem[col]}</TableCell>
+              ) : (
+                <TableCell>
+                  <ButtonDialog accept={() => change(dataForLetter)} isDisabled={completed} />
+                </TableCell>
+              )
+            })}
           </TableRow>
         )
       })}

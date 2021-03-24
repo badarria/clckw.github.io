@@ -1,20 +1,30 @@
-import { QueryInterface, TEXT, UUID } from 'sequelize/types'
+import { QueryInterface, TEXT, INTEGER, UUID } from 'sequelize/types'
+
 export default {
   up: async (queryInterface: QueryInterface) => {
     try {
       await queryInterface.sequelize.transaction(async (t) => {
-        await queryInterface.createTable('admin', {
+        await queryInterface.createTable('user', {
           id: {
-            type: UUID,
+            type: INTEGER,
             allowNull: false,
             primaryKey: true,
+            onDelete: 'cascade',
+            onUpdate: 'cascade',
           },
-          name: {
+          salt: { type: TEXT, allowNull: false },
+          role: { type: TEXT, allowNull: false },
+          email: {
+            type: TEXT,
+            allowNull: false,
+            unique: true,
+          },
+          pass: {
             type: TEXT,
             allowNull: false,
           },
-          password: {
-            type: TEXT,
+          token: {
+            type: UUID,
             allowNull: false,
           },
         })

@@ -1,12 +1,30 @@
 import { User } from './../db/models/Users'
 import { NextFunction, Request, Response } from 'express'
 
-export const checkToken = () => async (req: Request, res: Response, next: NextFunction) => {
+const checkToken = async (token: string) => {
+  const user = await User.findOne({ where: { token } })
+  if (user) {
+    return user.role
+  } else return new Error('Not Authorize')
+}
+
+export const checkMasterToken = async (req: Request, res: Response, next: NextFunction) => {
   const { token } = req.headers
-  if (token && typeof token === 'string') {
-    const user = await User.findOne({ where: { token } }).catch((err) => next(err))
-    if (user && user.token === token) {
-      next()
-    } else next(new Error('Not Authorize'))
-  } else next(new Error('Not Authorize'))
+  const role = typeof token === 'string' && (await checkToken(token).catch((err) => next(err)))
+  if (role && role === 'master') next()
+  else next(new Error('Token is invalid'))
+}
+
+export const checkAdminToken = async (req: Request, res: Response, next: NextFunction) => {
+  const { token } = req.headers
+  const role = typeof token === 'string' && (await checkToken(token).catch((err) => next(err)))
+  if (role && role === 'admin') next()
+  else next(new Error('Token is invalid'))
+}
+
+export const checkCustomerToken = async (req: Request, res: Response, next: NextFunction) => {
+  const { token } = req.headers
+  const role = typeof token === 'string' && (await checkToken(token).catch((err) => next(err)))
+  if (role && role === 'customer') next()
+  else next(new Error('Token is invalid'))
 }

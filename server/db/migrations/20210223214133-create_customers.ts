@@ -1,9 +1,6 @@
-import { INTEGER, STRING } from 'sequelize'
-;('use strict')
+import { INTEGER, STRING, QueryInterface } from 'sequelize/types'
 
-import { QueryInterface } from 'sequelize/types'
-
-export default {
+const customer = {
   up: async (queryInterface: QueryInterface) => {
     try {
       await queryInterface.sequelize.transaction(async (t) => {
@@ -13,6 +10,8 @@ export default {
             autoIncrement: true,
             primaryKey: true,
             type: INTEGER,
+            onUpdate: 'set null',
+            onDelete: 'set null',
           },
           name: {
             type: STRING,
@@ -22,10 +21,12 @@ export default {
             type: STRING,
             allowNull: false,
           },
-          email: {
-            type: STRING,
-            unique: true,
-            allowNull: false,
+          user_id: {
+            type: INTEGER,
+            references: {
+              model: 'user',
+              key: 'id',
+            },
           },
         })
         await queryInterface.addIndex('customers', ['email'], { transaction: t })
@@ -44,3 +45,5 @@ export default {
     }
   },
 }
+
+export { customer }

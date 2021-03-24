@@ -1,13 +1,13 @@
 import { getFiltered, getKeys, getList, remove, update, add } from './requests'
-import { checkToken } from '../../../utils'
+import { checkAdminToken } from '../../../utils'
 import { Router } from 'express'
 const index = Router()
 
-index.get('/:limit/:offset/:order/:orderby', checkToken(), getList)
+index.get('/:limit/:offset/:order/:orderby', checkAdminToken, getList)
 index.get('/filtered', getFiltered)
-index.get('/foreignKeys', checkToken(), getKeys)
-index.put('/', checkToken(), update)
-index.post('/', checkToken(), add)
-index.delete('/:id', checkToken(), remove)
+index.get('/foreignKeys', checkAdminToken, getKeys)
+index.put('/', checkAdminToken, update)
+index.post('/', checkAdminToken, add)
+index.delete('/:id', checkAdminToken, remove)
 
 export { index }

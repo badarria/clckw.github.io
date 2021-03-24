@@ -7,12 +7,14 @@ import { index as services } from './admin/services'
 import { index as homePage } from './home'
 import { index as ratingPage } from './rating'
 import { index as masterPage } from './master'
+import { index as customerPage } from './customer'
 
 const index = Router()
 
 index.use('/home', homePage)
 index.use('/rating', ratingPage)
 index.use('/master', masterPage)
+index.use('/customer', customerPage)
 index.use('/admin/customers', customers)
 index.use('/admin/masters', masters)
 index.use('/admin/cities', cities)

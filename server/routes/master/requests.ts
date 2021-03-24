@@ -1,12 +1,12 @@
 import { Customer, Master, Order, Service } from '../../db/models'
 import { NextFunction, Request, Response } from 'express'
-import { mastersOrderSchema, orderIdSchema, secondMailSchema } from '../../validation'
+import { usersOrderSchema, orderIdSchema, secondMailSchema } from '../../validation'
 import { createMail, jwtGenerator } from '../../utils'
 import { config } from '../../../config'
 const url = config.mailing.baseUrl
 
 export const getOrders = async (req: Request, res: Response, next: NextFunction) => {
-  const validData = await mastersOrderSchema.validate(req.params).catch((err) => next(err))
+  const validData = await usersOrderSchema.validate(req.params).catch((err) => next(err))
   if (validData) {
     const { id, orderby, order, limit, offset } = validData
     let ord: any = [orderby, order]
@@ -40,7 +40,7 @@ export const changeStatus = async (req: Request, res: Response, next: NextFuncti
     const { id } = validData
     const result = await Order.update({ completed: true }, { where: { id } }).catch((err) => next(err))
     if (result) {
-      const msg = result[0] ? 'Order was updated' : 'Order not found'
+      const msg = result[0] ? 'Order  was updated' : 'Order not found'
       const type = result[0] ? 'success' : 'warning'
       return res.json({ type, msg })
     }

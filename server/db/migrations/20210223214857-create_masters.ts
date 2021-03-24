@@ -1,5 +1,5 @@
 import { INTEGER, QueryInterface, STRING } from 'sequelize/types'
-;('use strict')
+
 export default {
   up: async (queryInterface: QueryInterface) => {
     try {
@@ -10,6 +10,8 @@ export default {
             autoIncrement: true,
             primaryKey: true,
             type: INTEGER,
+            onUpdate: 'set null',
+            onDelete: 'set null',
           },
           name: {
             type: STRING,
@@ -24,8 +26,13 @@ export default {
             references: {
               model: 'cities',
               key: 'id',
-              // onUpdate: 'SET NULL',
-              // onDelete: 'SET NULL',
+            },
+          },
+          user_id: {
+            type: INTEGER,
+            references: {
+              model: 'user',
+              key: 'id',
             },
           },
         })

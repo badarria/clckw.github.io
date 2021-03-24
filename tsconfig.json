@@ -20,4 +20,5 @@
     "outDir": "dist"
   },
   "exclude": ["client"],
+
 }

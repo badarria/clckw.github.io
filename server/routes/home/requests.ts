@@ -1,13 +1,14 @@
 import { toObjFromStr, toObjFromJSDate } from '../../utils/datetimefunc'
 import bcrypt from 'bcrypt'
+import * as genPass from 'generate-password'
 import { config } from '../../../config'
-import { City, Service, Order, Master, Customer, Admin, User } from '../../db/models'
+import { City, Service, Order, Master, Customer, User } from '../../db/models'
 import { NextFunction, Request, Response } from 'express'
 import { customerSchema, orderSchema, freeMastersSchema, loginFormSchema, firstMailSchema } from '../../validation'
 import { createMail } from '../../utils'
 import { sequelize } from '../../db'
 const url = config.mailing.baseUrl
-const admin = sequelize.models.Admin
+const admin = sequelize.models.Customer
 import { v4 } from 'uuid'
 
 const getInitState = async (req: Request, res: Response) => {
@@ -36,7 +37,7 @@ const findMasters = async (req: Request, res: Response, next: NextFunction) => {
     }).catch((err) => next(new Error(err)))
 
     if (Array.isArray(list)) {
-      const result: { id: number; surname: string; name: string; rating: number }[] = []
+      const result: { id: number; surname: string; name: string; rating: number | string }[] = []
       list.forEach(({ rating, name, surname, id, o }) => {
         let reqBegin = toObjFromStr(begin),
           reqFinish = toObjFromStr(finish)
@@ -61,10 +62,25 @@ const upsertCustomer = async (req: Request, res: Response, next: NextFunction) =
   const validData = await customerSchema.validate(req.body).catch((err) => next(err))
   if (validData) {
     const { email, name, surname } = validData
-    const id = await Customer.findOrCreate({ where: { email }, defaults: { name, surname, email } }).catch((err) =>
-      next(err)
-    )
-    return id && res.json(id[0].id)
+    const existUser = await User.findOne({ where: { email } }).catch((err) => next(err))
+    if (existUser && 'id' in existUser) {
+      const { id } = existUser
+      const updCustomer = await Customer.update(
+        { name, surname },
+        { where: { user_id: id }, returning: true }
+      ).catch((err) => next(err))
+      return updCustomer && res.json({ password: '', id: updCustomer[1][0].id })
+    } else {
+      let password = genPass.generate({ length: 8, numbers: true })
+      const saltRound = 10
+      const salt = await bcrypt.genSalt(saltRound)
+      const bcPass = await bcrypt.hash(password, salt)
+      const token = v4()
+      const newUser = await User.create({ token, pass: bcPass, salt, role: 'customer', email })
+      const userId = newUser && newUser.id
+      const newCustomer = await Customer.create({ name, surname, user_id: userId }).catch((err) => next(err))
+      return newCustomer && res.json({ password, id: newCustomer.id })
+    }
   }
 }
 
@@ -91,32 +107,46 @@ const addNewOrder = async (req: Request, res: Response, next: NextFunction) => {
 
 const auth = async (req: Request, res: Response, next: NextFunction) => {
   const validData = await loginFormSchema.validate(req.body).catch((err) => next(err))
-  if (validData) {
-    const { name, password } = validData
-    const user = await User.findOne({ where: { name } }).catch((err) => next(err))
 
+  if (validData) {
+    const { email, password } = validData
+    const user = await User.findOne({ where: { email } }).catch((err) => next(err))
     if (user) {
-      const { salt, pass, token, role, user_id } = user
+      const { id, salt, pass, token, role } = user
       const bcryptPassword = await bcrypt.hash(password, salt).catch((err) => next(err))
       const isMatch = bcryptPassword === pass
-      isMatch && res.json({ token, role, user_id })
-    }
+
+      if (isMatch) {
+        let userId = 0
+        if (role === 'master') {
+          const masterId = await Master.findOne({ include: { model: User, where: { id } } }).catch((err) => next(err))
+          masterId && (userId = masterId.id)
+        } else if (role === 'customer') {
+          const customerId = await Customer.findOne({ include: { model: User, where: { id } } }).catch((err) =>
+            next(err)
+          )
+          customerId && (userId = customerId.id)
+        }
+        res.json({ id: userId, role, token })
+      } else next(new Error('Name or password is incorrect'))
+    } else next(new Error('Name or password is incorrect'))
   }
 }
 
 const confirmingMail = async (req: Request, res: Response, next: NextFunction) => {
   const validData = await firstMailSchema.validate(req.body).catch((err) => next(err))
   if (validData) {
-    const { userEmail, name, begin, city, service, master } = validData
-    const mail = {
-      body: {
-        name,
-        intro: 'Your order details:',
-        table: {
-          data: [{ 'Order date': begin, City: city, 'Your master': master, 'Size of clock': service }],
-        },
-        outro: 'Thanks for choosing us!',
+    const { userEmail, name, begin, city, service, master, password } = validData
+    const table: any = [
+      {
+        title: 'Your order details:',
+        data: [{ 'Order date': begin, City: city, 'Your master': master, 'Size of clock': service }],
       },
+    ]
+    password && table.push({ title: 'Your registration details:', data: [{ Login: userEmail, Password: password }] })
+
+    const mail = {
+      body: { name, table, outro: 'Thanks for choosing us!' },
     }
     const subj = 'Your order has been processed successfully'
     req.body = createMail(mail, userEmail, subj)
@@ -125,31 +155,34 @@ const confirmingMail = async (req: Request, res: Response, next: NextFunction) =
 }
 
 // const newUser = async (req: Request, res: Response, next: NextFunction) => {
-//   const { name, password } = req.body
+//   const { name, surname, city, password } = req.body
 //   const saltRound = 10
 //   const salt = await bcrypt.genSalt(saltRound)
 //   const bcPass = await bcrypt.hash(password, salt)
 //   const userToken = v4()
-//   console.log(userToken)
+
 //   const user = await User.create({
 //     salt,
 //     pass: bcPass,
 //     token: userToken,
 //     name,
 //     role: 'master',
-//     user_id: 2,
 //   }).catch((err) => next(err))
 //   return user && res.json({ userToken })
 // }
 
 const stayAuth = async (req: Request, res: Response, next: NextFunction) => {
   const { token } = req.headers
-  console.log()
+
   if (typeof token === 'string') {
     const user = await User.findOne({ where: { token } }).catch((err) => next(err))
-    if (user && user.token === token) {
-      return res.json(user)
-    }
+    if (user && user.role === 'customer') {
+      const customer = await Customer.findOne({ where: { user_id: user.id } }).catch((err) => next(err))
+      return customer && res.json({ role: 'customer', id: customer.id })
+    } else if (user && user.role === 'master') {
+      const master = await Master.findOne({ where: { user_id: user.id } }).catch((err) => next(err))
+      return master && res.json({ role: 'customer', id: master.id })
+    } else return res.json(user)
   } else return res.json(false)
 }
 

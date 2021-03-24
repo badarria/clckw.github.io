@@ -1,5 +1,5 @@
-import { checkToken } from './checkToken'
+import { checkMasterToken, checkAdminToken, checkCustomerToken } from './checkToken'
 import { jwtGenerator } from './jwtGenerator'
 import { createMail, sendMail } from './mailer'
 
-export { checkToken, jwtGenerator, createMail, sendMail }
+export { checkMasterToken, jwtGenerator, createMail, sendMail, checkAdminToken, checkCustomerToken }

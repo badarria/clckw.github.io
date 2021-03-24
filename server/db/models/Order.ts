@@ -19,7 +19,7 @@ import { toDate, toTime } from '../../utils/datetimefunc'
 @Table({ tableName: 'orders', timestamps: false })
 export class Order extends Model {
   @Column({ type: DataTypes.INTEGER, allowNull: false, primaryKey: true, autoIncrement: true })
-  id?: number
+  id!: number
   @Column
   rating!: number
   @Column({ type: DataTypes.DATE, allowNull: false })
@@ -37,23 +37,26 @@ export class Order extends Model {
     return toTime(rawValue)
   }
 
-  @BelongsTo(() => Master, { onDelete: 'SET NULL', onUpdate: 'SET NULL', foreignKey: 'master_id' })
+  @BelongsTo(() => Master, { foreignKey: 'master_id', onDelete: 'set null', onUpdate: 'set null' })
   m!: Master[]
   @Column
   master_id!: number
 
-  @BelongsTo(() => Customer, { onDelete: 'SET NULL', onUpdate: 'SET NULL', foreignKey: 'customer_id' })
+  @BelongsTo(() => Customer, { foreignKey: 'customer_id', onDelete: 'set null', onUpdate: 'set null' })
   c!: Customer[]
   @Column
   customer_id!: number
 
-  @BelongsTo(() => Service, { onDelete: 'SET NULL', onUpdate: 'SET NULL', foreignKey: 'service_id' })
+  @BelongsTo(() => Service, { foreignKey: 'service_id', onDelete: 'set null', onUpdate: 'set null' })
   s!: Service[]
   @Column
   service_id!: number
   @Column({ type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false })
   completed!: boolean
-
+  @Column({ type: DataTypes.VIRTUAL, allowNull: false, defaultValue: false })
+  get status(): string {
+    return this.getDataValue('completed') ? 'done' : ''
+  }
   @Column({ type: DataTypes.VIRTUAL })
   get date(): string {
     const rawValue = this.getDataValue('beginat')

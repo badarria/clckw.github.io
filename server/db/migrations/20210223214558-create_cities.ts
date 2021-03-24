@@ -1,6 +1,6 @@
 import { QueryInterface, INTEGER, STRING } from 'sequelize/types'
-;('use strict')
-export default {
+
+const cities = {
   up: async (queryInterface: QueryInterface) => {
     try {
       await queryInterface.sequelize.transaction(async (t) => {
@@ -10,6 +10,8 @@ export default {
             autoIncrement: true,
             primaryKey: true,
             type: INTEGER,
+            onUpdate: 'set null',
+            onDelete: 'set null',
           },
           name: {
             type: STRING,
@@ -33,3 +35,5 @@ export default {
     }
   },
 }
+
+export { cities }

@@ -35,7 +35,7 @@ const remove = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = validData
     const result = await City.destroy({ where: { id } }).catch((err) => next(err))
     if (typeof result === 'number') {
-      const msg = result ? 'City was deleted' : 'City not found'
+      const msg = result ? 'City was removed from database' : 'City not found'
       const type = result ? 'success' : 'warning'
       return res.json({ type, msg })
     }

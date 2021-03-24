@@ -8,7 +8,7 @@ const update = async (req: Request, res: Response, next: NextFunction) => {
     const { name, time, id } = validData
     const result = await Service.update({ name, time }, { where: { id } }).catch((err) => next(err))
     if (result) {
-      const msg = result[0] ? 'Service was updated' : 'Service not found'
+      const msg = result[0] ? 'Service  was updated' : 'Service not found'
       const type = result[0] ? 'success' : 'warning'
       return res.json({ type, msg })
     }
@@ -36,7 +36,7 @@ const remove = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = validData
     const result = await Service.destroy({ where: { id } }).catch((err) => next(err))
     if (typeof result === 'number') {
-      const msg = result ? 'Service was deleted' : 'Service not found'
+      const msg = result ? 'Service was removed from database' : 'Service not found'
       const type = result ? 'success' : 'warning'
       return res.json({ type, msg })
     }

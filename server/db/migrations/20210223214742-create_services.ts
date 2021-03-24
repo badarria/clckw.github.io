@@ -10,6 +10,8 @@ export default {
             autoIncrement: true,
             primaryKey: true,
             type: INTEGER,
+            onUpdate: 'set null',
+            onDelete: 'set null',
           },
           name: {
             type: STRING,

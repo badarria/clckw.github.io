@@ -4,9 +4,9 @@ import { Order } from './Order'
 
 @Table({ tableName: 'services', timestamps: false })
 export class Service extends Model {
-  @HasMany(() => Order, 'service_id')
+  @HasMany(() => Order, { foreignKey: 'service_id', onDelete: 'set null', onUpdate: 'set null' })
   services!: Service[]
-  @Column({ type: DataTypes.TEXT, allowNull: false, primaryKey: true, autoIncrement: true })
+  @Column({ type: DataTypes.INTEGER, allowNull: false, primaryKey: true, autoIncrement: true })
   id?: string
   @Column({ type: DataTypes.STRING, unique: true, allowNull: false })
   name!: string

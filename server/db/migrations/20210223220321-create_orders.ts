@@ -1,5 +1,5 @@
 import { DATE, INTEGER, QueryInterface } from 'sequelize/types'
-;('use strict')
+
 export default {
   up: async (queryInterface: QueryInterface) => {
     try {
@@ -25,8 +25,6 @@ export default {
             references: {
               model: 'customers',
               key: 'id',
-              // onUpdate: 'SET NULL',
-              // onDelete: 'SET NULL',
             },
           },
           master_id: {

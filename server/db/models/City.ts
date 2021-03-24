@@ -4,10 +4,10 @@ import { Master } from './Master'
 
 @Table({ timestamps: false, tableName: 'cities' })
 export class City extends Model {
-  @HasMany(() => Master, 'city_id')
+  @HasMany(() => Master, { foreignKey: 'city_id', onDelete: 'set null', onUpdate: 'set null' })
   masters!: Master[]
 
-  @Column({ type: DataTypes.TEXT, allowNull: false, primaryKey: true, autoIncrement: true })
+  @Column({ type: DataTypes.INTEGER, autoIncrement: true, allowNull: false, primaryKey: true })
   id!: string
 
   @Column({

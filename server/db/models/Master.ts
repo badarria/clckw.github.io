@@ -5,14 +5,16 @@ import { User, Order, City } from '.'
 
 @Table({ tableName: 'masters', timestamps: false })
 export class Master extends Model {
-  @HasMany(() => Order, { foreignKey: 'master_id' })
+  @HasMany(() => Order, { foreignKey: 'master_id', onDelete: 'set null', onUpdate: 'set null' })
   o!: Order[]
 
-  @HasOne(() => User, 'id')
+  @BelongsTo(() => User, { foreignKey: 'user_id', onDelete: 'cascade', onUpdate: 'cascade' })
   user!: User
+
   @Column({ type: DataTypes.INTEGER, allowNull: false, primaryKey: true, autoIncrement: true })
   id!: number
-
+  @Column
+  user_id!: number
   @Column({
     type: DataTypes.STRING,
     allowNull: false,
@@ -37,9 +39,13 @@ export class Master extends Model {
   get city(): string {
     return this.getDataValue('ci')?.name
   }
+  @Column({ type: DataTypes.VIRTUAL })
+  get email(): string {
+    return this.getDataValue('user')?.email
+  }
 
   @Column({ type: DataTypes.VIRTUAL })
-  get rating(): number {
+  get rating(): number | string {
     const orders = this.getDataValue('o')
     const sum = orders?.reduce(
       (acc: { sum: number; count: number }, order: any) => {
@@ -52,6 +58,6 @@ export class Master extends Model {
       },
       { count: 0, sum: 0 }
     )
-    return Math.round(sum?.sum / sum?.count) || 0
+    return Math.round(sum?.sum / sum?.count) || ''
   }
 }

@@ -49,6 +49,8 @@ const masterSchema = yup.object().shape({
   name: name,
   surname: name,
   city: num.required(),
+  password: yup.string().required(),
+  email: yup.string().required(),
 })
 
 const pagingSchema = yup.object().shape({
@@ -69,7 +71,7 @@ const searchParamsSchema = yup.object().shape({
 })
 
 const loginFormSchema = yup.object().shape({
-  name: name,
+  email: yup.string().email().required(),
   password: yup.string().trim().min(5).required(),
 })
 
@@ -100,8 +102,9 @@ const firstMailSchema = yup.object().shape({
   city: yup.string().required(),
   service: yup.string().required(),
   master: yup.string().required(),
+  password: yup.string().required(),
 })
-const mastersOrderSchema =
+const usersOrderSchema =
   yup.object().shape({
     id: yup.number().required(),
   }) && pagingSchema
@@ -121,5 +124,5 @@ export {
   orderSchema,
   firstMailSchema,
   secondMailSchema,
-  mastersOrderSchema,
+  usersOrderSchema,
 }

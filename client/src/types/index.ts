@@ -252,7 +252,7 @@ export type ButtonIconProps = IconButtonProps & {
   type: string
 }
 
-export type LoginData = { login: string; password: string }
+export type LoginData = { email: string; password: string }
 
 export type MailResponse = { msg: string }
 

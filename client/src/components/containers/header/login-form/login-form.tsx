@@ -25,7 +25,7 @@ export const LoginForm = ({ login }: { login: Function }) => {
   const submit = async (data: LoginData) => {
     setLoading(true)
     const res = await login(data)
-    console.log(res)
+ 
     if ('role' in res) {
       setLoading(false)
       handleClose()

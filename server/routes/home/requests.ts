@@ -178,10 +178,10 @@ const stayAuth = async (req: Request, res: Response, next: NextFunction) => {
     const user = await User.findOne({ where: { token } }).catch((err) => next(err))
     if (user && user.role === 'customer') {
       const customer = await Customer.findOne({ where: { user_id: user.id } }).catch((err) => next(err))
-      return customer && res.json({ role: 'customer', id: customer.id })
+      return customer && res.json({ role: 'customer', id: customer.id, token })
     } else if (user && user.role === 'master') {
       const master = await Master.findOne({ where: { user_id: user.id } }).catch((err) => next(err))
-      return master && res.json({ role: 'customer', id: master.id })
+      return master && res.json({ role: 'customer', id: master.id, token })
     } else return res.json(user)
   } else return res.json(false)
 }

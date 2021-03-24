@@ -24,7 +24,9 @@ const update = async (req: Request, res: Response, next: NextFunction) => {
       const type = result[0] ? 'success' : 'warning'
       return updUser && res.json({ type, msg })
     } else if (result && !userId) {
-      const newUser = await User.create({ salt, pass: bcPass, email, token, role: 'master' }).catch((err) => next(err))
+      const newUser = await User.create({ salt, pass: bcPass, email, token, role: 'customer' }).catch((err) =>
+        next(err)
+      )
       const userId = newUser && newUser.id
       const updCustomer =
         userId && (await Customer.update({ user_id: userId }, { where: { id } }).catch((err) => next(err)))

@@ -88,12 +88,13 @@ export const SearchForm = () => {
 
     if (Array.isArray(masters) && masters.length) {
       setMasters(masters)
-      const id = await getCustomer({ email, name, surname })
-      if (typeof id === 'number') {
-        const orderData = { service: service.id, begin, finish, customer: id }
+      const data = await getCustomer({ email, name, surname })
+      if ('id' in data) {
+        const orderData = { service: service.id, begin, finish, customer: data.id }
         const mailData = {
           name,
           userEmail: email,
+          password: data.password,
           city: city.name,
           begin: toMailFormat(begin),
           service: service.name,
@@ -115,20 +116,16 @@ export const SearchForm = () => {
   useEffect(() => {
     const addOrder = async () => {
       let res = await setLoader(addNewOrder(order))
-      if ('id' in res) {
-        setOrder(initOrder)
-        const first = await sendConfirmLetter({ ...mail, id: res.id })
-        console.log(first)
-        // setTimeout(async () => {
-        //   const second = await sendRatingLetter({ ...mail, id: res.id })
-        //   console.log(second)
-        // }, 10000)
-      }
       if (res.type === 'success') {
         setMasters([])
         setSubmitted(submitted + 1)
+        setToastMsg(res)
+        setOrder(initOrder)
       }
-      setToastMsg(res)
+      if ('id' in res) {
+        const first = await sendConfirmLetter(mail)
+        console.log(first)
+      }
     }
     if (order.master !== 0) {
       addOrder()

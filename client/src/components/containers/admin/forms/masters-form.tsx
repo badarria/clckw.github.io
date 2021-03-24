@@ -6,13 +6,12 @@ import { masters } from '../../../../services/admin/validation/schema'
 import { MastersFormProps } from 'types'
 import { getMastersKeys } from 'services/admin/masters'
 
-export const MastersForm = ({ data, cancel, accept }: MastersFormProps) => {
-  console.log(data, 'masters')
-  const { id, name, surname, ci } = data
+export const MastersForm = ({ data, cancel, accept, editState }: MastersFormProps) => {
+  const { id, name, surname, ci, email } = data
   const [keys, setKeys] = useState([ci])
   const [loading, setLoading] = useState(false)
-  const defaultValues: any = { id, name, surname, city: keys[0] }
-  const labels = Object.keys({ id, name, surname })
+  const defaultValues: any = { id, name, surname, city: keys[0], password: '', email }
+  const labels = Object.keys({ id, name, surname, email, password: '' })
 
   const { register, handleSubmit, control, reset, errors } = useForm({
     defaultValues,
@@ -27,14 +26,12 @@ export const MastersForm = ({ data, cancel, accept }: MastersFormProps) => {
   }
 
   const formProps = {
-    submit: handleSubmit((data) => {
-      const { id, name, surname, city } = data
-      return accept({ id, name, surname, city: city.id })
-    }),
+    submit: handleSubmit((data) => accept({ ...data, city: data.city.id })),
     reset: () => {
       cancel()
       reset()
     },
+    editState,
   }
 
   useEffect(() => {

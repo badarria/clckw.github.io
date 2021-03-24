@@ -4,9 +4,17 @@ import { TypicalResponse, Paging, State, Master } from 'types'
 import { acceptMaster, deleteMaster, getMasters } from 'services/admin/masters'
 import { MastersForm } from '../forms'
 
-const columns = ['id', 'name', 'surname', 'city', 'rating']
+const columns = ['id', 'name', 'surname', 'email', 'city', 'rating']
 const initPaging: Paging = { limit: 10, offset: 0, orderby: 'id', order: 'desc', count: 50 }
-const initDataToChange: Master = { id: 0, name: '', surname: '', ci: { id: 0, name: '' }, rating: 0 }
+const initDataToChange: Master = {
+  id: 0,
+  name: '',
+  surname: '',
+  ci: { id: 0, name: '' },
+  rating: 0,
+  email: '',
+  password: '' || undefined,
+}
 
 export const Masters = () => {
   const [editState, setEditState] = useState<State>(null)
@@ -82,7 +90,7 @@ export const Masters = () => {
     getItems()
   }, [paging])
 
-  const formProps = { data: dataToChange, cancel, accept }
+  const formProps = { data: dataToChange, cancel, accept, editState }
   const headProps = { columns, push, order, orderby, setChange }
   const pagingProps = { option: { limit, offset, count }, setPaging: setChange }
 

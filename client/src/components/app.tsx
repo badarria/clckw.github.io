@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { getCheckingState, getUserAuthState } from '../store/state-selectors'
-import { AdminRoute, MasterRoute, RatingRoute } from '../routes'
+import { AdminRoute, MasterRoute, RatingRoute, CustomerRoute } from '../routes'
 import { Cities, Customers, Masters, Orders, Services } from './containers/admin/pages'
 import { User } from 'types'
 import { Loader } from './ui'
@@ -31,6 +31,7 @@ const App = ({ user, isChecking }) => {
           </AdminRoute>
           <RatingRoute path='/orderRate' />
           <MasterRoute path='/master' user={user} />
+          <CustomerRoute path='/customer' user={user} />
           <Redirect to='/' />
         </Switch>
       )}

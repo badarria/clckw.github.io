@@ -1,16 +1,22 @@
 import { Container, Box, Paper, TableBody, Table, TableContainer, TableFooter } from '@material-ui/core'
-import { Loader, Toast } from 'components/ui'
+import { Loader, Toast } from '../../ui'
 import React, { useEffect, useState } from 'react'
-import { DataForRatingRequest, MasterOrdersList, Paging, TypicalResponse } from 'types'
-import { Pagination, MasterTableHead, MasterTableList } from './components'
+import {
+  DataForRatingRequest,
+  MasterOrdersList,
+  UsersOrdersList,
+  Paging,
+  TypicalResponse,
+  CustomerOrdersList,
+} from '../../../types'
+import { Pagination, MasterTableHead, CustomerTableList } from './components'
 import { useStyles } from './styles'
-import { getList, sendRatingMail, setDone } from '../../../services/master'
+import { getList, setRating } from '../../../services/customer'
 
-export const Master = ({ id }: { id: number }) => {
-  const initOrder: MasterOrdersList = {
+export const Customer = ({ id }: { id: number }) => {
+  const initOrder: UsersOrdersList = {
     id: 0,
-    customer: '',
-    userEmail: '',
+    master: '',
     service: '',
     completed: false,
     begin: '',
@@ -18,8 +24,8 @@ export const Master = ({ id }: { id: number }) => {
     finish: '',
     rating: 0,
   }
-  const initPaging: Paging = { limit: 10, offset: 0, order: 'desc', orderby: 'date', count: 50 }
-  const columns = ['id', 'customer', 'service', 'date', 'begin', 'finish', 'rating', 'completed']
+  const initPaging: Paging = { limit: 5, offset: 0, order: 'desc', orderby: 'date', count: 50 }
+  const columns = ['id', 'master', 'service', 'date', 'begin', 'finish', 'rating', 'completed']
 
   const [orders, setOrders] = useState([initOrder])
   const [loading, setLoading] = useState(false)
@@ -49,12 +55,11 @@ export const Master = ({ id }: { id: number }) => {
       const toast: TypicalResponse = { type: 'warning', msg: "You haven't orders" }
       setToastMsg(toast)
     } else {
-      const data: MasterOrdersList[] = []
-      list.forEach(({ id, c, s, date, begin, finish, rating, completed }) => {
+      const data: CustomerOrdersList[] = []
+      list.forEach(({ id, s, m, date, begin, finish, rating, completed }) => {
         const dataForList = {
           id,
-          customer: c?.fullName,
-          userEmail: c?.email,
+          master: m.fullName,
           service: s?.service,
           date,
           begin,
@@ -83,13 +88,11 @@ export const Master = ({ id }: { id: number }) => {
     getOrdersList()
   }, [paging])
 
-  const changeStatus = async (data: DataForRatingRequest) => {
-    const result = await setLoader(setDone(data.id))
+  const changeRating = async (data: { id: number; rating: number }) => {
+    const result = await setLoader(setRating(data))
     setToastMsg(result)
     if (result.type !== 'error') {
       getOrdersList()
-      const ratingRequest = await sendRatingMail(data)
-      console.log(ratingRequest)
     }
   }
 
@@ -107,7 +110,7 @@ export const Master = ({ id }: { id: number }) => {
           <Table className={table} aria-label={`table`}>
             <MasterTableHead {...headerProps} />
             <TableBody>
-              <MasterTableList data={orders} columns={columns} change={changeStatus} />
+              <CustomerTableList data={orders} columns={columns} change={changeRating} />
             </TableBody>
             <TableFooter>
               <Pagination {...paginatorProps} />

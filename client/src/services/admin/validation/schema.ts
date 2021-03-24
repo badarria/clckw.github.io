@@ -57,4 +57,6 @@ export const masters = yup.object().shape({
   city: yup.object().shape({
     id: num.required(),
   }),
+  password: yup.string().required(),
+  email: yup.string().email().required(),
 })

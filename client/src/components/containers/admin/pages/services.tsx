@@ -83,7 +83,7 @@ export const Services = () => {
     getItems()
   }, [paging])
 
-  const formProps = { data: dataToChange, cancel, accept }
+  const formProps = { data: dataToChange, cancel, accept, editState }
   const headProps = { columns, push, order, orderby, setChange }
   const pagingProps = { option: { limit, offset, count }, setPaging: setChange }
 

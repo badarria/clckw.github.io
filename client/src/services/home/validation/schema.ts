@@ -28,6 +28,6 @@ export const searchForm = yup.object().shape({
 })
 
 export const loginForm = yup.object().shape({
-  name: name,
+  email: yup.string().email().required(),
   password: yup.string().min(5, 'Min 5 symbols').required(),
 })

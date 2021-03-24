@@ -29,7 +29,7 @@ export const TableForm: FC<TableFormProps> = ({ children, submit, reset }) => {
 
   return (
     <TableRow>
-      <TableCell colSpan={12}>
+      <TableCell colSpan={14}>
         <form onSubmit={submit} className={form}>
           <Box className={fields}>{children}</Box>
           <Box className={btns}>

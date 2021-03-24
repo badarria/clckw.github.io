@@ -1,4 +1,4 @@
-import { DataForRatingRequest, getMastersOrderData, MastersOrder, TypicalResponse } from '../../types'
+import { DataForRatingRequest, getUsersOrderData, UsersOrder, TypicalResponse } from '../../types'
 
 const getToken = () => localStorage.getItem('token') || ''
 const masterPath = 'master'
@@ -11,7 +11,7 @@ const wrapTryCatch = async <T>(tryFunc: T) => {
   }
 }
 
-const get = async (data: getMastersOrderData): Promise<MastersOrder[]> => {
+const get = async (data: getUsersOrderData): Promise<UsersOrder[]> => {
   const { id, limit, offset, order, orderby } = data
   const token = getToken()
   const res = await fetch(`${masterPath}/${id}/${limit}/${offset}/${order}/${orderby}`, { headers: { token } })
@@ -40,5 +40,5 @@ const send = async (data: DataForRatingRequest): Promise<TypicalResponse> => {
 }
 
 export const setDone = async (id: number) => await wrapTryCatch(done(id))
-export const getList = async (data: getMastersOrderData) => await wrapTryCatch(get(data))
+export const getList = async (data: getUsersOrderData) => await wrapTryCatch(get(data))
 export const sendRatingMail = async (data: DataForRatingRequest) => await wrapTryCatch(send(data))

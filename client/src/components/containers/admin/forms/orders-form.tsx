@@ -14,7 +14,7 @@ import { initOrderKeys, OrdersFormProps, SubmittedOrder } from 'types'
 import { getOrdersKeys, getFilteredOrders } from 'services/admin/orders'
 import { SelectHours } from 'components/ui/select/select-hours'
 
-export const OrdersForm = ({ data, cancel, accept }: OrdersFormProps) => {
+export const OrdersForm = ({ data, cancel, accept, editState }: OrdersFormProps) => {
   const { id, date, c, m, s, begin } = data
 
   const orderKeys: initOrderKeys = {
@@ -110,6 +110,7 @@ export const OrdersForm = ({ data, cancel, accept }: OrdersFormProps) => {
       cancel()
       reset()
     },
+    editState,
   }
 
   const selectProps = { data: newHours, control, name: 'hours', disabled: disableHours }

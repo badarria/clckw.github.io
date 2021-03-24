@@ -25,10 +25,13 @@ export const LoginForm = ({ login }: { login: Function }) => {
   const submit = async (data: LoginData) => {
     setLoading(true)
     const res = await login(data)
+    console.log(res)
     if ('role' in res) {
       setLoading(false)
       handleClose()
-      const path = res.role === 'admin' ? '/admin/customers' : '/master'
+      let path = '/admin/customers'
+      res.role === 'customer' && (path = '/customer')
+      res.role === 'master' && (path = '/master')
       history.push(state?.from || path)
     } else {
       setMsg(res.msg)
@@ -60,14 +63,14 @@ export const LoginForm = ({ login }: { login: Function }) => {
             <TextField
               autoFocus
               id='name'
-              label='Name'
-              name='name'
+              label='Email'
+              name='email'
               type='text'
               inputRef={register}
               required
               className={fields}
-              error={!!errors.name}
-              helperText={errors.name?.message || ''}
+              error={!!errors.email}
+              helperText={errors.email?.message || ''}
             />
             <TextField
               id='password'

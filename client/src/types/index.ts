@@ -8,6 +8,8 @@ export type Master = {
   surname: string
   ci: City
   rating: number
+  email: string
+  password?: string
 }
 
 export type Order = {
@@ -20,9 +22,9 @@ export type Order = {
   rating: number
   date: string
   city: string
-  completed: boolean
+  status: string
 }
-export type MastersOrder = {
+export type UsersOrder = {
   id: number
   m: { fullName: string }
   c: { fullName: string; email: string }
@@ -33,7 +35,17 @@ export type MastersOrder = {
   date: string
   completed: boolean
 }
-export type getMastersOrderData = Paging & { id: number }
+export type UsersOrdersList = {
+  id: number
+  master: string
+  service: string
+  completed: boolean
+  begin: string
+  date: string
+  finish: string
+  rating: number
+}
+export type getUsersOrderData = Paging & { id: number }
 
 export type Service = { id: number; name: string; time: string }
 export type ServiceWithKeys = Service & {
@@ -45,6 +57,7 @@ export type Customer = {
   name: string
   surname: string
   email: string
+  password: string
 }
 
 export type City = {
@@ -86,7 +99,7 @@ export type ServicesKey = { time: { id: number; name: string }[] }
 export type HoursArray = { hour: string; booked: boolean }[]
 export type State = 'isEditing' | 'isCreating' | null
 
-type SubjFormProps = { cancel: Function; accept: Function }
+type SubjFormProps = { cancel: Function; accept: Function; editState: State }
 
 export type TypicalResponse = { type: 'success' | 'info' | 'warning' | 'error'; msg: string }
 export type CustomersFormProps = SubjFormProps & { data: Customer }
@@ -188,12 +201,27 @@ export type MasterOrdersList = {
   rating: number
   completed: boolean
 }
+export type CustomerOrdersList = {
+  id: number
+  master: string
+  service: string
+  date: string
+  finish: string
+  begin: string
+  rating: number
+  completed: boolean
+}
 export type MasterTableListProps = {
   data: MasterOrdersList[]
   columns: string[]
-  change: (data: DataForRatingRequest) => void
+  change: Function
 }
 
+export type CustomerTableListProps = {
+  data: CustomerOrdersList[]
+  columns: string[]
+  change: ({ id, rating }: { id: number; rating: number }) => void
+}
 export type AdminTableProps = {
   items: Array<AllSubjectsDataUi>
   columns: string[]
@@ -228,9 +256,9 @@ export type LoginData = { login: string; password: string }
 
 export type MailResponse = { msg: string }
 
-export type CustomerResponse = TypicalResponse | number
+export type CustomerResponse = TypicalResponse | { id: number; password: string }
 export type FreeMastersList = Master[]
-export type LoginResponse = { token: string; role: string; user_id: number } | TypicalResponse
+export type LoginResponse = { token: string; role: string; id: number } | TypicalResponse
 export type DataToProcess = {
   service: Service
   city: City
@@ -286,5 +314,5 @@ export type MasterCardProps = {
 }
 export type MastersListProps = { data: FreeMastersList; confirm: Function }
 export type User = { id: 0; auth: boolean; role: string }
-export type UserResponse = { user_id: number; role: string; token: string }
+export type UserResponse = { id: number; role: string; token: string }
 export type HeaderProps = { logoutFrom: () => void; loginTo: (data: LoginData) => Promise<any>; user: User }

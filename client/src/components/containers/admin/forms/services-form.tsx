@@ -8,7 +8,7 @@ import { TextField } from '@material-ui/core'
 import { useStyles } from './styles'
 import { getServiceTime } from 'services/utils/table-func'
 
-export const ServicesForm = ({ data: { id = 0, name, time }, cancel, accept }: ServicesFormProps) => {
+export const ServicesForm = ({ data: { id = 0, name, time }, cancel, accept, editState }: ServicesFormProps) => {
   const defaultValues: Record<string, any> = { id, name, time }
   const labels = Object.keys({ id, name })
   const { fields, inputLabel, idInput, input, helperText } = useStyles()
@@ -28,6 +28,7 @@ export const ServicesForm = ({ data: { id = 0, name, time }, cancel, accept }: S
       cancel()
       reset()
     },
+    editState,
   }
 
   return (

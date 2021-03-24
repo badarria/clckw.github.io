@@ -5,7 +5,7 @@ import { cities } from '../../../../services/admin/validation/schema'
 import { InputField, TableForm } from '../components'
 import { CitiesFormProps } from 'types'
 
-export const CitiesForm = ({ data: { id = 0, name }, cancel, accept }: CitiesFormProps) => {
+export const CitiesForm = ({ data: { id = 0, name }, cancel, accept, editState }: CitiesFormProps) => {
   const defaultValues: any = { id, name }
   const labels = Object.keys({ id, name })
   const { register, handleSubmit, reset, errors } = useForm({
@@ -19,6 +19,7 @@ export const CitiesForm = ({ data: { id = 0, name }, cancel, accept }: CitiesFor
       cancel()
       reset()
     },
+    editState,
   }
 
   return (

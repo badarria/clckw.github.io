@@ -14,6 +14,7 @@ const Header = ({ logoutFrom, loginTo, user }: HeaderProps) => {
   const { auth, role } = user
   const isAdmin = role === 'admin' && auth
   const isMaster = role === 'master' && auth
+  const isCustomer = role === 'customer' && auth
   const { root, title, btns } = useStyles()
 
   return (
@@ -34,7 +35,12 @@ const Header = ({ logoutFrom, loginTo, user }: HeaderProps) => {
                 Master
               </Button>
             )}
-            {isAdmin || isMaster ? (
+            {isCustomer && (
+              <Button color='inherit' component={Link} to={'/customer'}>
+                Customer
+              </Button>
+            )}
+            {isAdmin || isMaster || isCustomer ? (
               <Button color='inherit' onClick={logoutFrom}>
                 Logout
               </Button>

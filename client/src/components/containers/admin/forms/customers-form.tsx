@@ -3,21 +3,27 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { customers } from '../../../../services/admin/validation/schema'
 import { InputField, TableForm } from '../components'
-import { CustomersFormProps } from 'types'
+import { Customer, CustomersFormProps } from 'types'
 
-export const CustomersForm = ({ data: { id, name, surname, email }, cancel, accept }: CustomersFormProps) => {
-  const defaultValues: any = { id, name, surname, email }
-  const labels = Object.keys({ id: id || 0, name, surname, email })
+export const CustomersForm = ({
+  data: { id, name, surname, email, password },
+  cancel,
+  accept,
+  editState,
+}: CustomersFormProps) => {
+  const defaultValues: any = { id, name, surname, email, password }
+  const labels = Object.keys({ id: id || 0, name, surname, email, password })
   const { register, handleSubmit, errors } = useForm({
     defaultValues,
     resolver: yupResolver(customers),
   })
 
   const formProps = {
-    submit: handleSubmit((data) => accept(data)),
+    submit: handleSubmit((data: Customer) => accept(data)),
     reset: () => {
       cancel()
     },
+    editState,
   }
 
   return (

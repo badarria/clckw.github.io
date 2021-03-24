@@ -6,12 +6,12 @@ import { Dispatch } from 'redux'
 export const login = (data: LoginData) => async (dispatch: Dispatch) => {
   const res = await loginUser(data)
   if ('token' in res) {
-    const { token, role, user_id } = res
+    const { token, role, id } = res
     localStorage.setItem('token', token)
-    dispatch(setUserAuth({ auth: true, role, id: user_id }))
-    return { status: true, msg: 'Success', role }
+    dispatch(setUserAuth({ auth: true, role, id }))
+    return { msg: 'success', role }
   } else {
-    return { status: false, msg: res }
+    return res
   }
 }
 
@@ -21,27 +21,14 @@ export const stayAuth = async (dispatch: Dispatch) => {
     dispatch(setChecking(true))
     const res = await checkUserAuth(token)
     if (res && 'role' in res) {
-      const { role, user_id } = res
-      dispatch(setUserAuth({ auth: true, id: user_id, role }))
+      const { role, id } = res
+      dispatch(setUserAuth({ auth: true, id, role }))
     } else {
       localStorage.removeItem('token')
       dispatch(setUserAuth({ auth: false }))
     }
   }
   dispatch(setChecking(false))
-}
-
-export const stayMasterAuth = async (dispatch: Dispatch) => {
-  const userToken = localStorage.getItem('userToken')
-  if (userToken) {
-    const user = await checkUserAuth(userToken)
-    if (user) {
-      dispatch(setUserAuth(true))
-    } else {
-      localStorage.removeItem('userToken')
-      dispatch(setUserAuth(false))
-    }
-  } else dispatch(setUserAuth(false))
 }
 
 export const logout = (dispatch: Dispatch) => {

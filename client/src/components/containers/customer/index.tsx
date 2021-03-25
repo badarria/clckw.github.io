@@ -1,15 +1,8 @@
 import { Container, Box, Paper, TableBody, Table, TableContainer, TableFooter } from '@material-ui/core'
 import { Loader, Toast } from '../../ui'
 import React, { useEffect, useState } from 'react'
-import {
-  DataForRatingRequest,
-  MasterOrdersList,
-  UsersOrdersList,
-  Paging,
-  TypicalResponse,
-  CustomerOrdersList,
-} from '../../../types'
-import { Pagination, MasterTableHead, CustomerTableList } from './components'
+import { UsersOrdersList, Paging, TypicalResponse, CustomerOrdersList } from '../../../types'
+import { Pagination, CustomerTableHead, CustomerTableList } from './components'
 import { useStyles } from './styles'
 import { getList, setRating } from '../../../services/customer'
 
@@ -25,7 +18,7 @@ export const Customer = ({ id }: { id: number }) => {
     rating: 0,
   }
   const initPaging: Paging = { limit: 5, offset: 0, order: 'desc', orderby: 'date', count: 50 }
-  const columns = ['id', 'master', 'service', 'date', 'begin', 'finish', 'rating', 'completed']
+  const columns = ['id', 'master', 'service', 'date', 'begin', 'finish', 'rating']
 
   const [orders, setOrders] = useState([initOrder])
   const [loading, setLoading] = useState(false)
@@ -108,7 +101,7 @@ export const Customer = ({ id }: { id: number }) => {
         </Box>
         <TableContainer component={Paper} className={root}>
           <Table className={table} aria-label={`table`}>
-            <MasterTableHead {...headerProps} />
+            <CustomerTableHead {...headerProps} />
             <TableBody>
               <CustomerTableList data={orders} columns={columns} change={changeRating} />
             </TableBody>

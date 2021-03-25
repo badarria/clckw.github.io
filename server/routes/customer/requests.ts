@@ -1,7 +1,8 @@
 import { Customer, Master, Order, Service } from '../../db/models'
 import { NextFunction, Request, Response } from 'express'
-import { usersOrderSchema } from '../../validation'
+import { userRatingSchema, usersOrderSchema } from '../../validation'
 import { config } from '../../../config'
+import { nextTick } from 'node:process'
 const url = config.mailing.baseUrl
 
 export const getOrders = async (req: Request, res: Response, next: NextFunction) => {
@@ -31,5 +32,18 @@ export const getOrders = async (req: Request, res: Response, next: NextFunction)
       ],
     }).catch((err) => next(err))
     list && res.json(list)
+  }
+}
+
+export const setRating = async (req: Request, res: Response, next: NextFunction) => {
+  const validData = await userRatingSchema.validate(req.body).catch((err) => next(err))
+  if (validData) {
+    const { id, rating } = validData
+    const updRating = await Order.update({ rating }, { where: { id } }).catch((err) => next(err))
+    if (updRating) {
+      const msg = updRating ? 'Order was rated!' : "Order wasn't found"
+      const type = updRating ? 'success' : 'warning'
+      return res.json({ type, msg })
+    }
   }
 }

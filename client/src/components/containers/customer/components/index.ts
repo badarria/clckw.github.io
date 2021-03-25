@@ -1,6 +1,6 @@
 import { Pagination } from './pagination'
-import { CustomerTableList } from './master-table-list'
-import { MasterTableHead } from './master-table-head'
-import { ButtonDialog } from './button-dialog'
+import { CustomerTableList } from './customer-table-list'
+import { CustomerTableHead } from './customer-table-head'
+import { RatingDialog } from './rating-dialog'
 
-export { Pagination, CustomerTableList, MasterTableHead, ButtonDialog }
+export { Pagination, CustomerTableList, CustomerTableHead, RatingDialog }

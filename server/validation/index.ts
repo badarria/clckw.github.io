@@ -108,10 +108,15 @@ const usersOrderSchema =
   yup.object().shape({
     id: yup.number().required(),
   }) && pagingSchema
+const userRatingSchema = yup.object().shape({
+  id: yup.number().required(),
+  rating: yup.number().required(),
+})
 
 export {
   orderRatingSchema,
   orderIdSchema,
+  userRatingSchema,
   freeMastersSchema,
   loginFormSchema,
   searchParamsSchema,

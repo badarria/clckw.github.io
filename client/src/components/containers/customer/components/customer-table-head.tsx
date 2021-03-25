@@ -3,7 +3,7 @@ import React from 'react'
 import { useStyles } from '../styles'
 import { MasterTableHeadProps } from '../../../../types'
 
-export const MasterTableHead = (props: MasterTableHeadProps) => {
+export const CustomerTableHead = (props: MasterTableHeadProps) => {
   const { columns, order, orderby, setChange } = props
   const { visuallyHidden, head } = useStyles()
 

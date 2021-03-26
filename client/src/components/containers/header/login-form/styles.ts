@@ -36,8 +36,11 @@ export const useStyles = makeStyles({
   },
   checkBox: {
     margin: '0px 16px -2px 8px',
-    padding: '0px 0px 0px 0px',
     display: 'flex',
     alignItems: 'flex-end',
+    padding: '0px 0px 0px 0px',
+    '&MuiCheckbox-root': {
+      padding: '0px 0px 0px 0px',
+    },
   },
 })

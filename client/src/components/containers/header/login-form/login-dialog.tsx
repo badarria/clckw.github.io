@@ -33,22 +33,22 @@ export const LoginDialog = ({ close, submit, open, msg, changeState }: DialogPro
             <TextField
               autoFocus
               id='name'
-              label='Email'
+              label='Email*'
               name='email'
               type='text'
+              autoComplete='nope'
               inputRef={register}
-              required
               className={fields}
               error={!!errors.email}
               helperText={errors.email?.message || ''}
             />
             <TextField
               id='password'
-              label='Password'
+              label='Password*'
               name='password'
               type='password'
+              autoComplete='nope'
               inputRef={register}
-              required
               className={fields}
               error={!!errors.password}
               helperText={errors.password?.message || ''}

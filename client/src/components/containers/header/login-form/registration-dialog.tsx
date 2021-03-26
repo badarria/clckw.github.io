@@ -5,7 +5,7 @@ import { Typography } from '@material-ui/core'
 import { registrationForm } from '../../../../services/home/validation/schema'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useStyles } from './styles'
-import { AutocompleteField, Loader } from 'components/ui'
+import { AutocompleteField, InputField, Loader } from 'components/ui'
 import { getInit } from 'services/home/api'
 import { ControlledCheckbox } from '.'
 import { setDisabled } from 'services/utils/datetime-func'
@@ -68,64 +68,18 @@ export const RegistrationDialog = ({ close, submit, open, msg, changeState }: Di
           <form onSubmit={handleSubmit(submit)} className={form}>
             <Box className={wrap}>
               <Box className={inputWrap}>
-                <TextField
-                  autoFocus
-                  id='name'
-                  label='Name*'
-                  name='name'
-                  type='text'
-                  autoComplete='nope'
-                  inputRef={register}
-                  className={fields}
-                  error={!!errors.name}
-                  helperText={errors.name?.message || ''}
-                />
-                <TextField
-                  autoFocus
-                  id='surname'
-                  label='Surname*'
-                  name='surname'
-                  type='text'
-                  autoComplete='nope'
-                  inputRef={register}
-                  className={fields}
-                  error={!!errors.surname}
-                  helperText={errors.surname?.message || ''}
-                />
-                <TextField
-                  id='email'
-                  label='Email*'
-                  name='email'
-                  type='email'
-                  autoComplete='nope'
-                  inputRef={register}
-                  className={fields}
-                  error={!!errors.email}
-                  helperText={errors.email?.message || ''}
-                />
+                <InputField label='name' defaultValue='' {...{ register, errors }} />
+                <InputField label='surname' defaultValue='' {...{ register, errors }} />
+                <InputField label='email' defaultValue='' {...{ register, errors }} />
               </Box>
               <Box className={inputWrap}>
-                <TextField
-                  id='password'
-                  label='Password*'
-                  name='password'
-                  type='password'
-                  autoComplete='nope'
-                  inputRef={register}
-                  className={fields}
-                  error={!!errors.password}
-                  helperText={errors.password?.message || ''}
-                />
-                <TextField
-                  id='confirmPassword'
-                  label='Confirm password*'
+                <InputField label='password' defaultValue='' {...{ register, errors }} type='password' />
+                <InputField
+                  label='confirm Password'
+                  defaultValue=''
+                  {...{ register, errors }}
                   name='confirmPassword'
                   type='password'
-                  autoComplete='nope'
-                  inputRef={register}
-                  className={fields}
-                  error={!!errors.confirmPassword}
-                  helperText={errors.confirmPassword?.message || ''}
                 />
                 <AutocompleteField {...{ data: cities, control, name: 'city', keyToSelect: 'name', errors }} />
               </Box>

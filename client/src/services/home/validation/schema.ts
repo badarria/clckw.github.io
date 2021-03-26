@@ -37,7 +37,7 @@ export const registrationForm = yup.object().shape({
   surname: name,
   email: yup.string().email().required(),
   password: yup.string().required(),
-  confirmPassword: yup.string().test('confirm', (value, context) => {
+  confirmPassword: yup.string().test('confirm', 'Password not the same', (value, context) => {
     const pass = context.parent.password
     return value === pass
   }),

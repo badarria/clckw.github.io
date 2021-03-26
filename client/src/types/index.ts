@@ -154,7 +154,14 @@ export type AutocompleteFieldProps = {
   errors: any
 }
 
-export type InputFieldProps = { defaultValue: string; label: string; register: any; errors: any }
+export type InputFieldProps = {
+  defaultValue: string
+  label: string
+  register: any
+  errors: any
+  name?: string
+  type?: string
+}
 export type ToastProps = { toast: TypicalResponse }
 
 export type SelectHoursProps = {

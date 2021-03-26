@@ -59,6 +59,7 @@ export const LoginForm = ({ login, registration }: LoginFormProps) => {
   const handleClickOpen = () => setOpen(true)
 
   const close = () => {
+    setLoginState(true)
     setOpen(false)
   }
 

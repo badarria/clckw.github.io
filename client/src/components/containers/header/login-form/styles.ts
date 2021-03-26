@@ -2,11 +2,11 @@ import { makeStyles } from '@material-ui/core/styles'
 
 export const useStyles = makeStyles({
   btn: { margin: '16px 16px 0' },
-  title: { margin: '16px 32px 0', padding: 0 },
+  title: { margin: '16px 32px 0', padding: '0px' },
   dialog: {
     '&.MuiDialog-root': {
-      margin: 0,
-      padding: 0,
+      margin: '0px',
+      padding: '0px',
       zIndex: '1200',
     },
   },
@@ -36,7 +36,7 @@ export const useStyles = makeStyles({
   },
   checkBox: {
     margin: '0px 16px -2px 8px',
-    padding: 0,
+    padding: '0px 0px 0px 0px',
     display: 'flex',
     alignItems: 'flex-end',
   },

@@ -36,7 +36,6 @@ export const LoginForm = ({ login, registration }: LoginFormProps) => {
   }
 
   const submitRegistration = async (data) => {
-    console.log(data, 'regData')
     setLoading(true)
     const res = await registration({ ...data, city: data.city.id })
     if ('role' in res) {

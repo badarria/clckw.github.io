@@ -71,11 +71,11 @@ export const RegistrationDialog = ({ close, submit, open, msg, changeState }: Di
                 <TextField
                   autoFocus
                   id='name'
-                  label='Name'
+                  label='Name*'
                   name='name'
                   type='text'
+                  autoComplete='nope'
                   inputRef={register}
-                  required
                   className={fields}
                   error={!!errors.name}
                   helperText={errors.name?.message || ''}
@@ -83,22 +83,22 @@ export const RegistrationDialog = ({ close, submit, open, msg, changeState }: Di
                 <TextField
                   autoFocus
                   id='surname'
-                  label='Surname'
+                  label='Surname*'
                   name='surname'
                   type='text'
+                  autoComplete='nope'
                   inputRef={register}
-                  required
                   className={fields}
                   error={!!errors.surname}
                   helperText={errors.surname?.message || ''}
                 />
                 <TextField
                   id='email'
-                  label='Email'
+                  label='Email*'
                   name='email'
                   type='email'
+                  autoComplete='nope'
                   inputRef={register}
-                  required
                   className={fields}
                   error={!!errors.email}
                   helperText={errors.email?.message || ''}
@@ -107,22 +107,22 @@ export const RegistrationDialog = ({ close, submit, open, msg, changeState }: Di
               <Box className={inputWrap}>
                 <TextField
                   id='password'
-                  label='Password'
+                  label='Password*'
                   name='password'
                   type='password'
+                  autoComplete='nope'
                   inputRef={register}
-                  required
                   className={fields}
                   error={!!errors.password}
                   helperText={errors.password?.message || ''}
                 />
                 <TextField
                   id='confirmPassword'
-                  label='Confirm password'
+                  label='Confirm password*'
                   name='confirmPassword'
                   type='password'
+                  autoComplete='nope'
                   inputRef={register}
-                  required
                   className={fields}
                   error={!!errors.confirmPassword}
                   helperText={errors.confirmPassword?.message || ''}

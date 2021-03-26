@@ -42,7 +42,7 @@ export const Customer = ({ id, name }: { id: number; name: string }) => {
     }, 3000)
   }
 
-  const getOrdersList = async () => {
+  const getOrdersList = async (sayHi = false) => {
     const list = await setLoader(getList({ ...paging, id }))
     if ('type' in list) setToastMsg(list)
     else if (!list.length) {
@@ -65,14 +65,14 @@ export const Customer = ({ id, name }: { id: number; name: string }) => {
       })
       setOrders(data)
       const toast: TypicalResponse = { type: 'success', msg: `Hi, ${name}, you have ${data.length} orders. ` }
-      setToastMsg(toast)
+      sayHi && setToastMsg(toast)
       if (list.length !== paging.count) setPaging((paging) => ({ ...paging, count: list.length }))
     }
   }
 
   useEffect(() => {
     if (!loading) {
-      getOrdersList()
+      getOrdersList(true)
     }
   }, [])
 

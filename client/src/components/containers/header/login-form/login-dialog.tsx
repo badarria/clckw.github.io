@@ -6,6 +6,7 @@ import { loginForm } from '../../../../services/home/validation/schema'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useStyles } from './styles'
 import { useState } from 'react'
+import { InputField } from '../../../ui'
 
 type DialogProps = {
   msg: string
@@ -28,31 +29,10 @@ export const LoginDialog = ({ close, submit, open, msg, changeState }: DialogPro
         Login
       </DialogTitle>
       <DialogContent className={content}>
-        <form onSubmit={handleSubmit(submit)} className={form}>
+        <form onSubmit={handleSubmit(submit)} className={form} autoComplete='off'>
           <Box className={btnWrap}>
-            <TextField
-              autoFocus
-              id='name'
-              label='Email*'
-              name='email'
-              type='text'
-              autoComplete='nope'
-              inputRef={register}
-              className={fields}
-              error={!!errors.email}
-              helperText={errors.email?.message || ''}
-            />
-            <TextField
-              id='password'
-              label='Password*'
-              name='password'
-              type='password'
-              autoComplete='nope'
-              inputRef={register}
-              className={fields}
-              error={!!errors.password}
-              helperText={errors.password?.message || ''}
-            />
+            <InputField label='email' defaultValue='' {...{ register, errors }} />
+            <InputField label='password' defaultValue='' {...{ register, errors }} type='password' />
             {msg ? (
               <Typography color='secondary' variant='subtitle2'>
                 {msg}

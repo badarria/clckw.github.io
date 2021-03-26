@@ -39,7 +39,7 @@ export const useStyles = makeStyles({
     display: 'flex',
     alignItems: 'flex-end',
     padding: '0px 0px 0px 0px',
-    '&MuiCheckbox-root': {
+    '&.PrivateSwitchBase-root-59': {
       padding: '0px 0px 0px 0px',
     },
   },

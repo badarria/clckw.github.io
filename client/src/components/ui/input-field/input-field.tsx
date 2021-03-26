@@ -17,10 +17,10 @@ export const InputField = ({ defaultValue, label, register, errors, name = label
       inputProps={{
         readOnly: label === 'id',
         className: `${label === 'id' ? idInput : null} ${input}`,
+        autoComplete: 'off',
       }}
       error={!!errors[name]}
       helperText={errors[name]?.message || ''}
-      autoComplete='nope'
       inputRef={register}
       FormHelperTextProps={{ className: helperText }}
     />

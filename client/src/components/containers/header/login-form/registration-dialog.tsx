@@ -65,7 +65,7 @@ export const RegistrationDialog = ({ close, submit, open, msg, changeState }: Di
         </DialogTitle>
 
         <DialogContent className={content}>
-          <form onSubmit={handleSubmit(submit)} className={form}>
+          <form onSubmit={handleSubmit(submit)} className={form} autoComplete='off'>
             <Box className={wrap}>
               <Box className={inputWrap}>
                 <InputField label='name' defaultValue='' {...{ register, errors }} />

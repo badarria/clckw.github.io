@@ -154,22 +154,26 @@ const confirmingMail = async (req: Request, res: Response, next: NextFunction) =
   }
 }
 
-// const newUser = async (req: Request, res: Response, next: NextFunction) => {
-//   const { name, surname, city, password } = req.body
-//   const saltRound = 10
-//   const salt = await bcrypt.genSalt(saltRound)
-//   const bcPass = await bcrypt.hash(password, salt)
-//   const userToken = v4()
+const regMaster = async (req: Request, res: Response, next: NextFunction) => {
+  const { name, surname, city, password, email } = req.body
+  const saltRound = 10
+  const salt = await bcrypt.genSalt(saltRound)
+  const bcPass = await bcrypt.hash(password, salt)
+  const userToken = v4()
 
-//   const user = await User.create({
-//     salt,
-//     pass: bcPass,
-//     token: userToken,
-//     name,
-//     role: 'master',
-//   }).catch((err) => next(err))
-//   return user && res.json({ userToken })
-// }
+  const user = await User.create({
+    salt,
+    pass: bcPass,
+    token: userToken,
+    email,
+    role: 'master',
+  }).catch((err) => next(err))
+  if (user) {
+    const { id } = user
+    const newMaster = await Master.create({ name, surname, city_id: city, user_id: id }).catch((err) => next(err))
+    return user && newMaster && res.json({ token: userToken, role: 'master', id: newMaster.id })
+  }
+}
 
 const stayAuth = async (req: Request, res: Response, next: NextFunction) => {
   const { token } = req.headers
@@ -181,9 +185,9 @@ const stayAuth = async (req: Request, res: Response, next: NextFunction) => {
       return customer && res.json({ role: 'customer', id: customer.id, token })
     } else if (user && user.role === 'master') {
       const master = await Master.findOne({ where: { user_id: user.id } }).catch((err) => next(err))
-      return master && res.json({ role: 'customer', id: master.id, token })
+      return master && res.json({ role: 'master', id: master.id, token })
     } else return res.json(user)
   } else return res.json(false)
 }
 
-export { findMasters, upsertCustomer, auth, addNewOrder, stayAuth, confirmingMail, getInitState }
+export { findMasters, upsertCustomer, auth, addNewOrder, stayAuth, confirmingMail, getInitState, regMaster }

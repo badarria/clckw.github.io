@@ -4,7 +4,7 @@ import { MasterTableListProps, MasterOrdersList } from '../../../../types'
 import { ButtonDialog } from '.'
 
 export const MasterTableList = ({ data, columns, change }: MasterTableListProps) => {
-  return (
+  return data[0].id ? (
     <>
       {data.map((item: MasterOrdersList, inx: number) => {
         const { id, completed, userEmail, customer } = item
@@ -27,5 +27,11 @@ export const MasterTableList = ({ data, columns, change }: MasterTableListProps)
         )
       })}
     </>
+  ) : (
+    <TableRow component='tr'>
+      <TableCell align='center' colSpan={10} component='td'>
+        There is no placed order
+      </TableCell>
+    </TableRow>
   )
 }

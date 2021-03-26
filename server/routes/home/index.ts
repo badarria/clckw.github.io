@@ -1,4 +1,13 @@
-import { findMasters, upsertCustomer, auth, confirmingMail, stayAuth, addNewOrder, getInitState } from './requests'
+import {
+  findMasters,
+  upsertCustomer,
+  auth,
+  confirmingMail,
+  stayAuth,
+  addNewOrder,
+  getInitState,
+  regMaster,
+} from './requests'
 import { sendMail } from '../../utils'
 import { Router } from 'express'
 const index = Router()
@@ -10,5 +19,6 @@ index.post('/auth', auth)
 index.post('/newOrder', addNewOrder)
 index.post('/confirm', confirmingMail, sendMail())
 index.get('/verify', stayAuth)
+index.post('/registration', regMaster)
 
 export { index }

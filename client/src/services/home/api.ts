@@ -12,6 +12,7 @@ import {
   OrderResponse,
   DataForNewOrder,
   UserResponse,
+  RegistrMasterData,
 } from 'types'
 
 const homePath = '/home'
@@ -85,6 +86,15 @@ const init = async (): Promise<InitData> => {
   return res.json()
 }
 
+const registr = async (data: RegistrMasterData): Promise<UserResponse> => {
+  const res = await fetch(`${homePath}/registration`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  return res.json()
+}
+
 export const getFreeMasters = async (data: ParamsForSearching) => await wrapTryCatch(getMasters(data))
 export const getCustomer = async (data: Partial<Customer>) => await wrapTryCatch(upsertCustomer(data))
 export const loginUser = async (data: LoginData) => await wrapTryCatch(login(data))
@@ -93,3 +103,4 @@ export const sendConfirmLetter = async (data: DataForLetter) => await wrapTryCat
 export const sendRatingLetter = async (data: DataForLetter) => await wrapTryCatch(sendSecondLetter(data))
 export const getInit = async () => await wrapTryCatch(init())
 export const checkUserAuth = async (token: string) => await wrapTryCatch(check(token))
+export const regMaster = async (data: RegistrMasterData) => await wrapTryCatch(registr(data))

@@ -1,10 +1,23 @@
+import { LoginFormResponse } from './../../types/index'
 import { setChecking, setUserAuth } from '../../store/reducer'
-import { checkUserAuth, loginUser } from './api'
-import { LoginData } from 'types'
+import { checkUserAuth, loginUser, regMaster } from './api'
+import { LoginData, RegistrMasterData } from 'types'
 import { Dispatch } from 'redux'
 
-export const login = (data: LoginData) => async (dispatch: Dispatch) => {
+export const login = (data: LoginData) => async (dispatch: Dispatch): LoginFormResponse => {
   const res = await loginUser(data)
+  if ('token' in res) {
+    const { token, role, id } = res
+    localStorage.setItem('token', token)
+    dispatch(setUserAuth({ auth: true, role, id }))
+    return { msg: 'success', role }
+  } else {
+    return res
+  }
+}
+
+export const registration = (data: RegistrMasterData) => async (dispatch: Dispatch): LoginFormResponse => {
+  const res = await regMaster(data)
   if ('token' in res) {
     const { token, role, id } = res
     localStorage.setItem('token', token)

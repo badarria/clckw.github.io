@@ -253,7 +253,7 @@ export type ButtonIconProps = IconButtonProps & {
 }
 
 export type LoginData = { email: string; password: string }
-
+export type RegistrMasterData = { email: string; name: string; surname: string; password: string; city: number }
 export type MailResponse = { msg: string }
 
 export type CustomerResponse = TypicalResponse | { id: number; password: string }
@@ -315,4 +315,15 @@ export type MasterCardProps = {
 export type MastersListProps = { data: FreeMastersList; confirm: Function }
 export type User = { id: 0; auth: boolean; role: string }
 export type UserResponse = { id: number; role: string; token: string }
-export type HeaderProps = { logoutFrom: () => void; loginTo: (data: LoginData) => Promise<any>; user: User }
+export type LoginFormResponse = Promise<{ msg: string; role: string } | TypicalResponse>
+export type HeaderProps = {
+  logoutFrom: () => void
+  loginTo: (data: LoginData) => LoginFormResponse
+  user: User
+  newMaster: (data: RegistrMasterData) => LoginFormResponse
+}
+
+export type LoginFormProps = {
+  login: (data: LoginData) => LoginFormResponse
+  registration: (data: RegistrMasterData) => LoginFormResponse
+}

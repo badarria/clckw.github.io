@@ -18,12 +18,11 @@ export const Master = ({ id }: { id: number }) => {
     finish: '',
     rating: 0,
   }
-  const initPaging: Paging = { limit: 10, offset: 0, order: 'desc', orderby: 'date', count: 50 }
   const columns = ['id', 'customer', 'service', 'date', 'begin', 'finish', 'rating', 'completed']
-
   const [orders, setOrders] = useState([initOrder])
   const [loading, setLoading] = useState(false)
   const [toast, setToast] = useState<TypicalResponse>({ type: 'success', msg: '' })
+  const initPaging: Paging = { limit: 10, offset: 0, order: 'desc', orderby: 'date', count: orders.length }
   const [paging, setPaging] = useState(initPaging)
   const { wrap, box, root, table, container } = useStyles()
   const { order, orderby, limit, offset, count } = paging

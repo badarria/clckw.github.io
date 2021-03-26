@@ -1,34 +1,27 @@
 import React, { useState } from 'react'
 import { useLocation, useHistory } from 'react-router-dom'
-import { Dialog, DialogContent, DialogTitle, Button, Box, TextField } from '@material-ui/core'
-import { useForm } from 'react-hook-form'
-import { Typography } from '@material-ui/core'
-import { loginForm } from '../../../../services/home/validation/schema'
-import { yupResolver } from '@hookform/resolvers/yup'
 import { useStyles } from './styles'
 import { Loader } from '../../../ui'
+import { RegistrationDialog, LoginDialog } from '.'
+import { LoginData, LoginFormProps } from 'types'
+import { Button } from '@material-ui/core'
 
-import { LoginData } from 'types'
-
-export const LoginForm = ({ login }: { login: Function }) => {
-  const { btn, btnWrap, dialog, title, content, form, fields } = useStyles()
+export const LoginForm = ({ login, registration }: LoginFormProps) => {
+  const { btn } = useStyles()
   const [open, setOpen] = useState(false)
   const [msg, setMsg] = useState('')
   const [loading, setLoading] = useState(false)
+  const [isLogin, setLoginState] = useState(true)
   const { state } = useLocation<{ from: string }>()
   const history = useHistory()
 
-  const { register, handleSubmit, errors } = useForm({
-    resolver: yupResolver(loginForm),
-  })
-
-  const submit = async (data: LoginData) => {
+  const submitLogin = async (data: LoginData) => {
     setLoading(true)
     const res = await login(data)
- 
+
     if ('role' in res) {
       setLoading(false)
-      handleClose()
+      close()
       let path = '/admin/customers'
       res.role === 'customer' && (path = '/customer')
       res.role === 'master' && (path = '/master')
@@ -42,11 +35,36 @@ export const LoginForm = ({ login }: { login: Function }) => {
     }
   }
 
+  const submitRegistration = async (data) => {
+    console.log(data, 'regData')
+    setLoading(true)
+    const res = await registration({ ...data, city: data.city.id })
+    if ('role' in res) {
+      setLoading(false)
+      close()
+      let path = '/master'
+      history.push(state?.from || path)
+    } else {
+      setMsg(res.msg)
+      setLoading(false)
+      setTimeout(() => {
+        setMsg('')
+      }, 2000)
+    }
+  }
+
+  const setRegistration = (isLogin) => {
+    setLoginState(isLogin)
+  }
+
   const handleClickOpen = () => setOpen(true)
 
-  const handleClose = () => {
+  const close = () => {
     setOpen(false)
   }
+
+  const loginProps = { msg, open, close, submit: submitLogin, changeState: setRegistration }
+  const registrationProps = { msg, open, close, submit: submitRegistration, changeState: setRegistration }
 
   return (
     <>
@@ -54,51 +72,7 @@ export const LoginForm = ({ login }: { login: Function }) => {
       <Button color='inherit' className={btn} onClick={handleClickOpen}>
         Login
       </Button>
-      <Dialog open={open} onClose={handleClose} aria-labelledby='form-dialog-title' className={dialog}>
-        <DialogTitle id='form-dialog' className={title}>
-          Login
-        </DialogTitle>
-        <DialogContent className={content}>
-          <form onSubmit={handleSubmit(submit)} className={form}>
-            <TextField
-              autoFocus
-              id='name'
-              label='Email'
-              name='email'
-              type='text'
-              inputRef={register}
-              required
-              className={fields}
-              error={!!errors.email}
-              helperText={errors.email?.message || ''}
-            />
-            <TextField
-              id='password'
-              label='Password'
-              name='password'
-              type='password'
-              inputRef={register}
-              required
-              className={fields}
-              error={!!errors.password}
-              helperText={errors.password?.message || ''}
-            />
-            {msg ? (
-              <Typography color='secondary' variant='subtitle2'>
-                {msg}
-              </Typography>
-            ) : null}
-            <Box className={btnWrap}>
-              <Button type='submit' color='primary' variant='contained' className={btn}>
-                Ok
-              </Button>
-              <Button onClick={handleClose} type='reset' variant='contained'>
-                Cancel
-              </Button>
-            </Box>
-          </form>
-        </DialogContent>
-      </Dialog>
+      {isLogin ? <LoginDialog {...loginProps} /> : <RegistrationDialog {...registrationProps} />}
     </>
   )
 }

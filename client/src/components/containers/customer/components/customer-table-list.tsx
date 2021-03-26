@@ -8,13 +8,12 @@ import { useStyles } from './styles'
 export const CustomerTableList = ({ data, columns, change }: CustomerTableListProps) => {
   const { tooltip } = useStyles()
 
-  return (
+  return data[0].id ? (
     <>
       {data.map((item: CustomerOrdersList, inx: number) => {
         const { id, rating, completed } = item
         const isRated = completed && rating
-        const isNotRatedYet = completed && !rating
-        console.log(rating, completed)
+
         return (
           <TableRow key={inx} component='tr'>
             <TableCell component='td'>{inx + 1}</TableCell>
@@ -44,5 +43,11 @@ export const CustomerTableList = ({ data, columns, change }: CustomerTableListPr
         )
       })}
     </>
+  ) : (
+    <TableRow component='tr'>
+      <TableCell align='center' colSpan={10} component='td'>
+        There is no placed order
+      </TableCell>
+    </TableRow>
   )
 }

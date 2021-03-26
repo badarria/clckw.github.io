@@ -1,16 +1,16 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Container, AppBar, Toolbar, Button, Box } from '@material-ui/core'
-import { LoginForm } from './login-form/login-form'
+import { LoginForm } from './login-form'
 import { Action, compose } from 'redux'
 import { connect } from 'react-redux'
 import { getUserAuthState } from '../../../store/state-selectors'
 import { useStyles } from './styles'
-import { login, logout } from '../../../services/home'
-import { HeaderProps, LoginData, User } from 'types'
+import { login, logout, registration } from '../../../services/home'
+import { HeaderProps, LoginData, RegistrMasterData, User } from 'types'
 import { ThunkDispatch } from '@reduxjs/toolkit'
 
-const Header = ({ logoutFrom, loginTo, user }: HeaderProps) => {
+const Header = ({ logoutFrom, loginTo, user, newMaster }: HeaderProps) => {
   const { auth, role } = user
   const isAdmin = role === 'admin' && auth
   const isMaster = role === 'master' && auth
@@ -45,7 +45,7 @@ const Header = ({ logoutFrom, loginTo, user }: HeaderProps) => {
                 Logout
               </Button>
             ) : (
-              <LoginForm {...{ login: loginTo }} />
+              <LoginForm {...{ login: loginTo, registration: newMaster }} />
             )}
           </Box>
         </Toolbar>
@@ -63,6 +63,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, Action>) => {
   return {
     logoutFrom: () => dispatch(logout),
     loginTo: (data: LoginData) => dispatch(login(data)),
+    newMaster: (data: RegistrMasterData) => dispatch(registration(data)),
   }
 }
 

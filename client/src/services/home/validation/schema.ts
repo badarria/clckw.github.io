@@ -31,3 +31,15 @@ export const loginForm = yup.object().shape({
   email: yup.string().email().required(),
   password: yup.string().min(5, 'Min 5 symbols').required(),
 })
+
+export const registrationForm = yup.object().shape({
+  name: name,
+  surname: name,
+  email: yup.string().email().required(),
+  password: yup.string().required(),
+  confirmPassword: yup.string().test('confirm', (value, context) => {
+    const pass = context.parent.password
+    return value === pass
+  }),
+  city: yup.object().shape({ name: yup.string().required(), id: yup.number().required() }),
+})

@@ -89,6 +89,7 @@ export const SearchForm = () => {
     if (Array.isArray(masters) && masters.length) {
       setMasters(masters)
       const data = await getCustomer({ email, name, surname })
+      console.log(data, 'getCustomer')
       if ('id' in data) {
         const orderData = { service: service.id, begin, finish, customer: data.id }
         const mailData = {
@@ -110,7 +111,7 @@ export const SearchForm = () => {
 
   const confirm = async ({ id, masterName }: { id: number; masterName: string }) => {
     setOrder((prevorder) => ({ ...prevorder, master: id }))
-    setMail({ ...mail, master: masterName })
+    setMail((prev) => ({ ...prev, master: masterName }))
   }
 
   useEffect(() => {
@@ -118,7 +119,7 @@ export const SearchForm = () => {
       let res = await setLoader(addNewOrder(order))
       if (res.type === 'success') {
         setMasters([])
-        setSubmitted(submitted + 1)
+        setSubmitted((prev) => prev + 1)
         setToastMsg(res)
         setOrder(initOrder)
       }

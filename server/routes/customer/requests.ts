@@ -1,4 +1,4 @@
-import { Customer, Master, Order, Service } from '../../db/models'
+import { Customer, Master, Order, Service, User } from '../../db/models'
 import { NextFunction, Request, Response } from 'express'
 import { userRatingSchema, usersOrderSchema } from '../../validation'
 import { config } from '../../../config'
@@ -9,7 +9,7 @@ export const getOrders = async (req: Request, res: Response, next: NextFunction)
   const validData = await usersOrderSchema.validate(req.params).catch((err) => next(err))
   if (validData) {
     const { id, orderby, order, limit, offset } = validData
-    console.log(id, 'ID')
+
     let ord: any = [orderby, order]
     if (orderby === 'customer') ord = [{ model: Customer, as: 'c' }, 'name', order]
     if (orderby === 'service') ord = [{ model: Service, as: 's' }, 'name', order]
@@ -26,8 +26,19 @@ export const getOrders = async (req: Request, res: Response, next: NextFunction)
       ...params,
       attributes: ['id', 'date', 'begin', 'finish', 'rating', 'beginat', 'finishat', 'completed'],
       include: [
-        { model: Customer, as: 'c', attributes: ['name', 'surname', 'fullName', 'email'], where: { id } },
-        { model: Master, as: 'm', attributes: ['id', 'name', 'surname', 'fullName'] },
+        {
+          model: Customer,
+          as: 'c',
+          attributes: ['name', 'surname', 'fullName', 'email'],
+          where: { id },
+          include: [{ model: User, as: 'user' }],
+        },
+        {
+          model: Master,
+          as: 'm',
+          attributes: ['id', 'name', 'surname', 'fullName'],
+          include: [{ model: User, as: 'user' }],
+        },
         { model: Service, as: 's', attributes: [['name', 'service']] },
       ],
     }).catch((err) => next(err))

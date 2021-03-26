@@ -117,17 +117,17 @@ const auth = async (req: Request, res: Response, next: NextFunction) => {
       const isMatch = bcryptPassword === pass
 
       if (isMatch) {
-        let userId = 0
+        let userId = 0,
+          name = 'admin'
         if (role === 'master') {
-          const masterId = await Master.findOne({ include: { model: User, where: { id } } }).catch((err) => next(err))
-          masterId && (userId = masterId.id)
-        } else if (role === 'customer') {
-          const customerId = await Customer.findOne({ include: { model: User, where: { id } } }).catch((err) =>
-            next(err)
-          )
-          customerId && (userId = customerId.id)
+          const master = await Master.findOne({ include: { model: User, where: { id } } }).catch((err) => next(err))
+          master && (userId = master.id) && (name = master.fullName)
         }
-        res.json({ id: userId, role, token })
+        if (role === 'customer') {
+          const customer = await Customer.findOne({ include: { model: User, where: { id } } }).catch((err) => next(err))
+          customer && (userId = customer.id) && (name = customer.fullName)
+        }
+        return res.json({ id: userId, role, token, name })
       } else next(new Error('Name or password is incorrect'))
     } else next(new Error('Name or password is incorrect'))
   }
@@ -171,7 +171,7 @@ const regMaster = async (req: Request, res: Response, next: NextFunction) => {
   if (user) {
     const { id } = user
     const newMaster = await Master.create({ name, surname, city_id: city, user_id: id }).catch((err) => next(err))
-    return user && newMaster && res.json({ token: userToken, role: 'master', id: newMaster.id })
+    return user && newMaster && res.json({ token: userToken, role: 'master', id: newMaster.id, name })
   }
 }
 
@@ -180,13 +180,14 @@ const stayAuth = async (req: Request, res: Response, next: NextFunction) => {
 
   if (typeof token === 'string') {
     const user = await User.findOne({ where: { token } }).catch((err) => next(err))
+
     if (user && user.role === 'customer') {
       const customer = await Customer.findOne({ where: { user_id: user.id } }).catch((err) => next(err))
-      return customer && res.json({ role: 'customer', id: customer.id, token })
+      return customer && res.json({ role: 'customer', id: customer.id, token, name: customer.fullName })
     } else if (user && user.role === 'master') {
       const master = await Master.findOne({ where: { user_id: user.id } }).catch((err) => next(err))
-      return master && res.json({ role: 'master', id: master.id, token })
-    } else return res.json(user)
+      return master && res.json({ role: 'master', id: master.id, token, name: master.fullName })
+    } else return user && res.json({ token: user.token, id: 0, role: 'admin', name: 'admin' })
   } else return res.json(false)
 }
 

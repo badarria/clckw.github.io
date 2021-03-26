@@ -1,4 +1,4 @@
-import { Customer, Master, Order, Service } from '../../db/models'
+import { Customer, Master, Order, Service, User } from '../../db/models'
 import { NextFunction, Request, Response } from 'express'
 import { usersOrderSchema, orderIdSchema, secondMailSchema } from '../../validation'
 import { createMail, jwtGenerator } from '../../utils'
@@ -25,7 +25,12 @@ export const getOrders = async (req: Request, res: Response, next: NextFunction)
       ...params,
       attributes: ['id', 'date', 'begin', 'finish', 'rating', 'beginat', 'finishat', 'completed'],
       include: [
-        { model: Customer, as: 'c', attributes: ['name', 'surname', 'fullName', 'email'] },
+        {
+          model: Customer,
+          as: 'c',
+          attributes: ['name', 'surname', 'fullName', 'email'],
+          include: [{ model: User, as: 'user' }],
+        },
         { model: Master, as: 'm', attributes: ['id', 'name', 'surname', 'fullName'], where: { id } },
         { model: Service, as: 's', attributes: [['name', 'service']] },
       ],
@@ -48,6 +53,7 @@ export const changeStatus = async (req: Request, res: Response, next: NextFuncti
 }
 
 export const ratingRequestMail = async (req: Request, res: Response, next: NextFunction) => {
+  console.log(req.body)
   const validData = await secondMailSchema.validate(req.body).catch((err) => next(err))
   if (validData) {
     const { userEmail, name, id } = validData

@@ -6,7 +6,7 @@ import { Pagination, MasterTableHead, MasterTableList } from './components'
 import { useStyles } from './styles'
 import { getList, sendRatingMail, setDone } from '../../../services/master'
 
-export const Master = ({ id }: { id: number }) => {
+export const Master = ({ id, name }: { id: number; name: string }) => {
   const initOrder: MasterOrdersList = {
     id: 0,
     customer: '',
@@ -45,7 +45,7 @@ export const Master = ({ id }: { id: number }) => {
     const list = await setLoader(getList({ ...paging, id }))
     if ('type' in list) setToastMsg(list)
     else if (!list.length) {
-      const toast: TypicalResponse = { type: 'warning', msg: "You haven't orders" }
+      const toast: TypicalResponse = { type: 'warning', msg: `Hi, ${name}, you haven't orders` }
       setToastMsg(toast)
     } else {
       const data: MasterOrdersList[] = []
@@ -64,6 +64,8 @@ export const Master = ({ id }: { id: number }) => {
         data.push(dataForList)
       })
       setOrders(data)
+      const toast: TypicalResponse = { type: 'success', msg: `Hi, ${name}, you have ${data.length} orders. ` }
+      setToastMsg(toast)
       if (list.length !== paging.count) setPaging((paging) => ({ ...paging, count: list.length }))
     }
   }

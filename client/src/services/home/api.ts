@@ -59,6 +59,7 @@ const add = async (data: DataForNewOrder): Promise<OrderResponse> => {
 }
 
 const sendFirstLetter = async (data: DataForLetter): Promise<MailResponse> => {
+  console.log(data, 'data')
   const res = await fetch(`${homePath}/confirm`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

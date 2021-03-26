@@ -7,10 +7,10 @@ import { Dispatch } from 'redux'
 export const login = (data: LoginData) => async (dispatch: Dispatch): LoginFormResponse => {
   const res = await loginUser(data)
   if ('token' in res) {
-    const { token, role, id } = res
+    const { token, role, id, name } = res
     localStorage.setItem('token', token)
-    dispatch(setUserAuth({ auth: true, role, id }))
-    return { msg: 'success', role }
+    dispatch(setUserAuth({ auth: true, role, id, name }))
+    return { msg: 'success', role, name }
   } else {
     return res
   }
@@ -19,10 +19,10 @@ export const login = (data: LoginData) => async (dispatch: Dispatch): LoginFormR
 export const registration = (data: RegistrMasterData) => async (dispatch: Dispatch): LoginFormResponse => {
   const res = await regMaster(data)
   if ('token' in res) {
-    const { token, role, id } = res
+    const { token, role, id, name } = res
     localStorage.setItem('token', token)
-    dispatch(setUserAuth({ auth: true, role, id }))
-    return { msg: 'success', role }
+    dispatch(setUserAuth({ auth: true, role, id, name }))
+    return { msg: 'success', role, name }
   } else {
     return res
   }
@@ -33,9 +33,10 @@ export const stayAuth = async (dispatch: Dispatch) => {
   if (token) {
     dispatch(setChecking(true))
     const res = await checkUserAuth(token)
+    console.log(res, 'stayAuth')
     if (res && 'role' in res) {
-      const { role, id } = res
-      dispatch(setUserAuth({ auth: true, id, role }))
+      const { role, id, name } = res
+      dispatch(setUserAuth({ auth: true, id, role, name }))
     } else {
       localStorage.removeItem('token')
       dispatch(setUserAuth({ auth: false }))
@@ -46,5 +47,5 @@ export const stayAuth = async (dispatch: Dispatch) => {
 
 export const logout = (dispatch: Dispatch) => {
   localStorage.removeItem('token')
-  dispatch(setUserAuth({ id: 0, auth: false, role: '' }))
+  dispatch(setUserAuth({ id: 0, auth: false, role: '', name: '' }))
 }

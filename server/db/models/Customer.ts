@@ -28,7 +28,7 @@ export class Customer extends Model {
 
   @Column({ type: DataTypes.VIRTUAL })
   get email(): string {
-    return this.getDataValue('user')?.email || ''
+    return JSON.parse(JSON.stringify(this.getDataValue('user') || ''))?.email || ''
   }
 
   @Column({ type: DataTypes.VIRTUAL })

@@ -102,7 +102,7 @@ const firstMailSchema = yup.object().shape({
   city: yup.string().required(),
   service: yup.string().required(),
   master: yup.string().required(),
-  password: yup.string().required(),
+  password: yup.string(),
 })
 const usersOrderSchema =
   yup.object().shape({

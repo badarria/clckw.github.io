@@ -265,7 +265,7 @@ export type MailResponse = { msg: string }
 
 export type CustomerResponse = TypicalResponse | { id: number; password: string }
 export type FreeMastersList = Master[]
-export type LoginResponse = { token: string; role: string; id: number } | TypicalResponse
+export type LoginResponse = { token: string; role: string; id: number; name: string } | TypicalResponse
 export type DataToProcess = {
   service: Service
   city: City
@@ -320,9 +320,9 @@ export type MasterCardProps = {
   key: number
 }
 export type MastersListProps = { data: FreeMastersList; confirm: Function }
-export type User = { id: 0; auth: boolean; role: string }
-export type UserResponse = { id: number; role: string; token: string }
-export type LoginFormResponse = Promise<{ msg: string; role: string } | TypicalResponse>
+export type User = { id: 0; auth: boolean; role: string; name: string }
+export type UserResponse = { id: number; role: string; token: string; name: string }
+export type LoginFormResponse = Promise<{ msg: string; role: string; name: string } | TypicalResponse>
 export type HeaderProps = {
   logoutFrom: () => void
   loginTo: (data: LoginData) => LoginFormResponse

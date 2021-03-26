@@ -6,7 +6,7 @@ import { Pagination, CustomerTableHead, CustomerTableList } from './components'
 import { useStyles } from './styles'
 import { getList, setRating } from '../../../services/customer'
 
-export const Customer = ({ id }: { id: number }) => {
+export const Customer = ({ id, name }: { id: number; name: string }) => {
   const initOrder: UsersOrdersList = {
     id: 0,
     master: '',
@@ -46,7 +46,7 @@ export const Customer = ({ id }: { id: number }) => {
     const list = await setLoader(getList({ ...paging, id }))
     if ('type' in list) setToastMsg(list)
     else if (!list.length) {
-      const toast: TypicalResponse = { type: 'warning', msg: "You haven't orders" }
+      const toast: TypicalResponse = { type: 'warning', msg: `Hi, ${name}, you haven't orders` }
       setToastMsg(toast)
     } else {
       const data: CustomerOrdersList[] = []
@@ -64,6 +64,8 @@ export const Customer = ({ id }: { id: number }) => {
         data.push(dataForList)
       })
       setOrders(data)
+      const toast: TypicalResponse = { type: 'success', msg: `Hi, ${name}, you have ${data.length} orders. ` }
+      setToastMsg(toast)
       if (list.length !== paging.count) setPaging((paging) => ({ ...paging, count: list.length }))
     }
   }

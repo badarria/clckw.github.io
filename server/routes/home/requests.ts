@@ -89,7 +89,6 @@ const addNewOrder = async (req: Request, res: Response, next: NextFunction) => {
   const validData = await orderSchema.validate(req.body).catch((err) => next(err))
   if (validData) {
     const { master, customer, service, begin, finish, files = [] } = validData
-    console.log(validData)
     const newOrder = await Order.create({
       master_id: master,
       customer_id: customer,
@@ -108,11 +107,12 @@ const addNewOrder = async (req: Request, res: Response, next: NextFunction) => {
           .catch((err) => err)
           .then((cloudData) => {
             if ('url' in cloudData) {
+              const { url, public_id, resource_type } = cloudData
               return Photo.create({
                 order_id: id,
-                url: cloudData.url,
-                public_id: cloudData.public_id,
-                resource_type: cloudData.resource_type,
+                url,
+                public_id,
+                resource_type,
               })
             }
           })

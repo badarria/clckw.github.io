@@ -4,14 +4,15 @@ import { DropzoneDialog } from 'material-ui-dropzone'
 import { Controller, Control } from 'react-hook-form'
 import { useStyles } from './styles'
 import { useCallback } from 'react'
+const maxMegaBytes = 1
+const maxFileSize = maxMegaBytes * 1024 ** 2
+const filesLimit = 5
+const formats = ['image/jpeg', 'image/png', 'image/jpg']
 
 export const DropZone = ({ control }: { control: Control }) => {
   const [open, setOpen] = useState(false)
   const [readedFiles, setReadedFiles] = useState<string[]>([])
   const { btn, tooltip } = useStyles()
-  const maxSize = 1000000
-  const filesLimit = 5
-  const formats = ['image/jpeg', 'image/png', 'image/jpg']
 
   const readFile = (file: Blob): Promise<string | ArrayBuffer | null> =>
     new Promise((resolve, reject) => {
@@ -36,7 +37,6 @@ export const DropZone = ({ control }: { control: Control }) => {
 
   const submit = useCallback(() => {
     setOpen(false)
-    console.log(readedFiles, 'indafunc')
     return readedFiles
   }, [readedFiles])
 
@@ -45,7 +45,7 @@ export const DropZone = ({ control }: { control: Control }) => {
 
   return (
     <>
-      <Tooltip title={`Maximum ${filesLimit} photos. No more than ${maxSize / 1000000} MB each`} classes={{ tooltip }}>
+      <Tooltip title={`Maximum ${filesLimit} photos. No more than ${maxMegaBytes} MB each`} classes={{ tooltip }}>
         <span>
           <Button onClick={openZone} variant='outlined' className={btn}>
             Add Photo
@@ -65,7 +65,7 @@ export const DropZone = ({ control }: { control: Control }) => {
             onSave={() => onChange(submit())}
             acceptedFiles={formats}
             useChipsForPreview={true}
-            maxFileSize={maxSize}
+            maxFileSize={maxFileSize}
             onClose={closeZone}
           />
         )}

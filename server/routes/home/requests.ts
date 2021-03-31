@@ -1,3 +1,4 @@
+import { Photo } from './../../db/models/Photo'
 import { toObjFromStr, toObjFromJSDate } from '../../utils/datetimefunc'
 import bcrypt from 'bcrypt'
 import * as genPass from 'generate-password'
@@ -5,8 +6,9 @@ import { config } from '../../../config'
 import { City, Service, Order, Master, Customer, User } from '../../db/models'
 import { NextFunction, Request, Response } from 'express'
 import { customerSchema, orderSchema, freeMastersSchema, loginFormSchema, firstMailSchema } from '../../validation'
-import { createMail } from '../../utils'
+import { createMail, cloudinary } from '../../utils'
 import { sequelize } from '../../db'
+
 const url = config.mailing.baseUrl
 const admin = sequelize.models.Customer
 import { v4 } from 'uuid'
@@ -87,8 +89,9 @@ const upsertCustomer = async (req: Request, res: Response, next: NextFunction) =
 const addNewOrder = async (req: Request, res: Response, next: NextFunction) => {
   const validData = await orderSchema.validate(req.body).catch((err) => next(err))
   if (validData) {
-    const { master, customer, service, begin, finish } = validData
-    const id = await Order.create({
+    const { master, customer, service, begin, finish, files = [] } = validData
+
+    const newOrder = await Order.create({
       master_id: master,
       customer_id: customer,
       service_id: service,
@@ -96,12 +99,35 @@ const addNewOrder = async (req: Request, res: Response, next: NextFunction) => {
       finishat: finish,
     }).catch((err) => next(err))
 
-    id &&
-      res.json({
-        type: 'success',
-        id: id.id,
-        msg: 'Your order is accepted. We will send you a mail with details',
-      })
+    if (newOrder) {
+      const { id } = newOrder
+      let acc = files.length
+      for (let i = 0; i < files.length; i += 1) {
+        const cloudData = await cloudinary.v2.uploader
+          .upload(files[i], (error: Error, result: any) => result || error)
+          .catch((err) => err)
+
+        if ('url' in cloudData) {
+          const addPhoto = await Photo.create({
+            order_id: id,
+            url: cloudData.url,
+            public_id: cloudData.public_id,
+            resource_type: cloudData.resource_type,
+          }).catch((err) => next(err))
+
+          addPhoto && (acc -= 1)
+        } else continue
+      }
+      let msg = acc ? "Order accepted but something went wrong and photo wasn't downloaded." : 'Order accepted.'
+      msg += ' We will send you a mail with details'
+
+      id &&
+        res.json({
+          type: 'success',
+          id: newOrder.id,
+          msg,
+        })
+    }
   }
 }
 

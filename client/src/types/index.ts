@@ -34,6 +34,7 @@ export type UsersOrder = {
   rating: number
   date: string
   completed: boolean
+  photos: Photo[]
 }
 export type UsersOrdersList = {
   id: number
@@ -197,6 +198,7 @@ export type AdminTableListProps = {
   editState: State
   push: Function
 }
+export type Photo = { id: number; url: string; order_id: number; public_id: string; resource_type: string }
 export type MasterOrdersList = {
   id: number
   customer: string
@@ -207,6 +209,7 @@ export type MasterOrdersList = {
   begin: string
   rating: number
   completed: boolean
+  photos: Photo[]
 }
 export type CustomerOrdersList = {
   id: number
@@ -222,6 +225,12 @@ export type MasterTableListProps = {
   data: MasterOrdersList[]
   columns: string[]
   change: Function
+  getZip: (id: number) => Promise<string | TypicalResponse>
+}
+export type TableButtonIconProps = {
+  id: number
+  getZip: (id: number) => Promise<string | TypicalResponse>
+  disabled: boolean
 }
 
 export type CustomerTableListProps = {
@@ -294,7 +303,7 @@ export type DataForLetter = {
 }
 
 export type ParamsForSearching = { city: number; begin: string; finish: string }
-export type RawParamsForSearching = {
+export type SubmitData = {
   date: Date
   hours: string
   name: string
@@ -309,6 +318,7 @@ export type RawParamsForSearching = {
     name: string
     time: string
   }
+  files: any[]
 }
 
 export type MasterCardProps = {

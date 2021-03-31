@@ -39,6 +39,13 @@ const send = async (data: DataForRatingRequest): Promise<TypicalResponse> => {
   return res.json()
 }
 
+const getPhoto = async (id: number): Promise<string> => {
+  const token = getToken()
+  const res = await fetch(`${masterPath}/getPhotos/${id}`, { headers: { token } })
+  return res.json()
+}
+
+export const getOrdersPhoto = async (id: number) => await wrapTryCatch(getPhoto(id))
 export const setDone = async (id: number) => await wrapTryCatch(done(id))
 export const getList = async (data: getUsersOrderData) => await wrapTryCatch(get(data))
 export const sendRatingMail = async (data: DataForRatingRequest) => await wrapTryCatch(send(data))

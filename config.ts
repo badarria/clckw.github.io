@@ -16,6 +16,7 @@ const allConfig = {
       email: process.env.MAIL_ADRESS,
       baseUrl: 'https://test-clckw.herokuapp.com',
     },
+    cloudinary: { cloud_name: 'clockwise', api_key: '924892912162719', api_secret: 'qC3HexA51iAX_11_ulekCi2mh2w' },
     jwt: process.env.JWT_SECRET || '',
   },
   development: {
@@ -26,6 +27,7 @@ const allConfig = {
       email: process.env.MAIL_ADRESS,
       baseUrl: 'http://localhost:3000',
     },
+    cloudinary: { cloud_name: 'clockwise', api_key: '924892912162719', api_secret: 'qC3HexA51iAX_11_ulekCi2mh2w' },
     jwt: process.env.JWT_SECRET || '',
   },
 }

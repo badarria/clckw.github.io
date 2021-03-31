@@ -1,9 +1,11 @@
-import { Customer, Master, Order, Service, User } from '../../db/models'
+import { Customer, Master, Order, Photo, Service, User } from '../../db/models'
 import { NextFunction, Request, Response } from 'express'
 import { usersOrderSchema, orderIdSchema, secondMailSchema } from '../../validation'
-import { createMail, jwtGenerator } from '../../utils'
+import { createMail, jwtGenerator, cloudinary } from '../../utils'
 import { config } from '../../../config'
+import JSZip from 'jszip'
 const url = config.mailing.baseUrl
+const zip = new JSZip()
 
 export const getOrders = async (req: Request, res: Response, next: NextFunction) => {
   const validData = await usersOrderSchema.validate(req.params).catch((err) => next(err))
@@ -33,6 +35,7 @@ export const getOrders = async (req: Request, res: Response, next: NextFunction)
         },
         { model: Master, as: 'm', attributes: ['id', 'name', 'surname', 'fullName'], where: { id } },
         { model: Service, as: 's', attributes: [['name', 'service']] },
+        { model: Photo, as: 'photos' },
       ],
     }).catch((err) => next(err))
     list && res.json(list)
@@ -53,7 +56,6 @@ export const changeStatus = async (req: Request, res: Response, next: NextFuncti
 }
 
 export const ratingRequestMail = async (req: Request, res: Response, next: NextFunction) => {
-  console.log(req.body)
   const validData = await secondMailSchema.validate(req.body).catch((err) => next(err))
   if (validData) {
     const { userEmail, name, id } = validData
@@ -75,5 +77,20 @@ export const ratingRequestMail = async (req: Request, res: Response, next: NextF
     const subj = 'We need your feedback!'
     req.body = createMail(mail, userEmail, subj)
     next()
+  }
+}
+
+export const getPhotos = async (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.params
+  const photos = await Photo.findAll({ where: { order_id: id } }).catch((err) => next(err))
+  if (photos) {
+    const public_ids: string[] = []
+    photos.forEach((photo) => {
+      const { public_id } = photo
+      public_ids.push(public_id)
+    })
+
+    const sources = cloudinary.v2.utils.download_zip_url({ public_ids })
+    return sources && res.json(sources)
   }
 }

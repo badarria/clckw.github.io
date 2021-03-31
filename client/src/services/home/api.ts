@@ -49,7 +49,6 @@ const login = async (data: LoginData): Promise<LoginResponse> => {
 }
 
 const add = async (data: DataForNewOrder): Promise<OrderResponse> => {
-  console.log(data)
   const res = await fetch(`${homePath}/newOrder`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

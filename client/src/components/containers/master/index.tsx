@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { DataForRatingRequest, MasterOrdersList, Paging, TypicalResponse } from 'types'
 import { Pagination, MasterTableHead, MasterTableList } from './components'
 import { useStyles } from './styles'
-import { getList, sendRatingMail, setDone } from '../../../services/master'
+import { getList, sendRatingMail, setDone, getOrdersPhoto } from '../../../services/master'
 
 export const Master = ({ id, name }: { id: number; name: string }) => {
   const initOrder: MasterOrdersList = {
@@ -17,8 +17,10 @@ export const Master = ({ id, name }: { id: number; name: string }) => {
     date: '',
     finish: '',
     rating: 0,
+    photos: [{ id: 0, url: '', order_id: 0, public_id: '', resource_type: '' }],
   }
-  const columns = ['id', 'customer', 'service', 'date', 'begin', 'finish', 'rating', 'completed']
+
+  const columns = ['id', 'customer', 'service', 'date', 'begin', 'finish', 'rating', 'completed', 'photos']
   const [orders, setOrders] = useState([initOrder])
   const [loading, setLoading] = useState(false)
   const [toast, setToast] = useState<TypicalResponse>({ type: 'success', msg: '' })
@@ -49,7 +51,7 @@ export const Master = ({ id, name }: { id: number; name: string }) => {
       setToastMsg(toast)
     } else {
       const data: MasterOrdersList[] = []
-      list.forEach(({ id, c, s, date, begin, finish, rating, completed }) => {
+      list.forEach(({ id, c, s, date, begin, finish, rating, completed, photos }) => {
         const dataForList = {
           id,
           customer: c?.fullName,
@@ -60,6 +62,7 @@ export const Master = ({ id, name }: { id: number; name: string }) => {
           finish,
           rating,
           completed,
+          photos,
         }
         data.push(dataForList)
       })
@@ -108,7 +111,7 @@ export const Master = ({ id, name }: { id: number; name: string }) => {
           <Table className={table} aria-label={`table`}>
             <MasterTableHead {...headerProps} />
             <TableBody>
-              <MasterTableList data={orders} columns={columns} change={changeStatus} />
+              <MasterTableList data={orders} columns={columns} change={changeStatus} getZip={getOrdersPhoto} />
             </TableBody>
             <TableFooter>
               <Pagination {...paginatorProps} />

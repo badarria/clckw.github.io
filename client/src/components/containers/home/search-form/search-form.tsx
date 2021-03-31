@@ -4,8 +4,8 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { searchForm } from '../../../../services/home/validation/schema'
 import { useStyles } from './styles'
-import { TypicalResponse, Master, RawParamsForSearching } from 'types'
-import { MastersList, DatePicker, AutocompleteField, Loader, Toast, InputField } from '../components'
+import { TypicalResponse, Master, SubmitData } from 'types'
+import { MastersList, DatePicker, AutocompleteField, Loader, Toast, InputField, DropZone } from '../components'
 import { SelectHours } from 'components/ui/select/select-hours'
 import { addNewOrder, getCustomer, getFreeMasters, getInit, sendConfirmLetter } from 'services/home/api'
 import { dateFromNewDate, getBeginFinish, getHoursArray, pastTime, toMailFormat } from 'services/utils/datetime-func'
@@ -40,6 +40,7 @@ export const SearchForm = () => {
     service: keys.service[0],
     date: dateFromNewDate(),
     hours: findDefaultHour(),
+    files: [],
   }
 
   const { register, handleSubmit, control, watch, errors } = useForm({
@@ -80,8 +81,8 @@ export const SearchForm = () => {
     setHours(newHours)
   }, [service, dateValue])
 
-  const findFreeMasters = async (data: RawParamsForSearching) => {
-    const { service, city, hours, date, email, name, surname } = data
+  const findFreeMasters = async (data: SubmitData) => {
+    const { service, city, hours, date, email, name, surname, files } = data
     const { begin, finish } = getBeginFinish(date, hours, service.time)
     const dataForSearching = { city: city.id, begin, finish }
     const masters = await setLoader(getFreeMasters(dataForSearching))
@@ -89,9 +90,8 @@ export const SearchForm = () => {
     if (Array.isArray(masters) && masters.length) {
       setMasters(masters)
       const data = await getCustomer({ email, name, surname })
-      console.log(data, 'getCustomer')
       if ('id' in data) {
-        const orderData = { service: service.id, begin, finish, customer: data.id }
+        const orderData = { service: service.id, begin, finish, customer: data.id, files }
         const mailData = {
           name,
           userEmail: email,
@@ -144,10 +144,7 @@ export const SearchForm = () => {
           Enter your details, city, and size of the watch that needs to be repaired.
         </Typography>
         <Typography align='center'> Select a comfy date and time and we will find free masters for you. </Typography>
-        <form
-          onSubmit={handleSubmit((data: RawParamsForSearching) => findFreeMasters(data))}
-          className={form}
-          key={submitted}>
+        <form onSubmit={handleSubmit((data: SubmitData) => findFreeMasters(data))} className={form} key={submitted}>
           <Box className={wrap}>
             {inputs.map((label, inx) => (
               <InputField {...{ defaultValue: '', register, errors, label }} key={inx} />
@@ -170,6 +167,7 @@ export const SearchForm = () => {
             />
             <DatePicker control={control} />
             <SelectHours {...selectProps} />
+            <DropZone control={control} />
           </Box>
           <Box className={wrap}>
             <Button type='submit' variant='contained' color='primary' className={btn}>

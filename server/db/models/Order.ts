@@ -1,6 +1,6 @@
-import { BelongsTo, Column, Model, Scopes, Table } from 'sequelize-typescript'
+import { BelongsTo, Column, HasMany, Model, Scopes, Table } from 'sequelize-typescript'
 import { DataTypes } from 'sequelize'
-import { Customer, City, Master, Service } from '.'
+import { Customer, City, Master, Service, Photo } from '.'
 import { toDate, toTime } from '../../utils/datetimefunc'
 
 @Scopes(() => ({
@@ -53,15 +53,21 @@ export class Order extends Model {
   service_id!: number
   @Column({ type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false })
   completed!: boolean
+
+  @BelongsTo(() => Photo, { targetKey: 'order_id', foreignKey: 'id', onDelete: 'set null', onUpdate: 'set null' })
+  photos!: Photo[]
+
   @Column({ type: DataTypes.VIRTUAL, allowNull: false, defaultValue: false })
   get status(): string {
     return this.getDataValue('completed') ? 'done' : ''
   }
+
   @Column({ type: DataTypes.VIRTUAL })
   get date(): string {
     const rawValue = this.getDataValue('beginat')
     return toDate(rawValue)
   }
+
   @Column({ type: DataTypes.VIRTUAL })
   get city(): string {
     const rawValue = this.getDataValue('m')

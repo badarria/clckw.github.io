@@ -24,6 +24,7 @@ const orderSchema = yup.object().shape({
     }),
   customer: num.required(),
   master: num.required(),
+  files: yup.array(),
 })
 
 const customerSchema = yup.object().shape({

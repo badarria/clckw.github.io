@@ -1,4 +1,4 @@
-import cloudinary from '../../node_modules/cloudinary'
+import cloudinary from 'cloudinary'
 import { config } from '../../config'
 
 const { cloud_name, api_key, api_secret } = config.cloudinary

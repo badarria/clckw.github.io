@@ -117,6 +117,9 @@ export const SearchForm = () => {
   useEffect(() => {
     const addOrder = async () => {
       let res = await setLoader(addNewOrder(order))
+      if (res.type === 'error') {
+        setToastMsg(res)
+      }
       if (res.type === 'success') {
         setMasters([])
         setSubmitted((prev) => prev + 1)
@@ -146,9 +149,10 @@ export const SearchForm = () => {
         <Typography align='center'> Select a comfy date and time and we will find free masters for you. </Typography>
         <form onSubmit={handleSubmit((data: SubmitData) => findFreeMasters(data))} className={form} key={submitted}>
           <Box className={wrap}>
-            {inputs.map((label, inx) => (
-              <InputField {...{ defaultValue: '', register, errors, label }} key={inx} />
-            ))}
+            {inputs.map((label, inx) => {
+              const inputFieldProp = { defaultValue: '', register, errors, label }
+              return <InputField {...inputFieldProp} key={inx} />
+            })}
             <AutocompleteField
               key='city'
               control={control}

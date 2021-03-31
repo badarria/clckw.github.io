@@ -1,9 +1,8 @@
-import { Photo } from './../../db/models/Photo'
 import { toObjFromStr, toObjFromJSDate } from '../../utils/datetimefunc'
 import bcrypt from 'bcrypt'
 import * as genPass from 'generate-password'
 import { config } from '../../../config'
-import { City, Service, Order, Master, Customer, User } from '../../db/models'
+import { City, Service, Order, Master, Customer, User, Photo } from '../../db/models'
 import { NextFunction, Request, Response } from 'express'
 import { customerSchema, orderSchema, freeMastersSchema, loginFormSchema, firstMailSchema } from '../../validation'
 import { createMail, cloudinary } from '../../utils'
@@ -90,7 +89,7 @@ const addNewOrder = async (req: Request, res: Response, next: NextFunction) => {
   const validData = await orderSchema.validate(req.body).catch((err) => next(err))
   if (validData) {
     const { master, customer, service, begin, finish, files = [] } = validData
-
+    console.log(validData)
     const newOrder = await Order.create({
       master_id: master,
       customer_id: customer,
@@ -102,31 +101,33 @@ const addNewOrder = async (req: Request, res: Response, next: NextFunction) => {
     if (newOrder) {
       const { id } = newOrder
       let acc = files.length
-      for (let i = 0; i < files.length; i += 1) {
-        const cloudData = await cloudinary.v2.uploader
-          .upload(files[i], (error: Error, result: any) => result || error)
+
+      const promises = files.map((file) => {
+        return cloudinary.v2.uploader
+          .upload(file)
           .catch((err) => err)
+          .then((cloudData) => {
+            if ('url' in cloudData) {
+              return Photo.create({
+                order_id: id,
+                url: cloudData.url,
+                public_id: cloudData.public_id,
+                resource_type: cloudData.resource_type,
+              })
+            }
+          })
+          .then((newOrder) => {
+            newOrder && (acc -= 1)
+          })
+          .catch((err) => next(err))
+      })
 
-        if ('url' in cloudData) {
-          const addPhoto = await Photo.create({
-            order_id: id,
-            url: cloudData.url,
-            public_id: cloudData.public_id,
-            resource_type: cloudData.resource_type,
-          }).catch((err) => next(err))
+      return Promise.all(promises).then(() => {
+        let msg = acc ? "Order accepted but something went wrong and photo wasn't downloaded." : 'Order accepted.'
+        msg += ' We will send you a mail with details'
 
-          addPhoto && (acc -= 1)
-        } else continue
-      }
-      let msg = acc ? "Order accepted but something went wrong and photo wasn't downloaded." : 'Order accepted.'
-      msg += ' We will send you a mail with details'
-
-      id &&
-        res.json({
-          type: 'success',
-          id: newOrder.id,
-          msg,
-        })
+        id && res.json({ type: 'success', id: newOrder.id, msg })
+      })
     }
   }
 }

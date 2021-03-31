@@ -3,11 +3,15 @@ import { Button, Tooltip } from '@material-ui/core'
 import { DropzoneDialog } from 'material-ui-dropzone'
 import { Controller, Control } from 'react-hook-form'
 import { useStyles } from './styles'
+import { useCallback } from 'react'
 
 export const DropZone = ({ control }: { control: Control }) => {
   const [open, setOpen] = useState(false)
   const [readedFiles, setReadedFiles] = useState<string[]>([])
   const { btn, tooltip } = useStyles()
+  const maxSize = 1000000
+  const filesLimit = 5
+  const formats = ['image/jpeg', 'image/png', 'image/jpg']
 
   const readFile = (file: Blob): Promise<string | ArrayBuffer | null> =>
     new Promise((resolve, reject) => {
@@ -16,29 +20,34 @@ export const DropZone = ({ control }: { control: Control }) => {
       reader.readAsDataURL(file)
     })
 
-  const savePhoto = async (data: Blob[]) => {
+  const savePhoto = useCallback(async (data: Blob[]) => {
     const res = await readFile(data[0])
     typeof res === 'string' && setReadedFiles((prev) => [...prev, res])
-  }
+  }, [])
 
-  const findAndDelete = async (file: Blob) => {
+  const findAndDelete = useCallback(async (file: Blob) => {
     const readed = await readFile(file)
     const newArr = readedFiles.reduce((acc: any[], file) => {
       if (file !== readed) acc.push(file)
       return acc
     }, [])
     setReadedFiles(newArr)
-  }
-  const submit = () => {
+  }, [])
+
+  const submit = useCallback(() => {
     setOpen(false)
+    console.log(readedFiles, 'indafunc')
     return readedFiles
-  }
+  }, [readedFiles])
+
+  const openZone = useCallback(() => setOpen(true), [])
+  const closeZone = useCallback(() => setOpen(false), [])
 
   return (
     <>
-      <Tooltip title='Maximum 5 photos. No more than 1 MB each' classes={{ tooltip }}>
+      <Tooltip title={`Maximum ${filesLimit} photos. No more than ${maxSize / 1000000} MB each`} classes={{ tooltip }}>
         <span>
-          <Button onClick={() => setOpen(true)} variant='outlined' className={btn}>
+          <Button onClick={openZone} variant='outlined' className={btn}>
             Add Photo
           </Button>
         </span>
@@ -48,16 +57,16 @@ export const DropZone = ({ control }: { control: Control }) => {
         control={control}
         render={({ onChange }) => (
           <DropzoneDialog
-            onDelete={(file) => findAndDelete(file)}
-            onDrop={(file) => savePhoto(file)}
-            filesLimit={5}
+            onDelete={findAndDelete}
+            onDrop={savePhoto}
+            filesLimit={filesLimit}
             clearOnUnmount
             open={open}
             onSave={() => onChange(submit())}
-            acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
+            acceptedFiles={formats}
             useChipsForPreview={true}
-            maxFileSize={1000000}
-            onClose={() => setOpen(false)}
+            maxFileSize={maxSize}
+            onClose={closeZone}
           />
         )}
       />

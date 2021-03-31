@@ -11,6 +11,7 @@ export const MasterTableList = ({ data, columns, change, getZip }: MasterTableLi
       {data.map((item: MasterOrdersList, inx: number) => {
         const { id, completed, userEmail, customer, photos } = item
         const dataForLetter = { id, userEmail, name: customer }
+        const iconButtonProps = { id, getZip, disabled: !photos }
 
         return (
           <TableRow key={id} component='tr'>
@@ -23,7 +24,7 @@ export const MasterTableList = ({ data, columns, change, getZip }: MasterTableLi
               <ButtonDialog accept={() => change(dataForLetter)} isDisabled={completed} />
             </TableCell>
 
-            <TableButtonIcon {...{ id, getZip, disabled: !photos }} />
+            <TableButtonIcon {...iconButtonProps} />
           </TableRow>
         )
       })}

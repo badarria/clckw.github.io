@@ -3,9 +3,8 @@ import { NextFunction, Request, Response } from 'express'
 import { usersOrderSchema, orderIdSchema, secondMailSchema } from '../../validation'
 import { createMail, jwtGenerator, cloudinary } from '../../utils'
 import { config } from '../../../config'
-import JSZip from 'jszip'
+import { Sequelize } from 'sequelize'
 const url = config.mailing.baseUrl
-const zip = new JSZip()
 
 export const getOrders = async (req: Request, res: Response, next: NextFunction) => {
   const validData = await usersOrderSchema.validate(req.params).catch((err) => next(err))
@@ -91,6 +90,9 @@ export const getPhotos = async (req: Request, res: Response, next: NextFunction)
     })
 
     const sources = cloudinary.v2.utils.download_zip_url({ public_ids })
-    return sources && res.json(sources)
+
+    return res.json(sources)
   }
 }
+
+// SELECT "Order"."id" FROM "orders" AS "Order" LEFT OUTER JOIN "customers" AS "c" ON "Order"."customer_id" = "c"."id" LEFT OUTER JOIN "users" AS "c->user" ON "c"."user_id" = "c->user"."id" INNER JOIN "masters" AS "m" ON "Order"."master_id" = "m"."id" AND "m"."id" = '2' LEFT OUTER JOIN "services" AS "s" ON "Order"."service_id" = "s"."id" LEFT OUTER JOIN "photos" AS "photos" ON "Order"."id" = "photos"."order_id" ORDER BY "c"."name" ASC LIMIT 10 OFFSET 0;

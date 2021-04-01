@@ -3,15 +3,17 @@ import { TableCell, IconButton } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
 import { TableButtonIconProps } from 'types'
+import { useCallback } from 'react'
 
 export const TableButtonIcon = ({ id, getZip, disabled }: TableButtonIconProps) => {
   const [link, setLink] = useState('/master')
 
+  const newLink = useCallback(async () => {
+    const lk = await getZip(id)
+    if (typeof lk === 'string') setLink(lk)
+  }, [])
+
   useEffect(() => {
-    const newLink = async () => {
-      const lk = await getZip(id)
-      if (typeof lk === 'string') setLink(lk)
-    }
     newLink()
   }, [])
 

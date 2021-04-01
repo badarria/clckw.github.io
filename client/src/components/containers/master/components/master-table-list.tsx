@@ -5,6 +5,7 @@ import { ButtonDialog, TableButtonIcon } from '.'
 
 export const MasterTableList = ({ data, columns, change, getZip }: MasterTableListProps) => {
   const generatedColumns = columns.slice(0, -2)
+  console.log(data, 'LIST')
 
   return data[0].id ? (
     <>
@@ -12,13 +13,17 @@ export const MasterTableList = ({ data, columns, change, getZip }: MasterTableLi
         const { id, completed, userEmail, customer, photos } = item
         const dataForLetter = { id, userEmail, name: customer }
         const iconButtonProps = { id, getZip, disabled: !photos }
+        const thisItem: any = { ...item }
 
         return (
-          <TableRow key={id} component='tr'>
+          <TableRow key={inx} component='tr'>
             <TableCell component='td'>{inx + 1}</TableCell>
-            {generatedColumns.map((col) => {
-              const thisItem: any = { ...item }
-              return <TableCell component='td'>{thisItem[col]}</TableCell>
+            {generatedColumns.map((col, inx) => {
+              return (
+                <TableCell component='td' key={inx}>
+                  {thisItem[col]}
+                </TableCell>
+              )
             })}
             <TableCell>
               <ButtonDialog accept={() => change(dataForLetter)} isDisabled={completed} />

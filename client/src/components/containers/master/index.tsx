@@ -6,21 +6,21 @@ import { Pagination, MasterTableHead, MasterTableList } from './components'
 import { useStyles } from './styles'
 import { getList, sendRatingMail, setDone, getOrdersPhoto } from '../../../services/master'
 
-export const Master = ({ id, name }: { id: number; name: string }) => {
-  const initOrder: MasterOrdersList = {
-    id: 0,
-    customer: '',
-    userEmail: '',
-    service: '',
-    completed: false,
-    begin: '',
-    date: '',
-    finish: '',
-    rating: 0,
-    photos: [{ id: 0, url: '', order_id: 0, public_id: '', resource_type: '' }],
-  }
+const columns = ['id', 'customer', 'service', 'date', 'begin', 'finish', 'rating', 'completed', 'photos']
+const initOrder: MasterOrdersList = {
+  id: 0,
+  customer: '',
+  userEmail: '',
+  service: '',
+  completed: false,
+  begin: '',
+  date: '',
+  finish: '',
+  rating: 0,
+  photos: [{ id: 0, url: '', order_id: 0, public_id: '', resource_type: '' }],
+}
 
-  const columns = ['id', 'customer', 'service', 'date', 'begin', 'finish', 'rating', 'completed', 'photos']
+export const Master = ({ id, name }: { id: number; name: string }) => {
   const [orders, setOrders] = useState([initOrder])
   const [loading, setLoading] = useState(false)
   const [toast, setToast] = useState<TypicalResponse>({ type: 'success', msg: '' })

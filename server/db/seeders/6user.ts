@@ -14,7 +14,6 @@ const mSalt = saltGen()
 const mPass = bcrypt.hashSync(masterPass, mSalt)
 const aSalt = saltGen()
 const aPass = bcrypt.hashSync(adminPass, aSalt)
-console.log(aPass, aSalt)
 
 export default {
   up: (queryInterface: QueryInterface) => {

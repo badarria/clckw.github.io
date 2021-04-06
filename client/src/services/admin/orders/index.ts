@@ -29,7 +29,6 @@ const del = async (id: number): Promise<TypicalResponse> => {
 }
 
 const putOrPost = async (method: Method, data: NewOrderData): Promise<TypicalResponse> => {
-  console.log(data)
   const token = getToken()
   const res = await fetch(`${adminPath}`, {
     method,

@@ -44,7 +44,10 @@ const rootReducer = createSlice({
       state.masters = action.payload
     },
     setInit: (state) => {
-      state = initState
+      state.customerData = initState.customerData
+      state.orderData = initState.orderData
+      state.masters = []
+      state.mailData = initState.mailData
     },
   },
 })

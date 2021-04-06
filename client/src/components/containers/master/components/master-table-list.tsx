@@ -5,7 +5,6 @@ import { ButtonDialog, TableButtonIcon } from '.'
 
 export const MasterTableList = ({ data, columns, change, getZip }: MasterTableListProps) => {
   const generatedColumns = columns.slice(0, -2)
-  console.log(data, 'LIST')
 
   return data[0].id ? (
     <>

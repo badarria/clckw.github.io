@@ -2,7 +2,6 @@ import { Response, Request, NextFunction } from 'express'
 import { ValidationError } from 'yup'
 
 export const errorsHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error(err, 'inda ErrorHandler')
   if (err instanceof ValidationError) {
     res.status(500).send({ type: 'error', msg: 'Data is incorrect', detail: err.errors[0] })
     return

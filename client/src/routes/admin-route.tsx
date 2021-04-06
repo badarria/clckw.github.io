@@ -6,6 +6,6 @@ import { Admin } from '../components/containers'
 
 export const AdminRoute: FC<{ path: string }> = ({ children }) => {
   const { auth, role } = useSelector((state: RootState) => state.user)
-  console.log('inda admin')
+
   return auth && role === 'admin' ? <Admin>{children}</Admin> : <Redirect to='/' />
 }

@@ -36,7 +36,7 @@ export const RegistrationDialog = ({ close, submit, open, msg, changeState }: Di
       agree: false,
     },
   })
-  //   console.log(errors)
+
 
   const isAgree = watch(['agree']).agree
 

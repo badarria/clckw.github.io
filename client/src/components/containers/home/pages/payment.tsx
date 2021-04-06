@@ -12,7 +12,7 @@ import { addNewOrder, handlePayment, sendConfirmLetter } from 'services/home/api
 import { getBeginFinish } from 'services/utils/datetime-func'
 import { TypicalResponse } from 'types'
 import { CheckoutForm } from '../forms/payment/checkout'
-import { setInit } from 'store/reducer'
+import { initState, setInit } from 'store/reducer'
 
 const promise = loadStripe(
   'pk_test_51IbLzbK13PqXeZaYmoyqJmBCWV0K1sWOCGrFt0mkgF1t8YBYbq1VF3ojVBRtfGHpO3XHbCYMRYdcy26K7RBLr1zj00SU4On1Su'
@@ -37,6 +37,7 @@ export const Payment = () => {
   const backToMain = useCallback(() => {
     setSuccessMsg('')
     history.replace('/')
+    dispatch(setInit())
   }, [])
 
   const setToastMsg = (toast: TypicalResponse) => {
@@ -62,7 +63,6 @@ export const Payment = () => {
 
         const res = await addNewOrder(orderData)
         if (res.type === 'success') {
-          dispatch(setInit)
           setSuccessMsg(res.msg)
           sendConfirmLetter(mailData)
         } else setToastMsg(res)

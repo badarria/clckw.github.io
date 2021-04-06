@@ -67,7 +67,6 @@ export const Search = () => {
   }
 
   const setToastMsg = (toast: TypicalResponse) => {
-    console.log(toast, 'indatoast')
     setToast(toast)
     setTimeout(() => {
       setToast({ type: toast.type, msg: '' })

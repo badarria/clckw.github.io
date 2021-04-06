@@ -31,8 +31,10 @@ const getList = async (req: Request, res: Response, next: NextFunction) => {
     if (orderby === 'customer') ord = [{ model: Customer, as: 'c' }, 'name', order]
     if (orderby === 'city') ord = [{ model: Master, as: 'm' }, { model: City, as: 'ci' }, 'name', order]
     if (orderby === 'service') ord = [{ model: Service, as: 's' }, 'name', order]
+    if (orderby === 'price') ord = [{ model: Service, as: 's' }, 'price', order]
     if (orderby === 'date' || orderby === 'begin') ord = ['beginat', order]
     if (orderby === 'finish') ord = ['finishat', order]
+    if (orderby === 'status') ord = ['completed', order]
 
     const params: any = { order: [ord] }
     if (limit >= 0) {

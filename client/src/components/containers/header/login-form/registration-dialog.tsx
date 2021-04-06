@@ -55,6 +55,7 @@ export const RegistrationDialog = ({ close, submit, open, msg, changeState }: Di
     }
     !loading && getCities()
   }, [])
+  const inputProps = { register, errors }
 
   return (
     <>
@@ -68,19 +69,13 @@ export const RegistrationDialog = ({ close, submit, open, msg, changeState }: Di
           <form onSubmit={handleSubmit(submit)} className={form} autoComplete='off'>
             <Box className={wrap}>
               <Box className={inputWrap}>
-                <InputField label='name' defaultValue='' {...{ register, errors }} />
-                <InputField label='surname' defaultValue='' {...{ register, errors }} />
-                <InputField label='email' defaultValue='' {...{ register, errors }} />
+                <InputField label='name' {...inputProps} />
+                <InputField label='surname' {...inputProps} />
+                <InputField label='email' {...inputProps} />
               </Box>
               <Box className={inputWrap}>
-                <InputField label='password' defaultValue='' {...{ register, errors }} type='password' />
-                <InputField
-                  label='confirm Password'
-                  defaultValue=''
-                  {...{ register, errors }}
-                  name='confirmPassword'
-                  type='password'
-                />
+                <InputField label='password' {...inputProps} type='password' />
+                <InputField label='confirm Password' {...inputProps} name='confirmPassword' type='password' />
                 <AutocompleteField {...{ data: cities, control, name: 'city', keyToSelect: 'name', errors }} />
               </Box>
             </Box>

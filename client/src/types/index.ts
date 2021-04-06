@@ -28,7 +28,7 @@ export type UsersOrder = {
   id: number
   m: { fullName: string }
   c: { fullName: string; email: string }
-  s: { service: string }
+  s: { service: string; price: number }
   begin: string
   finish: string
   rating: number
@@ -48,7 +48,7 @@ export type UsersOrdersList = {
 }
 export type getUsersOrderData = Paging & { id: number }
 
-export type Service = { id: number; name: string; time: string }
+export type Service = { id: number; name: string; time: string; price: number }
 export type ServiceWithKeys = Service & {
   time: { id: number; name: string; time: string }[]
   time_id: number
@@ -153,10 +153,11 @@ export type AutocompleteFieldProps = {
   name: string
   keyToSelect: string
   errors: any
+  defValue?: any
 }
 
 export type InputFieldProps = {
-  defaultValue: string
+  // defaultValue: string
   label: string
   register: any
   errors: any
@@ -204,6 +205,7 @@ export type MasterOrdersList = {
   customer: string
   userEmail: string
   service: string
+  price: number
   date: string
   finish: string
   begin: string
@@ -322,14 +324,11 @@ export type SubmitData = {
 }
 
 export type MasterCardProps = {
-  id: number
-  name: string
-  surname: string
-  rating: number
+  data: { id: number; name: string; surname: string; rating: number }
   confirm: Function
-  key: number
 }
-export type MastersListProps = { data: FreeMastersList; confirm: Function }
+
+export type MastersListProps = { data: FreeMastersList }
 export type User = { id: 0; auth: boolean; role: string; name: string }
 export type UserResponse = { id: number; role: string; token: string; name: string }
 export type LoginFormResponse = Promise<{ msg: string; role: string; name: string } | TypicalResponse>

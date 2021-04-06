@@ -43,6 +43,7 @@ export const services = yup.object().shape({
       .matches(/^[1-8]h$/, 'From 1 to 8 hours')
       .required(),
   }),
+  price: yup.number().required(),
 })
 
 export const cities = yup.object().shape({

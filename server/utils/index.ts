@@ -2,5 +2,6 @@ import { checkMasterToken, checkAdminToken, checkCustomerToken } from './checkTo
 import { jwtGenerator } from './jwtGenerator'
 import { createMail, sendMail } from './mailer'
 import { cloudinary } from './cloudinary'
+import { stripe } from './stripe'
 
-export { checkMasterToken, jwtGenerator, createMail, sendMail, checkAdminToken, checkCustomerToken, cloudinary }
+export { checkMasterToken, jwtGenerator, createMail, sendMail, checkAdminToken, checkCustomerToken, cloudinary, stripe }

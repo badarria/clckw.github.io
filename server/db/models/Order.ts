@@ -12,7 +12,7 @@ import { toDate, toTime } from '../../utils/datetimefunc'
         include: [{ model: City, as: 'ci', attributes: [['name', 'city']] }],
       },
       { model: Customer, attributes: ['id', 'name', 'surname', 'fullName'] },
-      { model: Service, attributes: ['id', ['name', 'service'], ['time', 'service_time']] },
+      { model: Service, attributes: ['id', ['name', 'service'], ['time', 'service_time'], 'price'] },
     ],
   },
 }))
@@ -60,6 +60,11 @@ export class Order extends Model {
   @Column({ type: DataTypes.VIRTUAL, allowNull: false, defaultValue: false })
   get status(): string {
     return this.getDataValue('completed') ? 'done' : ''
+  }
+  @Column({ type: DataTypes.VIRTUAL })
+  get price(): string {
+    const raw = this.getDataValue('s')
+    return raw.price
   }
 
   @Column({ type: DataTypes.VIRTUAL })

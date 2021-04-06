@@ -4,10 +4,19 @@ import * as genPass from 'generate-password'
 import { config } from '../../../config'
 import { City, Service, Order, Master, Customer, User, Photo } from '../../db/models'
 import { NextFunction, Request, Response } from 'express'
-import { customerSchema, orderSchema, freeMastersSchema, loginFormSchema, firstMailSchema } from '../../validation'
+import {
+  customerSchema,
+  orderSchema,
+  freeMastersSchema,
+  loginFormSchema,
+  firstMailSchema,
+  paymentsDataSchema,
+} from '../../validation'
 import { createMail, cloudinary } from '../../utils'
 import { sequelize } from '../../db'
+import { stripe } from '../../utils'
 
+const domain = config.mailing.baseUrl
 const url = config.mailing.baseUrl
 const admin = sequelize.models.Customer
 import { v4 } from 'uuid'
@@ -25,7 +34,7 @@ const findMasters = async (req: Request, res: Response, next: NextFunction) => {
     const { city, begin, finish } = validData
 
     const list = await Master.findAll({
-      attributes: ['rating', 'name', 'surname', 'id'],
+      // attributes: ['rating', 'name', 'surname', 'id', 'fullName'],
       include: [
         { model: City, as: 'ci', where: { id: city } },
         {
@@ -218,4 +227,32 @@ const stayAuth = async (req: Request, res: Response, next: NextFunction) => {
   } else return res.json(false)
 }
 
-export { findMasters, upsertCustomer, auth, addNewOrder, stayAuth, confirmingMail, getInitState, regMaster }
+const handlePayment = async (req: Request, res: Response, next: NextFunction) => {
+  const validData = await paymentsDataSchema.validate(req.body).catch((err) => next(err))
+  if (validData) {
+    const intent = await stripe.paymentIntents
+      .create({
+        payment_method: req.body.id,
+        amount: req.body.amount * 100,
+        currency: 'usd',
+        confirmation_method: 'manual',
+        confirm: true,
+      })
+      .catch((err) => next(err))
+
+    if (intent && intent.status === 'succeeded') res.send({ type: 'success', msg: 'Payment was successfull' })
+    if (intent && intent.status === 'requires_action') res.send({ type: 'warning', msg: 'Payment requires action' })
+  }
+}
+
+export {
+  findMasters,
+  upsertCustomer,
+  auth,
+  addNewOrder,
+  stayAuth,
+  confirmingMail,
+  getInitState,
+  regMaster,
+  handlePayment,
+}

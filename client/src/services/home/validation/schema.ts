@@ -7,7 +7,7 @@ const name = yup
   .max(20, 'Max 20 characters')
   .required()
 
-export const searchForm = yup.object().shape({
+export const searchFormSchema = yup.object().shape({
   city: yup.object().shape({
     id: yup.number().required(),
     name: yup.string().trim().required(),

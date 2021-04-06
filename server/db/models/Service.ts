@@ -12,4 +12,6 @@ export class Service extends Model {
   name!: string
   @Column({ type: DataTypes.TEXT, allowNull: false })
   time!: string
+  @Column({ type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 })
+  price!: number
 }

@@ -40,6 +40,8 @@ export const getHoursArray = (service_time: string, orders: FilteredOrders = [],
 export const dateFromFormatToObj = (date: string) => DateTime.fromFormat(date, 'EEE dd/MM/yyyy').toJSDate()
 export const dateFromNewDate = () => DateTime.fromJSDate(new Date()).set({ hour: 0, minute: 0, second: 0 }).toJSDate()
 export const dateToRequest = (date: Date) => DateTime.fromJSDate(date).toJSON().replace(/\+.+$/, '')
+export const dateFromIso = (str: string) => (str ? DateTime.fromISO(str).toJSDate() : dateFromNewDate())
+export const hoursFromIso = (str: string) => DateTime.fromISO(str, { zone: 'utc' }).toFormat('HH:mm')
 
 export const pastTime = (hoursArr: HoursArray, currentDate = new Date()) => {
   const now = new Date()
@@ -60,11 +62,19 @@ export const setDisabled = (data: Order[]) =>
     return { ...item, disabled: false }
   })
 
-export const getBeginFinish = (date: Date, hours: string, service_time: string) => {
-  const beginJs = DateTime.fromJSDate(date)
-    .set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
-    .plus({ hours: Number(hours.split(':')[0]) })
-    .toJSDate()
+export const getBeginFinish = (date: Date | string, hours: string, service_time: string) => {
+  let beginJs: Date
+  if (date instanceof Date) {
+    beginJs = DateTime.fromJSDate(date)
+      .set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
+      .plus({ hours: Number(hours.split(':')[0]) })
+      .toJSDate()
+  } else {
+    beginJs = DateTime.fromISO(date)
+      .set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
+      .plus({ hours: Number(hours.split(':')[0]) })
+      .toJSDate()
+  }
   const finish: string = DateTime.fromJSDate(beginJs)
     .plus({ hours: Number(service_time) })
     .toISO()

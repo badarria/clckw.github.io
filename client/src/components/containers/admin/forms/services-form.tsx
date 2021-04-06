@@ -4,15 +4,17 @@ import { AutocompleteField, TableForm } from '../components'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { services } from '../../../../services/admin/validation/schema'
 import { ServicesFormProps } from 'types'
-import { TextField } from '@material-ui/core'
-import { useStyles } from './styles'
 import { getServiceTime } from 'services/utils/table-func'
+import { InputField } from 'components/ui'
 
-export const ServicesForm = ({ data: { id = 0, name, time }, cancel, accept, editState }: ServicesFormProps) => {
-  const defaultValues: Record<string, any> = { id, name, time }
+const servHours = getServiceTime()
+
+export const ServicesForm = ({ data: { id = 0, name, time, price }, cancel, accept, editState }: ServicesFormProps) => {
+  const [timeArr, setTimeArr] = useState(servHours)
   const labels = Object.keys({ id, name })
-  const { fields, inputLabel, idInput, input, helperText } = useStyles()
-  const [timeArr, setTime] = useState(getServiceTime())
+  const initTime = timeArr.find(({ id }) => id === Number(time)) || timeArr[0]
+
+  const defaultValues = { id, name, time: initTime, price }
 
   const { register, handleSubmit, control, reset, errors } = useForm({
     defaultValues,
@@ -21,8 +23,8 @@ export const ServicesForm = ({ data: { id = 0, name, time }, cancel, accept, edi
 
   const formProps = {
     submit: handleSubmit((data) => {
-      const { id, name, time } = data
-      accept({ id, name, time: time.id })
+      const { time } = data
+      accept({ ...data, time: time.id })
     }),
     reset: () => {
       cancel()
@@ -34,26 +36,18 @@ export const ServicesForm = ({ data: { id = 0, name, time }, cancel, accept, edi
   return (
     <TableForm {...formProps}>
       {labels.map((label, inx) => (
-        <TextField
-          className={fields}
-          defaultValue={defaultValues[label]}
-          label={label}
-          name={label}
-          InputLabelProps={{ className: inputLabel }}
-          inputProps={{
-            readOnly: label === 'id',
-            className: `${label === 'id' ? idInput : null} ${input}`,
-          }}
-          error={!!errors[label]}
-          helperText={errors[label]?.message || ''}
-          key={inx}
-          autoComplete='nope'
-          required={label !== 'id'}
-          inputRef={register}
-          FormHelperTextProps={{ className: helperText }}
-        />
+        <InputField label={label} errors={errors} key={inx} register={register} />
       ))}
-      <AutocompleteField key='time' control={control} name='time' data={timeArr} keyToSelect='name' errors={errors} />
+      <AutocompleteField
+        key='time'
+        control={control}
+        name='time'
+        data={timeArr}
+        keyToSelect='name'
+        errors={errors}
+        defValue={initTime}
+      />
+      <InputField label='Price, usd' name='price' errors={errors} register={register} />
     </TableForm>
   )
 }

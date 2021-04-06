@@ -1,10 +1,11 @@
 import React, { FC } from 'react'
+import { useSelector } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import { User } from 'types'
+import { RootState } from 'store'
 import { Admin } from '../components/containers'
 
-export const AdminRoute: FC<{ user: User; path: string }> = ({ user, children }) => {
-  const { auth, role } = user
-
+export const AdminRoute: FC<{ path: string }> = ({ children }) => {
+  const { auth, role } = useSelector((state: RootState) => state.user)
+  console.log('inda admin')
   return auth && role === 'admin' ? <Admin>{children}</Admin> : <Redirect to='/' />
 }

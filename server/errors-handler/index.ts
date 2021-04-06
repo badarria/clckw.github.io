@@ -25,6 +25,9 @@ export const errorsHandler = (err: Error, req: Request, res: Response, next: Nex
     res.status(500).send({ type: 'error', msg: 'Bad request. It is too large' })
     return
   }
+  if (err.name.match('Stripe')) {
+    return res.status(500).send({ type: 'error', msg: 'Something went wrong and payment not accept' })
+  }
 
   res.status(500).send({ type: 'error', msg: err.message || 'something went wrong' })
 }

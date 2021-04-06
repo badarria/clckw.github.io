@@ -1,28 +1,36 @@
 import React from 'react'
-import { Paper, Typography } from '@material-ui/core'
+import { Box, Button, Container, Paper, Typography } from '@material-ui/core'
 import { useStyles } from './styles'
 import { MasterCard } from '..'
-import { MastersListProps } from 'types'
+import ArrowBackIcon from '@material-ui/icons/ArrowBack'
+import { Master } from 'types'
+type MasterListProps = {
+  data: Omit<Master, 'ci' | 'email' | 'password'>[]
+  back: () => void
+  confirm: (data: Master) => void
+}
 
-export const MastersList = ({ data, confirm }: MastersListProps) => {
+export const MastersList = ({ data, back, confirm }: MasterListProps) => {
   const { wrap, title } = useStyles()
 
   return (
-    <>
-      {data.length > 0 && (
-        <Paper className={wrap}>
-          <Typography align='center' className={title}>
-            To place an order choose a master from the list below
-          </Typography>
-          {data.map(({ id, name, surname, rating }, inx) => (
-            <MasterCard {...{ id, name, surname, rating, confirm }} key={inx} />
-          ))}
-        </Paper>
-      )}
-    </>
-  )
-}
+    <Container>
+      <Paper className={wrap}>
+        <Typography align='center' className={title}>
+          To place an order choose a master from the list below
+        </Typography>
 
-MastersList.defaultProps = {
-  data: [],
+        {data.map((master, inx) => {
+          const masterCardProps = { data: master, confirm }
+          return <MasterCard {...masterCardProps} key={inx} />
+        })}
+
+        <Box className={title}>
+          <Button startIcon={<ArrowBackIcon />} onClick={back} variant='contained'>
+            Back
+          </Button>
+        </Box>
+      </Paper>
+    </Container>
+  )
 }

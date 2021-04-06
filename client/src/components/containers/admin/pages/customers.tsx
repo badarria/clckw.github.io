@@ -4,11 +4,11 @@ import { TypicalResponse, Paging, State, Customer } from 'types'
 import { acceptCustomer, deleteCustomer, getCustomers } from 'services/admin/customers'
 import { CustomersForm } from '../forms'
 
-export const Customers = () => {
-  const initPaging: Paging = { limit: 10, offset: 0, orderby: 'id', order: 'desc', count: 50 }
-  const initDataToChange: Customer = { id: 0, name: '', surname: '', email: '', password: '' }
-  const columns = ['id', 'name', 'surname', 'email']
+const initPaging: Paging = { limit: 10, offset: 0, orderby: 'id', order: 'desc', count: 50 }
+const initDataToChange: Customer = { id: 0, name: '', surname: '', email: '', password: '' }
+const columns = ['id', 'name', 'surname', 'email']
 
+export const Customers = () => {
   const [editState, setEditState] = useState<State>(null)
   const [toast, setToast] = useState<TypicalResponse>({ type: 'success', msg: '' })
   const [loading, setLoading] = useState(false)

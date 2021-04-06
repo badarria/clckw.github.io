@@ -7,6 +7,7 @@ import {
   addNewOrder,
   getInitState,
   regMaster,
+  handlePayment,
 } from './requests'
 import { sendMail } from '../../utils'
 import { Router } from 'express'
@@ -20,5 +21,6 @@ index.post('/newOrder', addNewOrder)
 index.post('/confirm', confirmingMail, sendMail())
 index.get('/verify', stayAuth)
 index.post('/registration', regMaster)
+index.post('/handlePay', handlePayment)
 
 export { index }

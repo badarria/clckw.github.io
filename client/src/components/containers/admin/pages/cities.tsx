@@ -4,11 +4,11 @@ import { TypicalResponse, Paging, State, City } from 'types'
 import { acceptCity, deleteCity, getCities } from 'services/admin/cities'
 import { CitiesForm } from '../forms'
 
-export const Cities = () => {
-  const columns = ['id', 'name']
-  const initPaging: Paging = { limit: 5, offset: 0, orderby: 'id', order: 'desc', count: 50 }
-  const initDataToChange: City = { id: 0, name: '' }
+const columns = ['id', 'name']
+const initPaging: Paging = { limit: 5, offset: 0, orderby: 'id', order: 'desc', count: 50 }
+const initDataToChange: City = { id: 0, name: '' }
 
+export const Cities = () => {
   const [editState, setEditState] = useState<State>(null)
   const [toast, setToast] = useState<TypicalResponse>({ type: 'success', msg: '' })
   const [loading, setLoading] = useState<boolean>(false)

@@ -3,16 +3,19 @@ import { NextFunction, Request, Response } from 'express'
 import { usersOrderSchema, orderIdSchema, secondMailSchema } from '../../validation'
 import { createMail, jwtGenerator, cloudinary } from '../../utils'
 import { config } from '../../../config'
-import { Sequelize } from 'sequelize'
+import { sequelize } from '../../db'
+import { QueryTypes } from 'sequelize'
 const url = config.mailing.baseUrl
 
 export const getOrders = async (req: Request, res: Response, next: NextFunction) => {
   const validData = await usersOrderSchema.validate(req.params).catch((err) => next(err))
   if (validData) {
     const { id, orderby, order, limit, offset } = validData
+
     let ord: any = [orderby, order]
     if (orderby === 'customer') ord = [{ model: Customer, as: 'c' }, 'name', order]
     if (orderby === 'service') ord = [{ model: Service, as: 's' }, 'name', order]
+    if (orderby === 'price') ord = [{ model: Service, as: 's' }, 'price', order]
     if (orderby === 'date' || orderby === 'begin') ord = ['beginat', order]
     if (orderby === 'finish') ord = ['finishat', order]
 
@@ -24,7 +27,7 @@ export const getOrders = async (req: Request, res: Response, next: NextFunction)
 
     const list = await Order.findAll({
       ...params,
-      attributes: ['id', 'date', 'begin', 'finish', 'rating', 'beginat', 'finishat', 'completed'],
+      attributes: ['id', 'date', 'begin', 'finish', 'rating', 'beginat', 'finishat', 'completed', 'price'],
       include: [
         {
           model: Customer,
@@ -33,7 +36,7 @@ export const getOrders = async (req: Request, res: Response, next: NextFunction)
           include: [{ model: User, as: 'user' }],
         },
         { model: Master, as: 'm', attributes: ['id', 'name', 'surname', 'fullName'], where: { id } },
-        { model: Service, as: 's', attributes: [['name', 'service']] },
+        { model: Service, as: 's', attributes: [['name', 'service'], 'price'] },
         { model: Photo, as: 'photos' },
       ],
     }).catch((err) => next(err))

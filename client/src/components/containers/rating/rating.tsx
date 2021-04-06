@@ -3,7 +3,6 @@ import { Container, Paper } from '@material-ui/core'
 import { getOrder, setRating } from '../../../services/rating/'
 import { useStyles } from './styles'
 import { NoRatingCard, RatingCard, Loader } from './rating-cards'
-import { resolveContent } from 'nodemailer/lib/shared'
 
 export const Rating = ({ id }: { id: string }) => {
   const { blank } = useStyles()

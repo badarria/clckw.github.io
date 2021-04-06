@@ -119,7 +119,7 @@ export const OrdersForm = ({ data, cancel, accept, editState }: OrdersFormProps)
     <>
       <Loader loading={loading} />
       <TableForm {...formProps}>
-        {id ? <InputField {...{ defaultValue: '', register, label: 'id', errors }} /> : null}
+        {id ? <InputField {...{ register, label: 'id', errors }} /> : null}
         <AutocompleteField control={control} name='master' data={keys.master} keyToSelect='fullName' errors={errors} />
         <AutocompleteField
           control={control}

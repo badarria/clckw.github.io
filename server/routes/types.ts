@@ -27,3 +27,5 @@ export type MailType = {
     outro: string
   }
 }
+
+export type paymentsDataSchema = { id: string; amount: number }

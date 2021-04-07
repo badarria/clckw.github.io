@@ -49,7 +49,7 @@ export const MastersForm = ({ data, cancel, accept, editState }: MastersFormProp
       <Loader loading={loading} />
       <TableForm {...formProps}>
         {labels.map((label, inx) => (
-          <InputField key={inx} defaultValue={defaultValues[label]} register={register} label={label} errors={errors} />
+          <InputField key={inx} register={register} label={label} errors={errors} />
         ))}
         <AutocompleteField control={control} name='city' data={keys} keyToSelect='name' errors={errors} />
       </TableForm>

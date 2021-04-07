@@ -31,8 +31,8 @@ export const LoginDialog = ({ close, submit, open, msg, changeState }: DialogPro
       <DialogContent className={content}>
         <form onSubmit={handleSubmit(submit)} className={form} autoComplete='off'>
           <Box className={btnWrap}>
-            <InputField label='email' defaultValue='' {...{ register, errors }} />
-            <InputField label='password' defaultValue='' {...{ register, errors }} type='password' />
+            <InputField label='email' {...{ register, errors }} />
+            <InputField label='password' {...{ register, errors }} type='password' />
             {msg ? (
               <Typography color='secondary' variant='subtitle2'>
                 {msg}

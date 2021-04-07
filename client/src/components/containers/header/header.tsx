@@ -1,21 +1,26 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { Container, AppBar, Toolbar, Button, Box } from '@material-ui/core'
 import { LoginForm } from './login-form'
-import { Action, compose } from 'redux'
-import { connect } from 'react-redux'
-import { getUserAuthState } from '../../../store/state-selectors'
+import { useDispatch, useSelector } from 'react-redux'
 import { useStyles } from './styles'
 import { login, logout, registration } from '../../../services/home'
-import { HeaderProps, LoginData, RegistrMasterData, User } from 'types'
-import { ThunkDispatch } from '@reduxjs/toolkit'
+import { HeaderProps, LoginData, RegistrMasterData } from 'types'
+import { RootState } from 'store'
 
-const Header = ({ logoutFrom, loginTo, user, newMaster }: HeaderProps) => {
+export const Header = () => {
+  const user = useSelector((state: RootState) => state.user)
   const { auth, role } = user
   const isAdmin = role === 'admin' && auth
   const isMaster = role === 'master' && auth
   const isCustomer = role === 'customer' && auth
   const { root, title, btns } = useStyles()
+  const dispatch = useDispatch()
+  const newMaster = useCallback((data: RegistrMasterData) => registration(data, dispatch), [])
+  const logoutFrom = useCallback(() => logout(dispatch), [])
+  const loginTo = useCallback((data: LoginData) => login(data, dispatch), [])
+
+  const loginFormProps = { login: loginTo, registration: newMaster }
 
   return (
     <AppBar position='static'>
@@ -45,7 +50,7 @@ const Header = ({ logoutFrom, loginTo, user, newMaster }: HeaderProps) => {
                 Logout
               </Button>
             ) : (
-              <LoginForm {...{ login: loginTo, registration: newMaster }} />
+              <LoginForm {...loginFormProps} />
             )}
           </Box>
         </Toolbar>
@@ -53,18 +58,3 @@ const Header = ({ logoutFrom, loginTo, user, newMaster }: HeaderProps) => {
     </AppBar>
   )
 }
-
-const mapStateToProps = (state: { user: User }) => {
-  return {
-    user: getUserAuthState(state),
-  }
-}
-const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, Action>) => {
-  return {
-    logoutFrom: () => dispatch(logout),
-    loginTo: (data: LoginData) => dispatch(login(data)),
-    newMaster: (data: RegistrMasterData) => dispatch(registration(data)),
-  }
-}
-
-export default compose(connect(mapStateToProps, mapDispatchToProps))(Header)

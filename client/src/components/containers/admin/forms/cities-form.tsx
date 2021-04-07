@@ -25,7 +25,7 @@ export const CitiesForm = ({ data: { id = 0, name }, cancel, accept, editState }
   return (
     <TableForm {...formProps}>
       {labels.map((label, inx) => (
-        <InputField key={inx} defaultValue={defaultValues[label]} register={register} label={label} errors={errors} />
+        <InputField key={inx} register={register} label={label} errors={errors} />
       ))}
     </TableForm>
   )

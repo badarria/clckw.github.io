@@ -4,19 +4,19 @@ import { TypicalResponse, Paging, State, Order, NewOrderData } from 'types'
 import { acceptOrder, deleteOrder, getOrders } from 'services/admin/orders'
 import { OrdersForm } from '../forms'
 
-export const Orders = () => {
-  const columns = ['id', 'service', 'master', 'customer', 'city', 'date', 'begin', 'finish', 'rating', 'status']
-  const initPaging: Paging = { limit: 15, offset: 0, orderby: 'date', order: 'desc', count: 50 }
-  const initDataToChange = {
-    id: 0,
-    m: { id: 0, fullName: '' },
-    c: { id: 0, fullName: '' },
-    s: { id: 0, service: '', service_time: '' },
-    begin: '',
-    date: '',
-    status: 'done',
-  }
+const columns = ['id', 'service', 'price', 'master', 'customer', 'city', 'date', 'begin', 'finish', 'rating', 'status']
+const initPaging: Paging = { limit: 15, offset: 0, orderby: 'date', order: 'desc', count: 50 }
+const initDataToChange = {
+  id: 0,
+  m: { id: 0, fullName: '' },
+  c: { id: 0, fullName: '' },
+  s: { id: 0, service: '', service_time: '' },
+  begin: '',
+  date: '',
+  status: 'done',
+}
 
+export const Orders = () => {
   const [editState, setEditState] = useState<State>(null)
   const [toast, setToast] = useState<TypicalResponse>({ type: 'success', msg: '' })
   const [loading, setLoading] = useState(false)
@@ -24,7 +24,7 @@ export const Orders = () => {
   const [paging, setPaging] = useState<Paging>(initPaging)
   const [dataToChange, setDataToChange] = useState(initDataToChange)
   const { limit, offset, count, orderby, order } = paging
-  console.log(items)
+
   const setLoader = async <T extends any>(doSomething: T) => {
     setLoading(true)
     const res = await doSomething

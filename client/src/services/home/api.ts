@@ -58,7 +58,6 @@ const add = async (data: DataForNewOrder): Promise<OrderResponse> => {
 }
 
 const sendFirstLetter = async (data: DataForLetter): Promise<MailResponse> => {
-  console.log(data, 'data')
   const res = await fetch(`${homePath}/confirm`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -95,6 +94,15 @@ const registr = async (data: RegistrMasterData): Promise<UserResponse> => {
   return res.json()
 }
 
+const payment = async (data: { id: string; amount: number }): Promise<any> => {
+  const res = await fetch(`${homePath}/handlePay`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  return res.json()
+}
+
 export const getFreeMasters = async (data: ParamsForSearching) => await wrapTryCatch(getMasters(data))
 export const getCustomer = async (data: Partial<Customer>) => await wrapTryCatch(upsertCustomer(data))
 export const loginUser = async (data: LoginData) => await wrapTryCatch(login(data))
@@ -104,3 +112,4 @@ export const sendRatingLetter = async (data: DataForLetter) => await wrapTryCatc
 export const getInit = async () => await wrapTryCatch(init())
 export const checkUserAuth = async (token: string) => await wrapTryCatch(check(token))
 export const regMaster = async (data: RegistrMasterData) => await wrapTryCatch(registr(data))
+export const handlePayment = async (data: { id: string; amount: number }) => await wrapTryCatch(payment(data))

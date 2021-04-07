@@ -1,10 +1,11 @@
-import { Redirect } from 'react-router-dom'
-import { User } from '../types'
+import { Redirect, Route } from 'react-router-dom'
 import { Customer } from '../components/containers'
+import { RootState } from 'store'
+import { useSelector } from 'react-redux'
 
-export const CustomerRoute = ({ user }: { user: User; path: string }) => {
-  const { auth, role, id, name } = user
+export const CustomerRoute = ({ path }: { path: string }) => {
+  const { auth, role } = useSelector((state: RootState) => state.user)
   const isCustomer = auth && role === 'customer'
 
-  return isCustomer ? <Customer id={id} name={name} /> : <Redirect to='/' />
+  return isCustomer ? <Route path={path} exact component={Customer} /> : <Redirect to='/' />
 }

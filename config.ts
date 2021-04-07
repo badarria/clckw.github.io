@@ -22,6 +22,7 @@ const allConfig = {
       api_secret: process.env.API_SECRET,
     },
     jwt: process.env.JWT_SECRET || '',
+    stripe: { publish_key: process.env.STRIPE_PUBLISH_KEY || '', secret_key: process.env.STRIPE_SECRET_KEY || '' },
   },
   development: {
     db: `postgresql://${process.env.PG_USER}:${process.env.PG_PASSWORD}@${process.env.PG_HOST}:${process.env.PG_PORT}/${process.env.PG_DATABASE}`,
@@ -37,6 +38,7 @@ const allConfig = {
       api_secret: process.env.API_SECRET,
     },
     jwt: process.env.JWT_SECRET || '',
+    stripe: { publish_key: process.env.STRIPE_PUBLISH_KEY || '', secret_key: process.env.STRIPE_SECRET_KEY || '' },
   },
 }
 

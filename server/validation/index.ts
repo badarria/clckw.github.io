@@ -38,6 +38,7 @@ const serviceSchema = yup.object().shape({
   id: num,
   name: name,
   time: yup.string().matches(/[1-8]/g).required(),
+  price: yup.number().required(),
 })
 
 const citySchema = yup.object().shape({
@@ -114,7 +115,17 @@ const userRatingSchema = yup.object().shape({
   rating: yup.number().required(),
 })
 
+const makePaySchema = yup.object().shape({
+  amount: yup.number().required(),
+  email: yup.string().required(),
+})
+const paymentsDataSchema = yup.object().shape({
+  id: yup.string().required(),
+  amount: yup.number().required(),
+})
+
 export {
+  makePaySchema,
   orderRatingSchema,
   orderIdSchema,
   userRatingSchema,
@@ -131,4 +142,5 @@ export {
   firstMailSchema,
   secondMailSchema,
   usersOrderSchema,
+  paymentsDataSchema
 }

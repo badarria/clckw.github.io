@@ -5,21 +5,23 @@ import { UsersOrdersList, Paging, TypicalResponse, CustomerOrdersList } from '..
 import { Pagination, CustomerTableHead, CustomerTableList } from './components'
 import { useStyles } from './styles'
 import { getList, setRating } from '../../../services/customer'
+import { useSelector } from 'react-redux'
+import { RootState } from 'store'
 
-export const Customer = ({ id, name }: { id: number; name: string }) => {
-  const initOrder: UsersOrdersList = {
-    id: 0,
-    master: '',
-    service: '',
-    completed: false,
-    begin: '',
-    date: '',
-    finish: '',
-    rating: 0,
-  }
+const initOrder: UsersOrdersList = {
+  id: 0,
+  master: '',
+  service: '',
+  completed: false,
+  begin: '',
+  date: '',
+  finish: '',
+  rating: 0,
+}
+const columns = ['id', 'master', 'service', 'date', 'begin', 'finish', 'rating']
 
-  const columns = ['id', 'master', 'service', 'date', 'begin', 'finish', 'rating']
-
+export const Customer = () => {
+  const { id, name } = useSelector((state: RootState) => state.user)
   const [orders, setOrders] = useState([initOrder])
   const [loading, setLoading] = useState(false)
   const [toast, setToast] = useState<TypicalResponse>({ type: 'success', msg: '' })

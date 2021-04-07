@@ -16,7 +16,7 @@ export const AdminTableHead = (props: AdminTableHeadProps) => {
 
   return (
     <TableRow component='tr'>
-      <TableCell>{columns.length ? '#' : null}</TableCell>
+      {/* <TableCell>{columns.length ? '#' : null}</TableCell> */}
       {columns.map((column, i) => {
         return (
           <TableCell key={i}>

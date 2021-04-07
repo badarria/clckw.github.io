@@ -5,13 +5,16 @@ import { DataForRatingRequest, MasterOrdersList, Paging, TypicalResponse } from 
 import { Pagination, MasterTableHead, MasterTableList } from './components'
 import { useStyles } from './styles'
 import { getList, sendRatingMail, setDone, getOrdersPhoto } from '../../../services/master'
+import { useSelector } from 'react-redux'
+import { RootState } from 'store'
 
-const columns = ['id', 'customer', 'service', 'date', 'begin', 'finish', 'rating', 'completed', 'photos']
+const columns = ['id', 'customer', 'service', 'price', 'date', 'begin', 'finish', 'rating', 'completed', 'photos']
 const initOrder: MasterOrdersList = {
   id: 0,
   customer: '',
   userEmail: '',
   service: '',
+  price: 0,
   completed: false,
   begin: '',
   date: '',
@@ -20,7 +23,8 @@ const initOrder: MasterOrdersList = {
   photos: [{ id: 0, url: '', order_id: 0, public_id: '', resource_type: '' }],
 }
 
-export const Master = ({ id, name }: { id: number; name: string }) => {
+export const Master = () => {
+  const { id, name } = useSelector((state: RootState) => state.user)
   const [orders, setOrders] = useState([initOrder])
   const [loading, setLoading] = useState(false)
   const [toast, setToast] = useState<TypicalResponse>({ type: 'success', msg: '' })
@@ -57,6 +61,7 @@ export const Master = ({ id, name }: { id: number; name: string }) => {
           customer: c?.fullName,
           userEmail: c?.email,
           service: s?.service,
+          price: s?.price,
           date,
           begin,
           finish,

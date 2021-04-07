@@ -10,5 +10,5 @@ if ('dbOpt' in config) {
 const sequelize = new Sequelize(...seqconnetOpt)
 sequelize.addModels([City, Customer, Service, Master, Order, User, Photo])
 
-// Photo.sync({ alter: true })
+// Service.sync({ alter: true })
 export { sequelize }

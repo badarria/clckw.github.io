@@ -1,15 +1,17 @@
 import React from 'react'
-import { Header, Home } from './containers'
+import { Header } from './containers'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
-import { compose } from 'redux'
-import { connect } from 'react-redux'
-import { getCheckingState, getUserAuthState } from '../store/state-selectors'
-import { AdminRoute, MasterRoute, RatingRoute, CustomerRoute } from '../routes'
+import { AdminRoute, MasterRoute, RatingRoute, CustomerRoute, MastersRoute } from '../routes'
 import { Cities, Customers, Masters, Orders, Services } from './containers/admin/pages'
-import { User } from 'types'
 import { Loader } from './ui'
 
-const App = ({ user, isChecking }) => {
+import { RootState } from 'store'
+import { useSelector } from 'react-redux'
+import { PaymentRoute, SearchRoute } from 'routes'
+
+export const App = () => {
+  const isChecking = useSelector((state: RootState) => state.checking)
+
   return (
     <Router>
       <Header />
@@ -17,9 +19,11 @@ const App = ({ user, isChecking }) => {
         <Loader loading={isChecking} />
       ) : (
         <Switch>
-          <Route path='/' exact component={Home} />
+          <Route path='/' exact component={SearchRoute} />
+          <Route path='/freeMasters' exact component={MastersRoute} />
+          <Route path='/payment' exact component={PaymentRoute} />
           <Route exact path='/admin' render={() => <Redirect to='/admin/customers' />} />
-          <AdminRoute path='/admin' user={user}>
+          <AdminRoute path='/admin'>
             <Switch>
               <Route path='/admin/customers' exact component={Customers} />
               <Route path='/admin/masters' exact component={Masters} />
@@ -30,20 +34,11 @@ const App = ({ user, isChecking }) => {
             </Switch>
           </AdminRoute>
           <RatingRoute path='/orderRate' />
-          <MasterRoute path='/master' user={user} />
-          <CustomerRoute path='/customer' user={user} />
+          <MasterRoute path='/master' />
+          <CustomerRoute path='/customer' />
           <Redirect to='/' />
         </Switch>
       )}
     </Router>
   )
 }
-
-const mapStateToProps = (state: { user: User; checking: boolean }, ownProps: any = {}) => {
-  return {
-    user: getUserAuthState(state),
-    isChecking: getCheckingState(state),
-  }
-}
-
-export default compose(connect(mapStateToProps, null))(App)

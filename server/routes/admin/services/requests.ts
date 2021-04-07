@@ -5,8 +5,8 @@ import { Service } from '../../../db/models'
 const update = async (req: Request, res: Response, next: NextFunction) => {
   const validData = await serviceSchema.validate(req.body).catch((err) => next(err))
   if (validData) {
-    const { name, time, id } = validData
-    const result = await Service.update({ name, time }, { where: { id } }).catch((err) => next(err))
+    const { name, time, id, price } = validData
+    const result = await Service.update({ name, time, price }, { where: { id } }).catch((err) => next(err))
     if (result) {
       const msg = result[0] ? 'Service  was updated' : 'Service not found'
       const type = result[0] ? 'success' : 'warning'
@@ -46,8 +46,8 @@ const remove = async (req: Request, res: Response, next: NextFunction) => {
 const add = async (req: Request, res: Response, next: NextFunction) => {
   const validData = await serviceSchema.validate(req.body).catch((err) => next(err))
   if (validData) {
-    const { name, time } = validData
-    const result = await Service.create({ name, time }).catch((err) => next(err))
+    const { name, time, price } = validData
+    const result = await Service.create({ name, time, price }).catch((err) => next(err))
 
     return result && res.json({ type: 'success', msg: 'Service was added' })
   }

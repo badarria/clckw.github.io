@@ -1,12 +1,15 @@
+import React, { useCallback } from 'react'
 import { useStyles } from './styles'
 import { Box, Button, Card, CardContent, Typography } from '@material-ui/core'
 import Rating from '@material-ui/lab/Rating'
-import React from 'react'
 import { MasterCardProps } from 'types'
 
-export const MasterCard = ({ id, name, surname, rating, confirm }: MasterCardProps) => {
+export const MasterCard = ({ data, confirm }: MasterCardProps) => {
+  const { name, surname, rating } = data
   const { content, stars, card } = useStyles()
   const masterName = `${name} ${surname}`
+  const confirmMaster = useCallback(() => confirm(data), [])
+
   return (
     <Card className={card}>
       <CardContent className={content}>
@@ -20,7 +23,7 @@ export const MasterCard = ({ id, name, surname, rating, confirm }: MasterCardPro
           <Rating name='read-only' value={Number(rating)} readOnly />
         </Box>
       </CardContent>
-      <Button variant='contained' color='primary' fullWidth size='large' onClick={() => confirm({ id, masterName })}>
+      <Button variant='contained' color='primary' fullWidth size='large' onClick={confirmMaster}>
         Choose!
       </Button>
     </Card>

@@ -33,7 +33,7 @@ export const AdminTableList = (props: AdminTableListProps) => {
 
         return (
           <TableRow key={id} component='tr'>
-            <TableCell component='td'>{inx + 1}</TableCell>
+            {/* <TableCell component='td'>{inx + 1}</TableCell> */}
             {columns.map((key, i) => {
               const thisItem: any = { ...item }
               return <TableCell key={i}>{thisItem[key]}</TableCell>

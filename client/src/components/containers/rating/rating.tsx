@@ -3,7 +3,6 @@ import { Container, Paper } from '@material-ui/core'
 import { getOrder, setRating } from '../../../services/rating/'
 import { useStyles } from './styles'
 import { NoRatingCard, RatingCard, Loader } from './rating-cards'
-import { resolveContent } from 'nodemailer/lib/shared'
 
 export const Rating = ({ id }: { id: string }) => {
   const { blank } = useStyles()
@@ -18,7 +17,7 @@ export const Rating = ({ id }: { id: string }) => {
     const orderData = async () => {
       setLoading(true)
       const res = await getOrder(id)
-      console.log(res)
+
       if (Array.isArray(res)) {
         setOrder(res[0])
         setStatus({ rated: !!res[0].rating, msg: 'Order already has been rated, thanks!' })

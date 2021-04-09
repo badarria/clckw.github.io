@@ -1,4 +1,4 @@
-import { OrdersKey, Method, State, TypicalResponse, FilteredOrders, NewOrderData } from 'types'
+import { OrdersKey, Method, State, TypicalResponseType, FilteredOrders, NewOrderData } from 'types'
 import { OrdersList, Paging } from 'types'
 const adminPath = '/admin/orders'
 const getToken = () => localStorage.getItem('token') || ''
@@ -7,7 +7,7 @@ const wrapTryCatch = async <T>(tryFunc: T) => {
   try {
     return await tryFunc
   } catch {
-    return { type: 'error', msg: 'Something went wrong' } as TypicalResponse
+    return { type: 'error', msg: 'Something went wrong' } as TypicalResponseType
   }
 }
 
@@ -19,7 +19,7 @@ const get = async ({ limit, order, orderby, offset }: Paging): Promise<OrdersLis
   return res.json()
 }
 
-const del = async (id: number): Promise<TypicalResponse> => {
+const del = async (id: number): Promise<TypicalResponseType> => {
   const token = getToken()
   const res = await fetch(`${adminPath}/${id}`, {
     method: 'DELETE',
@@ -28,7 +28,7 @@ const del = async (id: number): Promise<TypicalResponse> => {
   return res.json()
 }
 
-const putOrPost = async (method: Method, data: NewOrderData): Promise<TypicalResponse> => {
+const putOrPost = async (method: Method, data: NewOrderData): Promise<TypicalResponseType> => {
   const token = getToken()
   const res = await fetch(`${adminPath}`, {
     method,

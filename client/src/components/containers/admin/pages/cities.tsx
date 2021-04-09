@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { AdminTable, AdminTableHead, Loader, Pagination } from '../components'
-import { TypicalResponse, Paging, State, City } from 'types'
+import { TypicalResponseType, Paging, State, City } from 'types'
 import { acceptCity, deleteCity, getCities } from 'services/admin/cities'
 import { CitiesForm } from '../forms'
 
@@ -10,7 +10,7 @@ const initDataToChange: City = { id: 0, name: '' }
 
 export const Cities = () => {
   const [editState, setEditState] = useState<State>(null)
-  const [toast, setToast] = useState<TypicalResponse>({ type: 'success', msg: '' })
+  const [toast, setToast] = useState<TypicalResponseType>({ type: 'success', msg: '' })
   const [loading, setLoading] = useState<boolean>(false)
   const [items, setItems] = useState<City[]>([])
   const [paging, setPaging] = useState<Paging>(initPaging)
@@ -24,7 +24,7 @@ export const Cities = () => {
     return res
   }
 
-  const setToastMsg = (toast: TypicalResponse) => {
+  const setToastMsg = (toast: TypicalResponseType) => {
     setToast(toast)
     setTimeout(() => {
       setToast({ type: toast.type, msg: '' })
@@ -47,7 +47,7 @@ export const Cities = () => {
   }
 
   const remove = async (id: number) => {
-    const msg: TypicalResponse = await setLoader(deleteCity(id))
+    const msg: TypicalResponseType = await setLoader(deleteCity(id))
     setToastMsg(msg)
     if (msg.type === 'success') {
       await getItems()

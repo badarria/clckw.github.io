@@ -1,4 +1,4 @@
-import { Master, MastersKey, Method, State, TypicalResponse } from 'types'
+import { Master, MastersKey, Method, State, TypicalResponseType } from 'types'
 import { MastersList, Paging } from 'types'
 const adminPath = '/admin/masters'
 const getToken = () => localStorage.getItem('token') || ''
@@ -7,7 +7,7 @@ const wrapTryCatch = async <T>(tryFunc: T) => {
   try {
     return await tryFunc
   } catch {
-    return { type: 'error', msg: 'Something went wrong' } as TypicalResponse
+    return { type: 'error', msg: 'Something went wrong' } as TypicalResponseType
   }
 }
 
@@ -19,7 +19,7 @@ const get = async ({ limit, order, orderby, offset }: Paging): Promise<MastersLi
   return res.json()
 }
 
-const del = async (id: number): Promise<TypicalResponse> => {
+const del = async (id: number): Promise<TypicalResponseType> => {
   const token = getToken()
   const res = await fetch(`${adminPath}/${id}`, {
     method: 'DELETE',
@@ -28,7 +28,7 @@ const del = async (id: number): Promise<TypicalResponse> => {
   return res.json()
 }
 
-const putOrPost = async (method: Method, data: Master): Promise<TypicalResponse> => {
+const putOrPost = async (method: Method, data: Master): Promise<TypicalResponseType> => {
   const token = getToken()
   const res = await fetch(`${adminPath}`, {
     method,

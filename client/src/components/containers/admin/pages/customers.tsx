@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { AdminTable, AdminTableHead, Loader, Pagination } from '../components'
-import { TypicalResponse, Paging, State, Customer } from 'types'
+import { TypicalResponseType, Paging, State, Customer } from 'types'
 import { acceptCustomer, deleteCustomer, getCustomers } from 'services/admin/customers'
 import { CustomersForm } from '../forms'
 
@@ -10,7 +10,7 @@ const columns = ['id', 'name', 'surname', 'email']
 
 export const Customers = () => {
   const [editState, setEditState] = useState<State>(null)
-  const [toast, setToast] = useState<TypicalResponse>({ type: 'success', msg: '' })
+  const [toast, setToast] = useState<TypicalResponseType>({ type: 'success', msg: '' })
   const [loading, setLoading] = useState(false)
   const [items, setItems] = useState<Customer[]>([])
   const [paging, setPaging] = useState(initPaging)
@@ -24,7 +24,7 @@ export const Customers = () => {
     return res
   }
 
-  const setToastMsg = (toast: TypicalResponse) => {
+  const setToastMsg = (toast: TypicalResponseType) => {
     setToast(toast)
     setTimeout(() => {
       setToast({ type: toast.type, msg: '' })
@@ -47,7 +47,7 @@ export const Customers = () => {
   }
 
   const remove = async (id: number) => {
-    const msg: TypicalResponse = await setLoader(deleteCustomer(id))
+    const msg: TypicalResponseType = await setLoader(deleteCustomer(id))
     setToastMsg(msg)
     if (msg.type === 'success') {
       await getItems()

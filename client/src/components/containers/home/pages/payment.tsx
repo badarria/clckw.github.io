@@ -10,9 +10,9 @@ import { useHistory } from 'react-router-dom'
 import { Loader, Toast } from '../components'
 import { addNewOrder, handlePayment, sendConfirmLetter } from 'services/home/api'
 import { getBeginFinish } from 'services/utils/datetime-func'
-import { TypicalResponse } from 'types'
+import { TypicalResponseType } from 'types'
 import { CheckoutForm } from '../forms/payment/checkout'
-import { initState, setInit } from 'store/reducer'
+import { setInit } from 'store/reducer'
 
 const promise = loadStripe(
   'pk_test_51IbLzbK13PqXeZaYmoyqJmBCWV0K1sWOCGrFt0mkgF1t8YBYbq1VF3ojVBRtfGHpO3XHbCYMRYdcy26K7RBLr1zj00SU4On1Su'
@@ -27,7 +27,7 @@ export const Payment = () => {
   const history = useHistory()
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
-  const [toast, setToast] = useState<TypicalResponse>({ type: 'success', msg: '' })
+  const [toast, setToast] = useState<TypicalResponseType>({ type: 'success', msg: '' })
   const [successMsg, setSuccessMsg] = useState('')
 
   const back = useCallback(() => {
@@ -40,7 +40,7 @@ export const Payment = () => {
     dispatch(setInit())
   }, [])
 
-  const setToastMsg = (toast: TypicalResponse) => {
+  const setToastMsg = (toast: TypicalResponseType) => {
     setToast(toast)
     setTimeout(() => {
       setToast({ type: toast.type, msg: '' })
@@ -51,11 +51,12 @@ export const Payment = () => {
     setLoading(true)
     const res = await func(email, name, surname)
     if (res.error) {
-      setToastMsg({ type: 'error', msg: res.paymentMethod.message || 'something went wrong' })
+      setToastMsg({ type: 'error', msg: res.error.message || 'something went wrong' })
       setLoading(false)
     } else {
       const data = { id: res.paymentMethod.id, amount }
       const makePay = await handlePayment(data)
+
       if (makePay.type === 'success') {
         const { service, master, customer, date, time, files } = order
         const { begin, finish } = getBeginFinish(date, time, service.time)

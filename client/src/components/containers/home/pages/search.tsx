@@ -3,7 +3,7 @@ import { Paper, Box, Typography, Container } from '@material-ui/core'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useStyles } from './styles'
-import { TypicalResponse, SubmitData } from 'types'
+import { TypicalResponseType, SubmitData } from 'types'
 import { Loader, Toast } from '../components'
 import { getCustomer, getFreeMasters, getInit } from 'services/home/api'
 import { SearchForm } from '../forms/search/search-form'
@@ -35,7 +35,7 @@ export const Search = () => {
   const history = useHistory()
   const [loading, setLoading] = useState(false)
   const [hours, setHours] = useState(initHours)
-  const [toast, setToast] = useState<TypicalResponse>({ type: 'success', msg: '' })
+  const [toast, setToast] = useState<TypicalResponseType>({ type: 'success', msg: '' })
   const { name, surname, email, id } = useSelector((state: RootState) => state.customerData)
   const { service, date, time, city } = useSelector((state: RootState) => state.orderData)
   const defaultDate = dateFromIso(date)
@@ -66,7 +66,7 @@ export const Search = () => {
     return res
   }
 
-  const setToastMsg = (toast: TypicalResponse) => {
+  const setToastMsg = (toast: TypicalResponseType) => {
     setToast(toast)
     setTimeout(() => {
       setToast({ type: toast.type, msg: '' })

@@ -1,4 +1,4 @@
-import { DataForRatingRequest, getUsersOrderData, UsersOrder, TypicalResponse } from '../../types'
+import { DataForRatingRequest, getUsersOrderData, UsersOrder, TypicalResponseType } from '../../types'
 
 const getToken = () => localStorage.getItem('token') || ''
 const masterPath = 'master'
@@ -7,7 +7,7 @@ const wrapTryCatch = async <T>(tryFunc: T) => {
   try {
     return await tryFunc
   } catch {
-    return { type: 'error', msg: 'Something went wrong' } as TypicalResponse
+    return { type: 'error', msg: 'Something went wrong' } as TypicalResponseType
   }
 }
 
@@ -18,7 +18,7 @@ const get = async (data: getUsersOrderData): Promise<UsersOrder[]> => {
   return res.json()
 }
 
-const done = async (id: number): Promise<TypicalResponse> => {
+const done = async (id: number): Promise<TypicalResponseType> => {
   const token = getToken()
 
   const res = await fetch(`${masterPath}/status`, {
@@ -29,7 +29,7 @@ const done = async (id: number): Promise<TypicalResponse> => {
   return res.json()
 }
 
-const send = async (data: DataForRatingRequest): Promise<TypicalResponse> => {
+const send = async (data: DataForRatingRequest): Promise<TypicalResponseType> => {
   const token = getToken()
   const res = await fetch(`${masterPath}/sendMail`, {
     method: 'POST',

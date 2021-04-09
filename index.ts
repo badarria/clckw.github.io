@@ -5,13 +5,16 @@ import path from 'path'
 import { config } from './config'
 import { Request, Response } from 'express'
 import { errorsHandler } from './server/errors-handler'
+
 const app = express()
 
 const PORT = config.port
 
 app.use(cors())
 app.use(express.json({ limit: '10Mb' }))
+
 app.use('/', routes)
+
 app.use(errorsHandler)
 
 if ('app' in config) {

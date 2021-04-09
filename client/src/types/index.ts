@@ -1,4 +1,4 @@
-import { Control } from 'react-hook-form'
+import { Control, ErrorOption, FieldErrors, Ref, RegisterOptions } from 'react-hook-form'
 import { IconButtonProps } from '@material-ui/core'
 import { FormEvent, ReactElement } from 'react'
 
@@ -102,7 +102,7 @@ export type State = 'isEditing' | 'isCreating' | null
 
 type SubjFormProps = { cancel: Function; accept: Function; editState: State }
 
-export type TypicalResponse = { type: 'success' | 'info' | 'warning' | 'error'; msg: string }
+export type TypicalResponseType = { type: 'success' | 'info' | 'warning' | 'error'; msg: string }
 export type CustomersFormProps = SubjFormProps & { data: Customer }
 export type CitiesFormProps = SubjFormProps & { data: City }
 export type ServicesFormProps = SubjFormProps & { data: Service }
@@ -156,15 +156,14 @@ export type AutocompleteFieldProps = {
   defValue?: any
 }
 
-export type InputFieldProps = {
-  // defaultValue: string
+export type InputPropsType = {
   label: string
   register: any
-  errors: any
+  errors: FieldErrors
   name?: string
   type?: string
 }
-export type ToastProps = { toast: TypicalResponse }
+export type ToastProps = { toast: TypicalResponseType }
 
 export type SelectHoursProps = {
   control: Control<any>
@@ -227,11 +226,11 @@ export type MasterTableListProps = {
   data: MasterOrdersList[]
   columns: string[]
   change: Function
-  getZip: (id: number) => Promise<string | TypicalResponse>
+  getZip: (id: number) => Promise<string | TypicalResponseType>
 }
 export type TableButtonIconProps = {
   id: number
-  getZip: (id: number) => Promise<string | TypicalResponse>
+  getZip: (id: number) => Promise<string | TypicalResponseType>
   disabled: boolean
 }
 
@@ -246,7 +245,7 @@ export type AdminTableProps = {
   remove: Function
   push: Function
   editState: State
-  toast: TypicalResponse
+  toast: TypicalResponseType
   header: ReactElement
   pagination: ReactElement
 }
@@ -270,13 +269,11 @@ export type ButtonIconProps = IconButtonProps & {
   type: string
 }
 
-export type LoginData = { email: string; password: string }
-export type RegistrMasterData = { email: string; name: string; surname: string; password: string; city: number }
 export type MailResponse = { msg: string }
 
-export type CustomerResponse = TypicalResponse | { id: number; password: string }
+export type CustomerResponse = TypicalResponseType | { id: number; password: string }
 export type FreeMastersList = Master[]
-export type LoginResponse = { token: string; role: string; id: number; name: string } | TypicalResponse
+
 export type DataToProcess = {
   service: Service
   city: City
@@ -295,7 +292,7 @@ export type InitFields = InitData & {
   email: string
 }
 
-export type OrderResponse = TypicalResponse & { id: number }
+export type OrderResponse = TypicalResponseType & { id: number }
 export type DataForLetter = {
   userEmail: string
   begin: string
@@ -331,15 +328,3 @@ export type MasterCardProps = {
 export type MastersListProps = { data: FreeMastersList }
 export type User = { id: 0; auth: boolean; role: string; name: string }
 export type UserResponse = { id: number; role: string; token: string; name: string }
-export type LoginFormResponse = Promise<{ msg: string; role: string; name: string } | TypicalResponse>
-export type HeaderProps = {
-  logoutFrom: () => void
-  loginTo: (data: LoginData) => LoginFormResponse
-  user: User
-  newMaster: (data: RegistrMasterData) => LoginFormResponse
-}
-
-export type LoginFormProps = {
-  login: (data: LoginData) => LoginFormResponse
-  registration: (data: RegistrMasterData) => LoginFormResponse
-}

@@ -1,7 +1,7 @@
 import { Container, Box, Paper, TableBody, Table, TableContainer, TableFooter } from '@material-ui/core'
 import { Loader, Toast } from 'components/ui'
 import React, { useEffect, useState } from 'react'
-import { DataForRatingRequest, MasterOrdersList, Paging, TypicalResponse } from 'types'
+import { DataForRatingRequest, MasterOrdersList, Paging, TypicalResponseType } from 'types'
 import { Pagination, MasterTableHead, MasterTableList } from './components'
 import { useStyles } from './styles'
 import { getList, sendRatingMail, setDone, getOrdersPhoto } from '../../../services/master'
@@ -27,7 +27,7 @@ export const Master = () => {
   const { id, name } = useSelector((state: RootState) => state.user)
   const [orders, setOrders] = useState([initOrder])
   const [loading, setLoading] = useState(false)
-  const [toast, setToast] = useState<TypicalResponse>({ type: 'success', msg: '' })
+  const [toast, setToast] = useState<TypicalResponseType>({ type: 'success', msg: '' })
   const initPaging: Paging = { limit: 10, offset: 0, order: 'desc', orderby: 'date', count: orders.length }
   const [paging, setPaging] = useState(initPaging)
   const { wrap, box, root, table, container } = useStyles()
@@ -40,7 +40,7 @@ export const Master = () => {
     return res
   }
 
-  const setToastMsg = (toast: TypicalResponse) => {
+  const setToastMsg = (toast: TypicalResponseType) => {
     setToast(toast)
     setTimeout(() => {
       setToast({ type: toast.type, msg: '' })
@@ -51,7 +51,7 @@ export const Master = () => {
     const list = await setLoader(getList({ ...paging, id }))
     if ('type' in list) setToastMsg(list)
     else if (!list.length) {
-      const toast: TypicalResponse = { type: 'warning', msg: `Hi, ${name}, you haven't orders` }
+      const toast: TypicalResponseType = { type: 'warning', msg: `Hi, ${name}, you haven't orders` }
       setToastMsg(toast)
     } else {
       const data: MasterOrdersList[] = []
@@ -72,7 +72,7 @@ export const Master = () => {
         data.push(dataForList)
       })
       setOrders(data)
-      const toast: TypicalResponse = { type: 'success', msg: `Hi, ${name}, you have ${data.length} orders. ` }
+      const toast: TypicalResponseType = { type: 'success', msg: `Hi, ${name}, you have ${data.length} orders. ` }
       sayHi && setToastMsg(toast)
       if (list.length !== paging.count) setPaging((paging) => ({ ...paging, count: list.length }))
     }

@@ -3,7 +3,7 @@ import { Controller } from 'react-hook-form'
 import { Checkbox } from '@material-ui/core'
 import { useStyles } from './styles'
 
-export const ControlledCheckbox = ({ control, name }) => {
+const ControlledCheckbox = ({ control, name }) => {
   const { checkBox } = useStyles()
 
   return (
@@ -24,3 +24,5 @@ export const ControlledCheckbox = ({ control, name }) => {
     </>
   )
 }
+
+export default ControlledCheckbox

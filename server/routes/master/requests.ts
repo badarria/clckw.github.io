@@ -3,8 +3,10 @@ import { NextFunction, Request, Response } from 'express'
 import { usersOrderSchema, orderIdSchema, secondMailSchema } from '../../validation'
 import { createMail, jwtGenerator, cloudinary } from '../../utils'
 import { config } from '../../../config'
-import { sequelize } from '../../db'
-import { QueryTypes } from 'sequelize'
+import pdf from 'html-pdf'
+import pdfTemplate from './pdfTemplate'
+import fs from 'fs'
+
 const url = config.mailing.baseUrl
 
 export const getOrders = async (req: Request, res: Response, next: NextFunction) => {
@@ -55,6 +57,22 @@ export const changeStatus = async (req: Request, res: Response, next: NextFuncti
       return res.json({ type, msg })
     }
   }
+}
+
+export const downloadPdf = async (req: Request, res: Response, next: NextFunction) => {
+  // const { id } = req.params
+  // const details = await Order.scope('allIncl')
+  //   .findOne({ where: { id }, include: [] })
+  //   .catch((err) => next(err))
+  // if (details) {
+  //   const { service, master, date, price, m, c } = details
+  //   const customer = { ...c }
+  //   const mastrer = { ...m }
+  // }
+  pdf.create(pdfTemplate()).toFile('res.pdf', (err) => {
+    if (err) throw new Error('dfg')
+    return Promise.resolve()
+  })
 }
 
 export const ratingRequestMail = async (req: Request, res: Response, next: NextFunction) => {

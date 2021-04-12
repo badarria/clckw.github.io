@@ -10,7 +10,7 @@ type MailData = {
   master: string
   id: number
 } | null
-type orderData = {
+type OrderData = {
   service: { id: number; name: string; time: string; price: number }
   date: string
   time: string
@@ -19,15 +19,15 @@ type orderData = {
   city: { id: number; name: string }
   files: string[]
 } | null
-type customerData = { name: string; surname: string; email: string; id: number } | null
-type initState = { city: [{ id: number; name: string }]; service: [{ id: number; name: string; time: string }] } | null
+type CustomerData = { name: string; surname: string; email: string; id: number } | null
+type InitState = { city: [{ id: number; name: string }]; service: [{ id: number; name: string; time: string }] } | null
 
 export const initState = {
-  orderData: null as orderData,
-  customerData: null as customerData,
+  orderData: null as OrderData,
+  customerData: null as CustomerData,
   mailData: null as MailData,
   masters: [] as Masters,
-  initState: null as initState,
+  initState: null as InitState,
   user: null as User,
   checking: true,
 }

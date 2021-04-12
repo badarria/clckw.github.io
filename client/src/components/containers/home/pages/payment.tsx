@@ -17,12 +17,11 @@ import { stripe_public_key } from '../../../../config'
 const promise = loadStripe(stripe_public_key)
 
 export const Payment = () => {
-  const { name, surname, email } = useSelector(
-    (state: RootState) => state.customerData || { name: '', surname: '', email: '' }
-  )
+  const customer = useSelector((state: RootState) => state.customerData)
   const mailData = useSelector((state: RootState) => state.mailData)
   const order = useSelector((state: RootState) => state.orderData)
-  const amount = useSelector((state: RootState) => state.orderData?.service?.price || 0)
+  const amount = useSelector((state: RootState) => state.orderData?.service?.price)
+
   const { paper, msgBox, cardContainer, container, form } = useStyles()
   const history = useHistory()
   const dispatch = useDispatch()
@@ -49,11 +48,12 @@ export const Payment = () => {
 
   const submit = async (func) => {
     setLoading(true)
-    const res = await func(email, name, surname)
+    const res = customer && (await func(customer.email, customer.name, customer.surname))
+
     if (res.error) {
       setToastMsg({ type: 'error', msg: res.error.message || 'something went wrong' })
       setLoading(false)
-    } else {
+    } else if (amount) {
       const data = { id: res.paymentMethod.id, amount }
       const makePay = await handlePayment(data)
 
@@ -68,8 +68,8 @@ export const Payment = () => {
           mailData && sendConfirmLetter(mailData)
         } else setToastMsg(res)
       }
-      setLoading(false)
-    }
+    } else setToastMsg({ type: 'error', msg: 'Something went wrong' })
+    setLoading(false)
   }
 
   const CheckoutFormProps = { back, submit }

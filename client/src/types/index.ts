@@ -153,7 +153,6 @@ export type AutocompleteFieldProps = {
   name: string
   keyToSelect: string
   errors: any
-  defValue?: any
 }
 
 export type InputPropsType = {

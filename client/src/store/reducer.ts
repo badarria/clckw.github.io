@@ -37,7 +37,9 @@ const rootReducer = createSlice({
   initialState: initState,
   reducers: {
     setUserAuth: (state, action) => {
-      state.user = { ...state.user, ...action.payload }
+      if (action.payload) {
+        state.user = { ...state.user, ...action.payload }
+      } else state.user = null
     },
     setChecking: (state, action) => {
       state.checking = action.payload

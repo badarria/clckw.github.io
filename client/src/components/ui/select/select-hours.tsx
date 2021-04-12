@@ -6,6 +6,7 @@ import { SelectHoursProps } from 'types'
 
 export const SelectHours = ({ control, data, name, disabled }: SelectHoursProps) => {
   const { root, input } = useStyles()
+  const defaultValue = data[0] || { id: 0, name: '' }
 
   return (
     <FormControl className={root}>
@@ -15,7 +16,7 @@ export const SelectHours = ({ control, data, name, disabled }: SelectHoursProps)
       <Controller
         control={control}
         name={name}
-        defaultValue={data[0]}
+        defaultValue={defaultValue}
         as={
           <Select id={name} disabled={disabled} inputProps={{ className: input }}>
             {data.map(({ hour, booked }, inx) => (

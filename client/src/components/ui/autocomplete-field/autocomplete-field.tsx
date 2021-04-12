@@ -6,8 +6,9 @@ import { useStyles } from './styles'
 import { AutocompleteFieldProps } from 'types'
 
 export const AutocompleteField = (props: AutocompleteFieldProps) => {
-  const { data, control, name, keyToSelect, errors = {}, defValue = data[0] } = props
+  const { data, control, name, keyToSelect, errors = {} } = props
   const { input, root, label, error } = useStyles()
+  const defaultValue = data[0] || { id: 0, [keyToSelect]: '' }
 
   return (
     <Controller
@@ -17,7 +18,7 @@ export const AutocompleteField = (props: AutocompleteFieldProps) => {
         <Autocomplete
           className={root}
           disableClearable
-          defaultValue={defValue}
+          defaultValue={defaultValue}
           filterOptions={(data) => data.filter((opt) => opt[keyToSelect])}
           getOptionLabel={(option) => option[keyToSelect]}
           options={data}

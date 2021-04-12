@@ -9,10 +9,9 @@ import { setUserAuth } from 'store/reducer'
 
 export const Header = () => {
   const user = useSelector((state: RootState) => state.user)
-  const { auth, role } = user ?? { auth: false, role: '' }
-  const isAdmin = role === 'admin' && auth
-  const isMaster = role === 'master' && auth
-  const isCustomer = role === 'customer' && auth
+  const isAdmin = user && user.role === 'admin'
+  const isMaster = user && user.role === 'master'
+  const isCustomer = user && user.role === 'customer'
 
   const { root, title, btns } = useStyles()
   const dispatch = useDispatch()

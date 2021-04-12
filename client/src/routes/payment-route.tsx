@@ -5,8 +5,8 @@ import { RootState } from '../store'
 import { Payment } from '../components/containers/home/pages'
 
 export const PaymentRoute = ({ path }: { path: string }) => {
-  const { master } = useSelector((state: RootState) => state.orderData)
+  const orderData = useSelector((state: RootState) => state.orderData)
 
-  if (master?.id) return <Payment />
+  if (orderData && orderData.master.id) return <Payment />
   return <Redirect to='/' />
 }

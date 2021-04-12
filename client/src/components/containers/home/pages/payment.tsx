@@ -13,16 +13,16 @@ import { getBeginFinish } from 'services/utils/datetime-func'
 import { TypicalResponseType } from 'types'
 import { CheckoutForm } from '../forms/payment/checkout'
 import { setInit } from 'store/reducer'
-
-const promise = loadStripe(
-  'pk_test_51IbLzbK13PqXeZaYmoyqJmBCWV0K1sWOCGrFt0mkgF1t8YBYbq1VF3ojVBRtfGHpO3XHbCYMRYdcy26K7RBLr1zj00SU4On1Su'
-)
+import { stripe_public_key } from '../../../../config'
+const promise = loadStripe(stripe_public_key)
 
 export const Payment = () => {
-  const { name, surname, email } = useSelector((state: RootState) => state.customerData)
+  const { name, surname, email } = useSelector(
+    (state: RootState) => state.customerData || { name: '', surname: '', email: '' }
+  )
   const mailData = useSelector((state: RootState) => state.mailData)
   const order = useSelector((state: RootState) => state.orderData)
-  const amount = useSelector((state: RootState) => state.orderData.service.price)
+  const amount = useSelector((state: RootState) => state.orderData?.service?.price || 0)
   const { paper, msgBox, cardContainer, container, form } = useStyles()
   const history = useHistory()
   const dispatch = useDispatch()
@@ -57,7 +57,7 @@ export const Payment = () => {
       const data = { id: res.paymentMethod.id, amount }
       const makePay = await handlePayment(data)
 
-      if (makePay.type === 'success') {
+      if (makePay.type === 'success' && order) {
         const { service, master, customer, date, time, files } = order
         const { begin, finish } = getBeginFinish(date, time, service.time)
         const orderData = { begin, finish, master: master.id, customer, files, service: service.id }
@@ -65,7 +65,7 @@ export const Payment = () => {
         const res = await addNewOrder(orderData)
         if (res.type === 'success') {
           setSuccessMsg(res.msg)
-          sendConfirmLetter(mailData)
+          mailData && sendConfirmLetter(mailData)
         } else setToastMsg(res)
       }
       setLoading(false)

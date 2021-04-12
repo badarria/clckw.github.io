@@ -9,10 +9,10 @@ import { AutocompleteField, Loader } from 'components/ui'
 import { getInit } from 'services/home/api'
 import { ControlledCheckbox } from '../../components'
 import { useCallback } from 'react'
-import { SignUpGglFormDtT, SignUpDialog2PrT } from '../../types'
+import { SignUpGoogleForm, SignUpDialog2Props } from '../../types'
 const initCity = { id: 0, name: '' }
 
-const SignUpDialog2 = ({ msg, change, submit }: SignUpDialog2PrT) => {
+const SignUpDialog2 = ({ msg, change, submit }: SignUpDialog2Props) => {
   const { title, form, content, checkMasterBox, btnWrap, btn, wrap, checkBox, inputWrap, msgBox } = useStyles()
   const [cities, setCities] = useState([initCity])
   const [loading, setLoading] = useState(false)
@@ -50,7 +50,7 @@ const SignUpDialog2 = ({ msg, change, submit }: SignUpDialog2PrT) => {
     setMaster(isMaster)
   }, [isMaster])
 
-  const submitForm = useCallback((data: SignUpGglFormDtT) => {
+  const submitForm = useCallback((data: SignUpGoogleForm) => {
     const newData = { ...data }
     if (!data.master) newData.city = initCity
 

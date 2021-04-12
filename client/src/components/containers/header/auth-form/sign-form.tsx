@@ -2,17 +2,9 @@ import React, { useCallback, useState } from 'react'
 import { useLocation, useHistory } from 'react-router-dom'
 import { useStyles } from './styles'
 import { Loader } from '../../../ui'
-import {
-  LocalSignInDtT,
-  GglSignInDtT,
-  UserStateDtT,
-  SignInResDtT,
-  GglSignUpDtT,
-  LocalSignUpDtT,
-  FbResDtT,
-} from '../types'
+import { LocalSignIn, GoogleSignIn, UserState, SignRes, GoogleSignUp, LocalSignUp } from '../types'
 import { Button } from '@material-ui/core'
-import { authGoogleUser, loginUser, regGoogleUser, regUser, signInFbUser } from 'services/home/api'
+import { authGoogleUser, loginUser, regGoogleUser, regUser } from 'services/home/api'
 import { useDispatch } from 'react-redux'
 import { setUserAuth } from 'store/reducer'
 import SignUpDialog from './sign-up/sign-up-dialog'
@@ -28,7 +20,7 @@ const SignForm = () => {
   const history = useHistory()
   const dispatch = useDispatch()
 
-  const handleSignInRes = (data: SignInResDtT) => {
+  const handleSignInRes = (data: SignRes) => {
     if ('token' in data) {
       const { token, role, id, name } = data
       localStorage.setItem('token', token)
@@ -39,7 +31,7 @@ const SignForm = () => {
     }
   }
 
-  const handleUserRole = (data: UserStateDtT) => {
+  const handleUserRole = (data: UserState) => {
     if ('role' in data) {
       setLoading(false)
       close()
@@ -55,18 +47,18 @@ const SignForm = () => {
       }, 2000)
     }
   }
-  const handler = (res: SignInResDtT) => {
+  const handler = (res: SignRes) => {
     const userState = handleSignInRes(res)
     handleUserRole(userState)
   }
 
-  const handleLocalSignIn = async (data: LocalSignInDtT) => {
+  const handleLocalSignIn = async (data: LocalSignIn) => {
     setLoading(true)
     const res = await loginUser(data)
     handler(res)
   }
 
-  const handleGglSignIn = async (data: GglSignInDtT) => {
+  const handleGoogleSignIn = async (data: GoogleSignIn) => {
     if ('tokenId' in data) {
       setLoading(true)
       const res = await authGoogleUser({ token: data.tokenId })
@@ -74,23 +66,17 @@ const SignForm = () => {
     } else setMsg('Something went wrong. Try to login with local password.')
   }
 
-  const localSignUp = async (data: LocalSignUpDtT) => {
+  const localSignUp = async (data: LocalSignUp) => {
     setLoading(true)
     const res = await regUser(data)
     handler(res)
   }
 
-  const gglSignUp = async (data: GglSignUpDtT) => {
+  const googleSignUp = async (data: GoogleSignUp) => {
     setLoading(true)
     const res = await regGoogleUser(data)
     handler(res)
   }
-
-  // const fbSignIn = async (data: FbResDtT) => {
-  //   setLoading(true)
-  //   const res = await signInFbUser(data)
-  //   handler(res)
-  // }
 
   const setSignState = (isLogin: boolean) => {
     setSignInState(isLogin)
@@ -109,9 +95,9 @@ const SignForm = () => {
     close,
     localSignIn: handleLocalSignIn,
     changeState: setSignState,
-    gglSignIn: handleGglSignIn,
+    googleSignIn: handleGoogleSignIn,
   }
-  const signUpDialogRr = { msg, open, close, localSignUp, gglSignUp, changeState: setSignState }
+  const signUpDialogProps = { msg, open, close, localSignUp, googleSignUp, changeState: setSignState }
 
   return (
     <>
@@ -119,7 +105,7 @@ const SignForm = () => {
       <Button color='inherit' className={btn} onClick={handleClickOpen}>
         Login
       </Button>
-      {isSignIn ? <SignInDialog {...signInDialogPr} /> : <SignUpDialog {...signUpDialogRr} />}
+      {isSignIn ? <SignInDialog {...signInDialogPr} /> : <SignUpDialog {...signUpDialogProps} />}
     </>
   )
 }

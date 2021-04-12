@@ -1,20 +1,34 @@
 import { createSlice } from '@reduxjs/toolkit'
+type User = { id: number; auth: boolean; role: string; name: string } | null
+type Masters = { id: number; name: string; surname: string; rating: number; fullName: string }[]
+type MailData = {
+  name: string
+  userEmail: string
+  city: string
+  begin: string
+  service: string
+  master: string
+  id: number
+} | null
+type orderData = {
+  service: { id: number; name: string; time: string; price: number }
+  date: string
+  time: string
+  customer: number
+  master: { id: number; name: string; surname: string; rating: number; fullName: string }
+  city: { id: number; name: string }
+  files: string[]
+} | null
+type customerData = { name: string; surname: string; email: string; id: number } | null
+type initState = { city: [{ id: number; name: string }]; service: [{ id: number; name: string; time: string }] } | null
 
 export const initState = {
-  orderData: {
-    service: { id: 0, name: '', time: '', price: 0 },
-    date: '',
-    time: '',
-    customer: 0,
-    master: { id: 0, name: '', surname: '', rating: 0, fullName: '' },
-    city: { id: 0, name: '' },
-    files: [''],
-  },
-  customerData: { name: '', surname: '', email: '', id: 0 },
-  mailData: { name: '', userEmail: '', city: '', begin: '', service: '', master: '', id: 0 },
-  masters: [{ id: 0, name: '', surname: '', rating: 0, fullName: '' }],
-  initState: { city: [{ id: 0, name: '' }], service: [{ id: 0, name: '', time: '' }] },
-  user: { id: 0, auth: true, role: '', name: '' },
+  orderData: null as orderData,
+  customerData: null as customerData,
+  mailData: null as MailData,
+  masters: [] as Masters,
+  initState: null as initState,
+  user: null as User,
   checking: true,
 }
 

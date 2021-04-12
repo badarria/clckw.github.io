@@ -21,7 +21,7 @@ const initOrder: UsersOrdersList = {
 const columns = ['id', 'master', 'service', 'date', 'begin', 'finish', 'rating']
 
 export const Customer = () => {
-  const { id, name } = useSelector((state: RootState) => state.user)
+  const { id, name } = useSelector((state: RootState) => state.user || { id: 0, name: '' })
   const [orders, setOrders] = useState([initOrder])
   const [loading, setLoading] = useState(false)
   const [toast, setToast] = useState<TypicalResponseType>({ type: 'success', msg: '' })

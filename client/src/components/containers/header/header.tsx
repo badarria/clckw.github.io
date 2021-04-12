@@ -9,16 +9,17 @@ import { setUserAuth } from 'store/reducer'
 
 export const Header = () => {
   const user = useSelector((state: RootState) => state.user)
-  const { auth, role } = user
+  const { auth, role } = user ?? { auth: false, role: '' }
   const isAdmin = role === 'admin' && auth
   const isMaster = role === 'master' && auth
   const isCustomer = role === 'customer' && auth
+
   const { root, title, btns } = useStyles()
   const dispatch = useDispatch()
 
   const logoutFrom = useCallback(() => {
     localStorage.removeItem('token')
-    dispatch(setUserAuth({ id: 0, auth: false, role: '', name: '' }))
+    dispatch(setUserAuth(null))
   }, [])
 
   return (

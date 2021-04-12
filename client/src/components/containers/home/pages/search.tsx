@@ -36,10 +36,17 @@ export const Search = () => {
   const [loading, setLoading] = useState(false)
   const [hours, setHours] = useState(initHours)
   const [toast, setToast] = useState<TypicalResponseType>({ type: 'success', msg: '' })
-  const { name, surname, email, id } = useSelector((state: RootState) => state.customerData)
-  const { service, date, time, city } = useSelector((state: RootState) => state.orderData)
+  const { name, surname, email, id } = useSelector(
+    (state: RootState) => state.customerData || { name: '', surname: '', email: '', id: 0 }
+  )
+  const { service, date, time, city } = useSelector(
+    (state: RootState) =>
+      state.orderData || { service: { id: 0, name: '', time: '' }, date: '', time: '', city: { id: 0, name: '' } }
+  )
   const defaultDate = dateFromIso(date)
-  const initState = useSelector((state: RootState) => state.initState)
+  const initState = useSelector(
+    (state: RootState) => state.initState || { city: [{ id: 0, name: '' }], service: [{ id: 0, name: '', time: '' }] }
+  )
   const defaultValues = {
     name,
     surname,

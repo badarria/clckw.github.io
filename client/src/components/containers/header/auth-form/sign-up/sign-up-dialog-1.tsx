@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { DialogContent, DialogTitle, Button, Box, FormGroup, InputLabel } from '@material-ui/core'
 import { useForm } from 'react-hook-form'
 import { Typography } from '@material-ui/core'
@@ -8,10 +8,10 @@ import { useStyles } from '../styles'
 import { AutocompleteField, InputField, Loader } from 'components/ui'
 import { getInit } from 'services/home/api'
 import { ControlledCheckbox } from '../../components'
-import { SignUpDialog1PrT } from '../../types'
+import { SignUpDialog1Props } from '../../types'
 const initCity = { id: 0, name: '' }
 
-const SignUpDialog1 = ({ change, msg, localSignUp, gglBtn }: SignUpDialog1PrT) => {
+const SignUpDialog1 = ({ change, msg, localSignUp, gglBtn }: SignUpDialog1Props) => {
   const {
     title,
     form,

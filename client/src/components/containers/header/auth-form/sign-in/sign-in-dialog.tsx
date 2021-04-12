@@ -5,11 +5,11 @@ import { Typography } from '@material-ui/core'
 import { loginForm } from '../../../../../services/home/validation/schema'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useStyles } from '../styles'
-import { FacebookBtn, GoogleBtn } from '../../components'
-import { SignInDialogPrT } from '../../types'
+import { GoogleBtn } from '../../components'
+import { SignInDialogProps } from '../../types'
 import { InputField } from 'components/ui'
 
-const SignInDialog = ({ close, open, msg, changeState, gglSignIn, localSignIn }: SignInDialogPrT) => {
+const SignInDialog = ({ close, open, msg, changeState, googleSignIn, localSignIn }: SignInDialogProps) => {
   const { dialog, title, form, content, btnWrap, btn } = useStyles()
 
   const { register, handleSubmit, errors } = useForm({
@@ -39,7 +39,7 @@ const SignInDialog = ({ close, open, msg, changeState, gglSignIn, localSignIn }:
             <Button type='submit' color='primary' variant='contained' className={btn}>
               Ok
             </Button>
-            <GoogleBtn cb={gglSignIn} label='Sign in with Google' />
+            <GoogleBtn cb={googleSignIn} label='Sign in with Google' />
             <Button size='small' onClick={registration} className={btn} variant='outlined'>
               register
             </Button>

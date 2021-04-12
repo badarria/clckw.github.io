@@ -4,8 +4,9 @@ import { useSelector } from 'react-redux'
 import { RootState } from 'store'
 
 export const PayForm = () => {
-  const { master, userEmail, service, begin } = useSelector((state: RootState) => state.mailData)
-  const amount = useSelector((state: RootState) => state.orderData.service.price)
+  const mailData = useSelector((state: RootState) => state.mailData)
+  const { master, userEmail, service, begin } = mailData ?? { master: '', userEmail: '', service: '', begin: '' }
+  const amount = useSelector((state: RootState) => state.orderData?.service?.price) || 0
 
   const { box, line, item, amountBox, summ } = useStyles()
 

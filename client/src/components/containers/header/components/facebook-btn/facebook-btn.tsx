@@ -2,9 +2,9 @@ import React from 'react'
 import { Button } from '@material-ui/core'
 import { useStyles } from '../../auth-form/styles'
 import FacebookAuth from 'react-facebook-auth'
-import { FacebookBtnPrT } from '../../types'
+import { FacebookBtnProps } from '../../types'
 
-const FacebookBtn = ({ cb }: FacebookBtnPrT) => {
+const FacebookBtn = ({ cb }: FacebookBtnProps) => {
   const { btnGoogle } = useStyles()
   const btn = ({ onClick }) => (
     <Button className={btnGoogle} onClick={onClick} variant='contained' color='primary'>

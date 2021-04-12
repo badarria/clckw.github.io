@@ -4,8 +4,8 @@ import { RootState } from 'store'
 import { useSelector } from 'react-redux'
 
 export const CustomerRoute = ({ path }: { path: string }) => {
-  const { auth, role } = useSelector((state: RootState) => state.user)
-  const isCustomer = auth && role === 'customer'
+  const user = useSelector((state: RootState) => state.user)
+  const isCustomer = user && user.role === 'customer'
 
   return isCustomer ? <Route path={path} exact component={Customer} /> : <Redirect to='/' />
 }

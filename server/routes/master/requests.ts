@@ -51,6 +51,7 @@ export const changeStatus = async (req: Request, res: Response, next: NextFuncti
   if (validData) {
     const { id } = validData
     const result = await Order.update({ completed: true }, { where: { id } }).catch((err) => next(err))
+
     if (result) {
       const msg = result[0] ? 'Order  was updated' : 'Order not found'
       const type = result[0] ? 'success' : 'warning'
@@ -69,10 +70,11 @@ export const downloadPdf = async (req: Request, res: Response, next: NextFunctio
   //   const customer = { ...c }
   //   const mastrer = { ...m }
   // }
-  pdf.create(pdfTemplate()).toFile('res.pdf', (err) => {
-    if (err) throw new Error('dfg')
-    return Promise.resolve()
-  })
+  pdf.create(pdfTemplate()).toStream(function (err, stream) {
+    // stream.pipe(fs.createWriteStream('./foo.pdf'));
+    stream.pipe(res)
+  });
+
 }
 
 export const ratingRequestMail = async (req: Request, res: Response, next: NextFunction) => {

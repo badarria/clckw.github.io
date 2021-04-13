@@ -222,17 +222,6 @@ export type CustomerOrdersList = {
   rating: number
   completed: boolean
 }
-export type MasterTableListProps = {
-  data: MasterOrdersList[]
-  columns: string[]
-  change: Function
-  getZip: (id: number) => Promise<string | TypicalResponseType>
-}
-export type TableButtonIconProps = {
-  id: number
-  getZip: (id: number) => Promise<string | TypicalResponseType>
-  disabled: boolean
-}
 
 export type CustomerTableListProps = {
   data: CustomerOrdersList[]

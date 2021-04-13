@@ -38,17 +38,6 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
       if (isMatch) {
         const userByRole = await getUserByRole(role, token, id).catch((err) => next(err))
         return res.json(userByRole)
-        // let userId = 0,
-        //   name = 'admin'
-        // if (role === 'master') {
-        //   const master = await Master.findOne({ include: { model: User, where: { id } } }).catch((err) => next(err))
-        //   master && (userId = master.id) && (name = master.fullName)
-        // }
-        // if (role === 'customer') {
-        //   const customer = await Customer.findOne({ include: { model: User, where: { id } } }).catch((err) => next(err))
-        //   customer && (userId = customer.id) && (name = customer.fullName)
-        // }
-        // return res.json({ id: userId, role, token, name })
       } else next(new Error('Name or password is incorrect'))
     } else next(new Error('Name or password is incorrect'))
   }
@@ -86,7 +75,6 @@ export const handleLocalReg = async (req: Request, res: Response, next: NextFunc
 
 export const stayAuth = async (req: Request, res: Response, next: NextFunction) => {
   const { token } = req.headers
-
   if (typeof token === 'string') {
     const user = await User.findOne({ where: { token } }).catch((err) => next(err))
 
@@ -143,7 +131,7 @@ export const handleGgReg = async (req: Request, res: Response, next: NextFunctio
         let password = genPass.generate({ length: 8, numbers: true })
         const bcPass = await bcrypt.hash(password, salt)
         const userToken = v4()
-
+        console.log(isMaster, 'isMaster')
         const newUser = await User.create({ email, role, salt, pass: bcPass, token: userToken }).catch((err) => {
           if (err.name === 'SequelizeUniqueConstraintError')
             next(new Error('User with this email already exist. Try to login with google'))
@@ -154,7 +142,7 @@ export const handleGgReg = async (req: Request, res: Response, next: NextFunctio
           const newMaster = await Master.create({
             name: given_name,
             surname: family_name,
-            city_id: city,
+            city_id: city.id,
             user_id: id,
           }).catch((err) => next(err))
           return newMaster && res.json({ token: userToken, role: 'master', id: newMaster.id, given_name })

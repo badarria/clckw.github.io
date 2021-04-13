@@ -71,7 +71,6 @@ const SignForm = () => {
   };
 
   const handleGoogleSignIn = async (data: GoogleSignIn) => {
-    console.log(data, 'signIn');
     if ('tokenId' in data) {
       setLoading(true);
       const res = await authGoogleUser({ token: data.tokenId });

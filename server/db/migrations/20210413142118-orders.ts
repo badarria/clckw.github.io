@@ -1,4 +1,4 @@
-import { DATE, INTEGER, QueryInterface } from 'sequelize/types'
+import { DataTypes, QueryInterface } from 'sequelize'
 
 export default {
   up: async (queryInterface: QueryInterface) => {
@@ -9,42 +9,45 @@ export default {
             allowNull: false,
             autoIncrement: true,
             primaryKey: true,
-            type: INTEGER,
+            type: DataTypes.INTEGER,
           },
-          rating: INTEGER,
+          rating: DataTypes.INTEGER,
           beginat: {
-            type: DATE,
+            type: DataTypes.DATE,
             allowNull: false,
           },
           finishat: {
-            type: DATE,
+            type: DataTypes.DATE,
             allowNull: false,
           },
           customer_id: {
-            type: INTEGER,
+            type: DataTypes.INTEGER,
+            onDelete: 'set null',
+            onUpdate: 'set null',
             references: {
               model: 'customers',
               key: 'id',
             },
           },
           master_id: {
-            type: INTEGER,
+            type: DataTypes.INTEGER,
+            onDelete: 'set null',
+            onUpdate: 'set null',
             references: {
               model: 'masters',
               key: 'id',
-              // onUpdate: 'SET NULL',
-              // onDelete: 'SET NULL',
             },
           },
           service_id: {
-            type: INTEGER,
+            type: DataTypes.INTEGER,
+            onDelete: 'set null',
+            onUpdate: 'set null',
             references: {
               model: 'services',
               key: 'id',
-              // onUpdate: 'SET NULL',
-              // onDelete: 'SET NULL',
             },
           },
+          completed: DataTypes.BOOLEAN,
         })
       })
     } catch (e) {

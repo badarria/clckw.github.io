@@ -1,5 +1,5 @@
-import { QueryInterface, INTEGER, STRING } from 'sequelize/types'
-;('use strict')
+import { QueryInterface, DataTypes } from 'sequelize'
+
 export default {
   up: async (queryInterface: QueryInterface) => {
     try {
@@ -9,18 +9,23 @@ export default {
             allowNull: false,
             autoIncrement: true,
             primaryKey: true,
-            type: INTEGER,
+            type: DataTypes.INTEGER,
             onUpdate: 'set null',
             onDelete: 'set null',
           },
           name: {
-            type: STRING,
+            type: DataTypes.STRING,
             unique: true,
             allowNull: false,
           },
           time: {
-            type: STRING,
+            type: DataTypes.STRING,
             allowNull: false,
+          },
+          price: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0
           },
         })
         await queryInterface.addIndex('services', ['name'], { transaction: t })

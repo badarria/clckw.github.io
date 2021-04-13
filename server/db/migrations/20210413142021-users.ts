@@ -1,33 +1,35 @@
-import { QueryInterface, TEXT, INTEGER, UUID } from 'sequelize/types'
+import { QueryInterface, DataTypes } from 'sequelize'
 
 export default {
   up: async (queryInterface: QueryInterface) => {
     try {
       await queryInterface.sequelize.transaction(async (t) => {
-        await queryInterface.createTable('user', {
+        await queryInterface.createTable('users', {
           id: {
-            type: INTEGER,
+            type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
+            autoIncrement: true,
             onDelete: 'cascade',
             onUpdate: 'cascade',
           },
-          salt: { type: TEXT, allowNull: false },
-          role: { type: TEXT, allowNull: false },
+          salt: { type: DataTypes.TEXT, allowNull: false },
+          role: { type: DataTypes.TEXT, allowNull: false },
           email: {
-            type: TEXT,
+            type: DataTypes.TEXT,
             allowNull: false,
             unique: true,
           },
           pass: {
-            type: TEXT,
+            type: DataTypes.TEXT,
             allowNull: false,
           },
           token: {
-            type: UUID,
+            type: DataTypes.TEXT,
             allowNull: false,
           },
         })
+        await queryInterface.addIndex('users', ['email'], { transaction: t });
       })
     } catch (e) {
       console.error(e.message)
@@ -36,7 +38,7 @@ export default {
   down: async (queryInterface: QueryInterface) => {
     try {
       await queryInterface.sequelize.transaction(async (t) => {
-        await queryInterface.dropTable('admin', { transaction: t })
+        await queryInterface.dropTable('users', { transaction: t })
       })
     } catch (e) {
       console.error(e.message)

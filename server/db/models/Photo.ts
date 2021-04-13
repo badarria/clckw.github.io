@@ -1,4 +1,4 @@
-import { BelongsTo, Column, HasMany, Model, Table } from 'sequelize-typescript'
+import { Column, HasMany, Model, Table } from 'sequelize-typescript'
 import { DataTypes } from 'sequelize'
 import { Order } from './Order'
 
@@ -6,7 +6,7 @@ import { Order } from './Order'
 export class Photo extends Model {
   @Column({ type: DataTypes.INTEGER, allowNull: false, primaryKey: true, autoIncrement: true })
   id!: string
-  @Column({ type: DataTypes.TEXT, allowNull: false })
+  @Column({ type: DataTypes.STRING, allowNull: false })
   url!: string
 
   @HasMany(() => Order, { sourceKey: 'order_id', foreignKey: 'id', onDelete: 'set null', onUpdate: 'set null' })
@@ -14,8 +14,8 @@ export class Photo extends Model {
 
   @Column({ type: DataTypes.INTEGER, allowNull: false })
   order_id!: number
-  @Column({ type: DataTypes.TEXT, allowNull: false })
+  @Column({ type: DataTypes.STRING, allowNull: false })
   public_id!: string
-  @Column({ type: DataTypes.TEXT, allowNull: false })
+  @Column({ type: DataTypes.STRING, allowNull: false })
   resource_type!: string
 }

@@ -1,4 +1,4 @@
-import { BelongsTo, Column, HasMany, Model, Scopes, Table } from 'sequelize-typescript'
+import { BelongsTo, Column, Model, Scopes, Table } from 'sequelize-typescript'
 import { DataTypes } from 'sequelize'
 import { Customer, City, Master, Service, Photo } from '.'
 import { toDate, toTime } from '../../utils/datetimefunc'

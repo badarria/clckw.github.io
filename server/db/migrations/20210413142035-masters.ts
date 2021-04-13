@@ -1,35 +1,41 @@
-import { INTEGER, STRING, QueryInterface } from 'sequelize/types'
+import { DataTypes, QueryInterface, } from 'sequelize'
 
-const customer = {
+export default {
   up: async (queryInterface: QueryInterface) => {
     try {
       await queryInterface.sequelize.transaction(async (t) => {
-        await queryInterface.createTable('customers', {
+        await queryInterface.createTable('masters', {
           id: {
             allowNull: false,
             autoIncrement: true,
             primaryKey: true,
-            type: INTEGER,
+            type: DataTypes.INTEGER,
             onUpdate: 'set null',
             onDelete: 'set null',
           },
           name: {
-            type: STRING,
+            type: DataTypes.STRING,
             allowNull: false,
           },
           surname: {
-            type: STRING,
+            type: DataTypes.STRING,
             allowNull: false,
           },
+          city_id: {
+            type: DataTypes.INTEGER,
+            references: {
+              model: 'cities',
+              key: 'id',
+            },
+          },
           user_id: {
-            type: INTEGER,
+            type: DataTypes.INTEGER,
             references: {
               model: 'user',
               key: 'id',
             },
           },
         })
-        await queryInterface.addIndex('customers', ['email'], { transaction: t })
       })
     } catch (e) {
       console.error(e.message)
@@ -38,12 +44,10 @@ const customer = {
   down: async (queryInterface: QueryInterface) => {
     try {
       await queryInterface.sequelize.transaction(async (t) => {
-        await queryInterface.dropTable('customers', { transaction: t })
+        await queryInterface.dropTable('masters', { transaction: t })
       })
     } catch (e) {
       console.error(e.message)
     }
   },
 }
-
-export { customer }

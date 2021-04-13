@@ -1,25 +1,22 @@
-import { QueryInterface, INTEGER, STRING } from 'sequelize/types'
+import { QueryInterface, DataTypes } from 'sequelize'
 
-const cities = {
+export default {
   up: async (queryInterface: QueryInterface) => {
     try {
       await queryInterface.sequelize.transaction(async (t) => {
-        await queryInterface.createTable('cities', {
+        await queryInterface.createTable('test', {
           id: {
             allowNull: false,
             autoIncrement: true,
             primaryKey: true,
-            type: INTEGER,
-            onUpdate: 'set null',
-            onDelete: 'set null',
+            type: DataTypes.INTEGER,
           },
           name: {
-            type: STRING,
+            type: DataTypes.STRING,
             unique: true,
             allowNull: false,
           },
         })
-        await queryInterface.addIndex('cities', ['name'], { transaction: t })
       })
     } catch (e) {
       console.error(e.message)
@@ -28,12 +25,10 @@ const cities = {
   down: async (queryInterface: QueryInterface) => {
     try {
       await queryInterface.sequelize.transaction(async (t) => {
-        await queryInterface.dropTable('cities', { transaction: t })
+        await queryInterface.dropTable('test', { transaction: t })
       })
     } catch (e) {
       console.error(e.message)
     }
   },
 }
-
-export { cities }

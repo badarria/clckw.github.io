@@ -1,34 +1,37 @@
 import { createSlice } from '@reduxjs/toolkit'
-type User = { id: number; auth: boolean; role: string; name: string } | null
-type Masters = { id: number; name: string; surname: string; rating: number; fullName: string }[]
-type MailData = {
-  name: string
-  userEmail: string
-  city: string
-  begin: string
-  service: string
-  master: string
-  id: number
-} | null
-type OrderData = {
-  service: { id: number; name: string; time: string; price: number }
-  date: string
-  time: string
-  customer: number
-  master: { id: number; name: string; surname: string; rating: number; fullName: string }
-  city: { id: number; name: string }
-  files: string[]
-} | null
-type CustomerData = { name: string; surname: string; email: string; id: number } | null
-type InitState = { city: [{ id: number; name: string }]; service: [{ id: number; name: string; time: string }] } | null
+type InitState = {
+  user: { id: number; auth: boolean; role: string; name: string } | null,
+  masters: { id: number; name: string; surname: string; rating: number; fullName: string }[],
+  mailData: {
+    name: string
+    userEmail: string
+    city: string
+    begin: string
+    service: string
+    master: string
+    id: number
+  } | null,
+  orderData: {
+    service: { id: number; name: string; time: string; price: number }
+    date: string
+    time: string
+    customer: number
+    master: { id: number; name: string; surname: string; rating: number; fullName: string }
+    city: { id: number; name: string }
+    files: string[]
+  } | null,
+  customerData: { name: string; surname: string; email: string; id: number } | null,
+  initState: { city: [{ id: number; name: string }]; service: [{ id: number; name: string; time: string }] } | null,
+  checking: boolean
+}
 
-export const initState = {
-  orderData: null as OrderData,
-  customerData: null as CustomerData,
-  mailData: null as MailData,
-  masters: [] as Masters,
-  initState: null as InitState,
-  user: null as User,
+export const initState: InitState = {
+  orderData: null,
+  customerData: null,
+  mailData: null,
+  masters: [],
+  initState: null,
+  user: null,
   checking: true,
 }
 

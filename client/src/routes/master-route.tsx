@@ -4,8 +4,8 @@ import { RootState } from 'store'
 import { useSelector } from 'react-redux'
 
 export const MasterRoute = ({ path }: { path: string }) => {
-  const { auth, role } = useSelector((state: RootState) => state.user)
-  const isMaster = auth && role === 'master'
+  const user = useSelector((state: RootState) => state.user)
+  const isMaster = user && user.role === 'master'
 
   return isMaster ? <Master /> : <Redirect to='/' />
 }

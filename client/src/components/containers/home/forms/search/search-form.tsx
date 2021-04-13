@@ -6,6 +6,7 @@ import { SelectHours } from 'components/ui/select/select-hours'
 import { Control, RegisterOptions } from 'react-hook-form'
 
 type SearchFormProps = { control: Control; register: RegisterOptions; errors: any; initState: any; hours: any }
+
 export const SearchForm = ({ control, register, errors, initState, hours }: SearchFormProps) => {
   const { btn, wrapInput } = useStyles()
 
@@ -23,7 +24,7 @@ export const SearchForm = ({ control, register, errors, initState, hours }: Sear
           key='city'
           control={control}
           name='city'
-          data={initState.city}
+          data={initState?.city || []}
           keyToSelect='name'
           errors={errors}
         />
@@ -31,7 +32,7 @@ export const SearchForm = ({ control, register, errors, initState, hours }: Sear
           key='service'
           control={control}
           name='service'
-          data={initState.service}
+          data={initState?.service || []}
           keyToSelect='name'
           errors={errors}
         />

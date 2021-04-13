@@ -1,20 +1,37 @@
 import { createSlice } from '@reduxjs/toolkit'
-
-export const initState = {
+type InitState = {
+  user: { id: number; auth: boolean; role: string; name: string } | null,
+  masters: { id: number; name: string; surname: string; rating: number; fullName: string }[],
+  mailData: {
+    name: string
+    userEmail: string
+    city: string
+    begin: string
+    service: string
+    master: string
+    id: number
+  } | null,
   orderData: {
-    service: { id: 0, name: '', time: '', price: 0 },
-    date: '',
-    time: '',
-    customer: 0,
-    master: { id: 0, name: '', surname: '', rating: 0, fullName: '' },
-    city: { id: 0, name: '' },
-    files: [''],
-  },
-  customerData: { name: '', surname: '', email: '', id: 0 },
-  mailData: { name: '', userEmail: '', city: '', begin: '', service: '', master: '', id: 0 },
-  masters: [{ id: 0, name: '', surname: '', rating: 0, fullName: '' }],
-  initState: { city: [{ id: 0, name: '' }], service: [{ id: 0, name: '', time: '' }] },
-  user: { id: 0, auth: true, role: '', name: '' },
+    service: { id: number; name: string; time: string; price: number }
+    date: string
+    time: string
+    customer: number
+    master: { id: number; name: string; surname: string; rating: number; fullName: string }
+    city: { id: number; name: string }
+    files: string[]
+  } | null,
+  customerData: { name: string; surname: string; email: string; id: number } | null,
+  initState: { city: [{ id: number; name: string }]; service: [{ id: number; name: string; time: string }] } | null,
+  checking: boolean
+}
+
+export const initState: InitState = {
+  orderData: null,
+  customerData: null,
+  mailData: null,
+  masters: [],
+  initState: null,
+  user: null,
   checking: true,
 }
 
@@ -23,7 +40,9 @@ const rootReducer = createSlice({
   initialState: initState,
   reducers: {
     setUserAuth: (state, action) => {
-      state.user = { ...state.user, ...action.payload }
+      if (action.payload) {
+        state.user = { ...state.user, ...action.payload }
+      } else state.user = null
     },
     setChecking: (state, action) => {
       state.checking = action.payload

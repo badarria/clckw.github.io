@@ -9,7 +9,7 @@ const update = async (req: Request, res: Response, next: NextFunction) => {
   const validData = await orderSchema.validate(req.body).catch((err) => next(err))
   if (validData) {
     const { master, customer, service, begin, finish, id } = validData
-    console.log(begin, finish)
+
     const result = await Order.update(
       { master_id: master, customer_id: customer, service_id: service, beginat: begin, finishat: finish },
       { where: { id } }

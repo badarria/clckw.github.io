@@ -10,24 +10,23 @@ import { useHistory } from 'react-router-dom'
 import { Loader, Toast } from '../components'
 import { addNewOrder, handlePayment, sendConfirmLetter } from 'services/home/api'
 import { getBeginFinish } from 'services/utils/datetime-func'
-import { TypicalResponse } from 'types'
+import { TypicalResponseType } from 'types'
 import { CheckoutForm } from '../forms/payment/checkout'
-import { initState, setInit } from 'store/reducer'
-
-const promise = loadStripe(
-  'pk_test_51IbLzbK13PqXeZaYmoyqJmBCWV0K1sWOCGrFt0mkgF1t8YBYbq1VF3ojVBRtfGHpO3XHbCYMRYdcy26K7RBLr1zj00SU4On1Su'
-)
+import { setInit } from 'store/reducer'
+import { stripe_public_key } from '../../../../config'
+const promise = loadStripe(stripe_public_key)
 
 export const Payment = () => {
-  const { name, surname, email } = useSelector((state: RootState) => state.customerData)
+  const customer = useSelector((state: RootState) => state.customerData)
   const mailData = useSelector((state: RootState) => state.mailData)
   const order = useSelector((state: RootState) => state.orderData)
-  const amount = useSelector((state: RootState) => state.orderData.service.price)
+  const amount = useSelector((state: RootState) => state.orderData?.service?.price)
+
   const { paper, msgBox, cardContainer, container, form } = useStyles()
   const history = useHistory()
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
-  const [toast, setToast] = useState<TypicalResponse>({ type: 'success', msg: '' })
+  const [toast, setToast] = useState<TypicalResponseType>({ type: 'success', msg: '' })
   const [successMsg, setSuccessMsg] = useState('')
 
   const back = useCallback(() => {
@@ -40,7 +39,7 @@ export const Payment = () => {
     dispatch(setInit())
   }, [])
 
-  const setToastMsg = (toast: TypicalResponse) => {
+  const setToastMsg = (toast: TypicalResponseType) => {
     setToast(toast)
     setTimeout(() => {
       setToast({ type: toast.type, msg: '' })
@@ -49,14 +48,16 @@ export const Payment = () => {
 
   const submit = async (func) => {
     setLoading(true)
-    const res = await func(email, name, surname)
+    const res = customer && (await func(customer.email, customer.name, customer.surname))
+
     if (res.error) {
-      setToastMsg({ type: 'error', msg: res.paymentMethod.message || 'something went wrong' })
+      setToastMsg({ type: 'error', msg: res.error.message || 'something went wrong' })
       setLoading(false)
-    } else {
+    } else if (amount) {
       const data = { id: res.paymentMethod.id, amount }
       const makePay = await handlePayment(data)
-      if (makePay.type === 'success') {
+
+      if (makePay.type === 'success' && order) {
         const { service, master, customer, date, time, files } = order
         const { begin, finish } = getBeginFinish(date, time, service.time)
         const orderData = { begin, finish, master: master.id, customer, files, service: service.id }
@@ -64,11 +65,11 @@ export const Payment = () => {
         const res = await addNewOrder(orderData)
         if (res.type === 'success') {
           setSuccessMsg(res.msg)
-          sendConfirmLetter(mailData)
+          mailData && sendConfirmLetter(mailData)
         } else setToastMsg(res)
       }
-      setLoading(false)
-    }
+    } else setToastMsg({ type: 'error', msg: 'Something went wrong' })
+    setLoading(false)
   }
 
   const CheckoutFormProps = { back, submit }

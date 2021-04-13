@@ -1,26 +1,25 @@
 import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { Container, AppBar, Toolbar, Button, Box } from '@material-ui/core'
-import { LoginForm } from './login-form'
+import SignForm from './auth-form/sign-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useStyles } from './styles'
-import { login, logout, registration } from '../../../services/home'
-import { HeaderProps, LoginData, RegistrMasterData } from 'types'
 import { RootState } from 'store'
+import { setUserAuth } from 'store/reducer'
 
 export const Header = () => {
   const user = useSelector((state: RootState) => state.user)
-  const { auth, role } = user
-  const isAdmin = role === 'admin' && auth
-  const isMaster = role === 'master' && auth
-  const isCustomer = role === 'customer' && auth
+  const isAdmin = user && user.role === 'admin'
+  const isMaster = user && user.role === 'master'
+  const isCustomer = user && user.role === 'customer'
+
   const { root, title, btns } = useStyles()
   const dispatch = useDispatch()
-  const newMaster = useCallback((data: RegistrMasterData) => registration(data, dispatch), [])
-  const logoutFrom = useCallback(() => logout(dispatch), [])
-  const loginTo = useCallback((data: LoginData) => login(data, dispatch), [])
 
-  const loginFormProps = { login: loginTo, registration: newMaster }
+  const logoutFrom = useCallback(() => {
+    localStorage.removeItem('token')
+    dispatch(setUserAuth(null))
+  }, [])
 
   return (
     <AppBar position='static'>
@@ -50,8 +49,15 @@ export const Header = () => {
                 Logout
               </Button>
             ) : (
-              <LoginForm {...loginFormProps} />
+              <SignForm />
             )}
+            {/* <FacebookLogin
+              appId='495294944977053'
+              autoLoad={true}
+              fields='name,email,picture'
+              onClick={Button}
+              callback={responseFacebook}
+            /> */}
           </Box>
         </Toolbar>
       </Container>

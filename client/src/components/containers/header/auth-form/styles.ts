@@ -28,7 +28,6 @@ export const useStyles = makeStyles({
   btnWrap: {
     display: 'flex',
     flexDirection: 'column',
-    margin: '16px 0px 0px',
   },
   wrap: {
     display: 'flex',
@@ -42,5 +41,18 @@ export const useStyles = makeStyles({
     '&.PrivateSwitchBase-root-59': {
       padding: '0px 0px 0px 0px',
     },
+  },
+  inputGrow: { flexGrow: 1 },
+  btnGoogle: {
+    margin: '8px 16px 0',
+  },
+  checkMasterBox: {
+    margin: '8px 0 0',
+  },
+  msgBox: {
+    display: 'flex',
+    alignItems: 'center',
+    height: '24px',
+    margin: '16px 16px 0',
   },
 })

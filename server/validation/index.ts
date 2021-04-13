@@ -1,3 +1,4 @@
+import { YouTube } from '@material-ui/icons'
 import * as yup from 'yup'
 import { checkThisDayTime, compareTime } from '../utils/datetimefunc'
 
@@ -124,7 +125,34 @@ const paymentsDataSchema = yup.object().shape({
   amount: yup.number().required(),
 })
 
+const googleTokenSchema = yup.object().shape({
+  token: yup.string().required(),
+})
+
+const ggRegDataSchema = yup.object().shape({
+  token: yup.string().required(),
+  isMaster: yup.boolean().required(),
+  city: yup.object().shape({
+    id: num,
+    name: yup.string(),
+  }),
+})
+
+const localDataSchema = yup.object().shape({
+  city: yup.object().shape({
+    id: yup.number(),
+    name: yup.string(),
+  }),
+  name,
+  surname: name,
+  email: yup.string().email().required(),
+  password: yup.string().required(),
+  master: yup.boolean().required(),
+})
+
 export {
+  localDataSchema,
+  ggRegDataSchema as googleRegDataSchema,
   makePaySchema,
   orderRatingSchema,
   orderIdSchema,
@@ -142,5 +170,6 @@ export {
   firstMailSchema,
   secondMailSchema,
   usersOrderSchema,
-  paymentsDataSchema
+  paymentsDataSchema,
+  googleTokenSchema,
 }

@@ -1,4 +1,4 @@
-import { TypicalResponse } from 'types'
+import { TypicalResponseType } from 'types'
 
 const ratingPath = '/rating'
 
@@ -6,7 +6,7 @@ const wrapTryCatch = async <T>(tryFunc: T) => {
   try {
     return await tryFunc
   } catch {
-    return { type: 'error', msg: 'Something went wrong' } as TypicalResponse
+    return { type: 'error', msg: 'Something went wrong' } as TypicalResponseType
   }
 }
 

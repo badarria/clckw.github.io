@@ -32,7 +32,7 @@ export const loginForm = yup.object().shape({
   password: yup.string().min(5, 'Min 5 symbols').required(),
 })
 
-export const registrationForm = yup.object().shape({
+export const reg1FormSchema = yup.object().shape({
   name: name,
   surname: name,
   email: yup.string().email().required(),
@@ -41,5 +41,15 @@ export const registrationForm = yup.object().shape({
     const pass = context.parent.password
     return value === pass
   }),
-  city: yup.object().shape({ name: yup.string().required(), id: yup.number().required() }),
+  city: yup.object().shape({ name: yup.string(), id: yup.number() }),
+  master: yup.boolean().required(),
+})
+
+export const reg2FormSchema = yup.object().shape({
+  agree: yup.boolean().required(),
+  master: yup.boolean().required(),
+  city: yup.object().shape({
+    id: yup.number(),
+    name: yup.string(),
+  }),
 })

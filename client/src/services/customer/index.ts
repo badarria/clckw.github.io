@@ -1,4 +1,4 @@
-import { DataForRatingRequest, getUsersOrderData, UsersOrder, TypicalResponse } from '../../types'
+import { DataForRatingRequest, getUsersOrderData, UsersOrder, TypicalResponseType } from '../../types'
 
 const getToken = () => localStorage.getItem('token') || ''
 const customerPath = 'customer'
@@ -7,7 +7,7 @@ const wrapTryCatch = async <T>(tryFunc: T) => {
   try {
     return await tryFunc
   } catch {
-    return { type: 'error', msg: 'Something went wrong' } as TypicalResponse
+    return { type: 'error', msg: 'Something went wrong' } as TypicalResponseType
   }
 }
 
@@ -18,7 +18,7 @@ const get = async (data: getUsersOrderData): Promise<UsersOrder[]> => {
   return res.json()
 }
 
-const rating = async (data: { id: number; rating: number }): Promise<TypicalResponse> => {
+const rating = async (data: { id: number; rating: number }): Promise<TypicalResponseType> => {
   const token = getToken()
 
   const res = await fetch(`${customerPath}/rating`, {

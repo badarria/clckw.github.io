@@ -1,9 +1,9 @@
 import { TextField } from '@material-ui/core'
 import React from 'react'
-import { InputFieldProps } from 'types'
+import { InputPropsType } from 'types'
 import { useStyles } from './styles'
 
-export const InputField = ({ label, register, errors, name = label, type = 'text' }: InputFieldProps) => {
+export const InputField = ({ label, register, errors, name = label, type = 'text' }: InputPropsType) => {
   const { fields, inputLabel, idInput, input, helperText } = useStyles()
 
   return (

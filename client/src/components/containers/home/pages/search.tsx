@@ -3,7 +3,7 @@ import { Paper, Box, Typography, Container } from '@material-ui/core'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useStyles } from './styles'
-import { TypicalResponse, SubmitData } from 'types'
+import { TypicalResponseType, SubmitData } from 'types'
 import { Loader, Toast } from '../components'
 import { getCustomer, getFreeMasters, getInit } from 'services/home/api'
 import { SearchForm } from '../forms/search/search-form'
@@ -35,19 +35,19 @@ export const Search = () => {
   const history = useHistory()
   const [loading, setLoading] = useState(false)
   const [hours, setHours] = useState(initHours)
-  const [toast, setToast] = useState<TypicalResponse>({ type: 'success', msg: '' })
-  const { name, surname, email, id } = useSelector((state: RootState) => state.customerData)
-  const { service, date, time, city } = useSelector((state: RootState) => state.orderData)
-  const defaultDate = dateFromIso(date)
+  const [toast, setToast] = useState<TypicalResponseType>({ type: 'success', msg: '' })
+  const customer = useSelector((state: RootState) => state.customerData)
+  const order = useSelector((state: RootState) => state.orderData)
+  const defaultDate = dateFromIso(order?.date || '')
   const initState = useSelector((state: RootState) => state.initState)
   const defaultValues = {
-    name,
-    surname,
-    email,
-    city,
-    service,
+    name: customer?.name || '',
+    surname: customer?.surname || '',
+    email: customer?.email || '',
+    city: order?.city || [],
+    service: order?.service || [],
     date: defaultDate,
-    hours: time || findDefaultHour(),
+    hours: order?.time || findDefaultHour(),
     files: [],
   }
 
@@ -66,7 +66,7 @@ export const Search = () => {
     return res
   }
 
-  const setToastMsg = (toast: TypicalResponse) => {
+  const setToastMsg = (toast: TypicalResponseType) => {
     setToast(toast)
     setTimeout(() => {
       setToast({ type: toast.type, msg: '' })
@@ -74,19 +74,20 @@ export const Search = () => {
   }
 
   useEffect(() => {
-    const isInitted = !!initState.city[0].id
     const getData = async () => {
       const keys = await setLoader(getInit())
       if ('city' in keys) {
         dispatch(setInitState(keys))
       }
     }
-    !isInitted && !loading && getData()
+    !initState && !loading && getData()
   }, [])
 
   useEffect(() => {
-    const newHours = pastTime(getHoursArray(serviceValue.time), dateValue)
-    setHours(newHours)
+    if ('time' in serviceValue) {
+      const newHours = pastTime(getHoursArray(serviceValue.time), dateValue)
+      setHours(newHours)
+    }
   }, [serviceValue, dateValue])
 
   const findFreeMasters = async (data: SubmitData) => {
@@ -98,7 +99,7 @@ export const Search = () => {
     if (Array.isArray(masters) && masters.length) {
       dispatch(setMasters(masters))
       const normDate = dateToRequest(date)
-      const orderData = { service, date: normDate, time: hours, customer: id || 0, files, city }
+      const orderData = { service, date: normDate, time: hours, files, city, customer: customer?.id || 0 }
       const mailData = {
         name,
         userEmail: email,
@@ -108,7 +109,7 @@ export const Search = () => {
         service: service.name,
       }
 
-      if (!id) {
+      if (!customer?.id) {
         const data = await getCustomer({ email, name, surname })
 
         if ('id' in data) {

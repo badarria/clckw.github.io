@@ -38,15 +38,7 @@ export const ServicesForm = ({ data: { id = 0, name, time, price }, cancel, acce
       {labels.map((label, inx) => (
         <InputField label={label} errors={errors} key={inx} register={register} />
       ))}
-      <AutocompleteField
-        key='time'
-        control={control}
-        name='time'
-        data={timeArr}
-        keyToSelect='name'
-        errors={errors}
-        defValue={initTime}
-      />
+      <AutocompleteField key='time' control={control} name='time' data={timeArr} keyToSelect='name' errors={errors} />
       <InputField label='Price, usd' name='price' errors={errors} register={register} />
     </TableForm>
   )

@@ -7,6 +7,6 @@ index.get('/:id/:limit/:offset/:order/:orderby', checkMasterToken, getOrders)
 index.put('/status', checkMasterToken, changeStatus)
 index.post('/sendMail', checkMasterToken, ratingRequestMail, sendMail())
 index.get('/getPhotos/:id', checkMasterToken, getPhotos)
-index.get('/downloadPdf', downloadPdf)
+index.get('/downloadPdf/:id', downloadPdf)
 
 export { index }

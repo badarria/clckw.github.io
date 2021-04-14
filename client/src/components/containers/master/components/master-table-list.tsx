@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { TableCell, TableRow } from '@material-ui/core';
 import { TypicalResponseType, MasterOrdersList } from '../../../../types';
 import { ButtonDialog, PdfBtn, ZipBtn } from '.';
@@ -8,7 +8,7 @@ type Props = {
   columns: string[];
   change: Function;
   getZip: (id: number) => Promise<string | TypicalResponseType>;
-  getPdf: Function;
+  getPdf: (id: number) => void;
 };
 
 export const MasterTableList = (props: Props) => {

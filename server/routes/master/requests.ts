@@ -5,7 +5,7 @@ import { createMail, jwtGenerator, cloudinary } from '../../utils'
 import { config } from '../../../config'
 import pdf from 'html-pdf'
 import pdfTemplate from './pdfTemplate'
-import fs from 'fs'
+import { ReadStream } from 'node:fs'
 
 const url = config.mailing.baseUrl
 
@@ -60,21 +60,29 @@ export const changeStatus = async (req: Request, res: Response, next: NextFuncti
   }
 }
 
-export const downloadPdf = async (req: Request, res: Response, next: NextFunction) => {
-  // const { id } = req.params
-  // const details = await Order.scope('allIncl')
-  //   .findOne({ where: { id }, include: [] })
-  //   .catch((err) => next(err))
-  // if (details) {
-  //   const { service, master, date, price, m, c } = details
-  //   const customer = { ...c }
-  //   const mastrer = { ...m }
-  // }
-  pdf.create(pdfTemplate()).toStream(function (err, stream) {
-    // stream.pipe(fs.createWriteStream('./foo.pdf'));
-    stream.pipe(res)
-  });
+const formingDataForPdf = async (id: string) => {
+  const details = await Order.scope('allIncl')
+    .findOne({ where: { id }, include: [] })
+  if (!details) return new Error('Order wasn\'t found')
+  else {
+    const strDetails = JSON.parse(JSON.stringify(details))
+    const { service, master, customer, date, begin, price, m, c } = strDetails
 
+    return ({ service, master, orderId: id, customer, begin: `${date} ${begin}`, price, customerEmail: c?.user?.email, masterEmail: m?.user?.email })
+  }
+}
+
+export const downloadPdf = async (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.params
+  const dataForPdf = await formingDataForPdf(id)
+  if (dataForPdf instanceof Error) next(dataForPdf)
+  else {
+    pdf.create(pdfTemplate(dataForPdf)).toStream(function (err, stream) {
+      if (err) next(err)
+      res.setHeader('Content-type', 'application/pdf')
+      !err && stream.pipe(res)
+    });
+  }
 }
 
 export const ratingRequestMail = async (req: Request, res: Response, next: NextFunction) => {
@@ -97,8 +105,22 @@ export const ratingRequestMail = async (req: Request, res: Response, next: NextF
       },
     }
     const subj = 'We need your feedback!'
-    req.body = createMail(mail, userEmail, subj)
-    next()
+    const dataForPdf = await formingDataForPdf(id)
+    if (dataForPdf instanceof Error) next(dataForPdf)
+    else {
+      const createMailWithPdf = () => new Promise((resolve, reject) => pdf.create(pdfTemplate(dataForPdf)).toStream((err: Error, stream: ReadStream) => {
+        if (err) return reject(err)
+        const attach = [{
+          filename: 'receipt.pdf',
+          type: "application/pdf",
+          content: stream,
+        }]
+        return resolve(createMail(mail, userEmail, subj, attach))
+      }))
+      req.body = await createMailWithPdf().catch(err => next(err))
+
+      next()
+    }
   }
 }
 
@@ -113,9 +135,6 @@ export const getPhotos = async (req: Request, res: Response, next: NextFunction)
     })
 
     const sources = cloudinary.v2.utils.download_zip_url({ public_ids })
-
     return res.json(sources)
   }
 }
-
-// SELECT "Order"."id" FROM "orders" AS "Order" LEFT OUTER JOIN "customers" AS "c" ON "Order"."customer_id" = "c"."id" LEFT OUTER JOIN "users" AS "c->user" ON "c"."user_id" = "c->user"."id" INNER JOIN "masters" AS "m" ON "Order"."master_id" = "m"."id" AND "m"."id" = '2' LEFT OUTER JOIN "services" AS "s" ON "Order"."service_id" = "s"."id" LEFT OUTER JOIN "photos" AS "photos" ON "Order"."id" = "photos"."order_id" ORDER BY "c"."name" ASC LIMIT 10 OFFSET 0;

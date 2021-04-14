@@ -67,7 +67,7 @@ export class Order extends Model {
   @Column({ type: DataTypes.VIRTUAL })
   get price(): string {
     const raw = this.getDataValue('s')
-    return raw.price
+    return raw?.price
   }
 
   @Column({ type: DataTypes.VIRTUAL })

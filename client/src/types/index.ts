@@ -138,7 +138,7 @@ export type OrderToReq = {
   begin: string
   finish: string
 }
-export type DataForRatingRequest = { userEmail: string; name: string; id: number }
+export type ChangeStatus = { userEmail: string; name: string; id: number }
 export type DataForNewOrder = {
   service: number
   begin: string

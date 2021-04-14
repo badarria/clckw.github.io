@@ -1,4 +1,4 @@
-import { DataForRatingRequest, getUsersOrderData, UsersOrder, TypicalResponseType } from '../../types'
+import { ChangeStatus, getUsersOrderData, UsersOrder, TypicalResponseType } from '../../types'
 
 const getToken = () => localStorage.getItem('token') || ''
 const masterPath = 'master'
@@ -29,7 +29,7 @@ const done = async (id: number): Promise<TypicalResponseType> => {
   return res.json()
 }
 
-const send = async (data: DataForRatingRequest): Promise<TypicalResponseType> => {
+const send = async (data: ChangeStatus): Promise<TypicalResponseType> => {
   const token = getToken()
   const res = await fetch(`${masterPath}/sendMail`, {
     method: 'POST',
@@ -45,14 +45,14 @@ const getPhoto = async (id: number): Promise<string> => {
   return res.json()
 }
 
-const getPdf = async (): Promise<any> => {
+const getPdf = async (id: number): Promise<Blob> => {
   const token = getToken()
-  const res = await fetch(`${masterPath}/downloadPdf`, { headers: { token } })
-  return res.json()
+  const res = await fetch(`${masterPath}/downloadPdf/${id}`, { headers: { responseType: 'blob', token } })
+  return res.blob()
 }
 
 export const getOrdersPhoto = async (id: number) => await wrapTryCatch(getPhoto(id))
 export const setDone = async (id: number) => await wrapTryCatch(done(id))
 export const getList = async (data: getUsersOrderData) => await wrapTryCatch(get(data))
-export const sendRatingMail = async (data: DataForRatingRequest) => await wrapTryCatch(send(data))
-export const getOrdersReceipt = async () => await wrapTryCatch(getPdf())
+export const sendRatingMail = async (data: ChangeStatus) => await wrapTryCatch(send(data))
+export const getOrdersReceipt = async (id: number) => await wrapTryCatch(getPdf(id))

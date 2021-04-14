@@ -8,9 +8,9 @@ import {
   TableFooter,
 } from '@material-ui/core';
 import { Loader, Toast } from 'components/ui';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
-  DataForRatingRequest,
+  ChangeStatus,
   MasterOrdersList,
   Paging,
   TypicalResponseType,
@@ -40,19 +40,6 @@ const columns = [
   'photos',
   'receipt',
 ];
-// const initOrder: MasterOrdersList = {
-//   id: 0,
-//   customer: '',
-//   userEmail: '',
-//   service: '',
-//   price: 0,
-//   completed: false,
-//   begin: '',
-//   date: '',
-//   finish: '',
-//   rating: 0,
-//   photos: [{ id: 0, url: '', order_id: 0, public_id: '', resource_type: '' }],
-// };
 
 export const Master = () => {
   const { id, name } = useSelector((state: RootState) => state.user);
@@ -142,7 +129,7 @@ export const Master = () => {
     getOrdersList();
   }, [paging]);
 
-  const changeStatus = async (data: DataForRatingRequest) => {
+  const changeStatus = async (data: ChangeStatus) => {
     const result = await setLoader(setDone(data.id));
     setToastMsg(result);
     if (result.type !== 'error') {
@@ -151,6 +138,17 @@ export const Master = () => {
       console.log(ratingRequest);
     }
   };
+
+  const getPdf = useCallback(async (id: number) => {
+    const pdf = await setLoader(getOrdersReceipt(id));
+    if (pdf instanceof Blob) {
+      const url = URL.createObjectURL(pdf);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'receipt.pdf';
+      a.click();
+    } else setToastMsg(pdf);
+  }, []);
 
   const headerProps = { columns, order, orderby, setChange };
   const paginatorProps = {
@@ -163,7 +161,7 @@ export const Master = () => {
     columns,
     change: changeStatus,
     getZip: getOrdersPhoto,
-    getPdf: getOrdersReceipt,
+    getPdf,
   };
 
   return (

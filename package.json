@@ -49,8 +49,6 @@
     "luxon": "^1.25.0",
     "mailgen": "^2.0.14",
     "nodemailer": "^6.4.17",
-    "passport": "^0.4.1",
-    "passport-facebook": "^3.0.0",
     "pg": "^8.5.1",
     "pg-hstore": "^2.3.3",
     "reflect-metadata": "^0.1.13",

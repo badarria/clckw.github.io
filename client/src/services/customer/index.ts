@@ -1,4 +1,4 @@
-import { DataForRatingRequest, getUsersOrderData, UsersOrder, TypicalResponseType } from '../../types'
+import { ChangeStatus, getUsersOrderData, UsersOrder, TypicalResponseType } from '../../types'
 
 const getToken = () => localStorage.getItem('token') || ''
 const customerPath = 'customer'

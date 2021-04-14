@@ -1,6 +1,6 @@
 import { BelongsTo, Column, Model, Scopes, Table } from 'sequelize-typescript'
 import { DataTypes } from 'sequelize'
-import { Customer, City, Master, Service, Photo } from '.'
+import { Customer, City, Master, Service, Photo, User, } from '.'
 import { toDate, toTime } from '../../utils/datetimefunc'
 
 @Scopes(() => ({
@@ -9,9 +9,9 @@ import { toDate, toTime } from '../../utils/datetimefunc'
       {
         model: Master,
         attributes: ['id', 'name', 'surname', 'fullName'],
-        include: [{ model: City, as: 'ci', attributes: [['name', 'city']] }],
+        include: [{ model: City, as: 'ci', attributes: [['name', 'city']] }, { model: User, as: 'user' }],
       },
-      { model: Customer, attributes: ['id', 'name', 'surname', 'fullName'] },
+      { model: Customer, attributes: ['id', 'name', 'surname', 'fullName'], include: [{ model: User, as: 'user' }] },
       { model: Service, attributes: ['id', ['name', 'service'], ['time', 'service_time'], 'price'] },
     ],
   },
@@ -64,7 +64,7 @@ export class Order extends Model {
   @Column({ type: DataTypes.VIRTUAL })
   get price(): string {
     const raw = this.getDataValue('s')
-    return raw.price
+    return raw?.price
   }
 
   @Column({ type: DataTypes.VIRTUAL })

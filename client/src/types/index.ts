@@ -138,7 +138,7 @@ export type OrderToReq = {
   begin: string
   finish: string
 }
-export type DataForRatingRequest = { userEmail: string; name: string; id: number }
+export type ChangeStatus = { userEmail: string; name: string; id: number }
 export type DataForNewOrder = {
   service: number
   begin: string
@@ -227,11 +227,7 @@ export type MasterTableListProps = {
   change: Function
   getZip: (id: number) => Promise<string | TypicalResponseType>
 }
-export type TableButtonIconProps = {
-  id: number
-  getZip: (id: number) => Promise<string | TypicalResponseType>
-  disabled: boolean
-}
+
 
 export type CustomerTableListProps = {
   data: CustomerOrdersList[]

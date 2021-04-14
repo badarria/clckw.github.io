@@ -1,110 +1,168 @@
-import { Container, Box, Paper, TableBody, Table, TableContainer, TableFooter } from '@material-ui/core'
-import { Loader, Toast } from 'components/ui'
-import React, { useEffect, useState } from 'react'
-import { DataForRatingRequest, MasterOrdersList, Paging, TypicalResponseType } from 'types'
-import { Pagination, MasterTableHead, MasterTableList } from './components'
-import { useStyles } from './styles'
-import { getList, sendRatingMail, setDone, getOrdersPhoto } from '../../../services/master'
-import { useSelector } from 'react-redux'
-import { RootState } from 'store'
+import {
+  Container,
+  Box,
+  Paper,
+  TableBody,
+  Table,
+  TableContainer,
+  TableFooter,
+} from '@material-ui/core';
+import { Loader, Toast } from 'components/ui';
+import React, { useCallback, useEffect, useState } from 'react';
+import {
+  ChangeStatus,
+  MasterOrdersList,
+  Paging,
+  TypicalResponseType,
+} from 'types';
+import { Pagination, MasterTableHead, MasterTableList } from './components';
+import { useStyles } from './styles';
+import {
+  getList,
+  sendRatingMail,
+  setDone,
+  getOrdersPhoto,
+  getOrdersReceipt,
+} from '../../../services/master';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store';
 
-const columns = ['id', 'customer', 'service', 'price', 'date', 'begin', 'finish', 'rating', 'completed', 'photos']
-const initOrder: MasterOrdersList = {
-  id: 0,
-  customer: '',
-  userEmail: '',
-  service: '',
-  price: 0,
-  completed: false,
-  begin: '',
-  date: '',
-  finish: '',
-  rating: 0,
-  photos: [{ id: 0, url: '', order_id: 0, public_id: '', resource_type: '' }],
-}
+const columns = [
+  'id',
+  'customer',
+  'service',
+  'price',
+  'date',
+  'begin',
+  'finish',
+  'rating',
+  'completed',
+  'photos',
+  'receipt',
+];
 
 export const Master = () => {
-  const user = useSelector((state: RootState) => state.user)
-  const { id, name } = user ?? { id: 0, name: '' }
-  const [orders, setOrders] = useState([initOrder])
-  const [loading, setLoading] = useState(false)
-  const [toast, setToast] = useState<TypicalResponseType>({ type: 'success', msg: '' })
-  const initPaging: Paging = { limit: 10, offset: 0, order: 'desc', orderby: 'date', count: orders.length }
-  const [paging, setPaging] = useState(initPaging)
-  const { wrap, box, root, table, container } = useStyles()
-  const { order, orderby, limit, offset, count } = paging
+  const user = useSelector((state: RootState) => state.user);
+  const { id, name } = user ?? { id: 0, name: '' };
+  const [orders, setOrders] = useState<MasterOrdersList[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [toast, setToast] = useState<TypicalResponseType>({
+    type: 'success',
+    msg: '',
+  });
+  const initPaging: Paging = {
+    limit: 10,
+    offset: 0,
+    order: 'desc',
+    orderby: 'date',
+    count: orders.length,
+  };
+  const [paging, setPaging] = useState(initPaging);
+  const { wrap, box, root, table, container } = useStyles();
+  const { order, orderby, limit, offset, count } = paging;
 
   const setLoader = async <T extends any>(doSomething: T) => {
-    setLoading(true)
-    const res = await doSomething
-    setLoading(false)
-    return res
-  }
+    setLoading(true);
+    const res = await doSomething;
+    setLoading(false);
+    return res;
+  };
 
   const setToastMsg = (toast: TypicalResponseType) => {
-    setToast(toast)
+    setToast(toast);
     setTimeout(() => {
-      setToast({ type: toast.type, msg: '' })
-    }, 3000)
-  }
+      setToast({ type: toast.type, msg: '' });
+    }, 3000);
+  };
 
   const getOrdersList = async (sayHi = false) => {
-    const list = await setLoader(getList({ ...paging, id }))
-    if ('type' in list) setToastMsg(list)
+    const list = await setLoader(getList({ ...paging, id }));
+    if ('type' in list) setToastMsg(list);
     else if (!list.length) {
-      const toast: TypicalResponseType = { type: 'warning', msg: `Hi, ${name}, you haven't orders` }
-      setToastMsg(toast)
+      const toast: TypicalResponseType = {
+        type: 'warning',
+        msg: `Hi, ${name}, you haven't orders`,
+      };
+      setToastMsg(toast);
     } else {
-      const data: MasterOrdersList[] = []
-      list.forEach(({ id, c, s, date, begin, finish, rating, completed, photos }) => {
-        const dataForList = {
-          id,
-          customer: c?.fullName,
-          userEmail: c?.email,
-          service: s?.service,
-          price: s?.price,
-          date,
-          begin,
-          finish,
-          rating,
-          completed,
-          photos,
+      const data: MasterOrdersList[] = [];
+      list.forEach(
+        ({ id, c, s, date, begin, finish, rating, completed, photos }) => {
+          const dataForList = {
+            id,
+            customer: c?.fullName,
+            userEmail: c?.email,
+            service: s?.service,
+            price: s?.price,
+            date,
+            begin,
+            finish,
+            rating,
+            completed,
+            photos,
+          };
+          data.push(dataForList);
         }
-        data.push(dataForList)
-      })
-      setOrders(data)
-      const toast: TypicalResponseType = { type: 'success', msg: `Hi, ${name}, you have ${data.length} orders. ` }
-      sayHi && setToastMsg(toast)
-      if (list.length !== paging.count) setPaging((paging) => ({ ...paging, count: list.length }))
+      );
+      setOrders(data);
+      const toast: TypicalResponseType = {
+        type: 'success',
+        msg: `Hi, ${name}, you have ${data.length} orders. `,
+      };
+      sayHi && setToastMsg(toast);
+      if (list.length !== paging.count)
+        setPaging((paging) => ({ ...paging, count: list.length }));
     }
-  }
+  };
 
   useEffect(() => {
     if (!loading) {
-      getOrdersList(true)
+      getOrdersList(true);
     }
-  }, [])
+  }, []);
 
   const setChange = async (data: Paging) => {
-    setPaging((paging) => ({ ...paging, ...data }))
-  }
+    setPaging((paging) => ({ ...paging, ...data }));
+  };
 
   useEffect(() => {
-    getOrdersList()
-  }, [paging])
+    getOrdersList();
+  }, [paging]);
 
-  const changeStatus = async (data: DataForRatingRequest) => {
-    const result = await setLoader(setDone(data.id))
-    setToastMsg(result)
+  const changeStatus = async (data: ChangeStatus) => {
+    const result = await setLoader(setDone(data.id));
+    setToastMsg(result);
     if (result.type !== 'error') {
-      getOrdersList()
-      const ratingRequest = await sendRatingMail(data)
-      console.log(ratingRequest)
+      getOrdersList();
+      const ratingRequest = await sendRatingMail(data);
+      console.log(ratingRequest);
     }
-  }
+  };
 
-  const headerProps = { columns, order, orderby, setChange }
-  const paginatorProps = { option: { limit, offset, count }, setPaging: setChange }
+  const getPdf = useCallback(async (id: number) => {
+    const pdf = await setLoader(getOrdersReceipt(id));
+    if (pdf instanceof Blob) {
+      const url = URL.createObjectURL(pdf);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'receipt.pdf';
+      a.click();
+    } else setToastMsg(pdf);
+  }, []);
+
+  const headerProps = { columns, order, orderby, setChange };
+  const paginatorProps = {
+    option: { limit, offset, count },
+    setPaging: setChange,
+  };
+
+  const masterListProps = {
+    data: orders,
+    columns,
+    change: changeStatus,
+    getZip: getOrdersPhoto,
+    getPdf,
+  };
 
   return (
     <Container className={container}>
@@ -117,7 +175,7 @@ export const Master = () => {
           <Table className={table} aria-label={`table`}>
             <MasterTableHead {...headerProps} />
             <TableBody>
-              <MasterTableList data={orders} columns={columns} change={changeStatus} getZip={getOrdersPhoto} />
+              <MasterTableList {...masterListProps} />
             </TableBody>
             <TableFooter>
               <Pagination {...paginatorProps} />
@@ -126,5 +184,5 @@ export const Master = () => {
         </TableContainer>
       </Box>
     </Container>
-  )
-}
+  );
+};

@@ -10,7 +10,7 @@ import {
   signUp,
   signInGoogle,
   signUpGoogle,
-} from './func'
+} from './requests'
 import { sendMail } from '../shared/utils'
 import { Router } from 'express'
 import { sequelize } from '../../db'

@@ -1,7 +1,7 @@
 import { Router } from 'express'
 const index = Router()
 import { checkAdminToken } from '../../shared/utils'
-import { update, get, remove, add } from './func'
+import { update, get, remove, add } from './requests'
 
 index.get('/:limit/:offset/:order/:orderby', checkAdminToken, get)
 index.put('/', checkAdminToken, update)

@@ -1,4 +1,4 @@
-import { getFiltered, getKeys, get, remove, update, add } from './func'
+import { getFiltered, getKeys, get, remove, update, add } from './requests'
 import { checkAdminToken } from '../../shared/utils'
 import { Router } from 'express'
 const index = Router()

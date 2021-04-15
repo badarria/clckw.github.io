@@ -1,5 +1,5 @@
 import { checkCustomerToken } from '../shared/utils'
-import { getOrders, setRating } from './func'
+import { getOrders, setRating } from './requests'
 import { Router } from 'express'
 const index = Router()
 

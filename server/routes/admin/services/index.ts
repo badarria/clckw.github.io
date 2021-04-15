@@ -1,5 +1,5 @@
 import { checkAdminToken } from '../../shared/utils'
-import { update, get, remove, add } from './func'
+import { update, get, remove, add } from './requests'
 import { Router } from 'express'
 const index = Router()
 

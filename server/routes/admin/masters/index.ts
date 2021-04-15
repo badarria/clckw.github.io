@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { update, add, remove, get, getKeys } from './func'
+import { update, add, remove, get, getKeys } from './requests'
 import { checkAdminToken } from '../../shared/utils'
 const index = Router()
 

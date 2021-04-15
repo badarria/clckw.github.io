@@ -1,5 +1,5 @@
 import { checkMasterToken, sendMail } from '../shared/utils'
-import { getOrders, changeStatus, createMail, getPhotos, downloadPdf } from './func'
+import { getOrders, changeStatus, createMail, getPhotos, downloadPdf } from './requests'
 import { Router } from 'express'
 const index = Router()
 

@@ -1,4 +1,4 @@
-import { getOrder, setRating } from './func'
+import { getOrder, setRating } from './requests'
 import { Router } from 'express'
 const index = Router()
 

@@ -1,9 +1,9 @@
 import { Router } from 'express'
 const index = Router()
-import { getList, update, remove, add } from './requests'
-import { checkAdminToken } from '../../../utils'
+import { get, update, remove, add } from './requests'
+import { checkAdminToken } from '../../shared/utils'
 
-index.get('/:limit/:offset/:order/:orderby', checkAdminToken, getList)
+index.get('/:limit/:offset/:order/:orderby', checkAdminToken, get)
 index.put('/', checkAdminToken, update)
 index.delete('/:id', checkAdminToken, remove)
 index.post('/', checkAdminToken, add)

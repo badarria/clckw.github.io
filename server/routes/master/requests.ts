@@ -60,14 +60,22 @@ export const changeStatus = async (req: Request, res: Response, next: NextFuncti
 }
 
 const formingDataForPdf = async (id: string) => {
-  const details = await Order.scope('allIncl')
-    .findOne({ where: { id }, include: [] })
-  if (!details) return new Error('Order wasn\'t found')
+  const details = await Order.scope('allIncl').findOne({ where: { id }, include: [] })
+  if (!details) return new Error("Order wasn't found")
   else {
     const strDetails = JSON.parse(JSON.stringify(details))
     const { service, master, customer, date, begin, price, m, c } = strDetails
-    console.log(strDetails)
-    return ({ service, master, orderId: id, customer, begin: `${date} ${begin}`, price, customerEmail: c?.user?.email, masterEmail: m?.user?.email })
+
+    return {
+      service,
+      master,
+      orderId: id,
+      customer,
+      begin: `${date} ${begin}`,
+      price,
+      customerEmail: c?.user?.email,
+      masterEmail: m?.user?.email,
+    }
   }
 }
 
@@ -76,11 +84,11 @@ export const downloadPdf = async (req: Request, res: Response, next: NextFunctio
   const dataForPdf = await formingDataForPdf(id)
   if (dataForPdf instanceof Error) next(dataForPdf)
   else {
-    pdf.create(pdfTemplate(dataForPdf)).toStream(function (err, stream) {
+    pdf.create(pdfTemplate(dataForPdf)).toStream((err: Error, stream: ReadStream) => {
       if (err) next(err)
       res.setHeader('Content-type', 'application/pdf')
       !err && stream.pipe(res)
-    });
+    })
   }
 }
 
@@ -107,16 +115,21 @@ export const ratingRequestMail = async (req: Request, res: Response, next: NextF
     const dataForPdf = await formingDataForPdf(id)
     if (dataForPdf instanceof Error) next(dataForPdf)
     else {
-      const createMailWithPdf = () => new Promise((resolve, reject) => pdf.create(pdfTemplate(dataForPdf)).toStream((err: Error, stream: ReadStream) => {
-        if (err) return reject(err)
-        const attach = [{
-          filename: 'receipt.pdf',
-          type: "application/pdf",
-          content: stream,
-        }]
-        return resolve(createMail(mail, userEmail, subj, attach))
-      }))
-      req.body = await createMailWithPdf().catch(err => next(err))
+      const createMailWithPdf = () =>
+        new Promise((resolve, reject) =>
+          pdf.create(pdfTemplate(dataForPdf)).toStream((err: Error, stream: ReadStream) => {
+            if (err) return reject(err)
+            const attach = [
+              {
+                filename: 'receipt.pdf',
+                type: 'application/pdf',
+                content: stream,
+              },
+            ]
+            return resolve(createMail(mail, userEmail, subj, attach))
+          })
+        )
+      req.body = await createMailWithPdf().catch((err) => next(err))
 
       next()
     }

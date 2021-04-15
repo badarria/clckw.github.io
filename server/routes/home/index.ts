@@ -1,21 +1,33 @@
-import { findMasters, upsertCustomer, addNewOrder, getInitState } from './search'
-import { sendMail } from '../../utils'
+import {
+  findMasters,
+  upsertCustomer,
+  handlePay,
+  addNewOrder,
+  getInit,
+  signIn,
+  createConfirmMail,
+  verify,
+  signUp,
+  signInGoogle,
+  signUpGoogle,
+} from './func'
+import { sendMail } from '../shared/utils'
 import { Router } from 'express'
-import { auth, handleGgLogin, handleLocalReg, stayAuth, handleGgReg } from './auth'
-import { confirmingMail } from './mailing'
-import { handlePayment } from './payment'
+import { sequelize } from '../../db'
 const index = Router()
 
-index.get('/init', getInitState)
+const magic = sequelize.models.Customer
+
+index.get('/init', getInit)
 index.get('/find/:city/:begin/:finish', findMasters)
 index.post('/customer', upsertCustomer)
-index.post('/auth', auth)
+index.post('/auth', signIn)
 index.post('/newOrder', addNewOrder)
-index.post('/confirm', confirmingMail, sendMail())
-index.get('/verify', stayAuth)
-index.post('/signUp', handleLocalReg)
-index.post('/handlePay', handlePayment)
-index.post('/signInGoogle', handleGgLogin)
-index.post('/signUpGoogle', handleGgReg)
-// index.post('/signInFb', signInFb)
+index.post('/confirm', createConfirmMail, sendMail())
+index.get('/verify', verify)
+index.post('/signUp', signUp)
+index.post('/handlePay', handlePay)
+index.post('/signInGoogle', signInGoogle)
+index.post('/signUpGoogle', signUpGoogle)
+
 export { index }

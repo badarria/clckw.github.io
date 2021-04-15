@@ -1,7 +1,7 @@
 import { BelongsTo, Column, Model, Scopes, Table } from 'sequelize-typescript'
 import { DataTypes } from 'sequelize'
-import { Customer, City, Master, Service, Photo, User, } from '.'
-import { toDate, toTime } from '../../utils/datetimefunc'
+import { Customer, City, Master, Service, Photo, User } from '.'
+import { toDate, toTime } from '../../routes/shared/utils/datetimefunc'
 
 @Scopes(() => ({
   allIncl: {
@@ -9,7 +9,10 @@ import { toDate, toTime } from '../../utils/datetimefunc'
       {
         model: Master,
         attributes: ['id', 'name', 'surname', 'fullName'],
-        include: [{ model: City, as: 'ci', attributes: [['name', 'city']] }, { model: User, as: 'user' }],
+        include: [
+          { model: City, as: 'ci', attributes: [['name', 'city']] },
+          { model: User, as: 'user' },
+        ],
       },
       { model: Customer, attributes: ['id', 'name', 'surname', 'fullName'], include: [{ model: User, as: 'user' }] },
       { model: Service, attributes: ['id', ['name', 'service'], ['time', 'service_time'], 'price'] },

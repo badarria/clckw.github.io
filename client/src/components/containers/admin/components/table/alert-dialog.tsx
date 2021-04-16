@@ -1,9 +1,27 @@
-import React from 'react'
-import { Dialog, DialogActions, DialogContent, Button, DialogContentText, DialogTitle } from '@material-ui/core'
+import React, { ReactElement } from 'react'
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  Button,
+  DialogContentText,
+  DialogTitle,
+  IconButtonProps,
+} from '@material-ui/core'
 import { ButtonIcon } from './button-icon'
-import { AlertDialogProps } from 'types'
+import { BtnType } from '../../../../../types'
 
-export const AlertDialog = (props: AlertDialogProps) => {
+type Props = {
+  icon: ReactElement<IconButtonProps> | null
+  title: string
+  accept: () => void
+  question: string
+  description: string
+  disabled: boolean
+  type: BtnType
+}
+
+export const AlertDialog = (props: Props) => {
   const [open, setOpen] = React.useState(false)
   const { icon = null, title, accept, question, description, disabled, type } = props
 
@@ -16,13 +34,7 @@ export const AlertDialog = (props: AlertDialogProps) => {
 
   return (
     <>
-      <ButtonIcon
-        onClick={handleClickOpen}
-        title={title}
-        disabled={disabled}
-        icon={icon}
-        type={type as 'button' | 'reset' | 'submit'}
-      />
+      <ButtonIcon onClick={handleClickOpen} title={title} disabled={disabled} icon={icon} type={type} />
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle id='alert-dialog-title'>{question}</DialogTitle>
         <DialogContent>

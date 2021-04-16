@@ -1,12 +1,19 @@
 import { TablePagination } from '@material-ui/core'
 import React, { MouseEvent, ChangeEvent } from 'react'
-import { PaginationProps } from 'types'
+import { Paging } from '../../../../../types'
 
-export const Pagination = ({ option: { limit, offset, count }, setPaging }: PaginationProps) => {
+type Props = {
+  option: { limit: number; offset: number; count: number }
+  setPaging: (data: Paging) => void
+}
+
+export const Pagination = ({ option: { limit, offset, count }, setPaging }: Props) => {
   const changeOffset = (event: MouseEvent | null, page: number) => setPaging({ offset: page * limit })
-  const changeItemsPerPage = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setPaging({ limit: event.target.value, offset: 0 })
 
+  const changeItemsPerPage = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const newlimit = event.target.value === 'all' ? -1 : Number(event.target.value)
+    setPaging({ limit: newlimit, offset: 0 })
+  }
   const page = Math.round(offset / limit)
 
   return (

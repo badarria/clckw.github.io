@@ -3,18 +3,17 @@ import { Box, Button, Typography } from '@material-ui/core'
 import Rating from '@material-ui/lab/Rating'
 import { useStyles } from './styles'
 
-export const RatingCard = ({
-  order: { id, customer },
-  submit,
-}: {
+type Props = {
   order: { id: number; customer: string }
-  submit: Function
-}) => {
+  submit: (data: { id: number; rating: number }) => void
+}
+
+export const RatingCard = ({ order: { id, customer }, submit }: Props) => {
   const { card, title, btn } = useStyles()
-  const [value, setRatingValue] = useState<number | null>(0)
+  const [value, setRatingValue] = useState(0)
 
   const setRating = () => submit({ id, rating: value })
-  const changeValue = (e: ChangeEvent<{}>, rating: number | null) => setRatingValue(rating)
+  const changeValue = (e: ChangeEvent<{}>, rating: number | null) => rating && setRatingValue(rating)
 
   return (
     <Box component='fieldset' borderColor='transparent' className={card}>

@@ -1,35 +1,40 @@
-import { GoogleSignUp, LocalSignUp } from './../../components/containers/header/types'
-import { LocalSignIn, SignRes } from '../../components/containers/header/types'
-import {
-  Customer,
-  ParamsForSearching,
-  DataForLetter,
-  FreeMastersList,
-  CustomerResponse,
-  TypicalResponseType,
-  MailResponse,
-  InitData,
-  OrderResponse,
-  DataForNewOrder,
-  UserResponse,
-} from 'types'
-
+import { GoogleSignUp, LocalSignUp, LocalSignIn, SignRes } from './../../components/containers/header/types'
+import { Customer, Response, Master, City, Service } from '../../types'
 const homePath = '/home'
 
 const wrapTryCatch = async <T>(tryFunc: T) => {
   try {
     return await tryFunc
   } catch {
-    return { type: 'error', msg: 'Something went wrong' } as TypicalResponseType
+    return <Response>{ type: 'error', msg: 'Something went wrong' }
   }
 }
+type GetMasters = { city: number; begin: string; finish: string }
+type CustomerRes = Response | { id: number; password: string }
+type NewOrder = {
+  service: number
+  begin: string
+  finish: string
+  customer: number
+  master: number
+}
+type UserResponse = { id: number; role: string; token: string; name: string }
+type InitData = { city: City[] | []; service: Service[] | [] }
+type OrderResponse = Response & { id: number }
+type DataForLetter = {
+  userEmail: string
+  begin: string
+  name: string
+  city: string
+  id: number
+}
 
-const getMasters = async ({ city, begin, finish }: ParamsForSearching): Promise<FreeMastersList> => {
+const getMasters = async ({ city, begin, finish }: GetMasters): Promise<Master[]> => {
   const res = await fetch(`${homePath}/find/${city}/${begin}/${finish}`)
   return res.json()
 }
 
-const upsertCustomer = async (data: Partial<Customer>): Promise<CustomerResponse> => {
+const upsertCustomer = async (data: Partial<Customer>): Promise<CustomerRes> => {
   const res = await fetch(`${homePath}/customer`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -47,7 +52,7 @@ const login = async (data: LocalSignIn): Promise<SignRes> => {
   return res.json()
 }
 
-const add = async (data: DataForNewOrder): Promise<OrderResponse> => {
+const add = async (data: NewOrder): Promise<OrderResponse> => {
   const res = await fetch(`${homePath}/newOrder`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -56,7 +61,7 @@ const add = async (data: DataForNewOrder): Promise<OrderResponse> => {
   return res.json()
 }
 
-const sendFirstLetter = async (data: DataForLetter): Promise<MailResponse> => {
+const sendFirstLetter = async (data: DataForLetter): Promise<{ msg: string }> => {
   const res = await fetch(`${homePath}/confirm`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -65,7 +70,7 @@ const sendFirstLetter = async (data: DataForLetter): Promise<MailResponse> => {
   return res.json()
 }
 
-const sendSecondLetter = async (data: DataForLetter): Promise<MailResponse> => {
+const sendSecondLetter = async (data: DataForLetter): Promise<{ msg: string }> => {
   const res = await fetch(`${homePath}/rating`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -93,7 +98,7 @@ const registr = async (data: LocalSignUp): Promise<UserResponse> => {
   return res.json()
 }
 
-const payment = async (data: { id: string; amount: number }): Promise<TypicalResponseType> => {
+const payment = async (data: { id: string; amount: number }): Promise<Response> => {
   const res = await fetch(`${homePath}/handlePay`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -119,19 +124,10 @@ const newGoogleUser = async (data: GoogleSignUp): Promise<SignRes> => {
   return res.json()
 }
 
-// const fbUser = async (data: FbRes) => {
-//   const res = await fetch(`${homePath}/signInFb`, {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify(data),
-//   })
-//   return res.json()
-// }
-
-export const getFreeMasters = async (data: ParamsForSearching) => await wrapTryCatch(getMasters(data))
+export const getFreeMasters = async (data: GetMasters) => await wrapTryCatch(getMasters(data))
 export const getCustomer = async (data: Partial<Customer>) => await wrapTryCatch(upsertCustomer(data))
 export const loginUser = async (data: LocalSignIn) => await wrapTryCatch(login(data))
-export const addNewOrder = async (data: DataForNewOrder) => await wrapTryCatch(add(data))
+export const addNewOrder = async (data: NewOrder) => await wrapTryCatch(add(data))
 export const sendConfirmLetter = async (data: DataForLetter) => await wrapTryCatch(sendFirstLetter(data))
 export const sendRatingLetter = async (data: DataForLetter) => await wrapTryCatch(sendSecondLetter(data))
 export const getInit = async () => await wrapTryCatch(init())
@@ -140,4 +136,3 @@ export const regUser = async (data: LocalSignUp) => await wrapTryCatch(registr(d
 export const handlePayment = async (data: { id: string; amount: number }) => await wrapTryCatch(payment(data))
 export const authGoogleUser = async (data: { token: string }) => await wrapTryCatch(googleUser(data))
 export const regGoogleUser = async (data: GoogleSignUp) => await wrapTryCatch(newGoogleUser(data))
-// export const signInFbUser = async (data: FbRes) => await wrapTryCatch(fbUser(data))

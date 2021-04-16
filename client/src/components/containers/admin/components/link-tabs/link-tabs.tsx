@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, ChangeEvent } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Tabs, Tab, AppBar, Container } from '@material-ui/core'
 
@@ -11,7 +11,7 @@ export const LinkTabs = ({ names }: { names: string[] }) => {
     setValue(match.pathname)
   }, [match])
 
-  const handleChange = (event: any, newValue: string) => {
+  const handleChange = (event: ChangeEvent<{}>, newValue: string) => {
     setValue(newValue)
   }
 

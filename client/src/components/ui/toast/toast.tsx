@@ -2,9 +2,9 @@ import React from 'react'
 import { Alert } from '@material-ui/lab'
 import { Slide } from '@material-ui/core'
 import { useStyles } from './styles'
-import { ToastProps } from 'types'
+import { Response } from 'types'
 
-export const Toast = ({ toast: { type, msg } }: ToastProps) => {
+export const Toast = ({ toast: { type, msg } }: { toast: Response }) => {
   const { msgBox } = useStyles()
 
   return (

@@ -2,9 +2,14 @@ import React, { useCallback } from 'react'
 import { useStyles } from './styles'
 import { Box, Button, Card, CardContent, Typography } from '@material-ui/core'
 import Rating from '@material-ui/lab/Rating'
-import { MasterCardProps } from 'types'
 
-export const MasterCard = ({ data, confirm }: MasterCardProps) => {
+type Data = { id: number; name: string; surname: string; rating: number }
+type Props = {
+  data: Data
+  confirm: (data: Data) => void
+}
+
+export const MasterCard = ({ data, confirm }: Props) => {
   const { name, surname, rating } = data
   const { content, stars, card } = useStyles()
   const masterName = `${name} ${surname}`

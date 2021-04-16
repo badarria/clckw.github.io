@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import { AdminTable, AdminTableHead, Loader, Pagination } from '../components'
-import { TypicalResponseType, Paging, State, City } from 'types'
+import { Response, Paging, City } from '../../../../types'
 import { acceptCity, deleteCity, getCities } from 'services/admin/cities'
 import { CitiesForm } from '../forms'
+import { State } from '../../admin/types'
 
 const columns = ['id', 'name']
-const initPaging: Paging = { limit: 5, offset: 0, orderby: 'id', order: 'desc', count: 50 }
+const initPaging: Required<Paging> = { limit: 5, offset: 0, orderby: 'id', order: 'desc', count: 50 }
 const initDataToChange: City = { id: 0, name: '' }
 
 export const Cities = () => {
   const [editState, setEditState] = useState<State>(null)
-  const [toast, setToast] = useState<TypicalResponseType>({ type: 'success', msg: '' })
-  const [loading, setLoading] = useState<boolean>(false)
+  const [toast, setToast] = useState<Response>({ type: 'success', msg: '' })
+  const [loading, setLoading] = useState(false)
   const [items, setItems] = useState<City[]>([])
-  const [paging, setPaging] = useState<Paging>(initPaging)
-  const [dataToChange, setDataToChange] = useState<City>(initDataToChange)
+  const [paging, setPaging] = useState(initPaging)
+  const [dataToChange, setDataToChange] = useState(initDataToChange)
   const { limit, offset, count, orderby, order } = paging
 
   const setLoader = async <T extends any>(doSomething: T) => {
@@ -24,7 +25,7 @@ export const Cities = () => {
     return res
   }
 
-  const setToastMsg = (toast: TypicalResponseType) => {
+  const setToastMsg = (toast: Response) => {
     setToast(toast)
     setTimeout(() => {
       setToast({ type: toast.type, msg: '' })
@@ -47,7 +48,7 @@ export const Cities = () => {
   }
 
   const remove = async (id: number) => {
-    const msg: TypicalResponseType = await setLoader(deleteCity(id))
+    const msg: Response = await setLoader(deleteCity(id))
     setToastMsg(msg)
     if (msg.type === 'success') {
       await getItems()

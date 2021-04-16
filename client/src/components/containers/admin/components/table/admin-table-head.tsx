@@ -1,22 +1,31 @@
 import { TableRow, TableCell, IconButton, TableSortLabel } from '@material-ui/core'
-import React from 'react'
+import React, { useCallback } from 'react'
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
 import { useStyles } from './styles'
-import { AdminTableHeadProps } from 'types'
+import { Paging } from '../.../../../../../../types'
 
-export const AdminTableHead = (props: AdminTableHeadProps) => {
+type Props = {
+  columns: string[]
+  push: (data: string[]) => void
+  order: 'desc' | 'asc'
+  orderby: string
+  setChange: (data: Paging) => void
+}
+
+export const AdminTableHead = (props: Props) => {
   const { columns, push, order, orderby, setChange } = props
   const { visuallyHidden } = useStyles()
 
   const createSortHandler = (prop: string) => () => {
     const isAsc = orderby === prop && order === 'asc'
-    const data = { order: isAsc ? 'desc' : 'asc', orderby: prop }
+    const data: Paging = { order: isAsc ? 'desc' : 'asc', orderby: prop }
     setChange(data)
   }
 
+  const click = useCallback(() => push(columns), [])
+
   return (
     <TableRow component='tr'>
-      {/* <TableCell>{columns.length ? '#' : null}</TableCell> */}
       {columns.map((column, i) => {
         return (
           <TableCell key={i}>
@@ -30,7 +39,7 @@ export const AdminTableHead = (props: AdminTableHeadProps) => {
         )
       })}
       <TableCell colSpan={2} align='right'>
-        <IconButton onClick={() => push(columns)} title='Add New Item'>
+        <IconButton onClick={click} title='Add New Item'>
           <AddCircleOutlineIcon />
         </IconButton>
       </TableCell>

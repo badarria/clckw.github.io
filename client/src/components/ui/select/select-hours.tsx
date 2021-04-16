@@ -1,10 +1,16 @@
 import React from 'react'
 import { FormControl, Select, InputLabel, MenuItem } from '@material-ui/core'
-import { Controller } from 'react-hook-form'
+import { Control, Controller } from 'react-hook-form'
 import { useStyles } from './styles'
-import { SelectHoursProps } from 'types'
 
-export const SelectHours = ({ control, data, name, disabled }: SelectHoursProps) => {
+type Props = {
+  control: Control
+  data: { hour: string; booked: boolean }[]
+  name: string
+  disabled: boolean
+}
+
+export const SelectHours = ({ control, data, name, disabled }: Props) => {
   const { root, input } = useStyles()
   const defaultValue = data[0] || { id: 0, name: '' }
 

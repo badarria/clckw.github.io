@@ -1,9 +1,17 @@
 import { TextField } from '@material-ui/core'
-import React from 'react'
-import { InputPropsType } from 'types'
+import React, { Ref } from 'react'
+import { FieldErrors, RegisterOptions } from 'react-hook-form'
 import { useStyles } from './styles'
 
-export const InputField = ({ label, register, errors, name = label, type = 'text' }: InputPropsType) => {
+type Props = {
+  label: string
+  register: Ref<RegisterOptions>
+  errors: FieldErrors
+  name?: string
+  type?: string
+}
+
+export const InputField = ({ label, register, errors, name = label, type = 'text' }: Props) => {
   const { fields, inputLabel, idInput, input, helperText } = useStyles()
 
   return (

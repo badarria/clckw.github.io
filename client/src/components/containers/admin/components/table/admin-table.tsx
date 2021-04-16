@@ -1,10 +1,22 @@
-import React from 'react'
+import React, { ReactElement } from 'react'
 import { Paper, Table, TableBody, TableContainer, TableFooter, TableHead, TableRow, Box } from '@material-ui/core'
 import { useStyles } from './styles'
 import { AdminTableList, Toast } from '../index'
-import { AdminTableProps } from 'types'
+import { AllSubjectsDataUi, State } from '../../../admin/types'
+import { Response } from '../../../../../types'
 
-export const AdminTable = (props: AdminTableProps) => {
+type Props = {
+  items: Array<AllSubjectsDataUi>
+  columns: string[]
+  remove: (id: number) => void
+  push: (data: any) => void
+  editState: State
+  toast: Response
+  header: ReactElement
+  pagination: ReactElement
+}
+
+export const AdminTable = (props: Props) => {
   const { items, columns, remove, push, editState, toast, header, pagination } = props
   const { wrap, root, box, table, head } = useStyles()
 

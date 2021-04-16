@@ -1,9 +1,11 @@
 import React from 'react'
-import { Controller } from 'react-hook-form'
+import { Control, Controller } from 'react-hook-form'
 import { Checkbox } from '@material-ui/core'
 import { useStyles } from './styles'
 
-const ControlledCheckbox = ({ control, name }) => {
+type Props = { control: Control; name: string }
+
+const ControlledCheckbox = ({ control, name }: Props) => {
   const { checkBox } = useStyles()
 
   return (

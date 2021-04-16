@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { TableCell, IconButton } from '@material-ui/core';
-import { Link } from 'react-router-dom';
-import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
-import { TypicalResponseType } from 'types';
-import { useCallback } from 'react';
+import React, { useEffect, useState } from 'react'
+import { TableCell, IconButton } from '@material-ui/core'
+import { Link } from 'react-router-dom'
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
+import { Response } from 'types'
+import { useCallback } from 'react'
 
 type Props = {
-  id: number;
-  getZip: (id: number) => Promise<string | TypicalResponseType>;
-  disabled: boolean;
-};
+  id: number
+  getZip: (id: number) => Promise<string | Response>
+  disabled: boolean
+}
 
 export const ZipBtn = ({ id, getZip, disabled }: Props) => {
-  const [link, setLink] = useState('/master');
+  const [link, setLink] = useState('/master')
 
   const newLink = useCallback(async () => {
-    const lk = await getZip(id);
-    if (typeof lk === 'string') setLink(lk);
-  }, []);
+    const lk = await getZip(id)
+    if (typeof lk === 'string') setLink(lk)
+  }, [])
 
   useEffect(() => {
-    newLink();
-  }, []);
+    newLink()
+  }, [])
 
   return (
     <TableCell>
@@ -31,10 +31,9 @@ export const ZipBtn = ({ id, getZip, disabled }: Props) => {
         target='_blank'
         color='primary'
         title="Download all order's photos"
-        disabled={disabled}
-      >
+        disabled={disabled}>
         <CloudDownloadIcon />
       </IconButton>
     </TableCell>
-  );
-};
+  )
+}

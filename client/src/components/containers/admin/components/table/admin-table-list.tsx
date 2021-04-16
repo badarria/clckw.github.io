@@ -3,9 +3,17 @@ import { TableCell, TableRow } from '@material-ui/core'
 import EditIcon from '@material-ui/icons/Edit'
 import DeleteIcon from '@material-ui/icons/Delete'
 import { ButtonIcon, AlertDialog } from '../index'
-import { AdminTableListProps, AllSubjectsDataUi } from 'types'
+import { State, AllSubjectsDataUi } from '../../../admin/types'
 
-export const AdminTableList = (props: AdminTableListProps) => {
+type Props = {
+  remove: (id: number) => void
+  data: Array<AllSubjectsDataUi>
+  columns: string[]
+  editState: State
+  push: (data: any) => void
+}
+
+export const AdminTableList = (props: Props) => {
   const { remove, data, columns, editState, push } = props
 
   return (
@@ -17,11 +25,12 @@ export const AdminTableList = (props: AdminTableListProps) => {
           title: !!editState ? 'You have to submit form first' : 'Remove item',
           icon: <DeleteIcon fontSize='small' />,
           disabled: !!editState,
-          type: 'button',
+          type: 'button' as 'button',
+          accept: () => remove(id),
         }
 
         const getDisabled = (data: AllSubjectsDataUi) => {
-          if ('status' in data && !editState) return data.status
+          if ('status' in data && !editState) return !!data.status
           else return !!editState
         }
 
@@ -31,24 +40,26 @@ export const AdminTableList = (props: AdminTableListProps) => {
           else return 'Edit item'
         }
 
+        const buttonProps = {
+          icon: <EditIcon fontSize='small' />,
+          onClick: () => push(item),
+          disabled: getDisabled(item),
+          title: getTitle(item),
+          type: 'button' as 'button',
+        }
+
         return (
-          <TableRow key={id} component='tr'>
-            {/* <TableCell component='td'>{inx + 1}</TableCell> */}
+          <TableRow key={inx} component='tr'>
             {columns.map((key, i) => {
               const thisItem: any = { ...item }
               return <TableCell key={i}>{thisItem[key]}</TableCell>
             })}
+
             <TableCell align='right'>
-              <ButtonIcon
-                icon={<EditIcon fontSize='small' />}
-                onClick={() => push(item)}
-                disabled={getDisabled(item) as boolean}
-                title={getTitle(item)}
-                type='button'
-              />
+              <ButtonIcon {...buttonProps} />
             </TableCell>
             <TableCell align='right'>
-              <AlertDialog {...{ ...alertProps, accept: () => remove(id) }} />
+              <AlertDialog {...alertProps} />
             </TableCell>
           </TableRow>
         )

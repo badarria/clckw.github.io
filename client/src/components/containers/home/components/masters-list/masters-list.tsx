@@ -3,14 +3,15 @@ import { Box, Button, Container, Paper, Typography } from '@material-ui/core'
 import { useStyles } from './styles'
 import { MasterCard } from '..'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
-import { Master } from 'types'
-type MasterListProps = {
-  data: Omit<Master, 'ci' | 'email' | 'password'>[]
+
+type Data = { id: number; name: string; surname: string; rating: number }
+type Props = {
+  data: Data[]
   back: () => void
-  confirm: (data: Master) => void
+  confirm: (data: Data) => void
 }
 
-export const MastersList = ({ data, back, confirm }: MasterListProps) => {
+export const MastersList = ({ data, back, confirm }: Props) => {
   const { wrap, title } = useStyles()
 
   return (

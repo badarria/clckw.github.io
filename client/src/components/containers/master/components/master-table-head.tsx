@@ -1,22 +1,24 @@
-import {
-  TableRow,
-  TableCell,
-  TableSortLabel,
-  TableHead,
-} from '@material-ui/core';
-import React from 'react';
-import { useStyles } from '../styles';
-import { MasterTableHeadProps } from '../../../../types';
+import { TableRow, TableCell, TableSortLabel, TableHead } from '@material-ui/core'
+import React from 'react'
+import { useStyles } from '../styles'
+import { Paging } from '../../../../types'
 
-export const MasterTableHead = (props: MasterTableHeadProps) => {
-  const { columns, order, orderby, setChange } = props;
-  const { visuallyHidden, head } = useStyles();
+type Props = {
+  columns: string[]
+  order: 'desc' | 'asc'
+  orderby: string
+  setChange: (data: Paging) => void
+}
+
+export const MasterTableHead = (props: Props) => {
+  const { columns, order, orderby, setChange } = props
+  const { visuallyHidden, head } = useStyles()
 
   const createSortHandler = (prop: string) => () => {
-    const isAsc = orderby === prop && order === 'asc';
-    const data = { order: isAsc ? 'desc' : 'asc', orderby: prop };
-    setChange(data);
-  };
+    const isAsc = orderby === prop && order === 'asc'
+    const data: Paging = { order: isAsc ? 'desc' : 'asc', orderby: prop }
+    setChange(data)
+  }
 
   return (
     <TableHead className={head}>
@@ -24,24 +26,16 @@ export const MasterTableHead = (props: MasterTableHeadProps) => {
         {columns.map((column, i) => {
           return (
             <TableCell key={i}>
-              <TableSortLabel
-                active={orderby === column}
-                direction={order}
-                onClick={createSortHandler(column)}
-              >
+              <TableSortLabel active={orderby === column} direction={order} onClick={createSortHandler(column)}>
                 {column}
                 {orderby === column ? (
-                  <span className={visuallyHidden}>
-                    {order === 'desc'
-                      ? 'sorted descending'
-                      : 'sorted ascending'}
-                  </span>
+                  <span className={visuallyHidden}>{order === 'desc' ? 'sorted descending' : 'sorted ascending'}</span>
                 ) : null}
               </TableSortLabel>
             </TableCell>
-          );
+          )
         })}
       </TableRow>
     </TableHead>
-  );
-};
+  )
+}

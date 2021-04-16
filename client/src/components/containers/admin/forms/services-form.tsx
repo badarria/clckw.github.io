@@ -3,13 +3,20 @@ import { useForm } from 'react-hook-form'
 import { AutocompleteField, TableForm } from '../components'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { services } from '../../../../services/admin/validation/schema'
-import { ServicesFormProps } from 'types'
+import { Service } from '../../../../types'
 import { getServiceTime } from 'services/utils/table-func'
 import { InputField } from 'components/ui'
+import { State } from '../../admin/types'
 
 const servHours = getServiceTime()
+type Props = {
+  cancel: () => void
+  accept: (data: Service) => void
+  editState: State
+  data: Service
+}
 
-export const ServicesForm = ({ data: { id = 0, name, time, price }, cancel, accept, editState }: ServicesFormProps) => {
+export const ServicesForm = ({ data: { id = 0, name, time, price }, cancel, accept, editState }: Props) => {
   const [timeArr, setTimeArr] = useState(servHours)
   const labels = Object.keys({ id, name })
   const initTime = timeArr.find(({ id }) => id === Number(time)) || timeArr[0]
@@ -24,7 +31,7 @@ export const ServicesForm = ({ data: { id = 0, name, time, price }, cancel, acce
   const formProps = {
     submit: handleSubmit((data) => {
       const { time } = data
-      accept({ ...data, time: time.id })
+      accept({ ...data, time: `${time.id}` })
     }),
     reset: () => {
       cancel()

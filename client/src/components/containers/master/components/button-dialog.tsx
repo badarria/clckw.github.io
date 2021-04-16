@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { useState } from 'react'
 import {
   Button,
   ButtonGroup,
@@ -11,23 +11,19 @@ import {
 } from '@material-ui/core'
 import { useStyles } from './styles'
 
-export const ButtonDialog: FC<{ isDisabled: boolean; accept: Function }> = ({ accept, isDisabled }) => {
-  const [open, setOpen] = useState(false)
+type Props = { isDisabled: boolean; accept: Function }
 
-  const handleClickOpen = () => {
-    setOpen(true)
-  }
-  const handleClose = () => {
-    setOpen(false)
-  }
+export const ButtonDialog = ({ accept, isDisabled }: Props) => {
+  const [open, setOpen] = useState(false)
+  const { tooltip } = useStyles()
+  const handleClickOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
   const confirm = () => {
     accept()
     setOpen(false)
   }
-  const getTitle = (status: boolean) => {
-    return status ? 'Order completed. You cannot change this' : 'Set order done'
-  }
-  const { tooltip } = useStyles()
+  const getTitle = (status: boolean) => (status ? 'Order completed. You cannot change this' : 'Set order done')
+
   return (
     <>
       <ButtonGroup>

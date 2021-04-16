@@ -1,12 +1,14 @@
-import React, { ChangeEvent, FC, useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import { Button, ButtonGroup, Dialog, DialogActions, DialogContent, DialogTitle, Tooltip } from '@material-ui/core'
 import { useStyles } from './styles'
 import { Rating } from '@material-ui/lab'
 
-export const RatingDialog: FC<{ data: { id: number; completed: boolean }; accept: Function }> = ({ accept, data }) => {
+type Props = { data: { id: number; completed: boolean }; accept: (data: { id: number; rating: number }) => void }
+
+export const RatingDialog = ({ accept, data }: Props) => {
   const { id, completed } = data
   const [open, setOpen] = useState(false)
-  const [rating, setRatingValue] = useState<number | null>(0)
+  const [rating, setRatingValue] = useState(0)
 
   const handleClickOpen = () => {
     setOpen(true)
@@ -19,7 +21,7 @@ export const RatingDialog: FC<{ data: { id: number; completed: boolean }; accept
     setOpen(false)
   }
   const getTitle = completed ? 'Set order rating' : "Order doesn't complete. You have to wait when master change status"
-  const changeValue = (e: ChangeEvent<{}>, value: number | null) => setRatingValue(value)
+  const changeValue = (e: ChangeEvent<{}>, value: number | null) => value && setRatingValue(value)
 
   const { tooltip } = useStyles()
   return (

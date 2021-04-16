@@ -1,9 +1,8 @@
 import React from 'react'
 import { CircularProgress, Backdrop } from '@material-ui/core'
 import { useStyles } from './styles'
-import { LoaderProps } from 'types'
 
-export const Loader = ({ loading }: LoaderProps) => {
+export const Loader = ({ loading }: { loading: boolean }) => {
   const { backdrop } = useStyles()
 
   return (

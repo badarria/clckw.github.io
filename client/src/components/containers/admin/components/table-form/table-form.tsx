@@ -1,11 +1,13 @@
-import React, { FC } from 'react'
+import React, { FC, FormEvent } from 'react'
 import { Clear, Done } from '@material-ui/icons'
 import { AlertDialog } from '..'
 import { TableRow, Box, TableCell } from '@material-ui/core'
 import { useStyles } from './styles'
-import { TableFormProps } from 'types'
+import { BtnType } from 'types'
 
-export const TableForm: FC<TableFormProps> = ({ children, submit, reset }) => {
+type Props = { submit: () => void; reset: () => void }
+
+export const TableForm: FC<Props> = ({ children, submit, reset }) => {
   const { btns, form, fields } = useStyles()
 
   const acceptDialogProps = {
@@ -13,7 +15,7 @@ export const TableForm: FC<TableFormProps> = ({ children, submit, reset }) => {
     title: 'Submit form',
     question: 'Submit form?',
     description: 'Save and make changes to the database',
-    type: 'button',
+    type: 'button' as BtnType,
     accept: submit,
     disabled: false,
   }
@@ -22,7 +24,7 @@ export const TableForm: FC<TableFormProps> = ({ children, submit, reset }) => {
     title: 'Reset all changes',
     question: 'Reset form?',
     description: 'Changes will not be saved',
-    type: 'reset',
+    type: 'reset' as BtnType,
     accept: reset,
     disabled: false,
   }

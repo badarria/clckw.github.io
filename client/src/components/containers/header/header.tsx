@@ -51,13 +51,6 @@ export const Header = () => {
             ) : (
               <SignForm />
             )}
-            {/* <FacebookLogin
-              appId='495294944977053'
-              autoLoad={true}
-              fields='name,email,picture'
-              onClick={Button}
-              callback={responseFacebook}
-            /> */}
           </Box>
         </Toolbar>
       </Container>

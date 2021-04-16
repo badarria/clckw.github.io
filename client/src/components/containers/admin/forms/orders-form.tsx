@@ -10,11 +10,33 @@ import {
   getBeginFinish,
   getHoursArray,
 } from '../../../../services/utils/datetime-func'
-import { initOrderKeys, OrdersFormProps, SubmittedOrder } from 'types'
+import { Order, ServiceAsKey } from '../../../../types'
 import { getOrdersKeys, getFilteredOrders } from 'services/admin/orders'
 import { SelectHours } from 'components/ui/select/select-hours'
+import { State, NewOrder } from '../../admin/types'
 
-export const OrdersForm = ({ data, cancel, accept, editState }: OrdersFormProps) => {
+type Props = {
+  cancel: () => void
+  accept: (data: NewOrder) => void
+  data: Omit<Order, 'rating' | 'city' | 'finish'>
+  editState: State
+}
+type fullNameObj = { id: number; fullName: string }
+type Submit = {
+  customer: fullNameObj
+  service: ServiceAsKey
+  master: fullNameObj
+  hours: string
+  date: Date
+  id: number
+}
+type initOrderKeys = {
+  customer: fullNameObj[]
+  service: ServiceAsKey[]
+  master: fullNameObj[]
+}
+
+export const OrdersForm = ({ data, cancel, accept, editState }: Props) => {
   const { id, date, c, m, s, begin } = data
 
   const orderKeys: initOrderKeys = {
@@ -82,7 +104,7 @@ export const OrdersForm = ({ data, cancel, accept, editState }: OrdersFormProps)
     }
   }, [masterValue, dateValue, serviceValue])
 
-  const submit = (data: SubmittedOrder) => {
+  const submit = (data: Submit) => {
     const {
       id,
       master,

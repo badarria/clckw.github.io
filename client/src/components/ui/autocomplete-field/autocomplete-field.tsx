@@ -1,11 +1,18 @@
 import React from 'react'
 import { TextField } from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete'
-import { Controller } from 'react-hook-form'
+import { Control, Controller, FieldErrors } from 'react-hook-form'
 import { useStyles } from './styles'
-import { AutocompleteFieldProps } from 'types'
 
-export const AutocompleteField = (props: AutocompleteFieldProps) => {
+export type Props = {
+  data: any[]
+  control: Control
+  name: string
+  keyToSelect: string
+  errors: FieldErrors
+}
+
+export const AutocompleteField = (props: Props) => {
   const { data, control, name, keyToSelect, errors = {} } = props
   const { input, root, label, error } = useStyles()
   const defaultValue = data[0] || { id: 0, [keyToSelect]: '' }
@@ -35,7 +42,6 @@ export const AutocompleteField = (props: AutocompleteFieldProps) => {
               inputRef={ref}
               helperText={errors[name]?.message || ''}
               FormHelperTextProps={{ className: error }}
-              // input={input}
             />
           )}
         />

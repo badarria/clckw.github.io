@@ -1,8 +1,10 @@
-import { HoursArray, FilteredOrders, Order } from 'types'
+import { Order } from 'types'
 import { DateTime } from 'luxon'
 
 const beginKey = 'begin'
 const endKey = 'finish'
+type FilteredOrders = { begin: string; finish: string }[]
+type HoursArray = { hour: string; booked: boolean }[]
 
 const getNum = (str: string) => Number(str.split(':')[0]) as number
 
@@ -38,7 +40,14 @@ export const getHoursArray = (service_time: string, orders: FilteredOrders = [],
 }
 
 export const dateFromFormatToObj = (date: string) => DateTime.fromFormat(date, 'EEE dd/MM/yyyy').toJSDate()
-export const dateFromNewDate = () => DateTime.fromJSDate(new Date()).set({ hour: 0, minute: 0, second: 0 }).toJSDate()
+
+export const dateFromNewDate = () => {
+  const now = new Date()
+  const limit = DateTime.fromJSDate(new Date()).set({ hour: 19, minute: 0, second: 0 }).toJSDate()
+  if (now > limit) return DateTime.fromJSDate(new Date()).set({ hour: 24, minute: 0, second: 0 }).toJSDate()
+  else return DateTime.fromJSDate(new Date()).set({ hour: 0, minute: 0, second: 0 }).toJSDate()
+}
+
 export const dateToRequest = (date: Date) => DateTime.fromJSDate(date).toJSON().replace(/\+.+$/, '')
 export const dateFromIso = (str: string) => (str ? DateTime.fromISO(str).toJSDate() : dateFromNewDate())
 export const hoursFromIso = (str: string) => DateTime.fromISO(str, { zone: 'utc' }).toFormat('HH:mm')

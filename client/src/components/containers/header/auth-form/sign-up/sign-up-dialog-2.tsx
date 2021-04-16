@@ -9,10 +9,16 @@ import { AutocompleteField, Loader } from 'components/ui'
 import { getInit } from 'services/home/api'
 import { ControlledCheckbox } from '../../components'
 import { useCallback } from 'react'
-import { SignUpGoogleForm, SignUpDialog2Props } from '../../types'
+import { SignUpGoogleForm } from '../../types'
 const initCity = { id: 0, name: '' }
 
-const SignUpDialog2 = ({ msg, change, submit }: SignUpDialog2Props) => {
+type Props = {
+  msg: string
+  change: () => void
+  submit: (data: SignUpGoogleForm) => void
+}
+
+const SignUpDialog2 = ({ msg, change, submit }: Props) => {
   const { title, form, content, checkMasterBox, btnWrap, btn, wrap, checkBox, inputWrap, msgBox } = useStyles()
   const [cities, setCities] = useState([initCity])
   const [loading, setLoading] = useState(false)

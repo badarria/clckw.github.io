@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { AdminTable, AdminTableHead, Loader, Pagination } from '../components'
-import { TypicalResponseType, Paging, State, Customer } from 'types'
+import { Response, Paging, Customer } from 'types'
 import { acceptCustomer, deleteCustomer, getCustomers } from 'services/admin/customers'
 import { CustomersForm } from '../forms'
+import { State } from '../../admin/types'
 
-const initPaging: Paging = { limit: 10, offset: 0, orderby: 'id', order: 'desc', count: 50 }
+const initPaging: Required<Paging> = { limit: 10, offset: 0, orderby: 'id', order: 'desc', count: 50 }
 const initDataToChange: Customer = { id: 0, name: '', surname: '', email: '', password: '' }
 const columns = ['id', 'name', 'surname', 'email']
 
 export const Customers = () => {
   const [editState, setEditState] = useState<State>(null)
-  const [toast, setToast] = useState<TypicalResponseType>({ type: 'success', msg: '' })
+  const [toast, setToast] = useState<Response>({ type: 'success', msg: '' })
   const [loading, setLoading] = useState(false)
   const [items, setItems] = useState<Customer[]>([])
   const [paging, setPaging] = useState(initPaging)
@@ -24,7 +25,7 @@ export const Customers = () => {
     return res
   }
 
-  const setToastMsg = (toast: TypicalResponseType) => {
+  const setToastMsg = (toast: Response) => {
     setToast(toast)
     setTimeout(() => {
       setToast({ type: toast.type, msg: '' })
@@ -47,7 +48,7 @@ export const Customers = () => {
   }
 
   const remove = async (id: number) => {
-    const msg: TypicalResponseType = await setLoader(deleteCustomer(id))
+    const msg: Response = await setLoader(deleteCustomer(id))
     setToastMsg(msg)
     if (msg.type === 'success') {
       await getItems()

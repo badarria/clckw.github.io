@@ -1,5 +1,6 @@
-import { OrdersKey, Method, State, TypicalResponseType, FilteredOrders, NewOrderData } from 'types'
-import { OrdersList, Paging } from 'types'
+import { Method, State, NewOrder } from '../../../components/containers/admin/types'
+import { Response, Order, ServiceAsKey, Paging } from '../../../types'
+
 const adminPath = '/admin/orders'
 const getToken = () => localStorage.getItem('token') || ''
 
@@ -7,11 +8,18 @@ const wrapTryCatch = async <T>(tryFunc: T) => {
   try {
     return await tryFunc
   } catch {
-    return { type: 'error', msg: 'Something went wrong' } as TypicalResponseType
+    return <Response>{ type: 'error', msg: 'Something went wrong' }
   }
 }
+type OrdersKey = {
+  master: { id: number; fullName: string }[]
+  customer: { id: number; fullName: string }[]
+  service: ServiceAsKey[]
+}
+type List = { items: Order[]; count: number }
+type FilteredOrders = { begin: string; finish: string }[]
 
-const get = async ({ limit, order, orderby, offset }: Paging): Promise<OrdersList> => {
+const get = async ({ limit, order, orderby, offset }: Paging): Promise<List> => {
   const token = getToken()
   const res = await fetch(`${adminPath}/${limit}/${offset}/${order}/${orderby}`, {
     headers: { token },
@@ -19,7 +27,7 @@ const get = async ({ limit, order, orderby, offset }: Paging): Promise<OrdersLis
   return res.json()
 }
 
-const del = async (id: number): Promise<TypicalResponseType> => {
+const del = async (id: number): Promise<Response> => {
   const token = getToken()
   const res = await fetch(`${adminPath}/${id}`, {
     method: 'DELETE',
@@ -28,7 +36,7 @@ const del = async (id: number): Promise<TypicalResponseType> => {
   return res.json()
 }
 
-const putOrPost = async (method: Method, data: NewOrderData): Promise<TypicalResponseType> => {
+const putOrPost = async (method: Method, data: NewOrder): Promise<Response> => {
   const token = getToken()
   const res = await fetch(`${adminPath}`, {
     method,
@@ -51,7 +59,7 @@ const getFiltered = async (master_id: number, order_id: number, date: string): P
 
 export const getOrders = async (paging: Paging) => await wrapTryCatch(get(paging))
 export const deleteOrder = async (id: number) => await wrapTryCatch(del(id))
-export const acceptOrder = async (data: NewOrderData, state: State) => {
+export const acceptOrder = async (data: NewOrder, state: State) => {
   const method = state === 'isEditing' ? 'PUT' : 'POST'
   return await wrapTryCatch(putOrPost(method, data))
 }

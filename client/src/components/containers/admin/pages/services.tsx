@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import { AdminTable, AdminTableHead, Loader, Pagination } from '../components'
-import { TypicalResponseType, Paging, State, Service } from 'types'
+import { Response, Paging, Service } from '../../../../types'
 import { acceptService, deleteService, getServices } from 'services/admin/services'
 import { ServicesForm } from '../forms'
+import { State } from '../../../containers/admin/types'
 
 const columns = ['id', 'name', 'time', 'price']
-const initPaging: Paging = { limit: 5, offset: 0, orderby: 'time', order: 'asc', count: 50 }
+const initPaging: Required<Paging> = { limit: 5, offset: 0, orderby: 'time', order: 'asc', count: 50 }
 const initDataToChange: Service = { id: 0, name: '', time: '', price: 0 }
 
 export const Services = () => {
   const [editState, setEditState] = useState<State>(null)
-  const [toast, setToast] = useState<TypicalResponseType>({ type: 'success', msg: '' })
-  const [loading, setLoading] = useState<boolean>(false)
+  const [toast, setToast] = useState<Response>({ type: 'success', msg: '' })
+  const [loading, setLoading] = useState(false)
   const [items, setItems] = useState<Service[]>([])
-  const [paging, setPaging] = useState<Paging>(initPaging)
-  const [dataToChange, setDataToChange] = useState<Service>(initDataToChange)
+  const [paging, setPaging] = useState(initPaging)
+  const [dataToChange, setDataToChange] = useState(initDataToChange)
   const { limit, offset, count, orderby, order } = paging
 
   const setLoader = async <T extends any>(doSomething: T) => {
@@ -24,7 +25,7 @@ export const Services = () => {
     return res
   }
 
-  const setToastMsg = (toast: TypicalResponseType) => {
+  const setToastMsg = (toast: Response) => {
     setToast(toast)
     setTimeout(() => {
       setToast({ type: toast.type, msg: '' })
@@ -47,7 +48,7 @@ export const Services = () => {
   }
 
   const remove = async (id: number) => {
-    const msg: TypicalResponseType = await setLoader(deleteService(id))
+    const msg: Response = await setLoader(deleteService(id))
     setToastMsg(msg)
     if (msg.type === 'success') {
       await getItems()

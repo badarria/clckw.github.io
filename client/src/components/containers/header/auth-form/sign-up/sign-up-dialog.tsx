@@ -1,12 +1,21 @@
 import React, { useState, useCallback } from 'react'
 import { Dialog } from '@material-ui/core'
 import { useStyles } from '../styles'
-import { SignUpGoogleForm, GoogleSignIn, SignUpDialogProps } from '../../types'
+import { SignUpGoogleForm, GoogleSignIn, GoogleSignUp, LocalSignUp } from '../../types'
 import SignUpDialog1 from './sign-up-dialog-1'
 import { GoogleBtn } from '../../components'
 import SignUpDialog2 from './sign-up-dialog-2'
 
-const SignUpDialog = ({ close, localSignUp, open, msg, googleSignUp, changeState }: SignUpDialogProps) => {
+type Props = {
+  msg: string
+  open: boolean
+  close: () => void
+  googleSignUp: ({ token, isMaster, city }: GoogleSignUp) => void
+  localSignUp: (data: LocalSignUp) => void
+  changeState: (data: boolean) => void
+}
+
+const SignUpDialog = ({ close, localSignUp, open, msg, googleSignUp, changeState }: Props) => {
   const { dialog } = useStyles()
   const [token, setToken] = useState('')
 
@@ -24,9 +33,9 @@ const SignUpDialog = ({ close, localSignUp, open, msg, googleSignUp, changeState
     googleSignUp({ token, isMaster: master, city })
   }
 
-  const gglBtn = <GoogleBtn cb={handleGoogleStage1} label='Sign Up with Google' />
+  const googleBtn = <GoogleBtn cb={handleGoogleStage1} label='Sign Up with Google' />
 
-  const regDialog1Props = { gglBtn, change, msg, localSignUp }
+  const regDialog1Props = { googleBtn, change, msg, localSignUp }
   const regDialog2Props = { msg, change, submit: handleGoogleStage2 }
 
   return (

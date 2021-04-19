@@ -4,8 +4,15 @@ import { useStyles } from './styles'
 import { DatePicker, AutocompleteField, InputField, DropZone } from '../../components'
 import { SelectHours } from 'components/ui/select/select-hours'
 import { Control, RegisterOptions, FieldErrors } from 'react-hook-form'
+import { RootState } from 'store'
 
-type Props = { control: Control; register: Ref<RegisterOptions>; errors: FieldErrors; initState: any; hours: any }
+type Props = {
+  control: Control
+  register: Ref<RegisterOptions>
+  errors: FieldErrors
+  initState: RootState['initState']
+  hours: { hour: string; booked: boolean }[]
+}
 
 export const SearchForm = ({ control, register, errors, initState, hours }: Props) => {
   const { btn, wrapInput } = useStyles()

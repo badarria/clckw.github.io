@@ -23,5 +23,5 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   if (!isMatch) next(new Error('Name or password is incorrect'))
 
   const userByRole = await getUserByRole(role, token, id).catch((err: Error) => next(err))
-  return res.json(userByRole)
+  return userByRole && res.json(userByRole)
 }

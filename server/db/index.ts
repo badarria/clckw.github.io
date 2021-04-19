@@ -2,7 +2,19 @@ import { Sequelize } from 'sequelize-typescript'
 import { config } from '../../config'
 import { City, Customer, Service, Master, User, Order, Photo } from './models'
 const connectionString = config.db
-let seqconnetOpt: any = [connectionString]
+type Config = [
+  string,
+  {
+    dialectOptions?: {
+      ssl?: {
+        require?: boolean
+        rejectUnauthorized?: boolean
+      }
+    }
+  }?
+]
+
+let seqconnetOpt: Config = [connectionString]
 if ('dbOpt' in config) {
   seqconnetOpt.push(config.dbOpt)
 }

@@ -16,7 +16,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     const updCustomer = await Customer.update(
       { name, surname },
       { where: { user_id: id }, returning: true }
-    ).catch((err) => next(err))
+    ).catch((err: Error) => next(err))
     return updCustomer && res.json({ password: '', id: updCustomer[1][0].id })
   } else {
     let password = genPass.generate({ length: 8, numbers: true })

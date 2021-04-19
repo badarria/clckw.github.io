@@ -28,7 +28,7 @@ export const DropZone = ({ control }: { control: Control }) => {
 
   const findAndDelete = useCallback(async (file: Blob) => {
     const readed = await readFile(file)
-    const newArr = readedFiles.reduce((acc: any[], file) => {
+    const newArr = readedFiles.reduce((acc: string[], file) => {
       if (file !== readed) acc.push(file)
       return acc
     }, [])

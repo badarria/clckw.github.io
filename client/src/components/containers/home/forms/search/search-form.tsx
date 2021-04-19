@@ -1,13 +1,20 @@
-import React from 'react'
+import React, { Ref } from 'react'
 import { Box, Button } from '@material-ui/core'
 import { useStyles } from './styles'
 import { DatePicker, AutocompleteField, InputField, DropZone } from '../../components'
 import { SelectHours } from 'components/ui/select/select-hours'
-import { Control, RegisterOptions } from 'react-hook-form'
+import { Control, RegisterOptions, FieldErrors } from 'react-hook-form'
+import { RootState } from 'store'
 
-type SearchFormProps = { control: Control; register: RegisterOptions; errors: any; initState: any; hours: any }
+type Props = {
+  control: Control
+  register: Ref<RegisterOptions>
+  errors: FieldErrors
+  initState: RootState['initState']
+  hours: { hour: string; booked: boolean }[]
+}
 
-export const SearchForm = ({ control, register, errors, initState, hours }: SearchFormProps) => {
+export const SearchForm = ({ control, register, errors, initState, hours }: Props) => {
   const { btn, wrapInput } = useStyles()
 
   const selectProps = { control, data: hours, name: 'hours' }

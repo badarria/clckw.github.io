@@ -11,7 +11,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   if (!validData) return
 
   const { id } = validData
-  const result = await Order.update({ completed: true }, { where: { id } }).catch((err) => next(err))
+  const result = await Order.update({ completed: true }, { where: { id } }).catch((err: Error) => next(err))
   if (!result) return
 
   const msg = result[0] ? 'Order  was updated' : 'Order not found'

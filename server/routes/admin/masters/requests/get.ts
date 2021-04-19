@@ -2,12 +2,15 @@ import { PagingSchema } from '../../../shared/validation'
 import { NextFunction, Request, Response } from 'express'
 import { Master, City, Order, User } from '../../../../db/models'
 
+type Ord = [string, string] | [{ model: typeof User | typeof City; as: string }, string, string]
+type Params = { order: [Ord]; limit?: number; offset?: number }
+
 export default async (req: Request, res: Response, next: NextFunction) => {
   let validData = await PagingSchema.validate(req.params).catch((err: Error) => next(err))
   if (!validData) return
 
   const { limit, offset, orderby, order } = validData
-  let ord: any = [orderby, order]
+  let ord: Ord = [orderby, order]
   if (orderby === 'city') {
     ord = [{ model: City, as: 'ci' }, 'name', order]
   }
@@ -15,7 +18,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   if (orderby === 'email') {
     ord = [{ model: User, as: 'user' }, 'email', order]
   }
-  const params: any = { order: [ord] }
+  const params: Params = { order: [ord] }
   if (limit >= 0) {
     params.limit = limit
     params.offset = offset

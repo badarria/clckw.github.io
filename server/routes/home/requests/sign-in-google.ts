@@ -20,7 +20,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       idToken: validData.token,
       audience: google.client_id,
     })
-    .catch((err) => next(err))
+    .catch((err: Error) => next(err))
   if (!ticket) return
 
   const payload = ticket.getPayload()
@@ -29,5 +29,5 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
   const { id, token, role } = user
   const userByRole = await getUserByRole(role, token, id).catch((err: Error) => next(err))
-  res.json(userByRole)
+  userByRole && res.json(userByRole)
 }

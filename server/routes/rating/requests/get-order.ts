@@ -8,7 +8,7 @@ const schema = yup.object().shape({
 })
 
 export default async (req: Request, res: Response, next: NextFunction) => {
-  const validData = await schema.validate(req.params).catch((err) => next(err))
+  const validData = await schema.validate(req.params).catch((err: Error) => next(err))
   if (!validData) return
 
   const { id } = validData
@@ -19,6 +19,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     attributes: ['id', 'customer', 'rating'],
     where: { id: orderId },
     include: { model: Customer, as: 'c', attributes: ['name', 'surname', 'fullName'] },
-  }).catch((err) => next(err))
+  }).catch((err: Error) => next(err))
   res.json(order)
 }

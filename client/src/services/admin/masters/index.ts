@@ -1,5 +1,6 @@
-import { Master, MastersKey, Method, State, TypicalResponseType } from 'types'
-import { MastersList, Paging } from 'types'
+import { Master, City, Response, Paging } from '../../../types'
+import { NewMaster, Method, State } from '../../../components/containers/admin/types'
+
 const adminPath = '/admin/masters'
 const getToken = () => localStorage.getItem('token') || ''
 
@@ -7,11 +8,13 @@ const wrapTryCatch = async <T>(tryFunc: T) => {
   try {
     return await tryFunc
   } catch {
-    return { type: 'error', msg: 'Something went wrong' } as TypicalResponseType
+    return <Response>{ type: 'error', msg: 'Something went wrong' }
   }
 }
 
-const get = async ({ limit, order, orderby, offset }: Paging): Promise<MastersList> => {
+type List = { items: Master[]; count: number }
+
+const get = async ({ limit, order, orderby, offset }: Paging): Promise<List> => {
   const token = getToken()
   const res = await fetch(`${adminPath}/${limit}/${offset}/${order}/${orderby}`, {
     headers: { token },
@@ -19,7 +22,7 @@ const get = async ({ limit, order, orderby, offset }: Paging): Promise<MastersLi
   return res.json()
 }
 
-const del = async (id: number): Promise<TypicalResponseType> => {
+const del = async (id: number): Promise<Response> => {
   const token = getToken()
   const res = await fetch(`${adminPath}/${id}`, {
     method: 'DELETE',
@@ -28,7 +31,7 @@ const del = async (id: number): Promise<TypicalResponseType> => {
   return res.json()
 }
 
-const putOrPost = async (method: Method, data: Master): Promise<TypicalResponseType> => {
+const putOrPost = async (method: Method, data: NewMaster): Promise<Response> => {
   const token = getToken()
   const res = await fetch(`${adminPath}`, {
     method,
@@ -38,7 +41,7 @@ const putOrPost = async (method: Method, data: Master): Promise<TypicalResponseT
   return res.json()
 }
 
-const getKeys = async (): Promise<MastersKey> => {
+const getKeys = async (): Promise<City[]> => {
   const token = getToken()
   const res = await fetch(`${adminPath}/foreignKeys`, { headers: { token } })
   return res.json()
@@ -46,7 +49,7 @@ const getKeys = async (): Promise<MastersKey> => {
 
 export const getMasters = async (paging: Paging) => await wrapTryCatch(get(paging))
 export const deleteMaster = async (id: number) => await wrapTryCatch(del(id))
-export const acceptMaster = async (data: Master, state: State) => {
+export const acceptMaster = async (data: NewMaster, state: State) => {
   const method = state === 'isEditing' ? 'PUT' : 'POST'
   return await wrapTryCatch(putOrPost(method, data))
 }

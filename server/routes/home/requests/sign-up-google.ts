@@ -29,7 +29,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       idToken: token,
       audience: google.client_id,
     })
-    .catch((err) => next(err))
+    .catch((err: Error) => next(err))
   if (!ticket) return
 
   const payload = ticket.getPayload()

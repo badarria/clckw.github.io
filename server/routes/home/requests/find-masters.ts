@@ -27,7 +27,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         attributes: ['rating', 'beginat', 'finishat'],
       },
     ],
-  }).catch((err) => next(new Error(err)))
+  }).catch((err: Error) => next(err))
   if (!Array.isArray(list)) return
 
   const result: Result[] = []

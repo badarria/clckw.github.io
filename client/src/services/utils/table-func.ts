@@ -5,10 +5,3 @@ export const getServiceTime = () => {
   }
   return res
 }
-
-export const findObj = (id: number, keys: any, defaultValue: any) => {
-  for (let item of keys) {
-    if (item.id === id) return item
-  }
-  return defaultValue
-}

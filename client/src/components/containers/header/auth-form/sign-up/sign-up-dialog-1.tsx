@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, ReactElement } from 'react'
 import { DialogContent, DialogTitle, Button, Box, FormGroup, InputLabel } from '@material-ui/core'
 import { useForm } from 'react-hook-form'
 import { Typography } from '@material-ui/core'
@@ -8,10 +8,17 @@ import { useStyles } from '../styles'
 import { AutocompleteField, InputField, Loader } from 'components/ui'
 import { getInit } from 'services/home/api'
 import { ControlledCheckbox } from '../../components'
-import { SignUpDialog1Props } from '../../types'
+import { LocalSignUp } from '../../types'
 const initCity = { id: 0, name: '' }
 
-const SignUpDialog1 = ({ change, msg, localSignUp, gglBtn }: SignUpDialog1Props) => {
+type Props = {
+  change: () => void
+  msg: string
+  localSignUp: (data: LocalSignUp) => void
+  googleBtn: ReactElement
+}
+
+const SignUpDialog1 = ({ change, msg, localSignUp, googleBtn }: Props) => {
   const {
     title,
     form,
@@ -112,7 +119,7 @@ const SignUpDialog1 = ({ change, msg, localSignUp, gglBtn }: SignUpDialog1Props)
             <Button type='submit' color='primary' variant='contained' className={btn} disabled={disabled}>
               Ok
             </Button>
-            {gglBtn}
+            {googleBtn}
             <Button size='small' onClick={change} className={btn}>
               I have an account
             </Button>

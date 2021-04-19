@@ -7,7 +7,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   if (!validData) return
 
   const { name, id } = validData
-  const result = await City.update({ name }, { where: { id } }).catch((err) => next(err))
+  const result = await City.update({ name }, { where: { id } }).catch((err: Error) => next(err))
   if (!result) return
 
   const msg = result[0] ? 'City was updated' : 'City not found'

@@ -3,14 +3,22 @@ import { useForm } from 'react-hook-form'
 import { AutocompleteField, InputField, Loader, TableForm } from '../components'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { masters } from '../../../../services/admin/validation/schema'
-import { MastersFormProps } from 'types'
+import { Master } from '../../../../types'
 import { getMastersKeys } from 'services/admin/masters'
+import { State, NewMaster } from '../../admin/types'
 
-export const MastersForm = ({ data, cancel, accept, editState }: MastersFormProps) => {
+type Props = {
+  cancel: () => void
+  accept: (data: NewMaster) => void
+  data: Master
+  editState: State
+}
+
+export const MastersForm = ({ data, cancel, accept, editState }: Props) => {
   const { id, name, surname, ci, email } = data
   const [keys, setKeys] = useState([ci])
   const [loading, setLoading] = useState(false)
-  const defaultValues: any = { id, name, surname, city: keys[0], password: '', email }
+  const defaultValues = { id, name, surname, city: keys[0], password: '', email }
   const labels = Object.keys({ id, name, surname, email, password: '' })
 
   const { register, handleSubmit, control, reset, errors } = useForm({
@@ -26,7 +34,7 @@ export const MastersForm = ({ data, cancel, accept, editState }: MastersFormProp
   }
 
   const formProps = {
-    submit: handleSubmit((data) => accept({ ...data, city: data.city.id })),
+    submit: handleSubmit((data) => accept({ ...data, city: `${data.city.id}` })),
     reset: () => {
       cancel()
       reset()

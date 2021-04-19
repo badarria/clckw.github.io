@@ -10,14 +10,14 @@ import { useHistory } from 'react-router-dom'
 import { Loader, Toast } from '../components'
 import { addNewOrder, handlePayment, sendConfirmLetter } from 'services/home/api'
 import { getBeginFinish } from 'services/utils/datetime-func'
-import { TypicalResponseType } from 'types'
+import { Response, StripeFunc } from '../../../../types'
 import { CheckoutForm } from '../forms/payment/checkout'
 import { setInit } from 'store/reducer'
 import { stripe_public_key } from '../../../../config'
 const promise = loadStripe(stripe_public_key)
 
 export const Payment = () => {
-  const customer = useSelector((state: RootState) => state.customerData)
+  const customerData = useSelector((state: RootState) => state.customerData)
   const mailData = useSelector((state: RootState) => state.mailData)
   const order = useSelector((state: RootState) => state.orderData)
   const amount = useSelector((state: RootState) => state.orderData?.service?.price)
@@ -26,7 +26,7 @@ export const Payment = () => {
   const history = useHistory()
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
-  const [toast, setToast] = useState<TypicalResponseType>({ type: 'success', msg: '' })
+  const [toast, setToast] = useState<Response>({ type: 'success', msg: '' })
   const [successMsg, setSuccessMsg] = useState('')
 
   const back = useCallback(() => {
@@ -39,36 +39,46 @@ export const Payment = () => {
     dispatch(setInit())
   }, [])
 
-  const setToastMsg = (toast: TypicalResponseType) => {
+  const setToastMsg = (toast: Response) => {
     setToast(toast)
     setTimeout(() => {
       setToast({ type: toast.type, msg: '' })
     }, 3000)
   }
 
-  const submit = async (func) => {
+  const submit = async (func: StripeFunc) => {
     setLoading(true)
-    const res = customer && (await func(customer.email, customer.name, customer.surname))
-
-    if (res.error) {
-      setToastMsg({ type: 'error', msg: res.error.message || 'something went wrong' })
+    if (!customerData || !amount || !order) {
       setLoading(false)
-    } else if (amount) {
-      const data = { id: res.paymentMethod.id, amount }
-      const makePay = await handlePayment(data)
+      return setToastMsg({ type: 'error', msg: 'Something went wrong' })
+    }
+    const { email, surname, name } = customerData
+    const stripeRes = await func(email, name, surname)
 
-      if (makePay.type === 'success' && order) {
-        const { service, master, customer, date, time, files } = order
-        const { begin, finish } = getBeginFinish(date, time, service.time)
-        const orderData = { begin, finish, master: master.id, customer, files, service: service.id }
+    if (stripeRes.error) {
+      setToastMsg({ type: 'error', msg: stripeRes.error?.message || 'something went wrong' })
+      setLoading(false)
+      return
+    }
 
-        const res = await addNewOrder(orderData)
-        if (res.type === 'success') {
-          setSuccessMsg(res.msg)
-          mailData && sendConfirmLetter(mailData)
-        } else setToastMsg(res)
-      }
-    } else setToastMsg({ type: 'error', msg: 'Something went wrong' })
+    const data = { id: stripeRes.paymentMethod.id, amount }
+    const makePay = await handlePayment(data)
+
+    if (makePay.type === 'error') {
+      setLoading(false)
+      return setToastMsg({ type: 'error', msg: 'Something went wrong' })
+    }
+
+    const { service, master, customer, date, time, files } = order
+    const { begin, finish } = getBeginFinish(date, time, service.time)
+    const orderData = { begin, finish, master: master.id, customer, files, service: service.id }
+    const newOrder = await addNewOrder(orderData)
+
+    if (newOrder.type === 'success') {
+      setSuccessMsg(newOrder.msg)
+      mailData && sendConfirmLetter(mailData)
+    } else setToastMsg(newOrder)
+
     setLoading(false)
   }
 

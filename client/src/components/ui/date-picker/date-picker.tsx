@@ -1,11 +1,10 @@
 import React from 'react'
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
-import { Controller } from 'react-hook-form'
+import { Control, Controller } from 'react-hook-form'
 import { useStyles } from './styles'
-import { DatePickerProps } from 'types'
 
-export const DatePicker = (props: DatePickerProps) => {
+export const DatePicker = (props: { control: Control }) => {
   const { root, input } = useStyles()
   const { control } = props
 

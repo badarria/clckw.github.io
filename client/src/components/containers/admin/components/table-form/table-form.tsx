@@ -3,12 +3,14 @@ import { Clear, Done } from '@material-ui/icons'
 import { AlertDialog } from '..'
 import { TableRow, Box, TableCell } from '@material-ui/core'
 import { useStyles } from './styles'
-import { TableFormProps } from 'types'
+import { AlertDialogProps } from '../../types'
 
-export const TableForm: FC<TableFormProps> = ({ children, submit, reset }) => {
+type Props = { submit: () => void; reset: () => void }
+
+export const TableForm: FC<Props> = ({ children, submit, reset }) => {
   const { btns, form, fields } = useStyles()
 
-  const acceptDialogProps = {
+  const acceptDialogProps: AlertDialogProps = {
     icon: <Done fontSize='small' />,
     title: 'Submit form',
     question: 'Submit form?',
@@ -17,7 +19,7 @@ export const TableForm: FC<TableFormProps> = ({ children, submit, reset }) => {
     accept: submit,
     disabled: false,
   }
-  const resetDialogProps = {
+  const resetDialogProps: AlertDialogProps = {
     icon: <Clear fontSize='small' />,
     title: 'Reset all changes',
     question: 'Reset form?',

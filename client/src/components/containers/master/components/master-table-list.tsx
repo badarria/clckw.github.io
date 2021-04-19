@@ -1,29 +1,30 @@
-import React from 'react';
-import { TableCell, TableRow } from '@material-ui/core';
-import { TypicalResponseType, MasterOrdersList } from '../../../../types';
-import { ButtonDialog, PdfBtn, ZipBtn } from '.';
+import React from 'react'
+import { TableCell, TableRow } from '@material-ui/core'
+import { Response } from '../../../../types'
+import { ButtonDialog, PdfBtn, ZipBtn } from '.'
+import { OrdersList, ChangeStatus, Columns } from '../types'
 
 type Props = {
-  data: MasterOrdersList[];
-  columns: string[];
-  change: Function;
-  getZip: (id: number) => Promise<string | TypicalResponseType>;
-  getPdf: Function;
-};
+  data: OrdersList[]
+  columns: Columns
+  change: (data: ChangeStatus) => void
+  getZip: (id: number) => Promise<string | Response>
+  getPdf: (id: number) => void
+}
 
 export const MasterTableList = (props: Props) => {
-  const { data, columns, change, getZip, getPdf } = props;
-  const generatedColumns = columns.slice(0, -3);
+  const { data, columns, change, getZip, getPdf } = props
+  const generatedColumns = columns.slice(0, -3)
 
   if (data.length)
     return (
       <>
-        {data.map((item: MasterOrdersList, inx: number) => {
-          const { id, completed, userEmail, customer, photos } = item;
-          const dataForLetter = { id, userEmail, name: customer };
-          const zipBtnProps = { id, getZip, disabled: !photos };
-          const pdfBtnProps = { id, getPdf, disabled: !completed };
-          const thisItem: any = { ...item };
+        {data.map((item: OrdersList, inx: number) => {
+          const { id, completed, userEmail, customer, photos } = item
+          const dataForLetter = { id, userEmail, name: customer }
+          const zipBtnProps = { id, getZip, disabled: !photos }
+          const pdfBtnProps = { id, getPdf, disabled: !completed }
+          const thisItem: any = { ...item }
 
           return (
             <TableRow key={inx} component='tr'>
@@ -32,22 +33,19 @@ export const MasterTableList = (props: Props) => {
                   <TableCell component='td' key={inx}>
                     {thisItem[col]}
                   </TableCell>
-                );
+                )
               })}
               <TableCell>
-                <ButtonDialog
-                  accept={() => change(dataForLetter)}
-                  isDisabled={completed}
-                />
+                <ButtonDialog accept={() => change(dataForLetter)} isDisabled={completed} />
               </TableCell>
 
               <ZipBtn {...zipBtnProps} />
               <PdfBtn {...pdfBtnProps} />
             </TableRow>
-          );
+          )
         })}
       </>
-    );
+    )
   else
     return (
       <TableRow component='tr'>
@@ -55,5 +53,5 @@ export const MasterTableList = (props: Props) => {
           There is no placed order
         </TableCell>
       </TableRow>
-    );
-};
+    )
+}

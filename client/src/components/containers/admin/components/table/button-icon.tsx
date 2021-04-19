@@ -1,8 +1,7 @@
 import { IconButton, Tooltip } from '@material-ui/core'
-import React, { FC } from 'react'
-import { ButtonIconProps } from 'types'
+import { ButtonIconProps } from '../../types'
 
-export const ButtonIcon: FC<ButtonIconProps> = (props) => {
+export const ButtonIcon = (props: ButtonIconProps) => {
   const { title, icon, onClick, disabled, type } = props
 
   return (

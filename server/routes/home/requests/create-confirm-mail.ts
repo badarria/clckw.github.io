@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
+import { Table, Mail } from 'routes/shared/utils/mailer'
 import * as yup from 'yup'
 import { createMail } from '../../shared/utils'
 
@@ -11,18 +12,6 @@ const schema = yup.object().shape({
   master: yup.string().required(),
   password: yup.string(),
 })
-
-type Table = {
-  title: string
-  data: {
-    'Order date'?: string
-    City?: string
-    'Your master'?: string
-    'Size of clock'?: string
-    Login?: string
-    Password?: string
-  }[]
-}[]
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   const validData = await schema.validate(req.body).catch((err: Error) => next(err))
@@ -37,7 +26,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   ]
   password && table.push({ title: 'Your registration details:', data: [{ Login: userEmail, Password: password }] })
 
-  const mail = {
+  const mail: Mail = {
     body: { name, table, outro: 'Thanks for choosing us!' },
   }
   const subj = 'Your order has been processed successfully'

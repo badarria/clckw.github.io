@@ -2,12 +2,19 @@ import { NextFunction, Request, Response } from 'express'
 import { PagingSchema } from '../../../shared/validation'
 import { Order, Customer, Master, Service, City } from '../../../../db/models'
 
+type Ord =
+  | [string, string]
+  | [{ model: typeof Master | typeof Customer | typeof Service; as: string }, string, string]
+  | [{ model: typeof Master; as: string }, { model: typeof City; as: string }, string, string]
+
+type Params = { order: [Ord]; limit?: number; offset?: number }
+
 export default async (req: Request, res: Response, next: NextFunction) => {
   let validData = await PagingSchema.validate(req.params).catch((err: Error) => next(err))
   if (!validData) return
 
   const { orderby, order, limit, offset } = validData
-  let ord: any = [orderby, order]
+  let ord: Ord = [orderby, order]
   if (orderby === 'master') ord = [{ model: Master, as: 'm' }, 'name', order]
   if (orderby === 'customer') ord = [{ model: Customer, as: 'c' }, 'name', order]
   if (orderby === 'city') ord = [{ model: Master, as: 'm' }, { model: City, as: 'ci' }, 'name', order]
@@ -17,7 +24,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   if (orderby === 'finish') ord = ['finishat', order]
   if (orderby === 'status') ord = ['completed', order]
 
-  const params: any = { order: [ord] }
+  const params: Params = { order: [ord] }
   if (limit >= 0) {
     params.limit = limit
     params.offset = offset

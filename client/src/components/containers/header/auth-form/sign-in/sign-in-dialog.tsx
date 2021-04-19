@@ -6,10 +6,19 @@ import { loginForm } from '../../../../../services/home/validation/schema'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useStyles } from '../styles'
 import { GoogleBtn } from '../../components'
-import { SignInDialogProps } from '../../types'
+import { LocalSignIn, GoogleSignIn } from '../../types'
 import { InputField } from 'components/ui'
 
-const SignInDialog = ({ close, open, msg, changeState, googleSignIn, localSignIn }: SignInDialogProps) => {
+type Props = {
+  msg: string
+  open: boolean
+  close: () => void
+  localSignIn: (data: LocalSignIn) => void
+  googleSignIn: (data: GoogleSignIn) => void
+  changeState: (data: boolean) => void
+}
+
+const SignInDialog = ({ close, open, msg, changeState, googleSignIn, localSignIn }: Props) => {
   const { dialog, title, form, content, btnWrap, btn } = useStyles()
 
   const { register, handleSubmit, errors } = useForm({

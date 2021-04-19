@@ -52,7 +52,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
           return resolve(createMail(mail, userEmail, subj, attach))
         })
       )
-    req.body = await createMailWithPdf().catch((err) => next(err))
+    req.body = await createMailWithPdf().catch((err: Error) => next(err))
 
     next()
   }

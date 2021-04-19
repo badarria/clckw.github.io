@@ -1,4 +1,6 @@
-import { Customer, Method, State, TypicalResponseType, CustomersList, Paging } from 'types'
+import { Customer, Response, Paging } from 'types'
+import { Method, State } from '../../../components/containers/admin/types'
+
 const adminPath = '/admin/customers'
 const getToken = () => localStorage.getItem('token') || ''
 
@@ -6,11 +8,13 @@ const wrapTryCatch = async <T>(tryFunc: T) => {
   try {
     return await tryFunc
   } catch {
-    return { type: 'error', msg: 'Something went wrong' } as TypicalResponseType
+    return <Response>{ type: 'error', msg: 'Something went wrong' }
   }
 }
 
-const get = async ({ limit, order, orderby, offset }: Paging): Promise<CustomersList> => {
+type List = { items: Customer[]; count: number }
+
+const get = async ({ limit, order, orderby, offset }: Paging): Promise<List> => {
   const token = getToken()
   const res = await fetch(`${adminPath}/${limit}/${offset}/${order}/${orderby}`, {
     headers: { token },
@@ -18,7 +22,7 @@ const get = async ({ limit, order, orderby, offset }: Paging): Promise<Customers
   return res.json()
 }
 
-const del = async (id: number): Promise<TypicalResponseType> => {
+const del = async (id: number): Promise<Response> => {
   const token = getToken()
   const res = await fetch(`${adminPath}/${id}`, {
     method: 'DELETE',
@@ -27,7 +31,7 @@ const del = async (id: number): Promise<TypicalResponseType> => {
   return res.json()
 }
 
-const putOrPost = async (method: Method, data: Customer): Promise<TypicalResponseType> => {
+const putOrPost = async (method: Method, data: Customer): Promise<Response> => {
   const token = getToken()
   const res = await fetch(`${adminPath}`, {
     method,

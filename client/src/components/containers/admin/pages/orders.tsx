@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { AdminTable, AdminTableHead, Loader, Pagination } from '../components'
-import { TypicalResponseType, Paging, State, Order, NewOrderData } from 'types'
+import { Response, Paging, Order } from '../../../../types'
 import { acceptOrder, deleteOrder, getOrders } from 'services/admin/orders'
 import { OrdersForm } from '../forms'
+import { State, NewOrder, AllSubjectsData } from '../../../containers/admin/types'
 
 const columns = ['id', 'service', 'price', 'master', 'customer', 'city', 'date', 'begin', 'finish', 'rating', 'status']
-const initPaging: Paging = { limit: 15, offset: 0, orderby: 'date', order: 'desc', count: 50 }
+const initPaging: Required<Paging> = { limit: 15, offset: 0, orderby: 'date', order: 'desc', count: 50 }
 const initDataToChange = {
   id: 0,
   m: { id: 0, fullName: '' },
@@ -18,10 +19,10 @@ const initDataToChange = {
 
 export const Orders = () => {
   const [editState, setEditState] = useState<State>(null)
-  const [toast, setToast] = useState<TypicalResponseType>({ type: 'success', msg: '' })
+  const [toast, setToast] = useState<Response>({ type: 'success', msg: '' })
   const [loading, setLoading] = useState(false)
   const [items, setItems] = useState<Order[]>([])
-  const [paging, setPaging] = useState<Paging>(initPaging)
+  const [paging, setPaging] = useState(initPaging)
   const [dataToChange, setDataToChange] = useState(initDataToChange)
   const { limit, offset, count, orderby, order } = paging
 
@@ -32,7 +33,7 @@ export const Orders = () => {
     return res
   }
 
-  const setToastMsg = (toast: TypicalResponseType) => {
+  const setToastMsg = (toast: Response) => {
     setToast(toast)
     setTimeout(() => {
       setToast({ type: toast.type, msg: '' })
@@ -56,7 +57,7 @@ export const Orders = () => {
   }
 
   const remove = async (id: number) => {
-    const msg: TypicalResponseType = await setLoader(deleteOrder(id))
+    const msg: Response = await setLoader(deleteOrder(id))
     setToastMsg(msg)
     if (msg.type === 'success') {
       await getItems()
@@ -75,7 +76,7 @@ export const Orders = () => {
     setDataToChange(initDataToChange)
   }
 
-  const accept = async (data: NewOrderData) => {
+  const accept = async (data: NewOrder) => {
     const toast = await setLoader(acceptOrder(data, editState))
     if (toast.type === 'success') {
       cancel()

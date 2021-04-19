@@ -4,7 +4,7 @@ import { getOrder, setRating } from '../../../services/rating/'
 import { useStyles } from './styles'
 import { NoRatingCard, RatingCard, Loader } from './rating-cards'
 
-export const Rating = ({ id }: { id: string }) => {
+export const Rating = ({ id }: { id: number }) => {
   const { blank } = useStyles()
   const [{ rated, msg }, setStatus] = useState({
     rated: true,
@@ -27,7 +27,7 @@ export const Rating = ({ id }: { id: string }) => {
     orderData()
   }, [])
 
-  const submit = async (data: { id: string; rating: number }) => {
+  const submit = async (data: { id: number; rating: number }) => {
     setLoading(true)
     const res = await setRating(data)
     setStatus(res)
@@ -38,7 +38,9 @@ export const Rating = ({ id }: { id: string }) => {
     <>
       <Loader loading={loading} />
       <Container>
-        <Paper className={blank}>{rated ? <NoRatingCard {...{ msg }} /> : <RatingCard {...{ order, submit }} />}</Paper>
+        <Paper className={blank}>
+          {rated ? <NoRatingCard msg={msg} /> : <RatingCard order={order} submit={submit} />}
+        </Paper>
       </Container>
     </>
   )

@@ -4,7 +4,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete'
 import { Control, Controller, FieldErrors } from 'react-hook-form'
 import { useStyles } from './styles'
 
-export type Props = {
+type Props = {
   data: any[]
   control: Control
   name: string

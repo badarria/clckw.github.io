@@ -5,11 +5,11 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { masters } from '../../../../services/admin/validation/schema'
 import { Master } from '../../../../types'
 import { getMastersKeys } from 'services/admin/masters'
-import { State, newMaster } from '../../admin/types'
+import { State, NewMaster } from '../../admin/types'
 
 type Props = {
   cancel: () => void
-  accept: (data: newMaster) => void
+  accept: (data: NewMaster) => void
   data: Master
   editState: State
 }

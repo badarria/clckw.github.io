@@ -3,7 +3,7 @@ import { AdminTable, AdminTableHead, Loader, Pagination } from '../components'
 import { Response, Paging, Master } from '../../../../types'
 import { acceptMaster, deleteMaster, getMasters } from 'services/admin/masters'
 import { MastersForm } from '../forms'
-import { State, newMaster } from '../../admin/types'
+import { State, NewMaster } from '../../admin/types'
 
 const columns = ['id', 'name', 'surname', 'email', 'city', 'rating']
 const initPaging: Required<Paging> = { limit: 10, offset: 0, orderby: 'id', order: 'desc', count: 50 }
@@ -75,7 +75,7 @@ export const Masters = () => {
     setDataToChange(initDataToChange)
   }
 
-  const accept = async (data: newMaster) => {
+  const accept = async (data: NewMaster) => {
     const toast = await setLoader(acceptMaster(data, editState))
     if (toast.type === 'success') {
       cancel()

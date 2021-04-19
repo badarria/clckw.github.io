@@ -45,7 +45,7 @@ export const dateFromNewDate = () => {
   const now = new Date()
   const limit = DateTime.fromJSDate(new Date()).set({ hour: 19, minute: 0, second: 0 }).toJSDate()
   if (now > limit) return DateTime.fromJSDate(new Date()).set({ hour: 24, minute: 0, second: 0 }).toJSDate()
-  else return DateTime.fromJSDate(new Date()).set({ hour: 0, minute: 0, second: 0 }).toJSDate()
+  return DateTime.fromJSDate(new Date()).set({ hour: 0, minute: 0, second: 0 }).toJSDate()
 }
 
 export const dateToRequest = (date: Date) => DateTime.fromJSDate(date).toJSON().replace(/\+.+$/, '')

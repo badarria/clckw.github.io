@@ -2,11 +2,11 @@ import React from 'react'
 import { TableCell, TableRow } from '@material-ui/core'
 import { Response } from '../../../../types'
 import { ButtonDialog, PdfBtn, ZipBtn } from '.'
-import { OrdersList, ChangeStatus } from '../types'
+import { OrdersList, ChangeStatus, Columns } from '../types'
 
 type Props = {
   data: OrdersList[]
-  columns: string[]
+  columns: Columns
   change: (data: ChangeStatus) => void
   getZip: (id: number) => Promise<string | Response>
   getPdf: (id: number) => void

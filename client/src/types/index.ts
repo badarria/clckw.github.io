@@ -1,7 +1,5 @@
 import { PaymentMethodResult } from '@stripe/stripe-js'
 
-export type BtnType = 'button' | 'submit' | 'reset'
-
 export type Paging = {
   limit?: number
   order?: 'desc' | 'asc'

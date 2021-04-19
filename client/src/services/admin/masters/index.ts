@@ -1,5 +1,5 @@
 import { Master, City, Response, Paging } from '../../../types'
-import { newMaster, Method, State } from '../../../components/containers/admin/types'
+import { NewMaster, Method, State } from '../../../components/containers/admin/types'
 
 const adminPath = '/admin/masters'
 const getToken = () => localStorage.getItem('token') || ''
@@ -31,7 +31,7 @@ const del = async (id: number): Promise<Response> => {
   return res.json()
 }
 
-const putOrPost = async (method: Method, data: newMaster): Promise<Response> => {
+const putOrPost = async (method: Method, data: NewMaster): Promise<Response> => {
   const token = getToken()
   const res = await fetch(`${adminPath}`, {
     method,
@@ -49,7 +49,7 @@ const getKeys = async (): Promise<City[]> => {
 
 export const getMasters = async (paging: Paging) => await wrapTryCatch(get(paging))
 export const deleteMaster = async (id: number) => await wrapTryCatch(del(id))
-export const acceptMaster = async (data: newMaster, state: State) => {
+export const acceptMaster = async (data: NewMaster, state: State) => {
   const method = state === 'isEditing' ? 'PUT' : 'POST'
   return await wrapTryCatch(putOrPost(method, data))
 }

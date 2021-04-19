@@ -2,11 +2,11 @@ import React, { ReactElement } from 'react'
 import { Paper, Table, TableBody, TableContainer, TableFooter, TableHead, TableRow, Box } from '@material-ui/core'
 import { useStyles } from './styles'
 import { AdminTableList, Toast } from '../index'
-import { AllSubjectsDataUi, State } from '../../../admin/types'
+import { AllSubjectsData, State } from '../../../admin/types'
 import { Response } from '../../../../../types'
 
 type Props = {
-  items: Array<AllSubjectsDataUi>
+  items: Array<AllSubjectsData>
   columns: string[]
   remove: (id: number) => void
   push: (data: any) => void

@@ -15,3 +15,4 @@ export type OrdersList = {
 }
 
 export type Photo = { id: number; url: string; order_id: number; public_id: string; resource_type: string }
+export type Columns = Array<keyof OrdersList | 'receipt'>

@@ -1,27 +1,9 @@
-import React, { ReactElement } from 'react'
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  Button,
-  DialogContentText,
-  DialogTitle,
-  IconButtonProps,
-} from '@material-ui/core'
+import React from 'react'
+import { Dialog, DialogActions, DialogContent, Button, DialogContentText, DialogTitle } from '@material-ui/core'
 import { ButtonIcon } from './button-icon'
-import { BtnType } from '../../../../../types'
+import { AlertDialogProps } from '../../types'
 
-type Props = {
-  icon: ReactElement<IconButtonProps> | null
-  title: string
-  accept: () => void
-  question: string
-  description: string
-  disabled: boolean
-  type: BtnType
-}
-
-export const AlertDialog = (props: Props) => {
+export const AlertDialog = (props: AlertDialogProps) => {
   const [open, setOpen] = React.useState(false)
   const { icon = null, title, accept, question, description, disabled, type } = props
 

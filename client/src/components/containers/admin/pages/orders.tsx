@@ -3,7 +3,7 @@ import { AdminTable, AdminTableHead, Loader, Pagination } from '../components'
 import { Response, Paging, Order } from '../../../../types'
 import { acceptOrder, deleteOrder, getOrders } from 'services/admin/orders'
 import { OrdersForm } from '../forms'
-import { State, NewOrder } from '../../../containers/admin/types'
+import { State, NewOrder, AllSubjectsData } from '../../../containers/admin/types'
 
 const columns = ['id', 'service', 'price', 'master', 'customer', 'city', 'date', 'begin', 'finish', 'rating', 'status']
 const initPaging: Required<Paging> = { limit: 15, offset: 0, orderby: 'date', order: 'desc', count: 50 }

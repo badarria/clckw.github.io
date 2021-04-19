@@ -8,9 +8,9 @@ import { getList, sendRatingMail, setDone, getOrdersPhoto, getOrdersReceipt } fr
 import { useSelector } from 'react-redux'
 import { RootState } from 'store'
 import { useHistory } from 'react-router-dom'
-import { ChangeStatus, OrdersList } from './types'
+import { ChangeStatus, OrdersList, Columns } from './types'
 
-const columns = [
+const columns: Columns = [
   'id',
   'customer',
   'service',
@@ -113,8 +113,7 @@ export const Master = () => {
     setToastMsg(result)
     if (result.type !== 'error') {
       getOrdersList()
-      const ratingRequest = await sendRatingMail(data)
-      console.log(ratingRequest)
+      sendRatingMail(data)
     }
   }
 

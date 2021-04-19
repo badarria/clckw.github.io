@@ -8,9 +8,9 @@ import { getList, setRating } from '../../../services/customer'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store'
 import { useHistory } from 'react-router-dom'
-import { OrdersList } from './types'
+import { OrdersList, Columns } from './types'
 
-const columns = ['id', 'master', 'service', 'date', 'begin', 'finish', 'rating']
+const columns: Columns = ['id', 'master', 'service', 'date', 'begin', 'finish', 'rating']
 
 export const Customer = () => {
   const user = useSelector((state: RootState) => state.user)

@@ -20,3 +20,5 @@ export type OrdersList = {
   rating: number
   completed: boolean
 }
+
+export type Columns = Array<keyof OrdersList>

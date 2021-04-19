@@ -44,7 +44,7 @@ type SubmitData = {
     name: string
     time: string
   }
-  files: any[]
+  files: Blob[]
 }
 
 export const Search = () => {

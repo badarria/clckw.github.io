@@ -3,7 +3,7 @@ import { AdminTable, AdminTableHead, Loader, Pagination } from '../components'
 import { Response, Paging, Service } from '../../../../types'
 import { acceptService, deleteService, getServices } from 'services/admin/services'
 import { ServicesForm } from '../forms'
-import { State } from '../../../containers/admin/types'
+import { State, ServiceWithKeys } from '../../../containers/admin/types'
 
 const columns = ['id', 'name', 'time', 'price']
 const initPaging: Required<Paging> = { limit: 5, offset: 0, orderby: 'time', order: 'asc', count: 50 }
@@ -55,7 +55,7 @@ export const Services = () => {
     }
   }
 
-  const push = (data: Service | string[]) => {
+  const push = (data: ServiceWithKeys | string[]) => {
     if ('id' in data) {
       setDataToChange(data)
       setEditState('isEditing')

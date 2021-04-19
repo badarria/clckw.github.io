@@ -1,15 +1,7 @@
-import { IconButton, IconButtonProps, Tooltip } from '@material-ui/core'
-import React, { ReactElement } from 'react'
+import { IconButton, Tooltip } from '@material-ui/core'
+import { ButtonIconProps } from '../../types'
 
-type Props = IconButtonProps & {
-  title: string
-  icon: ReactElement<IconButtonProps> | null
-  onClick: Function
-  disabled: boolean
-  type: string
-}
-
-export const ButtonIcon = (props: Props) => {
+export const ButtonIcon = (props: ButtonIconProps) => {
   const { title, icon, onClick, disabled, type } = props
 
   return (

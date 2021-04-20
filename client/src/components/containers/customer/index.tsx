@@ -8,13 +8,13 @@ import { getList, setRating } from '../../../services/customer'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store'
 import { useHistory } from 'react-router-dom'
-import { OrdersList, Columns } from './types'
+import { List, Columns } from './types'
 
 const columns: Columns = ['id', 'master', 'service', 'date', 'begin', 'finish', 'rating']
 
 export const Customer = () => {
   const user = useSelector((state: RootState) => state.user)
-  const [orders, setOrders] = useState<OrdersList[]>([])
+  const [orders, setOrders] = useState<List[]>([])
   const [loading, setLoading] = useState(false)
   const [toast, setToast] = useState<Response>({ type: 'success', msg: '' })
   const initPaging: Required<Paging> = { limit: 5, offset: 0, order: 'desc', orderby: 'date', count: orders.length }
@@ -40,15 +40,16 @@ export const Customer = () => {
   const getOrdersList = async (sayHi = false) => {
     if (!user) return history.replace('/')
 
-    const list = await setLoader(getList({ ...paging, id: user.id }))
-    if ('type' in list) setToastMsg(list)
-    else if (!list.length) {
+    const orders = await setLoader(getList({ ...paging, id: user.id }))
+    if ('type' in orders) setToastMsg(orders)
+    else if (!orders.rows.length) {
       const toast: Response = { type: 'warning', msg: `Hi, ${user.name}, you haven't orders` }
       setToastMsg(toast)
     } else {
-      const data: OrdersList[] = []
-      list.forEach(({ id, s, m, date, begin, finish, rating, completed }) => {
-        const dataForList: OrdersList = {
+      const { rows, count } = orders
+      const data: List[] = []
+      rows.forEach(({ id, s, m, date, begin, finish, rating, completed }) => {
+        const dataForList: List = {
           id,
           master: m?.fullName,
           service: s?.service,
@@ -61,9 +62,9 @@ export const Customer = () => {
         data.push(dataForList)
       })
       setOrders(data)
-      const toast: Response = { type: 'success', msg: `Hi, ${user.name}, you have ${data.length} orders. ` }
+      const toast: Response = { type: 'success', msg: `Hi, ${user.name}, you have ${count} orders. ` }
       sayHi && setToastMsg(toast)
-      if (list.length !== paging.count) setPaging((paging) => ({ ...paging, count: list.length }))
+      if (count !== paging.count) setPaging((paging) => ({ ...paging, count }))
     }
   }
 

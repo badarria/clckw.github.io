@@ -6,6 +6,7 @@ export const getUserByRole = async (role: string, token: string, id: number) => 
   if (role === 'master') {
     const master = await Master.findOne({ include: { model: User, where: { id } } }).catch((err: Error) => err)
     if (master instanceof Error || !master) return new Error()
+
     master && (userId = master.id) && (name = master.fullName)
   }
   if (role === 'customer') {

@@ -20,8 +20,10 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   const { id, salt, pass, token, role } = user
   const bcryptPassword = await bcrypt.hash(password, salt).catch((err: Error) => next(err))
   const isMatch = bcryptPassword === pass
-  if (!isMatch) next(new Error('Name or password is incorrect'))
+  if (!isMatch) return next(new Error('Name or password is incorrect'))
 
   const userByRole = await getUserByRole(role, token, id).catch((err: Error) => next(err))
-  return userByRole && res.json(userByRole)
+  if (!userByRole) return
+
+  return res.json(userByRole)
 }

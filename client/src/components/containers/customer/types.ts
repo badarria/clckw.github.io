@@ -10,7 +10,7 @@ export type UserOrders = {
   completed: boolean
 }
 
-export type OrdersList = {
+export type List = {
   id: number
   master: string
   service: string
@@ -21,4 +21,4 @@ export type OrdersList = {
   completed: boolean
 }
 
-export type Columns = Array<keyof OrdersList>
+export type Columns = Array<keyof List>

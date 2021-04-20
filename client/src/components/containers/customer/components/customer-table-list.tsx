@@ -1,12 +1,12 @@
 import React from 'react'
 import { TableCell, TableRow, Tooltip } from '@material-ui/core'
-import { OrdersList, Columns } from '../types'
+import { List, Columns } from '../types'
 import { RatingDialog } from '.'
 import { Rating } from '@material-ui/lab'
 import { useStyles } from './styles'
 
 export type Props = {
-  data: OrdersList[]
+  data: List[]
   columns: Columns
   change: ({ id, rating }: { id: number; rating: number }) => void
 }
@@ -17,15 +17,13 @@ export const CustomerTableList = ({ data, columns, change }: Props) => {
   if (data.length)
     return (
       <>
-        {data.map((item: OrdersList, inx: number) => {
+        {data.map((item: List, inx: number) => {
           const { id, rating, completed } = item
           const isRated = completed && rating
 
           return (
             <TableRow key={inx} component='tr'>
-              <TableCell component='td'>{inx + 1}</TableCell>
               {columns.map((col) => {
-
                 return (
                   <>
                     {col !== 'rating' ? (

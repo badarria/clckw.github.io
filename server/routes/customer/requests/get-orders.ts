@@ -24,7 +24,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     params.offset = offset
   }
 
-  const list = await Order.findAll({
+  const list = await Order.findAndCountAll({
     ...params,
     attributes: ['id', 'date', 'begin', 'finish', 'rating', 'beginat', 'finishat', 'completed'],
     include: [

@@ -2,15 +2,18 @@ import { Paging, Response } from '../../types'
 
 type GetOrders = Paging & { id: number }
 type UserOrders = {
-  id: number
-  m: { fullName: string }
-  c: { fullName: string; email: string }
-  s: { service: string; price: number }
-  begin: string
-  finish: string
-  rating: number
-  date: string
-  completed: boolean
+  rows: {
+    id: number
+    m: { fullName: string }
+    c: { fullName: string; email: string }
+    s: { service: string; price: number }
+    begin: string
+    finish: string
+    rating: number
+    date: string
+    completed: boolean
+  }[]
+  count: number
 }
 
 const getToken = () => localStorage.getItem('token') || ''
@@ -24,7 +27,7 @@ const wrapTryCatch = async <T>(tryFunc: T) => {
   }
 }
 
-const get = async (data: GetOrders): Promise<UserOrders[]> => {
+const get = async (data: GetOrders): Promise<UserOrders> => {
   const { id, limit, offset, order, orderby } = data
   const token = getToken()
   const res = await fetch(`${customerPath}/${id}/${limit}/${offset}/${order}/${orderby}`, { headers: { token } })

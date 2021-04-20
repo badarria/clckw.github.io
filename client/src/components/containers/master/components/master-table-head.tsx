@@ -2,9 +2,10 @@ import { TableRow, TableCell, TableSortLabel, TableHead } from '@material-ui/cor
 import React from 'react'
 import { useStyles } from '../styles'
 import { Paging } from '../../../../types'
+import { Columns } from '../types'
 
 type Props = {
-  columns: string[]
+  columns: Columns
   order: 'desc' | 'asc'
   orderby: string
   setChange: (data: Paging) => void
@@ -19,11 +20,12 @@ export const MasterTableHead = (props: Props) => {
     const data: Paging = { order: isAsc ? 'desc' : 'asc', orderby: prop }
     setChange(data)
   }
+  const columnsWithSort = columns.slice(0, -1)
 
   return (
     <TableHead className={head}>
       <TableRow component='tr'>
-        {columns.map((column, i) => {
+        {columnsWithSort.map((column, i) => {
           return (
             <TableCell key={i}>
               <TableSortLabel active={orderby === column} direction={order} onClick={createSortHandler(column)}>
@@ -35,6 +37,7 @@ export const MasterTableHead = (props: Props) => {
             </TableCell>
           )
         })}
+        <TableCell key={'receipt'}>receipt</TableCell>
       </TableRow>
     </TableHead>
   )

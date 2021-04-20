@@ -2,7 +2,7 @@ import { City, Response } from 'types'
 import { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login'
 
 export type LocalSignIn = { email: string; password: string }
-export type GoogleSignIn = GoogleLoginResponse | GoogleLoginResponseOffline
+export type GoogleSignIn = GoogleLoginResponse | GoogleLoginResponseOffline | GoogleFailure
 
 export type SignRes = { token: string; role: string; id: number; name: string } | Response
 
@@ -19,3 +19,5 @@ export type LocalSignUp = {
   agree: boolean
   master: boolean
 }
+
+export type GoogleFailure = { details: string; error: string }

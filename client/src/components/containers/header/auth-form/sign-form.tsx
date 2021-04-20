@@ -62,11 +62,14 @@ const SignForm = () => {
   }
 
   const handleGoogleSignIn = async (data: GoogleSignIn) => {
+    if ('error' in data && data.details.match('Cookie')) {
+      return setMsg('You must enable cookies for this website or use a login password')
+    }
     if ('tokenId' in data) {
       setLoading(true)
       const res = await authGoogleUser({ token: data.tokenId })
       handler(res)
-    } else setMsg('Something went wrong. Try to login with local password.')
+    } else setMsg('Something went wrong. Try to sign in with password.')
   }
 
   const localSignUp = async (data: LocalSignUp) => {

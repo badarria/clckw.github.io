@@ -8,7 +8,7 @@ import { getList, sendRatingMail, setDone, getOrdersPhoto, getOrdersReceipt } fr
 import { useSelector } from 'react-redux'
 import { RootState } from 'store'
 import { useHistory } from 'react-router-dom'
-import { ChangeStatus, OrdersList, Columns } from './types'
+import { ChangeStatus, Columns, List } from './types'
 
 const columns: Columns = [
   'id',
@@ -26,7 +26,7 @@ const columns: Columns = [
 
 export const Master = () => {
   const user = useSelector((state: RootState) => state.user)
-  const [orders, setOrders] = useState<OrdersList[]>([])
+  const [orders, setOrders] = useState<List[]>([])
   const [loading, setLoading] = useState(false)
   const [toast, setToast] = useState<Response>({ type: 'success', msg: '' })
   const initPaging: Required<Paging> = {
@@ -58,39 +58,24 @@ export const Master = () => {
   const getOrdersList = async (sayHi = false) => {
     if (!user) return history.replace('/')
 
-    const list = await setLoader(getList({ ...paging, id: user.id }))
-    if ('type' in list) setToastMsg(list)
-    else if (!list.length) {
+    const orders = await setLoader(getList({ ...paging, id: user.id }))
+    if ('type' in orders) setToastMsg(orders)
+    else if (!orders.list.length) {
       const toast: Response = {
         type: 'warning',
         msg: `Hi, ${user.name}, you haven't orders`,
       }
       setToastMsg(toast)
     } else {
-      const data: OrdersList[] = []
-      list.forEach(({ id, c, s, date, begin, finish, rating, completed, photos }) => {
-        const dataForList = {
-          id,
-          customer: c?.fullName,
-          userEmail: c?.email,
-          service: s?.service,
-          price: s?.price,
-          date,
-          begin,
-          finish,
-          rating,
-          completed,
-          photos,
-        }
-        data.push(dataForList)
-      })
-      setOrders(data)
+      const { count, list } = orders
+      setOrders(list)
+
       const toast: Response = {
         type: 'success',
-        msg: `Hi, ${user.name}, you have ${data.length} orders. `,
+        msg: `Hi, ${user.name}, you have ${count} orders. `,
       }
       sayHi && setToastMsg(toast)
-      if (list.length !== paging.count) setPaging((paging) => ({ ...paging, count: list.length }))
+      if (count !== paging.count) setPaging((paging) => ({ ...paging, count }))
     }
   }
 

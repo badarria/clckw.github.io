@@ -1,19 +1,7 @@
-import { ChangeStatus, Photo } from '../../components/containers/master/types'
+import { ChangeStatus, UserOrders } from '../../components/containers/master/types'
 import { Paging, Response } from '../../types'
 
 type GetOrders = Paging & { id: number }
-type UserOrders = {
-  id: number
-  m: { fullName: string }
-  c: { fullName: string; email: string }
-  s: { service: string; price: number }
-  begin: string
-  finish: string
-  rating: number
-  date: string
-  completed: boolean
-  photos: Photo[]
-}
 
 const getToken = () => localStorage.getItem('token') || ''
 const masterPath = 'master'
@@ -26,7 +14,7 @@ const wrapTryCatch = async <T>(tryFunc: T) => {
   }
 }
 
-const get = async (data: GetOrders): Promise<UserOrders[]> => {
+const get = async (data: GetOrders): Promise<UserOrders> => {
   const { id, limit, offset, order, orderby } = data
   const token = getToken()
   const res = await fetch(`${masterPath}/${id}/${limit}/${offset}/${order}/${orderby}`, { headers: { token } })

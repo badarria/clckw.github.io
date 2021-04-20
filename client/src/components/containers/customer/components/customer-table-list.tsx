@@ -24,12 +24,12 @@ export const CustomerTableList = ({ data, columns, change }: Props) => {
           return (
             <TableRow key={inx} component='tr'>
               <TableCell component='td'>{inx + 1}</TableCell>
-              {columns.map((col: string) => {
-                const thisItem: any = { ...item }
+              {columns.map((col) => {
+
                 return (
                   <>
                     {col !== 'rating' ? (
-                      <TableCell component='td'>{thisItem[col]}</TableCell>
+                      <TableCell component='td'>{item[col]}</TableCell>
                     ) : (
                       <TableCell>
                         {isRated ? (

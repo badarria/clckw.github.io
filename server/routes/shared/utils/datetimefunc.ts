@@ -17,7 +17,17 @@ const compareTime = (begin: string, finish: string) => {
 }
 
 const tsToUTC = (timestamp: Date) => DateTime.fromJSDate(timestamp).setZone('utc')
-const toTime = (timestamp: Date) => DateTime.fromJSDate(timestamp).setZone('utc').toFormat('HH:mm')
-const toDate = (timestamp: Date) => DateTime.fromJSDate(timestamp).toFormat('EEE dd/MM/yyyy')
+const toTime = (timestamp: Date | string) => {
+  if (typeof timestamp === 'string') {
+    return DateTime.fromISO(timestamp).setZone('utc').toFormat('HH:mm')
+  }
+  return DateTime.fromJSDate(timestamp).setZone('utc').toFormat('HH:mm')
+}
+const toDate = (timestamp: Date | string) => {
+  if (typeof timestamp === 'string') {
+    return DateTime.fromISO(timestamp).toFormat('EEE dd/MM/yyyy')
+  }
+  return DateTime.fromJSDate(timestamp).toFormat('EEE dd/MM/yyyy')
+}
 
 export { toObjFromStr, toObjFromJSDate, checkThisDayTime, compareTime, toTime, toDate, tsToUTC }

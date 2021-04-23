@@ -25,9 +25,21 @@ export const Header = () => {
     <AppBar position='static'>
       <Container>
         <Toolbar className={root}>
-          <Button component={Link} to={'/'} className={title}>
-            Clockware
-          </Button>
+          <Box>
+            <Button component={Link} to={'/'} className={title}>
+              Clockware
+            </Button>
+          </Box>
+          <Box className={btns}>
+            <Button color='inherit' component={Link} to={'/blog'} className={btns}>
+              Blog
+            </Button>
+            {isAdmin && (
+              <Button color='inherit' component={Link} to={'/admin/post'}>
+                Add new post
+              </Button>
+            )}
+          </Box>
           <Box className={btns}>
             {isAdmin && (
               <Button color='inherit' component={Link} to={'/admin/customers'}>

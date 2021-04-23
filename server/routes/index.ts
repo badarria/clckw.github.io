@@ -4,6 +4,7 @@ import { index as masters } from './admin/masters'
 import { index as cities } from './admin/cities'
 import { index as orders } from './admin/orders'
 import { index as services } from './admin/services'
+import { index as postPage } from './admin/post'
 import { index as homePage } from './home'
 import { index as ratingPage } from './rating'
 import { index as masterPage } from './master'
@@ -20,5 +21,6 @@ index.use('/admin/masters', masters)
 index.use('/admin/cities', cities)
 index.use('/admin/orders', orders)
 index.use('/admin/services', services)
+index.use('/admin/post', postPage)
 
 export { index }

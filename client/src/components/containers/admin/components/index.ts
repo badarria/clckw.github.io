@@ -6,6 +6,7 @@ import { TableForm } from './table-form/table-form'
 import { LinkTabs } from './link-tabs/link-tabs'
 import { ButtonIcon } from './table/button-icon'
 import { AlertDialog } from './table/alert-dialog'
+import Article from './article/article'
 import * as shared from '../../../ui'
 const { DatePicker, Loader, Toast, SelectHours, InputField, AutocompleteField } = shared
 
@@ -23,5 +24,6 @@ export {
   InputField,
   AlertDialog,
   ButtonIcon,
-  AutocompleteField
+  AutocompleteField,
+  Article,
 }

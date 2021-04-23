@@ -5,5 +5,6 @@ import { Service } from './Service'
 import { Order } from './Order'
 import { User } from './Users'
 import { Photo } from './Photo'
+import { Post } from './Post'
 
-export { Customer, Order, City, Master, Service, User, Photo }
+export { Customer, Order, City, Master, Service, User, Photo, Post }

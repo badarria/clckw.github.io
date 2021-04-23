@@ -1,3 +1,4 @@
 export const stripe_public_key =
   'pk_test_51IbLzbK13PqXeZaYmoyqJmBCWV0K1sWOCGrFt0mkgF1t8YBYbq1VF3ojVBRtfGHpO3XHbCYMRYdcy26K7RBLr1zj00SU4On1Su'
 export const google_client_id = '469901995859-e0ltg7q6mmppkqlc5rfvdvgr7ekup736.apps.googleusercontent.com'
+export const tinyAPI = '21dys2css4kd8jlwstzlt0fp0ev9nu06299in90c4c7uijs9'

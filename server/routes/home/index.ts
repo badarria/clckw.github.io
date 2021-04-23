@@ -10,6 +10,8 @@ import {
   signUp,
   signInGoogle,
   signUpGoogle,
+  getPostsList,
+  getOnePost,
 } from './requests'
 import { sendMail } from '../shared/utils'
 import { Router } from 'express'
@@ -29,5 +31,7 @@ index.post('/signUp', signUp)
 index.post('/handlePay', handlePay)
 index.post('/signInGoogle', signInGoogle)
 index.post('/signUpGoogle', signUpGoogle)
+index.get('/getPostsList', getPostsList)
+index.get('/getPost/:id', getOnePost)
 
 export { index }

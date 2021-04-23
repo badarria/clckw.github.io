@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 export const useStyles = makeStyles({
   root: {
-    spaceBetween: 'justifyContent',
+    justifyContent: 'space-between',
   },
   title: {
     textDecoration: 'none',
@@ -11,7 +11,5 @@ export const useStyles = makeStyles({
   },
   btns: {
     display: 'flex',
-    flexGrow: 1,
-    justifyContent: 'flex-end',
   },
 })

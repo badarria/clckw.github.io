@@ -1,5 +1,6 @@
 import { GoogleSignUp, LocalSignUp, LocalSignIn, SignRes } from './../../components/containers/header/types'
 import { Customer, Response, Master, City, Service } from '../../types'
+import { Post } from '../../components/containers/home/types'
 const homePath = '/home'
 
 const wrapTryCatch = async <T>(tryFunc: T) => {
@@ -124,6 +125,15 @@ const newGoogleUser = async (data: GoogleSignUp): Promise<SignRes> => {
   return res.json()
 }
 
+const getPostsList = async (): Promise<Post[]> => {
+  const res = await fetch(`${homePath}/getPostsList`)
+  return res.json()
+}
+const onePost = async (data: { id: string }): Promise<Post> => {
+  const res = await fetch(`${homePath}/getPost/${data.id}`)
+  return res.json()
+}
+
 export const getFreeMasters = async (data: GetMasters) => await wrapTryCatch(getMasters(data))
 export const getCustomer = async (data: Partial<Customer>) => await wrapTryCatch(upsertCustomer(data))
 export const loginUser = async (data: LocalSignIn) => await wrapTryCatch(login(data))
@@ -136,3 +146,5 @@ export const regUser = async (data: LocalSignUp) => await wrapTryCatch(registr(d
 export const handlePayment = async (data: { id: string; amount: number }) => await wrapTryCatch(payment(data))
 export const authGoogleUser = async (data: { token: string }) => await wrapTryCatch(googleUser(data))
 export const regGoogleUser = async (data: GoogleSignUp) => await wrapTryCatch(newGoogleUser(data))
+export const getPosts = async () => await wrapTryCatch(getPostsList())
+export const getOnePost = async (data: { id: string }) => await wrapTryCatch(onePost(data))

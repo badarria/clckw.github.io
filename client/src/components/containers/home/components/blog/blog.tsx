@@ -13,7 +13,6 @@ export default () => {
   const history = useHistory()
 
   const expand = ({ id }: { id: string }) => {
-    console.log(id)
     history.push(`/blog/${id}`)
   }
 

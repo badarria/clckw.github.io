@@ -5,7 +5,7 @@ import { toDate } from '../../routes/shared/utils/datetimefunc'
 @Table({ tableName: 'posts' })
 export class Post extends Model {
   @Column({ type: DataTypes.INTEGER, allowNull: false, primaryKey: true, autoIncrement: true })
-  id!: string
+  id!: number
   @Column({ type: DataTypes.STRING, allowNull: false })
   content!: string
   @Column({ type: DataTypes.STRING, allowNull: false })

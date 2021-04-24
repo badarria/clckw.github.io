@@ -5,7 +5,7 @@ import { Article } from '../components/containers/home/components'
 
 export const BlogRoute = ({ path }: { path: string }) => {
   const isMatch = useRouteMatch<{ id: string }>({ path: '/blog/:id' })
-  console.log('here')
+
   if (!isMatch) return <Route path={path} exact component={Blog} />
 
   const id = isMatch?.params.id

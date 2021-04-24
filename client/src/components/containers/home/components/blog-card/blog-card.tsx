@@ -15,7 +15,7 @@ export default ({ id, title, date, description, preview, expand }: Props) => {
   const { card, descr, content, img, link } = useStyles()
 
   const click = () => expand({ id })
-  console.log(preview)
+
   return (
     <Card className={card}>
       <CardContent className={content}>

@@ -28,7 +28,7 @@ const findBookedTime = (orders: FilteredOrders) =>
   }, []) as string[]
 
 export const toMailFormat = (str: string) => DateTime.fromISO(str).toFormat('EEE dd.MM.yy HH:mm')
-
+export const newDateToFormat = () => DateTime.fromJSDate(new Date()).toFormat('EEE dd.MM.yy')
 export const getHoursArray = (service_time: string, orders: FilteredOrders = [], dayBegin = 8, dayEnd = 20) => {
   const workDay = getWorkingHours(dayBegin, dayEnd, service_time)
   const bookedTime = findBookedTime(orders)

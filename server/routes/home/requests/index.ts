@@ -9,6 +9,8 @@ import signUpGoogle from './sign-up-google'
 import signUp from './sign-up'
 import upsertCustomer from './upsert-customer'
 import verify from './verify'
+import getPostsList from './get-posts-list'
+import getOnePost from './get-one-post'
 
 export {
   verify,
@@ -22,4 +24,6 @@ export {
   findMasters,
   createConfirmMail,
   signIn,
+  getPostsList,
+  getOnePost,
 }

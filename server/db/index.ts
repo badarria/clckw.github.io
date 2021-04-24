@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize-typescript'
 import { config } from '../../config'
-import { City, Customer, Service, Master, User, Order, Photo } from './models'
+import { City, Customer, Service, Master, User, Order, Photo, Post } from './models'
 const connectionString = config.db
 type Config = [
   string,
@@ -20,7 +20,7 @@ if ('dbOpt' in config) {
 }
 
 const sequelize = new Sequelize(...seqconnetOpt)
-sequelize.addModels([City, Customer, Service, Master, Order, User, Photo])
+sequelize.addModels([City, Customer, Service, Master, Order, User, Photo, Post])
 
 // Service.sync({ alter: true })
 export { sequelize }

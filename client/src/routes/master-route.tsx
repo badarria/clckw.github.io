@@ -1,5 +1,5 @@
-import React from 'react'
-import { Redirect } from 'react-router-dom'
+import React, { ComponentType, FC, ReactElement } from 'react'
+import { Redirect, Route, useRouteMatch } from 'react-router-dom'
 import { RootState } from 'store'
 import { useSelector } from 'react-redux'
 

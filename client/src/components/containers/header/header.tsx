@@ -47,9 +47,14 @@ export const Header = () => {
               </Button>
             )}
             {isMaster && (
-              <Button color='inherit' component={Link} to={'/master'}>
-                Master
-              </Button>
+              <>
+                <Button color='inherit' component={Link} to={'/master/scheduler'}>
+                  Calendar
+                </Button>
+                <Button color='inherit' component={Link} to={'/master'}>
+                  Master
+                </Button>
+              </>
             )}
             {isCustomer && (
               <Button color='inherit' component={Link} to={'/customer'}>

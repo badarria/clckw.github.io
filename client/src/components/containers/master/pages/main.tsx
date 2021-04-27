@@ -2,13 +2,13 @@ import { Container, Box, Paper, TableBody, Table, TableContainer, TableFooter } 
 import { Loader, Toast } from 'components/ui'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Paging, Response } from 'types'
-import { Pagination, MasterTableHead, MasterTableList } from './components'
-import { useStyles } from './styles'
-import { getList, sendRatingMail, setDone, getOrdersPhoto, getOrdersReceipt } from '../../../services/master'
+import { Pagination, MasterTableHead, MasterTableList } from '../components'
+import { useStyles } from '../styles'
+import { getList, sendRatingMail, setDone, getOrdersPhoto, getOrdersReceipt } from '../../../../services/master'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store'
 import { useHistory } from 'react-router-dom'
-import { ChangeStatus, Columns, List } from './types'
+import { ChangeStatus, Columns, List } from '../types'
 
 const columns: Columns = [
   'id',
@@ -24,7 +24,7 @@ const columns: Columns = [
   'receipt',
 ]
 
-export const Master = () => {
+export const Main = () => {
   const user = useSelector((state: RootState) => state.user)
   const [orders, setOrders] = useState<List[]>([])
   const [loading, setLoading] = useState(false)

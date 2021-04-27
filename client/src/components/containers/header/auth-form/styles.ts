@@ -10,10 +10,17 @@ export const useStyles = makeStyles({
       zIndex: '1200',
     },
   },
-  form: {
+  signInForm: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
+    maxWidth: '250px',
+  },
+  signUpForm: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    waxWidth: '250px',
   },
   content: {
     padding: '0 16px 24px',
@@ -52,7 +59,7 @@ export const useStyles = makeStyles({
   msgBox: {
     display: 'flex',
     alignItems: 'center',
-    height: '24px',
+    height: '32px',
     margin: '16px 16px 0',
   },
 })

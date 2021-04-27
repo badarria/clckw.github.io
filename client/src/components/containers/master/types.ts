@@ -23,3 +23,5 @@ export type UserOrders = {
   list: List[]
   count: number
 }
+
+export type SchedulerData = { startDate: string; endDate: string; service: string; customer: string; price: string, completed: boolean, rating: number | null, id: number }

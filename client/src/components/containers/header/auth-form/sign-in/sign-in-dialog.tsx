@@ -19,7 +19,7 @@ type Props = {
 }
 
 const SignInDialog = ({ close, open, msg, changeState, googleSignIn, localSignIn }: Props) => {
-  const { dialog, title, form, content, btnWrap, btn } = useStyles()
+  const { dialog, title, signInForm, content, btnWrap, btn, msgBox } = useStyles()
 
   const { register, handleSubmit, errors } = useForm({
     resolver: yupResolver(loginForm),
@@ -34,15 +34,17 @@ const SignInDialog = ({ close, open, msg, changeState, googleSignIn, localSignIn
         Login
       </DialogTitle>
       <DialogContent className={content}>
-        <form onSubmit={handleSubmit(localSignIn)} className={form} autoComplete='off'>
+        <form onSubmit={handleSubmit(localSignIn)} className={signInForm} autoComplete='off'>
           <Box className={btnWrap}>
             <InputField label='email' {...inputProps} />
             <InputField label='password' {...inputProps} type='password' />
-            {msg ? (
-              <Typography color='secondary' variant='subtitle2'>
-                {msg}
-              </Typography>
-            ) : null}
+            <Box className={msgBox}>
+              {msg ? (
+                <Typography color='secondary' variant='subtitle2'>
+                  {msg}
+                </Typography>
+              ) : null}
+            </Box>
           </Box>
           <Box className={btnWrap}>
             <Button type='submit' color='primary' variant='contained' className={btn}>

@@ -95,8 +95,9 @@ export const Cities = () => {
     editState,
     remove,
     toast,
+    form: <CitiesForm {...formProps} />,
     pagination: <Pagination {...pagingProps} />,
-    header: editState ? <CitiesForm {...formProps} /> : <AdminTableHead {...headProps} />,
+    header: <AdminTableHead {...headProps} />,
   }
 
   return (

@@ -95,8 +95,9 @@ export const Services = () => {
     editState,
     remove,
     toast,
+    form: <ServicesForm {...formProps} />,
     pagination: <Pagination {...pagingProps} />,
-    header: editState ? <ServicesForm {...formProps} /> : <AdminTableHead {...headProps} />,
+    header: <AdminTableHead {...headProps} />,
   }
 
   return (

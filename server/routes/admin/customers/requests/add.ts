@@ -13,9 +13,9 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   const salt = await bcrypt.genSalt(saltRound)
   const bcPass = await bcrypt.hash(password, salt)
   const token = v4()
-  const newUser = await User.create({ role: 'customer', pass: bcPass, email, salt, token }).catch((err: Error) =>
-    next(err)
-  )
+  const newUser = await User.create({ role: 'customer', pass: bcPass, email, salt, token }).catch((err: Error) => {
+    if (err.name === 'SequelizeUniqueConstraintError') next(new Error('Customer with this email already exist'))
+  })
 
   const result =
     newUser && (await Customer.create({ name, surname, user_id: newUser.id }).catch((err: Error) => next(err)))

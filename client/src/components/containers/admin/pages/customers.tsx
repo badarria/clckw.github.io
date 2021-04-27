@@ -69,6 +69,7 @@ export const Customers = () => {
 
   const accept = async (data: Customer) => {
     const toast = await setLoader(acceptCustomer(data, editState))
+
     if (toast.type === 'success') {
       cancel()
       await getItems()
@@ -96,12 +97,13 @@ export const Customers = () => {
     remove,
     toast,
     pagination: <Pagination {...pagingProps} />,
-    header: editState ? <CustomersForm {...formProps} /> : <AdminTableHead {...headProps} />,
+    header: <AdminTableHead {...headProps} />,
   }
 
   return (
     <>
       <Loader loading={loading} />
+      <CustomersForm {...formProps} />
       <AdminTable {...tableProps} />
     </>
   )

@@ -15,7 +15,7 @@ export const CitiesForm = ({ data: { id = 0, name }, cancel, accept, editState }
     defaultValues,
     resolver: yupResolver(cities),
   })
-
+  const renderForm = editState !== null
   const formProps = {
     submit: handleSubmit((data) => accept(data)),
     reset: () => {

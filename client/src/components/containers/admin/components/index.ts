@@ -3,6 +3,7 @@ import { AdminTableList } from './table/admin-table-list'
 import { AdminTableHead } from './table/admin-table-head'
 import { Pagination } from './table/pagination'
 import { TableForm } from './table-form/table-form'
+import { AlertForm } from './table-form/alert-form'
 import { LinkTabs } from './link-tabs/link-tabs'
 import { ButtonIcon } from './table/button-icon'
 import { AlertDialog } from './table/alert-dialog'
@@ -26,4 +27,5 @@ export {
   ButtonIcon,
   AutocompleteField,
   Article,
+  AlertForm,
 }

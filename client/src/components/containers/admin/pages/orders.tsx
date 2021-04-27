@@ -107,8 +107,9 @@ export const Orders = () => {
     editState,
     remove,
     toast,
+    form: <OrdersForm {...formProps} />,
     pagination: <Pagination {...pagingProps} />,
-    header: editState ? <OrdersForm {...formProps} /> : <AdminTableHead {...headProps} />,
+    header: <AdminTableHead {...headProps} />,
   }
 
   return (

@@ -1,4 +1,4 @@
-import { ChangeStatus, UserOrders } from '../../components/containers/master/types'
+import { ChangeStatus, UserOrders, SchedulerData } from '../../components/containers/master/types'
 import { Paging, Response } from '../../types'
 
 type GetOrders = Paging & { id: number }
@@ -24,7 +24,7 @@ const get = async (data: GetOrders): Promise<UserOrders> => {
 const done = async (id: number): Promise<Response> => {
   const token = getToken()
 
-  const res = await fetch(`${masterPath}/status`, {
+  const res = await fetch(`/${masterPath}/status`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json', token },
     body: JSON.stringify({ id }),
@@ -54,8 +54,15 @@ const getPdf = async (id: number): Promise<Blob> => {
   return res.blob()
 }
 
+const getScheduler = async (id: number): Promise<SchedulerData[]> => {
+  const token = getToken()
+  const res = await fetch(`/${masterPath}/schedulerList/${id}`, { headers: { token } })
+  return res.json()
+}
+
 export const getOrdersPhoto = async (id: number) => await wrapTryCatch(getPhoto(id))
 export const setDone = async (id: number) => await wrapTryCatch(done(id))
 export const getList = async (data: GetOrders) => await wrapTryCatch(get(data))
 export const sendRatingMail = async (data: ChangeStatus) => await wrapTryCatch(send(data))
 export const getOrdersReceipt = async (id: number) => await wrapTryCatch(getPdf(id))
+export const getSchedulerList = async (id: number) => await wrapTryCatch(getScheduler(id))

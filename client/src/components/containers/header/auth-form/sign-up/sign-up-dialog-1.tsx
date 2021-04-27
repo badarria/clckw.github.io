@@ -21,7 +21,7 @@ type Props = {
 const SignUpDialog1 = ({ change, msg, localSignUp, googleBtn }: Props) => {
   const {
     title,
-    form,
+    signUpForm,
     content,
     checkMasterBox,
     btnWrap,
@@ -81,7 +81,7 @@ const SignUpDialog1 = ({ change, msg, localSignUp, googleBtn }: Props) => {
       <Loader loading={loading} />
       <DialogTitle id='form-dialog' className={title}></DialogTitle>
       <DialogContent className={content}>
-        <form onSubmit={handleSubmit(localSignUp)} className={form} autoComplete='off'>
+        <form onSubmit={handleSubmit(localSignUp)} className={signUpForm} autoComplete='off'>
           <Box className={wrap}>
             <Box className={inputWrap}>
               <InputField label='name' {...inputProps} />

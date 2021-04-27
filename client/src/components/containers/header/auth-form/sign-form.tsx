@@ -14,7 +14,7 @@ import SignInDialog from './sign-in/sign-in-dialog'
 export type UserState = { msg: string; role: string; name: string } | Response
 
 const SignForm = () => {
-  const { btn } = useStyles()
+  // const { btn } = useStyles()
   const [open, setOpen] = useState(false)
   const [msg, setMsg] = useState('')
   const [loading, setLoading] = useState(false)
@@ -115,7 +115,7 @@ const SignForm = () => {
   return (
     <>
       <Loader loading={loading} />
-      <Button color='inherit' className={btn} onClick={handleClickOpen}>
+      <Button color='inherit' onClick={handleClickOpen}>
         Login
       </Button>
       {isSignIn ? <SignInDialog {...signInDialogPr} /> : <SignUpDialog {...signUpDialogProps} />}

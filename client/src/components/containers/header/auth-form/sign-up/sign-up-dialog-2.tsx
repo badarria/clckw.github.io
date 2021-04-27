@@ -19,7 +19,7 @@ type Props = {
 }
 
 const SignUpDialog2 = ({ msg, change, submit }: Props) => {
-  const { title, form, content, checkMasterBox, btnWrap, btn, wrap, checkBox, inputWrap, msgBox } = useStyles()
+  const { title, signUpForm, content, checkMasterBox, btnWrap, btn, wrap, checkBox, inputWrap, msgBox } = useStyles()
   const [cities, setCities] = useState([initCity])
   const [loading, setLoading] = useState(false)
   const [disabled, setDisabled] = useState(true)
@@ -70,7 +70,7 @@ const SignUpDialog2 = ({ msg, change, submit }: Props) => {
       <Loader loading={loading} />
       <DialogTitle id='form-dialog' className={title}></DialogTitle>
       <DialogContent className={content}>
-        <form onSubmit={handleSubmit(submitForm)} className={form} autoComplete='off'>
+        <form onSubmit={handleSubmit(submitForm)} className={signUpForm} autoComplete='off'>
           <FormGroup>
             <InputLabel className={checkBox}>
               <ControlledCheckbox control={control} name='agree' />

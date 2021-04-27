@@ -1,5 +1,6 @@
 import { Order } from 'types'
 import { DateTime } from 'luxon'
+import { SchedulerDateTime } from '@devexpress/dx-react-scheduler'
 
 const beginKey = 'begin'
 const endKey = 'finish'
@@ -29,6 +30,11 @@ const findBookedTime = (orders: FilteredOrders) =>
 
 export const toMailFormat = (str: string) => DateTime.fromISO(str).toFormat('EEE dd.MM.yy HH:mm')
 export const newDateToFormat = () => DateTime.fromJSDate(new Date()).toFormat('EEE dd.MM.yy')
+export const SchedulerTime = (str: SchedulerDateTime) => {
+  if (typeof str === 'string') return str.replace(/(\d|-)+T/, '').replace(/(:00)$/, '')
+  return str
+}
+
 export const getHoursArray = (service_time: string, orders: FilteredOrders = [], dayBegin = 8, dayEnd = 20) => {
   const workDay = getWorkingHours(dayBegin, dayEnd, service_time)
   const bookedTime = findBookedTime(orders)

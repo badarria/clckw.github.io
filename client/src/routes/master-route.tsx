@@ -1,11 +1,12 @@
-import { Redirect, Route } from 'react-router-dom'
-import { Master } from '../components/containers'
+import React, { ComponentType, FC, ReactElement } from 'react'
+import { Redirect, Route, useRouteMatch } from 'react-router-dom'
 import { RootState } from 'store'
 import { useSelector } from 'react-redux'
 
-export const MasterRoute = ({ path }: { path: string }) => {
+export const MasterRoute: React.FunctionComponent<any> = ({ children }) => {
   const user = useSelector((state: RootState) => state.user)
   const isMaster = user && user.role === 'master'
 
-  return isMaster ? <Master /> : <Redirect to='/' />
+  if (!isMaster) return <Redirect to='/' />
+  return children
 }

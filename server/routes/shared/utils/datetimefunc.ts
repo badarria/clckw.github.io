@@ -29,5 +29,10 @@ const toDate = (timestamp: Date | string) => {
   }
   return DateTime.fromJSDate(timestamp).toFormat('EEE dd/MM/yyyy')
 }
+// '2021-04-24T12:00'
+const toSchedulerFormat = (date: Date) =>
+  DateTime.fromJSDate(date)
+    .toISO()
+    .replace(/(\..+)/, '')
 
-export { toObjFromStr, toObjFromJSDate, checkThisDayTime, compareTime, toTime, toDate, tsToUTC }
+export { toObjFromStr, toObjFromJSDate, checkThisDayTime, compareTime, toTime, toDate, tsToUTC, toSchedulerFormat }

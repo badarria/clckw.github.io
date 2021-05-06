@@ -14,8 +14,6 @@ type Props = {
 export const InputField = ({ label, register, errors, name = label, type = 'text' }: Props) => {
   const { fields, inputLabel, idInput, input, helperText } = useStyles()
 
-  console.log(label, name)
-
   return (
     <TextField
       className={fields}

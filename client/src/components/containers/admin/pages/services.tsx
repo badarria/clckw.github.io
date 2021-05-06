@@ -95,7 +95,6 @@ export const Services = () => {
     editState,
     remove,
     toast,
-    form: <ServicesForm {...formProps} />,
     pagination: <Pagination {...pagingProps} />,
     header: <AdminTableHead {...headProps} />,
   }
@@ -103,6 +102,7 @@ export const Services = () => {
   return (
     <>
       <Loader loading={loading} />
+      {editState && <ServicesForm {...formProps} />}
       <AdminTable {...tableProps} />
     </>
   )

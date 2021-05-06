@@ -16,11 +16,11 @@ type Props = {
   data: Service
 }
 
-export const ServicesForm = ({ data: { id = 0, name, time, price }, cancel, accept, editState }: Props) => {
+export const ServicesForm = ({ data, cancel, accept, editState }: Props) => {
+  const { id, name, time, price } = data
   const [timeArr, setTimeArr] = useState(servHours)
-  const labels = Object.keys({ id, name })
+  const labels: Array<keyof Service> = ['id', 'name']
   const initTime = timeArr.find(({ id }) => id === Number(time)) || timeArr[0]
-
   const defaultValues = { id, name, time: initTime, price }
 
   const { register, handleSubmit, control, reset, errors } = useForm({
@@ -28,17 +28,18 @@ export const ServicesForm = ({ data: { id = 0, name, time, price }, cancel, acce
     resolver: yupResolver(services),
   })
 
+  const title = editState && editState === 'isEditing' ? 'Edit existing service' : 'Create new service'
+
   const formProps = {
     submit: handleSubmit((data) => {
       const { time } = data
       accept({ ...data, time: `${time.id}` })
     }),
-    reset: () => {
-      cancel()
-      reset()
-    },
-    editState,
+    cancel,
+    title,
   }
+
+  if (!editState) return null
 
   return (
     <TableForm {...formProps}>

@@ -103,7 +103,7 @@ export const Customers = () => {
   return (
     <>
       <Loader loading={loading} />
-      <CustomersForm {...formProps} />
+      {editState && <CustomersForm {...formProps} />}
       <AdminTable {...tableProps} />
     </>
   )

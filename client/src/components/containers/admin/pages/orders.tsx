@@ -107,7 +107,6 @@ export const Orders = () => {
     editState,
     remove,
     toast,
-    form: <OrdersForm {...formProps} />,
     pagination: <Pagination {...pagingProps} />,
     header: <AdminTableHead {...headProps} />,
   }
@@ -115,6 +114,7 @@ export const Orders = () => {
   return (
     <>
       <Loader loading={loading} />
+      {editState && <OrdersForm {...formProps} />}
       <AdminTable {...tableProps} />
     </>
   )

@@ -19,7 +19,7 @@ export const MastersForm = ({ data, cancel, accept, editState }: Props) => {
   const [keys, setKeys] = useState([ci])
   const [loading, setLoading] = useState(false)
   const defaultValues = { id, name, surname, city: keys[0], password: '', email }
-  const labels = Object.keys({ id, name, surname, email, password: '' })
+  const labels: Array<keyof Master> = ['id', 'name', 'surname', 'email', 'password']
 
   const { register, handleSubmit, control, reset, errors } = useForm({
     defaultValues,
@@ -33,13 +33,12 @@ export const MastersForm = ({ data, cancel, accept, editState }: Props) => {
     return res
   }
 
+  const title = editState && editState === 'isEditing' ? 'Edit existing master' : 'Create new master'
+
   const formProps = {
     submit: handleSubmit((data) => accept({ ...data, city: `${data.city.id}` })),
-    reset: () => {
-      cancel()
-      reset()
-    },
-    editState,
+    cancel,
+    title,
   }
 
   useEffect(() => {
@@ -51,6 +50,8 @@ export const MastersForm = ({ data, cancel, accept, editState }: Props) => {
     }
     getKeys()
   }, [])
+
+  if (!editState) return null
 
   return (
     <>

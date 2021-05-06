@@ -102,7 +102,6 @@ export const Masters = () => {
     editState,
     remove,
     toast,
-    form: <MastersForm {...formProps} />,
     pagination: <Pagination {...pagingProps} />,
     header: <AdminTableHead {...headProps} />,
   }
@@ -110,6 +109,7 @@ export const Masters = () => {
   return (
     <>
       <Loader loading={loading} />
+      {editState && <MastersForm {...formProps} />}
       <AdminTable {...tableProps} />
     </>
   )

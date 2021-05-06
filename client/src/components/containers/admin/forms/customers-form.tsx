@@ -2,7 +2,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { customers } from '../../../../services/admin/validation/schema'
-import { InputField, AlertForm } from '../components'
+import { InputField, TableForm } from '../components'
 import { Customer } from '../../../../types'
 import { State } from '../../admin/types'
 
@@ -23,21 +23,20 @@ export const CustomersForm = ({ data, cancel, accept, editState }: Props) => {
     resolver: yupResolver(customers),
   })
   const title = editState && editState === 'isEditing' ? 'Edit existing customer' : 'Create new customer'
-  const renderForm = editState !== null
 
   const formProps = {
-    submit: handleSubmit((data: Customer) => accept(data)),
-    reset: cancel,
+    submit: handleSubmit(accept),
+    cancel,
     title,
-    open: renderForm,
   }
-  // console.log(register('surname'))
+
+  if (!editState) return null
 
   return (
-    <AlertForm {...formProps}>
+    <TableForm {...formProps}>
       {labels.map((label, inx) => (
         <InputField key={inx} register={register} label={label} errors={errors} />
       ))}
-    </AlertForm>
+    </TableForm>
   )
 }

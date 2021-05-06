@@ -1,45 +1,34 @@
 import React, { FC } from 'react'
-import { Clear, Done } from '@material-ui/icons'
-import { AlertDialog } from '..'
-import { TableRow, Box, TableCell } from '@material-ui/core'
+import { Box, Dialog, Button, DialogContent, DialogActions, DialogTitle } from '@material-ui/core'
 import { useStyles } from './styles'
-import { AlertDialogProps } from '../../types'
 
-type Props = { submit: () => void; reset: () => void }
+type Props = { submit: () => void; cancel: () => void; title: string }
 
-export const TableForm: FC<Props> = ({ children, submit, reset }) => {
-  const { btns, form, fields } = useStyles()
-
-  const acceptDialogProps: AlertDialogProps = {
-    icon: <Done fontSize='small' />,
-    title: 'Submit form',
-    question: 'Submit form?',
-    description: 'Save and make changes to the database',
-    type: 'button',
-    accept: submit,
-    disabled: false,
-  }
-  const resetDialogProps: AlertDialogProps = {
-    icon: <Clear fontSize='small' />,
-    title: 'Reset all changes',
-    question: 'Reset form?',
-    description: 'Changes will not be saved',
-    type: 'reset',
-    accept: reset,
-    disabled: false,
-  }
+export const TableForm: FC<Props> = ({ children, cancel, submit, title }) => {
+  const { alertBtnsBox, alertForm, fields } = useStyles()
 
   return (
-    <TableRow>
-      <TableCell colSpan={14}>
-        <form onSubmit={submit} className={form}>
+    <Dialog open={true} onClose={cancel} maxWidth='md'>
+      <DialogTitle>{title}</DialogTitle>
+      <DialogContent>
+        <form onSubmit={submit} className={alertForm}>
           <Box className={fields}>{children}</Box>
-          <Box className={btns}>
-            <AlertDialog {...acceptDialogProps} />
-            <AlertDialog {...resetDialogProps} />
-          </Box>
+          <DialogActions className={alertBtnsBox}>
+            <Button
+              type='submit'
+              variant='contained'
+              onClick={submit}
+              color='primary'
+              title={'Save and make changes to the database'}>
+              Submit form
+            </Button>
+
+            <Button variant='contained' onClick={cancel} title='Changes will not be saved'>
+              Cancel
+            </Button>
+          </DialogActions>
         </form>
-      </TableCell>
-    </TableRow>
+      </DialogContent>
+    </Dialog>
   )
 }

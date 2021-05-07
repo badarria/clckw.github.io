@@ -41,12 +41,12 @@ export class Order extends Model {
   }
 
   @BelongsTo(() => Master, { foreignKey: 'master_id', onDelete: 'set null', onUpdate: 'set null' })
-  m!: Master[]
+  m!: Master
   @Column
   master_id!: number
 
   @BelongsTo(() => Customer, { foreignKey: 'customer_id', onDelete: 'set null', onUpdate: 'set null' })
-  c!: Customer[]
+  c!: Customer
   @Column
   customer_id!: number
 

@@ -5,10 +5,12 @@ import path from 'path'
 import { config } from './config'
 import { Request, Response } from 'express'
 import { errorsHandler } from './server/errors-handler'
+import ordersRemind from './server/cron/orders-remind'
 
 const app = express()
 
 const PORT = config.port
+ordersRemind.start()
 
 app.use(cors())
 app.use(express.json({ limit: '10Mb' }))

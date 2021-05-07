@@ -93,8 +93,9 @@ export const getBeginFinish = (date: Date | string, hours: string, service_time:
   const finish: string = DateTime.fromJSDate(beginJs)
     .plus({ hours: Number(service_time) })
     .toISO()
-    .replace(/\+.+$/, '+0000')
-  const begin = DateTime.fromJSDate(beginJs).toISO().replace(/\+.+$/, '+0000')
-
+  // .replace(/\+.+$/, '+0000')
+  const begin = DateTime.fromJSDate(beginJs).toISO()
+  // .replace(/\+.+$/, '+0000')
+  console.log(begin, 'begin front')
   return { finish, begin }
 }

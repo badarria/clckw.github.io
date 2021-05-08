@@ -1,22 +1,22 @@
 import React, { useCallback } from 'react'
-import { Link } from 'react-router-dom'
-import { Container, AppBar, Toolbar, Button, Box } from '@material-ui/core'
-import SignForm from './auth-form/sign-form'
+import { Container, AppBar, Toolbar } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { useStyles } from './styles'
 import { RootState } from 'store'
 import { setUserAuth } from 'store/reducer'
+import { CustomerHeader, MasterHeader, AdminHeader, NoRoleHeader } from './components'
 
 export const Header = () => {
   const user = useSelector((state: RootState) => state.user)
   const isAdmin = user && user.role === 'admin'
   const isMaster = user && user.role === 'master'
   const isCustomer = user && user.role === 'customer'
+  const noRole = !isAdmin && !isMaster && !isCustomer
 
-  const { root, title, btns } = useStyles()
+  const { root } = useStyles()
   const dispatch = useDispatch()
 
-  const logoutFrom = useCallback(() => {
+  const logout = useCallback(() => {
     localStorage.removeItem('token')
     dispatch(setUserAuth(null))
   }, [])
@@ -25,50 +25,10 @@ export const Header = () => {
     <AppBar position='static'>
       <Container>
         <Toolbar className={root}>
-          <Box>
-            <Button component={Link} to={'/'} className={title}>
-              Clockware
-            </Button>
-          </Box>
-          <Box className={btns}>
-            <Button color='inherit' component={Link} to={'/blog'} className={btns}>
-              Blog
-            </Button>
-            {isAdmin && (
-              <Button color='inherit' component={Link} to={'/admin/post'}>
-                Add new post
-              </Button>
-            )}
-          </Box>
-          <Box className={btns}>
-            {isAdmin && (
-              <Button color='inherit' component={Link} to={'/admin/customers'}>
-                Admin
-              </Button>
-            )}
-            {isMaster && (
-              <>
-                <Button color='inherit' component={Link} to={'/master/scheduler'}>
-                  Calendar
-                </Button>
-                <Button color='inherit' component={Link} to={'/master'}>
-                  Master
-                </Button>
-              </>
-            )}
-            {isCustomer && (
-              <Button color='inherit' component={Link} to={'/customer'}>
-                Customer
-              </Button>
-            )}
-            {isAdmin || isMaster || isCustomer ? (
-              <Button color='inherit' onClick={logoutFrom}>
-                Logout
-              </Button>
-            ) : (
-              <SignForm />
-            )}
-          </Box>
+          {isAdmin && <AdminHeader logout={logout} />}
+          {isCustomer && <CustomerHeader logout={logout} />}
+          {isMaster && <MasterHeader logout={logout} />}
+          {noRole && <NoRoleHeader />}
         </Toolbar>
       </Container>
     </AppBar>

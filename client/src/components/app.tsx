@@ -1,7 +1,7 @@
 import React from 'react'
 import { Header } from './containers'
 import { Scheduler, MasterMainPage } from './containers/master/pages'
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route, Redirect, useHistory, useLocation } from 'react-router-dom'
 import { AdminRoute, MasterRoute, RatingRoute, CustomerRoute, MastersRoute, PaymentRoute, BlogRoute } from '../routes'
 import { Search } from '../components/containers/home/pages'
 import { Cities, Customers, Masters, Orders, Services, Post } from './containers/admin/pages'

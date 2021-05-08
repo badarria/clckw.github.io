@@ -14,7 +14,6 @@ import SignInDialog from './sign-in/sign-in-dialog'
 export type UserState = { msg: string; role: string; name: string } | Response
 
 const SignForm = () => {
-  // const { btn } = useStyles()
   const [open, setOpen] = useState(false)
   const [msg, setMsg] = useState('')
   const [loading, setLoading] = useState(false)

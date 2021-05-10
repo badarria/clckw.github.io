@@ -20,6 +20,9 @@ export default ({ logout }: Props) => {
         <Button color='inherit' component={Link} to={'/admin/post'}>
           Add new post
         </Button>
+        <Button color='inherit' component={Link} to={'/admin/statistic'}>
+          Statistic
+        </Button>
       </Box>
       <Box className={btns}>
         <Button color='inherit' component={Link} to={'/admin/customers'}>

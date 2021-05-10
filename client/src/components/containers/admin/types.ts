@@ -49,3 +49,7 @@ export type AlertDialogProps = {
 }
 
 export type BtnType = 'button' | 'submit' | 'reset'
+
+
+export type Chart1 = { begin: string; finish: string }
+export type Chart1Res = { day: string, bymasters: { count: number, master: string }[], bycities: { city: string, count: number }[], total: number }[]

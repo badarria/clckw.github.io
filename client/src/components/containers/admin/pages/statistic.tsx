@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Loader } from '../components'
 import { Response } from '../../../../types'
+import { useStyles } from './styles'
+import { Container } from '@material-ui/core'
+import Chart1 from '../forms/statistic/chart1'
 
 export default () => {
   const [toast, setToast] = useState<Response>({ type: 'success', msg: '' })
+
   const [loading, setLoading] = useState(false)
+  const { container } = useStyles()
 
   const setLoader = async <T extends any>(doSomething: T) => {
     setLoading(true)
@@ -21,8 +26,9 @@ export default () => {
   }
 
   return (
-    <>
+    <Container className={container}>
       <Loader loading={loading} />
-    </>
+      <Chart1 />
+    </Container>
   )
 }

@@ -26,7 +26,6 @@ export const DatePicker = (props: { control: Control }) => {
             margin='normal'
             id='date-picker'
             label='Select day'
-            disablePast
             inputProps={{ className: input }}
             {...props}
           />

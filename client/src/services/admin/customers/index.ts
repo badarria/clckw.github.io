@@ -33,6 +33,7 @@ const del = async (id: number): Promise<Response> => {
 
 const putOrPost = async (method: Method, data: Customer): Promise<Response> => {
   const token = getToken()
+
   const res = await fetch(`${adminPath}`, {
     method,
     headers: { 'Content-Type': 'application/json', token },

@@ -13,21 +13,24 @@ type Props = {
   editState: State
 }
 
-export const CustomersForm = ({ data: { id, name, surname, email, password }, cancel, accept, editState }: Props) => {
+export const CustomersForm = ({ data, cancel, accept, editState }: Props) => {
+  const { id, name, surname, email, password } = data
   const defaultValues = { id, name, surname, email, password }
-  const labels = Object.keys({ id: id || 0, name, surname, email, password })
+  const labels: Array<keyof Customer> = ['id', 'name', 'surname', 'email', 'password']
+
   const { register, handleSubmit, errors } = useForm({
     defaultValues,
     resolver: yupResolver(customers),
   })
+  const title = editState && editState === 'isEditing' ? 'Edit existing customer' : 'Create new customer'
 
   const formProps = {
-    submit: handleSubmit((data: Customer) => accept(data)),
-    reset: () => {
-      cancel()
-    },
-    editState,
+    submit: handleSubmit(accept),
+    cancel,
+    title,
   }
+
+  if (!editState) return null
 
   return (
     <TableForm {...formProps}>

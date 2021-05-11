@@ -9,6 +9,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   if (!validData) return
 
   const { name, surname, email, id, password } = validData
+
   const saltRound = 10
   const salt = await bcrypt.genSalt(saltRound)
   const bcPass = await bcrypt.hash(password, salt)
@@ -16,6 +17,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   const result = await Customer.update({ name, surname }, { where: { id }, returning: true }).catch((err: Error) =>
     next(err)
   )
+
   if (!result) return next(new Error("Customer wasn't updated"))
 
   const userId = result[1][0].user_id
@@ -23,6 +25,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     const updUser = await User.update({ pass: bcPass, salt, email }, { where: { id: userId } }).catch((err: Error) =>
       next(err)
     )
+
     const msg = result[0] ? 'Customer was updated' : 'Customer not found'
     const type = result[0] ? 'success' : 'warning'
     return updUser && res.json({ type, msg })
@@ -33,6 +36,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     const userId = newUser && newUser.id
     const updCustomer =
       userId && (await Customer.update({ user_id: userId }, { where: { id } }).catch((err: Error) => next(err)))
+
     const msg = result[0] ? 'Customer  was updated' : 'Customer not found'
     const type = result[0] ? 'success' : 'warning'
     return updCustomer && res.json({ type, msg })

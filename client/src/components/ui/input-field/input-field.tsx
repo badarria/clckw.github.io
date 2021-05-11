@@ -17,7 +17,6 @@ export const InputField = ({ label, register, errors, name = label, type = 'text
   return (
     <TextField
       className={fields}
-      // defaultValue={defaultValue}
       label={`${label}*`}
       type={type}
       name={name}

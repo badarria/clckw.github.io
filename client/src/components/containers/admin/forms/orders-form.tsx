@@ -79,7 +79,7 @@ export const OrdersForm = ({ data, cancel, accept, editState }: Props) => {
     hours: begin,
   }
 
-  const { register, handleSubmit, control, reset, watch, errors } = useForm({
+  const { register, handleSubmit, control, watch, errors } = useForm({
     defaultValues,
     resolver: yupResolver(orders),
   })
@@ -125,14 +125,12 @@ export const OrdersForm = ({ data, cancel, accept, editState }: Props) => {
     }
     accept(dataToReq)
   }
+  const title = editState && editState === 'isEditing' ? 'Edit existing customer' : 'Create new customer'
 
   const formProps = {
-    submit: handleSubmit((data) => submit(data)),
-    reset: () => {
-      cancel()
-      reset()
-    },
-    editState,
+    submit: handleSubmit(submit),
+    cancel,
+    title,
   }
 
   const selectProps = { data: newHours, control, name: 'hours', disabled: disableHours }
@@ -141,18 +139,32 @@ export const OrdersForm = ({ data, cancel, accept, editState }: Props) => {
     <>
       <Loader loading={loading} />
       <TableForm {...formProps}>
-        {id ? <InputField {...{ register, label: 'id', errors }} /> : null}
-        <AutocompleteField control={control} name='master' data={keys.master} keyToSelect='fullName' errors={errors} />
-        <AutocompleteField
-          control={control}
-          name='customer'
-          data={keys.customer}
-          keyToSelect='fullName'
-          errors={errors}
-        />
-        <AutocompleteField control={control} name='service' data={keys.service} keyToSelect='service' errors={errors} />
-        <DatePicker control={control} />
-        <SelectHours {...selectProps} />
+        <>
+          {id ? <InputField {...{ register, label: 'id', errors }} /> : null}
+          <AutocompleteField
+            control={control}
+            name='master'
+            data={keys.master}
+            keyToSelect='fullName'
+            errors={errors}
+          />
+          <AutocompleteField
+            control={control}
+            name='customer'
+            data={keys.customer}
+            keyToSelect='fullName'
+            errors={errors}
+          />
+          <AutocompleteField
+            control={control}
+            name='service'
+            data={keys.service}
+            keyToSelect='service'
+            errors={errors}
+          />
+          <DatePicker control={control} />
+          <SelectHours {...selectProps} />
+        </>
       </TableForm>
     </>
   )

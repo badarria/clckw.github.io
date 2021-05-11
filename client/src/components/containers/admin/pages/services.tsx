@@ -96,12 +96,13 @@ export const Services = () => {
     remove,
     toast,
     pagination: <Pagination {...pagingProps} />,
-    header: editState ? <ServicesForm {...formProps} /> : <AdminTableHead {...headProps} />,
+    header: <AdminTableHead {...headProps} />,
   }
 
   return (
     <>
       <Loader loading={loading} />
+      {editState && <ServicesForm {...formProps} />}
       <AdminTable {...tableProps} />
     </>
   )

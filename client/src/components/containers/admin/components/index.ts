@@ -15,7 +15,6 @@ export {
   AdminTableList,
   AdminTableHead,
   Pagination,
-  TableForm,
   LinkTabs,
   DatePicker,
   Loader,
@@ -26,4 +25,5 @@ export {
   ButtonIcon,
   AutocompleteField,
   Article,
+  TableForm,
 }

@@ -7,12 +7,17 @@ export const useStyles = makeStyles({
     width: '100%',
     alignItems: 'flex-end',
   },
-  fields: { display: 'flex', maxWidth: '90%', alignItems: 'flex-end' },
+  dialog: { maxWidth: '100%' },
+  alertForm: { display: 'flex', flexDirection: 'column', alignItems: 'center' },
+  fields: { display: 'flex' },
   btns: {
     flexGrow: 1,
     display: 'flex',
     justifyContent: 'flex-end',
     alignItems: 'center',
     alignSelf: 'stretch',
+  },
+  alertBtnsBox: {
+    display: 'flex',
   },
 })

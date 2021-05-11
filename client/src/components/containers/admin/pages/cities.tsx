@@ -96,12 +96,13 @@ export const Cities = () => {
     remove,
     toast,
     pagination: <Pagination {...pagingProps} />,
-    header: editState ? <CitiesForm {...formProps} /> : <AdminTableHead {...headProps} />,
+    header: <AdminTableHead {...headProps} />,
   }
 
   return (
     <>
       <Loader loading={loading} />
+      {editState && <CitiesForm {...formProps} />}
       <AdminTable {...tableProps} />
     </>
   )

@@ -6,24 +6,27 @@ import { InputField, TableForm } from '../components'
 import { City } from '../../../../types'
 import { State } from '../../admin/types'
 
-type Props = { cancel: () => void; accept: (data: { id: number; name: string }) => void; data: City; editState: State }
+type Props = { cancel: () => void; accept: (data: City) => void; data: City; editState: State }
 
-export const CitiesForm = ({ data: { id = 0, name }, cancel, accept, editState }: Props) => {
+export const CitiesForm = ({ data, cancel, accept, editState }: Props) => {
+  const { id, name } = data
   const defaultValues = { id, name }
-  const labels = Object.keys({ id, name })
-  const { register, handleSubmit, reset, errors } = useForm({
+  const labels: Array<keyof City> = ['id', 'name']
+
+  const { register, handleSubmit, errors } = useForm({
     defaultValues,
     resolver: yupResolver(cities),
   })
 
+  const title = editState && editState === 'isEditing' ? 'Edit existing city' : 'Create new city'
+
   const formProps = {
-    submit: handleSubmit((data) => accept(data)),
-    reset: () => {
-      cancel()
-      reset()
-    },
-    editState,
+    submit: handleSubmit(accept),
+    cancel,
+    title,
   }
+
+  if (!editState) return null
 
   return (
     <TableForm {...formProps}>

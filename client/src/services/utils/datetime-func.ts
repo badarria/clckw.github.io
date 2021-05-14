@@ -1,6 +1,7 @@
 import { Order } from 'types'
 import { DateTime } from 'luxon'
 import { SchedulerDateTime } from '@devexpress/dx-react-scheduler'
+import { Period } from 'components/containers/admin/types'
 
 const beginKey = 'begin'
 const endKey = 'finish'
@@ -93,9 +94,15 @@ export const getBeginFinish = (date: Date | string, hours: string, service_time:
   const finish: string = DateTime.fromJSDate(beginJs)
     .plus({ hours: Number(service_time) })
     .toISO()
-  // .replace(/\+.+$/, '+0000')
   const begin = DateTime.fromJSDate(beginJs).toISO()
-  // .replace(/\+.+$/, '+0000')
-  console.log(begin, 'begin front')
+
   return { finish, begin }
 }
+
+export const findDiapazone = () => {
+  const initBegin = DateTime.now().startOf('month').toISO()
+  const initFinish = DateTime.now().endOf('month').toISO()
+  return { initBegin, initFinish }
+}
+
+export const isoToJs = (str: string) => DateTime.fromISO(str).toJSDate()

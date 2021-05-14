@@ -50,6 +50,27 @@ export type AlertDialogProps = {
 
 export type BtnType = 'button' | 'submit' | 'reset'
 
+export type ChartDate = { begin: string; finish: string }
+export type Chart1 = ChartDate & { period: Period }
+export type Chart2Res = { city: string; total: number }
+export type Chart3Res = { master: string; total: number }
+export type Chart4Res = {
+  types: Record<string, number>
+  master: string
+  count: number
+  iscompleted: number
+  isnotcompleted: number
+  price: number
+  rating: number | null
+}
 
-export type Chart1 = { begin: string; finish: string }
-export type Chart1Res = { day: string, bymasters: { count: number, master: string }[], bycities: { city: string, count: number }[], total: number }[]
+export type Chart1Res = {
+  day?: string
+  month?: string
+  week?: string
+  orders: { city: string; count: number; master: string }[]
+  total: number
+}[]
+export type Period = 'month' | 'week' | 'day'
+export type Range = { begin: string; finish: string }
+export type Chart1Init = { city: string; city_id: number; fullName: string; master_id: number }[]

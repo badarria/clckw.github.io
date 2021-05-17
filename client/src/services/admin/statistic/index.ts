@@ -6,6 +6,8 @@ import {
   Chart2Res,
   Chart3Res,
   Chart4Res,
+  Chart4,
+  Chart4Init,
 } from '../../../components/containers/admin/types'
 import { Response } from '../../../types'
 
@@ -56,9 +58,22 @@ const get3 = async ({ begin, finish }: ChartDate): Promise<Chart3Res[]> => {
   return res.json()
 }
 
-const get4 = async ({ begin, finish }: ChartDate): Promise<Chart4Res[]> => {
+const get4 = async (data: Chart4): Promise<Chart4Res> => {
   const token = getToken()
-  const res = await fetch(`${adminPath}/chart4/'${begin}'/'${finish}'`, {
+  const {
+    begin,
+    finish,
+    paging: { limit, offset, orderby, order },
+  } = data
+  const res = await fetch(`${adminPath}/chart4/'${begin}'/'${finish}'/${limit}/${offset}/${orderby}/${order}`, {
+    headers: { token },
+  })
+  return res.json()
+}
+
+const get4Init = async (): Promise<Chart4Init> => {
+  const token = getToken()
+  const res = await fetch(`${adminPath}/chart4Init`, {
     headers: { token },
   })
   return res.json()
@@ -68,4 +83,5 @@ export const getChart1 = async (data: Chart1) => await wrapTryCatch(get1(data))
 export const getChart1Init = async () => await wrapTryCatch(get1Init())
 export const getChart2 = async (data: ChartDate) => await wrapTryCatch(get2(data))
 export const getChart3 = async (data: ChartDate) => await wrapTryCatch(get3(data))
-export const getChart4 = async (data: ChartDate) => await wrapTryCatch(get4(data))
+export const getChart4 = async (data: Chart4) => await wrapTryCatch(get4(data))
+export const getChart4Init = async () => await wrapTryCatch(get4Init())

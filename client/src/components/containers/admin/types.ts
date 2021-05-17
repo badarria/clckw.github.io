@@ -1,6 +1,6 @@
 import { IconButtonProps } from '@material-ui/core'
 import { MouseEventHandler, ReactElement } from 'react'
-import { Order, Master, Customer, City, Service } from '../../../types'
+import { Order, Master, Customer, City, Service, Paging } from '../../../types'
 
 export type NewMaster = {
   id: number
@@ -54,15 +54,24 @@ export type ChartDate = { begin: string; finish: string }
 export type Chart1 = ChartDate & { period: Period }
 export type Chart2Res = { city: string; total: number }
 export type Chart3Res = { master: string; total: number }
-export type Chart4Res = {
-  types: Record<string, number>
+export type ServiceTypes = Record<string, number>
+export type ServiceTypesKey = keyof ServiceTypes
+export type Chart4 = ChartDate & { paging: Paging }
+export type Chart4ResList = {
+  types: ServiceTypes[]
   master: string
-  count: number
+  orders: number
   iscompleted: number
   isnotcompleted: number
   price: number
   rating: number | null
 }
+export type Chart4Res = {
+  list: Chart4ResList[]
+  count: number
+}
+
+export type Chart4Init = { name: string }[]
 
 export type Chart1Res = {
   day?: string

@@ -11,7 +11,7 @@ const schema = yup.object().shape({
 export default async (req: Request, res: Response, next: NextFunction) => {
   const validData = await schema.validate(req.params).catch((err) => next(err))
   if (!validData) return
-  console.log(req.params)
+
   const { begin, finish } = validData
   const list = await sequelize
     .query(

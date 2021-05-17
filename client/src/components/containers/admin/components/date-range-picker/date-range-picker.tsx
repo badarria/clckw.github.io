@@ -39,7 +39,6 @@ export default ({ getRange, initBegin, initFinish }: Props) => {
 
   const getStringData = () => {
     const { begin, finish } = range
-    console.log(begin, finish, 'inDaGetStrData')
 
     const beginToStr = toStringDate(begin)
     const finishToStr = toStringDate(finish)

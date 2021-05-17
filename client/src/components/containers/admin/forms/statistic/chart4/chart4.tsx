@@ -1,60 +1,93 @@
-import { Paper, TableBody, TableContainer, TableFooter, TableHead, TableRow, Table } from '@material-ui/core'
-import { Pagination } from '@material-ui/lab'
-import { Chart4Res, Period, Range } from 'components/containers/admin/types'
+import {
+  Paper,
+  TableBody,
+  TableContainer,
+  TableFooter,
+  TableHead,
+  TableRow,
+  Table,
+  Typography,
+  Box,
+} from '@material-ui/core'
+import { Chart4ResList, Range } from 'components/containers/admin/types'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { Chart4List } from './chart4-list'
-import { getChart4 } from 'services/admin/statistic'
+import { getChart4Init } from 'services/admin/statistic'
 import { findDiapazone } from 'services/utils/datetime-func'
 import { Paging } from 'types'
 import { Chart4Head } from './chart4-header'
-import { useStyles } from './styles'
+import { useStyles } from '../styles'
+import { Pagination } from '../../../components/table/pagination'
+import { DateRangePicker } from 'components/containers/admin/components'
 
-const initPeriod: Period = 'day'
 const { initBegin, initFinish } = findDiapazone()
-const initPaging: Required<Paging> = { offset: 0, limit: 10, orderby: 'master', order: 'desc', count: 10 }
+type Props = {
+  getData: (range: Range) => void
+  data: Chart4ResList[]
+  paging: Required<Paging>
+  setChange: (data: Paging) => void
+}
 
-export default () => {
-  const { root, table, head } = useStyles()
-  const [data, setData] = useState<Chart4Res[]>([])
+export default ({ data, paging, setChange, getData }: Props) => {
+  const { root, table, head, container, title, noDataBox } = useStyles()
   const [range, setRange] = useState<Range>({ begin: initBegin, finish: initFinish })
-  const [period, setPeriod] = useState<Period>(initPeriod)
-  const [paging, setPaging] = useState<Required<Paging>>(initPaging)
+  const [servicesKeys, setServiceKeys] = useState<string[]>([])
   const { order, orderby, offset, limit, count } = paging
 
-  const getData = async () => {
-    const list = await getChart4(range)
-    if ('type' in list) return
+  const getInitData = async () => {
+    const data = await getChart4Init()
+    if ('type' in data) return
 
-    setData(list)
+    const keys: string[] = []
+    data.forEach(({ name }) => keys.push(name))
+    setServiceKeys(keys)
+  }
+
+  const getRange = ({ begin, finish }: { begin: string; finish: string }) => {
+    setRange(() => ({ begin, finish }))
   }
 
   useEffect(() => {
-    getData()
-  }, [range])
+    getInitData()
+  }, [])
 
-  const setChange = async (data: Paging) => {
-    setPaging((paging) => ({ ...paging, ...data }))
-  }
+  useEffect(() => {
+    getData(range)
+  }, [range, paging])
 
-  const headProps = { order, orderby, setChange, types: ['small size', 'middle size', 'big size'] }
-  const pagination = { limit, offset, count, setChange }
+  const headProps = { order, orderby, setChange, servicesKeys }
+  const pagination = { option: { limit, offset, count }, setPaging: setChange }
 
   return (
-    <TableContainer component={Paper} className={root}>
-      <Table className={table} aria-label={`table`}>
-        <TableHead className={head}>
-          <Chart4Head {...headProps} />
-        </TableHead>
-        <TableBody>
-          <Chart4List data={data} />
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <Pagination {...pagination} />
-          </TableRow>
-        </TableFooter>
-      </Table>
-    </TableContainer>
+    <>
+      <Paper className={container}>
+        <Typography variant='h5' className={title} align='center'>
+          Statistics by masters
+        </Typography>
+        <DateRangePicker getRange={getRange} initBegin={initBegin} initFinish={initFinish} />
+        {data.length ? (
+          <TableContainer className={root}>
+            <Table className={table} aria-label={`table`}>
+              <TableHead className={head}>
+                <Chart4Head {...headProps} />
+              </TableHead>
+              <TableBody>
+                <Chart4List data={data} servicesKeys={servicesKeys} />
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <Pagination {...pagination} />
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </TableContainer>
+        ) : (
+          <Box className={noDataBox}>
+            <Typography>There is no data for this period</Typography>
+          </Box>
+        )}
+      </Paper>
+    </>
   )
 }

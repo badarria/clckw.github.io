@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import * as yup from 'yup'
 import { sequelize } from '../../../../db'
 import { QueryTypes } from 'sequelize'
-import { PagingSchema } from '../../../../routes/shared/validation'
+import { PagingSchema } from '../../../shared/validation'
 import { Master } from '../../../../db/models'
 
 const schema =

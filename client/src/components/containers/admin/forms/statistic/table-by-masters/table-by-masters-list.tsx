@@ -1,10 +1,10 @@
 import React from 'react'
 import { Box, TableCell, TableRow, Typography } from '@material-ui/core'
-import { Chart4ResList } from '../../../types'
+import { TableByMastersList } from '../../../types'
 import { useStyles } from '../styles'
 
 type Props = {
-  data: Chart4ResList[]
+  data: TableByMastersList[]
   servicesKeys: string[]
 }
 

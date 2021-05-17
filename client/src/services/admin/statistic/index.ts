@@ -1,13 +1,13 @@
 import {
-  Chart1,
-  Chart1Init,
-  Chart1Res,
+  Histogram,
+  HistogramInit,
+  HistogramRes,
   ChartDate,
-  Chart2Res,
-  Chart3Res,
-  Chart4Res,
-  Chart4,
-  Chart4Init,
+  DiagramByCitiesRes,
+  DiagramByMastersRes,
+  TableByMastersRes,
+  TableByMasters,
+  TableByMastersInit,
 } from '../../../components/containers/admin/types'
 import { Response } from '../../../types'
 
@@ -22,66 +22,66 @@ const wrapTryCatch = async <T>(tryFunc: T) => {
   }
 }
 
-const get1 = async ({ begin, finish, period }: Chart1): Promise<Chart1Res> => {
+const get1 = async ({ begin, finish, period }: Histogram): Promise<HistogramRes> => {
   const token = getToken()
   let path = ''
-  if (period === 'day') path = 'chart1Days'
-  if (period === 'week') path = 'chart1Weeks'
-  if (period === 'month') path = 'chart1Months'
+  if (period === 'day') path = 'histogramDays'
+  if (period === 'week') path = 'histogramWeeks'
+  if (period === 'month') path = 'histogramMonths'
   const res = await fetch(`${adminPath}/${path}/'${begin}'/'${finish}'`, {
     headers: { token },
   })
   return res.json()
 }
 
-const get1Init = async (): Promise<Chart1Init> => {
+const getHistInit = async (): Promise<HistogramInit> => {
   const token = getToken()
-  const res = await fetch(`${adminPath}/chart1Init`, {
+  const res = await fetch(`${adminPath}/histogramInit`, {
     headers: { token },
   })
   return res.json()
 }
 
-const get2 = async ({ begin, finish }: ChartDate): Promise<Chart2Res[]> => {
+const getDiagramCities = async ({ begin, finish }: ChartDate): Promise<DiagramByCitiesRes[]> => {
   const token = getToken()
-  const res = await fetch(`${adminPath}/chart2/'${begin}'/'${finish}'`, {
+  const res = await fetch(`${adminPath}/citiesDiagram/'${begin}'/'${finish}'`, {
     headers: { token },
   })
   return res.json()
 }
 
-const get3 = async ({ begin, finish }: ChartDate): Promise<Chart3Res[]> => {
+const getDiagramMasters = async ({ begin, finish }: ChartDate): Promise<DiagramByMastersRes[]> => {
   const token = getToken()
-  const res = await fetch(`${adminPath}/chart3/'${begin}'/'${finish}'`, {
+  const res = await fetch(`${adminPath}/mastersDiagram/'${begin}'/'${finish}'`, {
     headers: { token },
   })
   return res.json()
 }
 
-const get4 = async (data: Chart4): Promise<Chart4Res> => {
+const getTable = async (data: TableByMasters): Promise<TableByMastersRes> => {
   const token = getToken()
   const {
     begin,
     finish,
     paging: { limit, offset, orderby, order },
   } = data
-  const res = await fetch(`${adminPath}/chart4/'${begin}'/'${finish}'/${limit}/${offset}/${orderby}/${order}`, {
+  const res = await fetch(`${adminPath}/tableByMasters/'${begin}'/'${finish}'/${limit}/${offset}/${orderby}/${order}`, {
     headers: { token },
   })
   return res.json()
 }
 
-const get4Init = async (): Promise<Chart4Init> => {
+const getTableInit = async (): Promise<TableByMastersInit> => {
   const token = getToken()
-  const res = await fetch(`${adminPath}/chart4Init`, {
+  const res = await fetch(`${adminPath}/tableByMastersInit`, {
     headers: { token },
   })
   return res.json()
 }
 
-export const getChart1 = async (data: Chart1) => await wrapTryCatch(get1(data))
-export const getChart1Init = async () => await wrapTryCatch(get1Init())
-export const getChart2 = async (data: ChartDate) => await wrapTryCatch(get2(data))
-export const getChart3 = async (data: ChartDate) => await wrapTryCatch(get3(data))
-export const getChart4 = async (data: Chart4) => await wrapTryCatch(get4(data))
-export const getChart4Init = async () => await wrapTryCatch(get4Init())
+export const getHistogram = async (data: Histogram) => await wrapTryCatch(get1(data))
+export const getHistogramInit = async () => await wrapTryCatch(getHistInit())
+export const getDiagramByCities = async (data: ChartDate) => await wrapTryCatch(getDiagramCities(data))
+export const getDiagramByMasters = async (data: ChartDate) => await wrapTryCatch(getDiagramMasters(data))
+export const getTableByMasters = async (data: TableByMasters) => await wrapTryCatch(getTable(data))
+export const getTableByMastersInit = async () => await wrapTryCatch(getTableInit())

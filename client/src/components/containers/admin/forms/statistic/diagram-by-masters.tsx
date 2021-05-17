@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Box, Paper, Typography } from '@material-ui/core'
 import { useEffect, useState } from 'react'
-import { Chart3Res, Range, ChartDate } from '../../types'
+import { DiagramByMastersRes, Range, ChartDate } from '../../types'
 import { PieSeries, Chart, Tooltip, Legend } from '@devexpress/dx-react-chart-material-ui'
 import { useStyles } from './styles'
 import { DateRangePicker } from '../../components'
@@ -9,7 +9,7 @@ import { findDiapazone } from '../../../../../services/utils/datetime-func'
 import { EventTracker } from '@devexpress/dx-react-chart'
 
 const { initBegin, initFinish } = findDiapazone()
-type Props = { data: Chart3Res[]; getData: (range: Range) => void }
+type Props = { data: DiagramByMastersRes[]; getData: (range: Range) => void }
 
 export default ({ getData, data }: Props) => {
   const { container, radioBox, chartBox, title, noDataBox } = useStyles()

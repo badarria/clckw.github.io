@@ -19,7 +19,7 @@ const getMonths = (month: number) => {
   return DateTime.fromObject({ month }).toFormat('LLLL')
 }
 
-export const Label = (period: Period) => (data: ArgumentAxis.LabelProps) => {
+export const HistogramLabel = (period: Period) => (data: ArgumentAxis.LabelProps) => {
   let text = getDays(`${data.text}`)
   if (period === 'week') text = getWeekDates(Number(data.text)) || ''
   if (period === 'month') text = getMonths(Number(data.text)) || ''

@@ -1,18 +1,18 @@
 import * as React from 'react'
 import { Box, Paper, Typography } from '@material-ui/core'
 import { useEffect, useState } from 'react'
-import { Chart1Res, Period, Range } from '../../../types'
+import { HistogramRes, Period, Range } from '../../../types'
 import { ArgumentAxis, ValueAxis, Chart, BarSeries } from '@devexpress/dx-react-chart-material-ui'
 import { useStyles } from '../styles'
 import { DateRangePicker } from '../../../components'
 import { findDiapazone } from '../../../../../../services/utils/datetime-func'
-import { MultipleSelect } from './select'
-import { Label } from './label'
+import { HistogramSelect } from './histogram-select'
+import { HistogramLabel } from './histogram-label'
 
 const initPeriod: Period = 'day'
 const { initBegin, initFinish } = findDiapazone()
 type FilteredData = { day?: string; month?: number; week?: number; total: number }
-type Props = { getData: (range: Range, period: Period) => void; data: Chart1Res }
+type Props = { getData: (range: Range, period: Period) => void; data: HistogramRes }
 
 export default ({ getData, data }: Props) => {
   const { container, title, radioBox, chartBox, noDataBox } = useStyles()
@@ -63,12 +63,12 @@ export default ({ getData, data }: Props) => {
 
       <Box className={radioBox}>
         <DateRangePicker getRange={getRange} initBegin={initBegin} initFinish={initFinish} />
-        <MultipleSelect getFilteredData={getFilteredData} />
+        <HistogramSelect getFilteredData={getFilteredData} />
       </Box>
       <Box className={chartBox}>
         {data.length ? (
           <Chart data={filteredData}>
-            <ArgumentAxis labelComponent={Label(period)} />
+            <ArgumentAxis labelComponent={HistogramLabel(period)} />
             <ValueAxis />
             <BarSeries valueField='total' argumentField={period} />
           </Chart>

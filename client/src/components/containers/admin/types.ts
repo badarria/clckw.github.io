@@ -51,13 +51,12 @@ export type AlertDialogProps = {
 export type BtnType = 'button' | 'submit' | 'reset'
 
 export type ChartDate = { begin: string; finish: string }
-export type Chart1 = ChartDate & { period: Period }
-export type Chart2Res = { city: string; total: number }
-export type Chart3Res = { master: string; total: number }
+export type Histogram = ChartDate & { period: Period }
+export type DiagramByCitiesRes = { city: string; total: number }
+export type DiagramByMastersRes = { master: string; total: number }
 export type ServiceTypes = Record<string, number>
-export type ServiceTypesKey = keyof ServiceTypes
-export type Chart4 = ChartDate & { paging: Paging }
-export type Chart4ResList = {
+export type TableByMasters = ChartDate & { paging: Paging }
+export type TableByMastersList = {
   types: ServiceTypes[]
   master: string
   orders: number
@@ -66,14 +65,14 @@ export type Chart4ResList = {
   price: number
   rating: number | null
 }
-export type Chart4Res = {
-  list: Chart4ResList[]
+export type TableByMastersRes = {
+  list: TableByMastersList[]
   count: number
 }
 
-export type Chart4Init = { name: string }[]
+export type TableByMastersInit = { name: string }[]
 
-export type Chart1Res = {
+export type HistogramRes = {
   day?: string
   month?: string
   week?: string
@@ -82,4 +81,4 @@ export type Chart1Res = {
 }[]
 export type Period = 'month' | 'week' | 'day'
 export type Range = { begin: string; finish: string }
-export type Chart1Init = { city: string; city_id: number; fullName: string; master_id: number }[]
+export type HistogramInit = { city: string; city_id: number; fullName: string; master_id: number }[]

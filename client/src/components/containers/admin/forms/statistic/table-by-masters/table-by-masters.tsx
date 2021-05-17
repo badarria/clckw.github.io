@@ -9,14 +9,14 @@ import {
   Typography,
   Box,
 } from '@material-ui/core'
-import { Chart4ResList, Range } from '../../../types'
+import { TableByMastersList, Range } from '../../../types'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
-import { Chart4List } from './chart4-list'
-import { getChart4Init } from '../../../../../../services/admin/statistic'
+import { Chart4List } from './table-by-masters-list'
+import { getTableByMastersInit } from '../../../../../../services/admin/statistic'
 import { findDiapazone } from '../../../../../../services/utils/datetime-func'
 import { Paging } from '../../../../../../types'
-import { Chart4Head } from './chart4-header'
+import { Chart4Head } from './table-by-masters-header'
 import { useStyles } from '../styles'
 import { Pagination } from '../../../components/table/pagination'
 import { DateRangePicker } from '../../../components'
@@ -24,7 +24,7 @@ import { DateRangePicker } from '../../../components'
 const { initBegin, initFinish } = findDiapazone()
 type Props = {
   getData: (range: Range) => void
-  data: Chart4ResList[]
+  data: TableByMastersList[]
   paging: Required<Paging>
   setChange: (data: Paging) => void
 }
@@ -36,7 +36,7 @@ export default ({ data, paging, setChange, getData }: Props) => {
   const { order, orderby, offset, limit, count } = paging
 
   const getInitData = async () => {
-    const data = await getChart4Init()
+    const data = await getTableByMastersInit()
     if ('type' in data) return
 
     const keys: string[] = []

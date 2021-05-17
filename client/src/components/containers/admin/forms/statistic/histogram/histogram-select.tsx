@@ -7,15 +7,15 @@ import Chip from '@material-ui/core/Chip'
 import { Box } from '@material-ui/core'
 import { useStyles } from '../styles'
 import { useEffect } from 'react'
-import { getChart1Init } from '../../../../../../services/admin/statistic'
-import { Chart1Init } from '../../../types'
+import { getHistogramInit } from '../../../../../../services/admin/statistic'
+import { HistogramInit } from '../../../types'
 
 type Props = { getFilteredData: (city: string[]) => void }
 
-export const MultipleSelect = ({ getFilteredData }: Props) => {
+export const HistogramSelect = ({ getFilteredData }: Props) => {
   const [masters, setMasters] = useState<string[]>([])
   const [cities, setCities] = useState<string[]>([])
-  const [initData, setInitData] = useState<Chart1Init>([])
+  const [initData, setInitData] = useState<HistogramInit>([])
   const { form, chipsBox, chip, select, formBox1, formBox2, selectLabel } = useStyles()
 
   const handleChangeMasters = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -49,7 +49,7 @@ export const MultipleSelect = ({ getFilteredData }: Props) => {
 
   useEffect(() => {
     const initData = async () => {
-      const data = await getChart1Init()
+      const data = await getHistogramInit()
       if ('type' in data) return
       setInitData(data)
     }

@@ -3,23 +3,20 @@ import { Loader, Toast } from '../components'
 import { Paging, Response } from '../../../../types'
 import { useStyles } from './styles'
 import { Box, Container } from '@material-ui/core'
-import Chart1 from '../forms/statistic/chart1/chart1'
-import Chart2 from '../forms/statistic/chart2'
-import Chart3 from '../forms/statistic/chart3'
-import Chart4 from '../forms/statistic/chart4/chart4'
-import { Chart1Res, Chart2Res, Period, Range, Chart3Res, Chart4ResList } from '../types'
-import { getChart1, getChart2, getChart3, getChart4 } from 'services/admin/statistic'
+import { HistogramRes, DiagramByCitiesRes, Period, Range, DiagramByMastersRes, TableByMastersList } from '../types'
+import { getHistogram, getDiagramByCities, getDiagramByMasters, getTableByMasters } from 'services/admin/statistic'
+import { DiagramByCities, DiagramByMasters, Histogram, TableByMasters } from '../forms'
 
 const initPaging: Required<Paging> = { offset: 0, limit: 5, orderby: 'master', order: 'desc', count: 0 }
 
 export default () => {
   const [toast, setToast] = useState<Response>({ type: 'success', msg: '' })
   const [loading, setLoading] = useState(false)
-  const [chart1, setChart1] = useState<Chart1Res>([])
-  const [chart2, setChart2] = useState<Chart2Res[]>([])
-  const [chart3, setChart3] = useState<Chart3Res[]>([])
-  const [chart4, setChart4] = useState<Chart4ResList[]>([])
-  const [chart4Paging, setChart4Paging] = useState<Required<Paging>>(initPaging)
+  const [histogram, setHistogram] = useState<HistogramRes>([])
+  const [diagramByCities, setDiagramByCities] = useState<DiagramByCitiesRes[]>([])
+  const [diagramByMasters, setDiagramByMasters] = useState<DiagramByMastersRes[]>([])
+  const [tableByMasters, setTableByMasters] = useState<TableByMastersList[]>([])
+  const [tableByMastersPaging, setChart4Paging] = useState<Required<Paging>>(initPaging)
 
   const { container, halfBox, diagramsBox, totalBox, box } = useStyles()
 
@@ -38,19 +35,19 @@ export default () => {
   }
 
   const getChart1Data = async (range: Range, period: Period) => {
-    const list = await setLoader(getChart1({ ...range, period }))
+    const list = await setLoader(getHistogram({ ...range, period }))
     if ('type' in list) return setToastMsg(list)
-    setChart1(() => list)
+    setHistogram(() => list)
   }
 
   const getChart2Data = async (range: Range) => {
-    const list = await setLoader(getChart2(range))
+    const list = await setLoader(getDiagramByCities(range))
     if ('type' in list) return setToastMsg(list)
-    setChart2(() => list)
+    setDiagramByCities(() => list)
   }
 
   const getChart3Data = async (range: Range) => {
-    const list = await setLoader(getChart3(range))
+    const list = await setLoader(getDiagramByMasters(range))
     if ('type' in list) return
 
     const getTop = () => {
@@ -62,24 +59,24 @@ export default () => {
 
       return [...list.slice(0, 3), { master: 'Other', total: other }]
     }
-    setChart3(() => getTop())
+    setDiagramByMasters(() => getTop())
   }
 
   const getChart4Data = async (range: Range) => {
-    const res = await getChart4({ ...range, paging: chart4Paging })
+    const res = await getTableByMasters({ ...range, paging: tableByMastersPaging })
     if ('type' in res) return
 
     const { list, count } = res
-    if (chart4Paging.count !== count) setChart4Paging((prev) => ({ ...prev, count }))
-    setChart4(list)
+    if (tableByMastersPaging.count !== count) setChart4Paging((prev) => ({ ...prev, count }))
+    setTableByMasters(list)
   }
 
   const setChange = async (data: Paging) => setChart4Paging((paging) => ({ ...paging, ...data }))
 
-  const chart1Props = { getData: getChart1Data, data: chart1 }
-  const chart2Props = { getData: getChart2Data, data: chart2 }
-  const chart3Props = { getData: getChart3Data, data: chart3 }
-  const chart4Props = { getData: getChart4Data, data: chart4, paging: chart4Paging, setChange }
+  const histogramProps = { getData: getChart1Data, data: histogram }
+  const diagramCitiesProps = { getData: getChart2Data, data: diagramByCities }
+  const diagramMastersProps = { getData: getChart3Data, data: diagramByMasters }
+  const tableProps = { getData: getChart4Data, data: tableByMasters, paging: tableByMastersPaging, setChange }
 
   return (
     <Container className={container}>
@@ -88,18 +85,18 @@ export default () => {
       </Box>
       <Loader loading={loading} />
       <Box className={totalBox}>
-        <Chart1 {...chart1Props} />
+        <Histogram {...histogramProps} />
       </Box>
       <Box className={diagramsBox}>
         <Box className={halfBox}>
-          <Chart2 {...chart2Props} />
+          <DiagramByCities {...diagramCitiesProps} />
         </Box>
         <Box className={halfBox}>
-          <Chart3 {...chart3Props} />
+          <DiagramByMasters {...diagramMastersProps} />
         </Box>
       </Box>
       <Box className={totalBox}>
-        <Chart4 {...chart4Props} />
+        <TableByMasters {...tableProps} />
       </Box>
     </Container>
   )

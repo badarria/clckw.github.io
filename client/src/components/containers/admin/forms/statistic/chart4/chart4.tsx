@@ -9,17 +9,17 @@ import {
   Typography,
   Box,
 } from '@material-ui/core'
-import { Chart4ResList, Range } from 'components/containers/admin/types'
+import { Chart4ResList, Range } from '../../../types'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { Chart4List } from './chart4-list'
-import { getChart4Init } from 'services/admin/statistic'
-import { findDiapazone } from 'services/utils/datetime-func'
-import { Paging } from 'types'
+import { getChart4Init } from '../../../../../../services/admin/statistic'
+import { findDiapazone } from '../../../../../../services/utils/datetime-func'
+import { Paging } from '../../../../../../types'
 import { Chart4Head } from './chart4-header'
 import { useStyles } from '../styles'
 import { Pagination } from '../../../components/table/pagination'
-import { DateRangePicker } from 'components/containers/admin/components'
+import { DateRangePicker } from '../../../components'
 
 const { initBegin, initFinish } = findDiapazone()
 type Props = {

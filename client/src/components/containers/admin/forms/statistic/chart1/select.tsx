@@ -7,8 +7,8 @@ import Chip from '@material-ui/core/Chip'
 import { Box } from '@material-ui/core'
 import { useStyles } from '../styles'
 import { useEffect } from 'react'
-import { getChart1Init } from 'services/admin/statistic'
-import { Chart1Init } from 'components/containers/admin/types'
+import { getChart1Init } from '../../../../../../services/admin/statistic'
+import { Chart1Init } from '../../../types'
 
 type Props = { getFilteredData: (city: string[]) => void }
 

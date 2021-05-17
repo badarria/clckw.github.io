@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react'
 import { Chart2Res, Range, ChartDate } from '../../types'
 import { PieSeries, Chart, Tooltip, Legend } from '@devexpress/dx-react-chart-material-ui'
 import { useStyles } from './styles'
-import { DateRangePicker } from 'components/containers/admin/components'
-import { findDiapazone } from 'services/utils/datetime-func'
+import { DateRangePicker } from '../../components'
+import { findDiapazone } from '../../../../../services/utils/datetime-func'
 import { EventTracker } from '@devexpress/dx-react-chart'
 
 const { initBegin, initFinish } = findDiapazone()

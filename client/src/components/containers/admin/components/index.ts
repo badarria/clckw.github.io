@@ -7,6 +7,7 @@ import { LinkTabs } from './link-tabs/link-tabs'
 import { ButtonIcon } from './table/button-icon'
 import { AlertDialog } from './table/alert-dialog'
 import Article from './article/article'
+import DateRangePicker from './date-range-picker/date-range-picker'
 import * as shared from '../../../ui'
 const { DatePicker, Loader, Toast, SelectHours, InputField, AutocompleteField } = shared
 
@@ -26,4 +27,5 @@ export {
   AutocompleteField,
   Article,
   TableForm,
+  DateRangePicker,
 }

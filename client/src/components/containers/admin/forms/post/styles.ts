@@ -1,11 +1,9 @@
 import { makeStyles } from '@material-ui/core/styles'
 
 export const useStyles = makeStyles({
-  container: { overflowX: 'hidden', margin: '16px auto 100px' },
-  wrapper: {
-    padding: '1rem',
-    border: '1px solid #eeeded',
-    background: '#fafafa',
+  container: { overflowX: 'hidden', margin: '100px auto 100px' },
+  title: {
+    padding: '16px',
   },
   editor: {
     backgroundColor: '#fff',
@@ -45,3 +43,4 @@ export const useStyles = makeStyles({
     width: '60%',
   },
 })
+

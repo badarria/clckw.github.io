@@ -1,10 +1,18 @@
 import React from 'react'
 import { Header } from './containers'
 import { Scheduler, MasterMainPage } from './containers/master/pages'
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+  useHistory,
+  useLocation,
+  useRouteMatch,
+} from 'react-router-dom'
 import { AdminRoute, MasterRoute, RatingRoute, CustomerRoute, MastersRoute, PaymentRoute, BlogRoute } from '../routes'
 import { Search } from '../components/containers/home/pages'
-import { Cities, Customers, Masters, Orders, Services, Post } from './containers/admin/pages'
+import { Cities, Customers, Masters, Orders, Services, Post, Statistic } from './containers/admin/pages'
 import { Loader } from './ui'
 import { RootState } from 'store'
 import { useSelector } from 'react-redux'
@@ -25,7 +33,6 @@ export const App = () => {
           <Route path='/payment' exact component={PaymentRoute} />
           <Route exact path='/admin' render={() => <Redirect to='/admin/customers' />} />
           <AdminRoute
-            path='/admin'
             tabs={
               <Switch>
                 <Route path='/admin/customers' exact component={Customers} />
@@ -37,6 +44,7 @@ export const App = () => {
               </Switch>
             }
             post={<Route path='/admin/post' exact component={Post} />}
+            statistic={<Route path='/admin/statistic' exact component={Statistic} />}
           />
           <RatingRoute path='/orderRate' />
 
@@ -47,7 +55,7 @@ export const App = () => {
               <Redirect from='/master' to='/' />
             </Switch>
           </MasterRoute>
-          <CustomerRoute path='/customer' />
+          <Route path='/customer' exact component={CustomerRoute} />
           <Redirect to='/' />
         </Switch>
       )}

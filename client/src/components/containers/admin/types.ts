@@ -1,6 +1,6 @@
 import { IconButtonProps } from '@material-ui/core'
 import { MouseEventHandler, ReactElement } from 'react'
-import { Order, Master, Customer, City, Service } from '../../../types'
+import { Order, Master, Customer, City, Service, Paging } from '../../../types'
 
 export type NewMaster = {
   id: number
@@ -49,3 +49,36 @@ export type AlertDialogProps = {
 }
 
 export type BtnType = 'button' | 'submit' | 'reset'
+
+export type ChartDate = { begin: string; finish: string }
+export type Histogram = ChartDate & { period: Period }
+export type DiagramByCitiesRes = { city: string; total: number }
+export type DiagramByMastersRes = { master: string; total: number }
+export type ServiceTypes = Record<string, number>
+export type TableByMasters = ChartDate & { paging: Paging }
+export type TableByMastersList = {
+  types: ServiceTypes[]
+  master: string
+  orders: number
+  iscompleted: number
+  isnotcompleted: number
+  price: number
+  rating: number | null
+}
+export type TableByMastersRes = {
+  list: TableByMastersList[]
+  count: number
+}
+
+export type TableByMastersInit = { name: string }[]
+
+export type HistogramRes = {
+  day?: string
+  month?: string
+  week?: string
+  orders: { city: string; count: number; master: string }[]
+  total: number
+}[]
+export type Period = 'month' | 'week' | 'day'
+export type Range = { begin: string; finish: string }
+export type HistogramInit = { city: string; city_id: number; fullName: string; master_id: number }[]

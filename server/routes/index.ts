@@ -9,6 +9,7 @@ import { index as homePage } from './home'
 import { index as ratingPage } from './rating'
 import { index as masterPage } from './master'
 import { index as customerPage } from './customer'
+import { index as statisticPage } from './admin/statistic'
 
 const index = Router()
 
@@ -22,5 +23,6 @@ index.use('/admin/cities', cities)
 index.use('/admin/orders', orders)
 index.use('/admin/services', services)
 index.use('/admin/post', postPage)
+index.use('/admin/statistic', statisticPage)
 
 export { index }

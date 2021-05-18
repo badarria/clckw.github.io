@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom'
 import { RootState } from '../store'
 import { Masters } from '../components/containers/home/pages'
 
-export const MastersRoute = ({ path }: { path: string }) => {
+export const MastersRoute = () => {
   const masters = useSelector((state: RootState) => state.masters)
 
   if (masters[0]?.id) return <Masters />

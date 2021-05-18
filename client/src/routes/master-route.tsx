@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { Redirect } from 'react-router-dom'
 import { RootState } from 'store'
 import { useSelector } from 'react-redux'
 
-export const MasterRoute: React.FunctionComponent<any> = ({ children }) => {
+export const MasterRoute: FC<any> = ({ children }) => {
   const user = useSelector((state: RootState) => state.user)
   const isMaster = user && user.role === 'master'
 

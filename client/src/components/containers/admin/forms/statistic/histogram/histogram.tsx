@@ -19,15 +19,18 @@ export default ({ getData, data }: Props) => {
   const [filteredData, setFilteredData] = useState<FilteredData[]>([])
   const [range, setRange] = useState<Range>({ begin: initBegin, finish: initFinish })
   const [period, setPeriod] = useState<Period>(initPeriod)
+  const [masters, setMasters] = useState<string[]>([])
+  const [cities, setCities] = useState<string[]>([])
 
-  const getFilteredData = (keys: string[]) => {
-    if (!keys.length) {
+  const getFilteredData = () => {
+    if (!masters.length && !cities.length) {
       const newData = data.map((item) => {
         return { [period]: item[period], total: item.total }
       })
       return setFilteredData(newData)
     }
 
+    const keys = masters.length ? masters : cities
     const newData = data.reduce((acc: FilteredData[], item) => {
       const { orders } = item
       const newTotal = orders.reduce((accTotal, { city, master, count }) => {
@@ -43,8 +46,8 @@ export default ({ getData, data }: Props) => {
   }
 
   useEffect(() => {
-    getFilteredData([])
-  }, [data])
+    getFilteredData()
+  }, [data, masters, cities])
 
   useEffect(() => {
     getData(range, period)
@@ -54,6 +57,7 @@ export default ({ getData, data }: Props) => {
     setPeriod(period)
     setRange(() => ({ begin, finish }))
   }
+  const selectProps = { setMasters, setCities, masters, cities, data }
 
   return (
     <Paper className={container}>
@@ -63,7 +67,7 @@ export default ({ getData, data }: Props) => {
 
       <Box className={radioBox}>
         <DateRangePicker getRange={getRange} initBegin={initBegin} initFinish={initFinish} />
-        <HistogramSelect getFilteredData={getFilteredData} />
+        <HistogramSelect {...selectProps} />
       </Box>
       <Box className={chartBox}>
         {data.length ? (

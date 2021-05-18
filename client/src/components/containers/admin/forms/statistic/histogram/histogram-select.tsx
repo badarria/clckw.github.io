@@ -7,54 +7,59 @@ import Chip from '@material-ui/core/Chip'
 import { Box } from '@material-ui/core'
 import { useStyles } from '../styles'
 import { useEffect } from 'react'
-import { getHistogramInit } from '../../../../../../services/admin/statistic'
-import { HistogramInit } from '../../../types'
+import { HistogramInit, HistogramRes } from '../../../types'
 
-type Props = { getFilteredData: (city: string[]) => void }
+type Props = {
+  cities: string[]
+  masters: string[]
+  setMasters: (data: string[]) => void
+  setCities: (data: string[]) => void
+  data: HistogramRes
+}
 
-export const HistogramSelect = ({ getFilteredData }: Props) => {
-  const [masters, setMasters] = useState<string[]>([])
-  const [cities, setCities] = useState<string[]>([])
-  const [initData, setInitData] = useState<HistogramInit>([])
+export const HistogramSelect = ({ cities, masters, setCities, setMasters, data }: Props) => {
+  const [initData, setInitData] = useState<HistogramInit>({ masters: [], cities: [] })
   const { form, chipsBox, chip, select, formBox1, formBox2, selectLabel } = useStyles()
 
   const handleChangeMasters = (event: React.ChangeEvent<{ value: unknown }>) => {
     const values = event.target.value as string[]
     setCities([])
     setMasters(values)
-    getFilteredData(values)
   }
 
   const handleChangeCity = (event: React.ChangeEvent<{ value: unknown }>) => {
     setMasters([])
     setCities(event.target.value as string[])
-    getFilteredData(event.target.value as string[])
   }
 
   const deleteMasterChip = (master: string) => () => {
     const newMasters = masters.filter((name) => master !== name)
     setMasters(newMasters)
-    getFilteredData(newMasters)
   }
   const deleteCityChip = (city: string) => () => {
     const newCities = cities.filter((name) => name !== city)
     setCities(newCities)
-    getFilteredData(newCities)
   }
 
-  const filterCity = initData.reduce((acc: string[], { city }) => {
-    if (!acc.includes(city)) acc.push(city)
-    return acc
-  }, [])
+  const getInitData = () => {
+    const res = data.reduce(
+      (acc: { masters: string[]; cities: string[] }, { orders }) => {
+        orders.forEach(({ master, city }) => {
+          if (!acc.masters.includes(master)) acc.masters.push(master)
+          if (!acc.cities.includes(city)) acc.cities.push(city)
+        })
+        return acc
+      },
+      { masters: [], cities: [] }
+    )
+    setInitData(() => res)
+  }
 
   useEffect(() => {
-    const initData = async () => {
-      const data = await getHistogramInit()
-      if ('type' in data) return
-      setInitData(data)
-    }
-    initData()
-  }, [])
+    if (masters.length) setMasters([])
+    if (cities.length) setCities([])
+    getInitData()
+  }, [data])
 
   return (
     <>
@@ -67,11 +72,15 @@ export const HistogramSelect = ({ getFilteredData }: Props) => {
                   Select masters
                 </InputLabel>
                 <Select id='masters-id' multiple value={masters} onChange={handleChangeMasters} className={select}>
-                  {initData.map(({ fullName }, inx) => (
-                    <MenuItem key={inx} value={fullName}>
-                      {fullName}
-                    </MenuItem>
-                  ))}
+                  {initData.masters.length ? (
+                    initData.masters.map((name, inx) => (
+                      <MenuItem key={inx} value={name}>
+                        {name}
+                      </MenuItem>
+                    ))
+                  ) : (
+                    <MenuItem disabled>There is no options</MenuItem>
+                  )}
                 </Select>
               </Box>
             </Box>
@@ -83,13 +92,17 @@ export const HistogramSelect = ({ getFilteredData }: Props) => {
                   Or select cities
                 </InputLabel>
                 <Select id='cities-id' multiple value={cities} onChange={handleChangeCity} className={select}>
-                  {filterCity.map((city, inx) => {
-                    return (
-                      <MenuItem key={inx} value={city}>
-                        {city}
-                      </MenuItem>
-                    )
-                  })}
+                  {initData.cities.length ? (
+                    initData.cities.map((city, inx) => {
+                      return (
+                        <MenuItem key={inx} value={city}>
+                          {city}
+                        </MenuItem>
+                      )
+                    })
+                  ) : (
+                    <MenuItem disabled>There is no options</MenuItem>
+                  )}
                 </Select>
               </Box>
             </Box>

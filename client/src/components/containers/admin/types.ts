@@ -81,4 +81,4 @@ export type HistogramRes = {
 }[]
 export type Period = 'month' | 'week' | 'day'
 export type Range = { begin: string; finish: string }
-export type HistogramInit = { city: string; city_id: number; fullName: string; master_id: number }[]
+export type HistogramInit = { cities: string[]; masters: string[] }

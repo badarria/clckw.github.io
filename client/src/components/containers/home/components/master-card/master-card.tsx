@@ -2,6 +2,7 @@ import React, { useCallback } from 'react'
 import { useStyles } from './styles'
 import { Box, Button, Card, CardContent, Typography } from '@material-ui/core'
 import Rating from '@material-ui/lab/Rating'
+import { useTranslation } from 'react-i18next'
 
 type Data = { id: number; name: string; surname: string; rating: number }
 type Props = {
@@ -14,6 +15,7 @@ export const MasterCard = ({ data, confirm }: Props) => {
   const { content, stars, card } = useStyles()
   const masterName = `${name} ${surname}`
   const confirmMaster = useCallback(() => confirm(data), [])
+  const { t } = useTranslation()
 
   return (
     <Card className={card}>
@@ -23,13 +25,13 @@ export const MasterCard = ({ data, confirm }: Props) => {
         </Typography>
         <Box component='fieldset' borderColor='transparent' className={stars}>
           <Typography component='legend' align='center'>
-            Rating
+            {t('masters.rating')}
           </Typography>
           <Rating name='read-only' value={Number(rating)} readOnly />
         </Box>
       </CardContent>
       <Button variant='contained' color='primary' fullWidth size='large' onClick={confirmMaster}>
-        Choose!
+        {t('masters.chooseBtn')}
       </Button>
     </Card>
   )

@@ -5,6 +5,7 @@ import { useStyles } from './styles'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import { StripeCardElementChangeEvent } from '@stripe/stripe-js'
 import { StripeFunc } from '../../../../../types'
+import { useTranslation } from 'react-i18next'
 
 const cardStyle = {
   style: {
@@ -36,6 +37,7 @@ export const CheckoutForm = ({ back, submit }: Props) => {
   const { box, cardInput, btnBox, btnLeft, btnPay } = useStyles()
   const stripe = useStripe()
   const elements = useElements()
+  const { t } = useTranslation()
 
   const handleChange = async (event: StripeCardElementChangeEvent) => {
     setDisabled(event.empty)
@@ -67,7 +69,7 @@ export const CheckoutForm = ({ back, submit }: Props) => {
       </form>
       <Box className={btnBox}>
         <Button variant='contained' startIcon={<ArrowBackIcon />} onClick={back} className={btnLeft}>
-          Back
+          {t('payment.form.back')}
         </Button>
         <Button
           disabled={disabled}
@@ -77,7 +79,7 @@ export const CheckoutForm = ({ back, submit }: Props) => {
           onClick={handleSubmit}
           type='submit'
           className={btnPay}>
-          <span id='button-text'>Pay now</span>
+          <span id='button-text'>{t('payment.form.payBtn')}</span>
         </Button>
       </Box>
     </>

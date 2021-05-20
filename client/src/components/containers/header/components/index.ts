@@ -6,5 +6,16 @@ import CustomerHeader from './headers-by-role/customer-header'
 import AdminHeader from './headers-by-role/admin-header'
 import MasterHeader from './headers-by-role/master-header'
 import NoRoleHeader from './headers-by-role/no-role-header'
+import BlogBtn from './blog-btn/blog-btn'
 
-export { ControlledCheckbox, GoogleBtn, LogoBtn, LogoutBtn, AdminHeader, MasterHeader, CustomerHeader, NoRoleHeader }
+export {
+  ControlledCheckbox,
+  GoogleBtn,
+  LogoBtn,
+  LogoutBtn,
+  AdminHeader,
+  MasterHeader,
+  CustomerHeader,
+  NoRoleHeader,
+  BlogBtn,
+}

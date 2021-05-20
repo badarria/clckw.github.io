@@ -2,6 +2,7 @@ import React from 'react'
 import { FormControl, Select, InputLabel, MenuItem } from '@material-ui/core'
 import { Control, Controller } from 'react-hook-form'
 import { useStyles } from './styles'
+import { useTranslation } from 'react-i18next'
 
 type Props = {
   control: Control
@@ -13,11 +14,12 @@ type Props = {
 export const SelectHours = ({ control, data, name, disabled }: Props) => {
   const { root, input } = useStyles()
   const defaultValue = data[0] || { id: 0, name: '' }
+  const { t } = useTranslation()
 
   return (
     <FormControl className={root}>
       <InputLabel htmlFor='trinity-select' required>
-        Time
+        {t('search.form.time')}
       </InputLabel>
       <Controller
         control={control}

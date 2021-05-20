@@ -6,12 +6,14 @@ import { useHistory } from 'react-router-dom'
 import { getOnePost } from 'services/home/api'
 import { useStyles } from './styles'
 import { Post } from '../../types'
+import { useTranslation } from 'react-i18next'
 
 export default ({ id }: { id: string }) => {
   const [post, setPost] = useState<Post[]>([])
   const [loading, setLoading] = useState(false)
   const history = useHistory()
   const { msgBox, paper, container } = useStyles()
+  const { t } = useTranslation()
 
   const back = () => {
     history.replace('/blog')
@@ -33,7 +35,7 @@ export default ({ id }: { id: string }) => {
       <Container className={container}>
         <Typography align='center'>Sorry, something went wrong. Try another article</Typography>
         <Button variant='contained' onClick={back} className={msgBox} color='primary'>
-          Back
+          {t('blog.back')}
         </Button>
       </Container>
     )
@@ -51,7 +53,7 @@ export default ({ id }: { id: string }) => {
         <Box dangerouslySetInnerHTML={{ __html: content }} />
 
         <Button variant='contained' onClick={back} className={msgBox} color='primary'>
-          Back
+          {t('blog.back')}
         </Button>
       </Paper>
     </Container>

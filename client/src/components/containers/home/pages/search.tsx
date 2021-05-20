@@ -20,6 +20,8 @@ import { setInitState, setMailData, setMasters, setOrderData, setCustomerData } 
 import { useHistory } from 'react-router-dom'
 import { RootState } from 'store'
 import { searchFormSchema } from '../../../../services/home/validation/schema'
+import { useTranslation } from 'react-i18next'
+import '../../../../assets/i18n/config'
 
 const initHours = pastTime(getHoursArray('1'))
 const findDefaultHour = () => {
@@ -68,6 +70,7 @@ export const Search = () => {
     hours: order?.time || findDefaultHour(),
     files: [],
   }
+  const { t, i18n } = useTranslation()
 
   const { register, handleSubmit, control, watch, errors } = useForm({
     resolver: yupResolver(searchFormSchema),
@@ -141,7 +144,7 @@ export const Search = () => {
       dispatch(setMailData(mailData))
       history.push('/freeMasters')
     } else {
-      let msg = 'Sorry, there are no free masters. Try to choose another time or date'
+      let msg = t('search.sorryMsg')
       setToastMsg({ type: 'info', msg })
     }
   }
@@ -153,16 +156,14 @@ export const Search = () => {
       <Loader loading={loading} />
       <Box className={wrap}>
         <Typography variant='h4' component='h4' className={title}>
-          Repair your watch
+          {t('search.title')}
         </Typography>
         <Box className={msgBox}>
           <Toast toast={toast} />
         </Box>
         <Paper className={paper}>
-          <Typography align='center'>
-            Enter your details, city, and size of the watch that needs to be repaired.
-          </Typography>
-          <Typography align='center'> Select a comfy date and time and we will find free masters for you. </Typography>
+          <Typography align='center'>{t('search.descr.p1')}</Typography>
+          <Typography align='center'> {t('search.descr.p2')}</Typography>
           <form onSubmit={handleSubmit((data: SubmitData) => findFreeMasters(data))} className={form}>
             <SearchForm {...searchFormProps} />
           </form>

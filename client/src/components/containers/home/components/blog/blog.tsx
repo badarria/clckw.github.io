@@ -6,11 +6,13 @@ import { useHistory } from 'react-router-dom'
 import { getPosts } from 'services/home/api'
 import { BlogCard } from '../'
 import { useStyles } from './styles'
+import { useTranslation } from 'react-i18next'
 
 export default () => {
   const { container, msg } = useStyles()
   const [posts, setPosts] = useState<Post[]>([])
   const history = useHistory()
+  const { t } = useTranslation()
 
   const expand = ({ id }: { id: string }) => {
     history.push(`/blog/${id}`)
@@ -27,7 +29,7 @@ export default () => {
   return (
     <Box className={container}>
       <Typography variant='h4' align='center'>
-        Our Blog
+        {t('blog.title')}
       </Typography>
       {posts.length ? (
         <>
@@ -39,7 +41,7 @@ export default () => {
         </>
       ) : (
         <Typography align='center' variant='h6' className={msg}>
-          There is no articles yet
+          {t('blog.noArticle')}
         </Typography>
       )}
     </Box>

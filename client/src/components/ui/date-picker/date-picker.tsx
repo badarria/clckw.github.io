@@ -3,10 +3,12 @@ import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/picker
 import DateFnsUtils from '@date-io/date-fns'
 import { Control, Controller } from 'react-hook-form'
 import { useStyles } from './styles'
+import { useTranslation } from 'react-i18next'
 
 export const DatePicker = (props: { control: Control }) => {
   const { root, input } = useStyles()
   const { control } = props
+  const { t } = useTranslation()
 
   return (
     <Controller
@@ -25,7 +27,7 @@ export const DatePicker = (props: { control: Control }) => {
             format='dd/MM/yy'
             margin='normal'
             id='date-picker'
-            label='Select day'
+            label={t('search.form.day')}
             inputProps={{ className: input }}
             {...props}
           />

@@ -1,5 +1,6 @@
 import { Card, CardContent, CardMedia, Link, Typography, Box, Button } from '@material-ui/core'
 import React, { MouseEvent } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useStyles } from './styles'
 
 type Props = {
@@ -13,6 +14,7 @@ type Props = {
 
 export default ({ id, title, date, description, preview, expand }: Props) => {
   const { card, descr, content, img, link } = useStyles()
+  const { t } = useTranslation()
 
   const click = () => expand({ id })
 
@@ -27,7 +29,7 @@ export default ({ id, title, date, description, preview, expand }: Props) => {
           <Box className={descr} dangerouslySetInnerHTML={{ __html: description }} />
           <Box className={link}>
             <Button color='primary' onClick={click}>
-              Continue reading...
+              {t('blog.continue')}
             </Button>
           </Box>
         </Box>

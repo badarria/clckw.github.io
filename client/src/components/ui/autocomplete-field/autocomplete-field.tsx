@@ -10,11 +10,12 @@ type Props = {
   name: string
   keyToSelect: string
   errors: FieldErrors
+  label?: string
 }
 
 export const AutocompleteField = (props: Props) => {
-  const { data, control, name, keyToSelect, errors = {} } = props
-  const { input, root, label, error } = useStyles()
+  const { data, control, name, keyToSelect, errors = {}, label = name } = props
+  const { input, root, labels, error } = useStyles()
   const defaultValue = data[0] || { id: 0, [keyToSelect]: '' }
 
   return (
@@ -35,9 +36,9 @@ export const AutocompleteField = (props: Props) => {
           renderInput={(params) => (
             <TextField
               {...params}
-              label={name}
+              label={label}
               autoComplete='nope'
-              InputLabelProps={{ className: label }}
+              InputLabelProps={{ className: labels }}
               required
               inputRef={ref}
               helperText={errors[name]?.message || ''}

@@ -3,6 +3,7 @@ import { Box, Button, Container, Paper, Typography } from '@material-ui/core'
 import { useStyles } from './styles'
 import { MasterCard } from '..'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
+import { useTranslation } from 'react-i18next'
 
 type Data = { id: number; name: string; surname: string; rating: number }
 type Props = {
@@ -13,12 +14,13 @@ type Props = {
 
 export const MastersList = ({ data, back, confirm }: Props) => {
   const { wrap, title } = useStyles()
+  const { t } = useTranslation()
 
   return (
     <Container>
       <Paper className={wrap}>
         <Typography align='center' className={title}>
-          To place an order choose a master from the list below
+          {t('masters.title')}
         </Typography>
 
         {data.map((master, inx) => {
@@ -28,7 +30,7 @@ export const MastersList = ({ data, back, confirm }: Props) => {
 
         <Box className={title}>
           <Button startIcon={<ArrowBackIcon />} onClick={back} variant='contained'>
-            Back
+            {t('masters.back')}
           </Button>
         </Box>
       </Paper>

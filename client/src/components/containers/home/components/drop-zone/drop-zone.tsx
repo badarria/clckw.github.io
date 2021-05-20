@@ -4,6 +4,7 @@ import { DropzoneDialog } from 'material-ui-dropzone'
 import { Controller, Control } from 'react-hook-form'
 import { useStyles } from './styles'
 import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 const maxMegaBytes = 1
 const maxFileSize = maxMegaBytes * 1024 ** 2
 const filesLimit = 5
@@ -13,6 +14,7 @@ export const DropZone = ({ control }: { control: Control }) => {
   const [open, setOpen] = useState(false)
   const [readedFiles, setReadedFiles] = useState<string[]>([])
   const { btn, tooltip } = useStyles()
+  const { t } = useTranslation()
 
   const readFile = (file: Blob): Promise<string | ArrayBuffer | null> =>
     new Promise((resolve, reject) => {
@@ -45,10 +47,14 @@ export const DropZone = ({ control }: { control: Control }) => {
 
   return (
     <>
-      <Tooltip title={`Maximum ${filesLimit} photos. No more than ${maxMegaBytes} MB each`} classes={{ tooltip }}>
+      <Tooltip
+        title={`${t('search.dropZone.p1')} ${filesLimit} ${t('search.dropZone.p2')} ${maxMegaBytes} ${t(
+          'search.dropZone.p3'
+        )}`}
+        classes={{ tooltip }}>
         <span>
           <Button onClick={openZone} variant='outlined' className={btn}>
-            Add Photo
+            {t('search.dropZone.title')}
           </Button>
         </span>
       </Tooltip>

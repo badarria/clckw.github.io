@@ -14,6 +14,7 @@ import { Response, StripeFunc } from '../../../../types'
 import { CheckoutForm } from '../forms/payment/checkout'
 import { setInit } from 'store/reducer'
 import { stripe_public_key } from '../../../../config'
+import { useTranslation } from 'react-i18next'
 const promise = loadStripe(stripe_public_key)
 
 export const Payment = () => {
@@ -28,6 +29,7 @@ export const Payment = () => {
   const [loading, setLoading] = useState(false)
   const [toast, setToast] = useState<Response>({ type: 'success', msg: '' })
   const [successMsg, setSuccessMsg] = useState('')
+  const { t } = useTranslation('payment')
 
   const back = useCallback(() => {
     history.replace('/freeMasters')
@@ -46,17 +48,18 @@ export const Payment = () => {
     }, 3000)
   }
 
+  const errorMsg = t('errorMsg')
   const submit = async (func: StripeFunc) => {
     setLoading(true)
     if (!customerData || !amount || !order) {
       setLoading(false)
-      return setToastMsg({ type: 'error', msg: 'Something went wrong' })
+      return setToastMsg({ type: 'error', msg: errorMsg })
     }
     const { email, surname, name } = customerData
     const stripeRes = await func(email, name, surname)
 
     if (stripeRes.error) {
-      setToastMsg({ type: 'error', msg: stripeRes.error?.message || 'something went wrong' })
+      setToastMsg({ type: 'error', msg: stripeRes.error?.message || errorMsg })
       setLoading(false)
       return
     }
@@ -66,7 +69,7 @@ export const Payment = () => {
 
     if (makePay.type === 'error') {
       setLoading(false)
-      return setToastMsg({ type: 'error', msg: 'Something went wrong' })
+      return setToastMsg({ type: 'error', msg: errorMsg })
     }
 
     const { service, master, customer, date, time, files } = order
@@ -96,7 +99,7 @@ export const Payment = () => {
             <Box className={form}>
               <Typography align='center'>{successMsg}</Typography>
               <Button variant='contained' onClick={backToMain} className={msgBox} color='primary'>
-                Back to main page
+                {t('back')}
               </Button>
             </Box>
           ) : (

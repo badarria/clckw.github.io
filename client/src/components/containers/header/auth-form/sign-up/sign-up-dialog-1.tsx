@@ -9,6 +9,7 @@ import { AutocompleteField, InputField, Loader } from 'components/ui'
 import { getInit } from 'services/home/api'
 import { ControlledCheckbox } from '../../components'
 import { LocalSignUp } from '../../types'
+import { useTranslation } from 'react-i18next'
 const initCity = { id: 0, name: '' }
 
 type Props = {
@@ -19,23 +20,13 @@ type Props = {
 }
 
 const SignUpDialog1 = ({ change, msg, localSignUp, googleBtn }: Props) => {
-  const {
-    title,
-    signUpForm,
-    content,
-    checkMasterBox,
-    btnWrap,
-    btn,
-    wrap,
-    checkBox,
-    inputWrap,
-    inputGrow,
-    msgBox,
-  } = useStyles()
+  const { title, signUpForm, content, checkMasterBox, btnWrap, btn, wrap, checkBox, inputWrap, inputGrow, msgBox } =
+    useStyles()
   const [disabled, setDisabled] = useState(true)
   const [asMaster, setMaster] = useState(false)
   const [cities, setCities] = useState([initCity])
   const [loading, setLoading] = useState(false)
+  const { t } = useTranslation('header')
 
   const { handleSubmit, register, errors, control, watch } = useForm({
     resolver: yupResolver(reg1FormSchema),
@@ -74,7 +65,7 @@ const SignUpDialog1 = ({ change, msg, localSignUp, googleBtn }: Props) => {
   }, [isMaster])
 
   const inputProps = { register, control, errors }
-  const cityFieldProps = { data: cities, control, name: 'city', keyToSelect: 'name', errors }
+  const cityFieldProps = { data: cities, control, name: 'city', keyToSelect: 'name', errors, label: t('form.city') }
 
   return (
     <>
@@ -84,14 +75,14 @@ const SignUpDialog1 = ({ change, msg, localSignUp, googleBtn }: Props) => {
         <form onSubmit={handleSubmit(localSignUp)} className={signUpForm} autoComplete='off'>
           <Box className={wrap}>
             <Box className={inputWrap}>
-              <InputField label='name' {...inputProps} />
-              <InputField label='password' {...inputProps} type='password' />
-              <InputField label='email' {...inputProps} />
+              <InputField label={t('form.name')} {...inputProps} name='name' />
+              <InputField label={t('form.password')} {...inputProps} type='password' name='password' />
+              <InputField label={t('form.email')} {...inputProps} name='email' />
             </Box>
             <Box className={inputWrap}>
-              <InputField label='surname' {...inputProps} />
+              <InputField label={t('form.surname')} {...inputProps} name='surname' />
               <Box className={inputGrow}>
-                <InputField label='confirm Password' {...inputProps} name='confirmPassword' type='password' />
+                <InputField label={t('form.confirmPassword')} {...inputProps} name='confirmPassword' type='password' />
               </Box>
               {asMaster && <AutocompleteField {...cityFieldProps} />}
             </Box>
@@ -99,13 +90,13 @@ const SignUpDialog1 = ({ change, msg, localSignUp, googleBtn }: Props) => {
           <FormGroup>
             <InputLabel className={checkBox}>
               <ControlledCheckbox control={control} name='agree' />
-              <span> I agree with everything</span>
+              <span> {t('form.agree')}</span>
             </InputLabel>
           </FormGroup>
           <FormGroup className={checkMasterBox}>
             <InputLabel className={checkBox}>
               <ControlledCheckbox control={control} name='master' />
-              <span> Register as a master</span>
+              <span> {t('form.asMaster')}</span>
             </InputLabel>
           </FormGroup>
           <Box className={msgBox}>
@@ -117,11 +108,11 @@ const SignUpDialog1 = ({ change, msg, localSignUp, googleBtn }: Props) => {
           </Box>
           <Box className={btnWrap}>
             <Button type='submit' color='primary' variant='contained' className={btn} disabled={disabled}>
-              Ok
+              {t('form.btnOk')}
             </Button>
             {googleBtn}
             <Button size='small' onClick={change} className={btn}>
-              I have an account
+              {t('form.btnHaveAccount')}
             </Button>
           </Box>
         </form>

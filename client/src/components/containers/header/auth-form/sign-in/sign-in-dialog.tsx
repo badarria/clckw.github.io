@@ -8,6 +8,7 @@ import { useStyles } from '../styles'
 import { GoogleBtn } from '../../components'
 import { LocalSignIn, GoogleSignIn } from '../../types'
 import { InputField } from 'components/ui'
+import { useTranslation } from 'react-i18next'
 
 type Props = {
   msg: string
@@ -24,20 +25,20 @@ const SignInDialog = ({ close, open, msg, changeState, googleSignIn, localSignIn
   const { register, handleSubmit, errors } = useForm({
     resolver: yupResolver(loginForm),
   })
-
+  const { t } = useTranslation('header')
   const registration = useCallback(() => changeState(false), [])
   const inputProps = { register, errors }
 
   return (
     <Dialog open={open} onClose={close} aria-labelledby='form-dialog-title' className={dialog}>
       <DialogTitle id='form-dialog' className={title}>
-        Login
+        {t('login')}
       </DialogTitle>
       <DialogContent className={content}>
         <form onSubmit={handleSubmit(localSignIn)} className={signInForm} autoComplete='off'>
           <Box className={btnWrap}>
-            <InputField label='email' {...inputProps} />
-            <InputField label='password' {...inputProps} type='password' />
+            <InputField label={t('form.email')} {...inputProps} name='email' />
+            <InputField label={t('form.password')} {...inputProps} type='password' name='password' />
             <Box className={msgBox}>
               {msg ? (
                 <Typography color='secondary' variant='subtitle2'>
@@ -48,11 +49,11 @@ const SignInDialog = ({ close, open, msg, changeState, googleSignIn, localSignIn
           </Box>
           <Box className={btnWrap}>
             <Button type='submit' color='primary' variant='contained' className={btn}>
-              Ok
+              {t('form.btnOk')}
             </Button>
-            <GoogleBtn cb={googleSignIn} label='Sign in with Google' />
+            <GoogleBtn cb={googleSignIn} label={t('form.signInGoogle')} />
             <Button size='small' onClick={registration} className={btn} variant='outlined'>
-              register
+              {t('form.btnSignUp')}
             </Button>
           </Box>
         </form>

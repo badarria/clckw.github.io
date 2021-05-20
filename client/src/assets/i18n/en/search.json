@@ -1,0 +1,24 @@
+{
+    "title": "Place your order",
+    "descr": {
+        "p1": "Enter your details, city, and size of the watch that needs to be repaired.",
+        "p2": "Select a comfy date and time and we will find free masters for you."
+    },
+    "sorryMsg": "Sorry, there are no free masters. Try to choose another time or date",
+    "dropZone": {
+        "title": "Add Photo",
+        "p1": "Maximum",
+        "p2": "photos. No more than",
+        "p3": "MB each"
+    },
+    "form": {
+        "name": "name",
+        "surname": "surname",
+        "email": "email",
+        "city": "city",
+        "service": "service",
+        "findBtn": "Find Master",
+        "day": "Day",
+        "time": "Time"
+    }
+}

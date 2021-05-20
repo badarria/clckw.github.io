@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux'
 import { setUserAuth } from 'store/reducer'
 import SignUpDialog from './sign-up/sign-up-dialog'
 import SignInDialog from './sign-in/sign-in-dialog'
+import { useTranslation } from 'react-i18next'
 
 export type UserState = { msg: string; role: string; name: string } | Response
 
@@ -21,6 +22,7 @@ const SignForm = () => {
   const { state } = useLocation<{ from: string }>()
   const history = useHistory()
   const dispatch = useDispatch()
+  const { t } = useTranslation('header')
 
   const handleSignInRes = (data: SignRes) => {
     if ('token' in data) {
@@ -62,13 +64,13 @@ const SignForm = () => {
 
   const handleGoogleSignIn = async (data: GoogleSignIn) => {
     if ('error' in data && data.details.match('Cookie')) {
-      return setMsg('You must enable cookies for this website or use a login password')
+      return setMsg(t('form.cookiesMsg'))
     }
     if ('tokenId' in data) {
       setLoading(true)
       const res = await authGoogleUser({ token: data.tokenId })
       handler(res)
-    } else setMsg('Something went wrong. Try to sign in with password.')
+    } else setMsg(t('form.googleErrMsg'))
   }
 
   const localSignUp = async (data: LocalSignUp) => {
@@ -115,7 +117,7 @@ const SignForm = () => {
     <>
       <Loader loading={loading} />
       <Button color='inherit' onClick={handleClickOpen}>
-        Login
+        {t('login')}
       </Button>
       {isSignIn ? <SignInDialog {...signInDialogPr} /> : <SignUpDialog {...signUpDialogProps} />}
     </>

@@ -10,7 +10,7 @@ type Props = { logout: () => void }
 
 export default ({ logout }: Props) => {
   const { btns } = useStyles()
-  const { t } = useTranslation()
+  const { t } = useTranslation('header')
 
   return (
     <>
@@ -20,10 +20,10 @@ export default ({ logout }: Props) => {
       </Box>
       <Box className={btns}>
         <Button color='inherit' component={Link} to={'/master/scheduler'}>
-          {t('header.calendar')}
+          {t('scheduler')}
         </Button>
         <Button color='inherit' component={Link} to={'/master'}>
-          {t('header.master')}
+          {t('master')}
         </Button>
         <LogoutBtn logout={logout} />
         <LangSwitcher />

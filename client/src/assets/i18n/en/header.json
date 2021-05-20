@@ -1,0 +1,28 @@
+{
+    "blog": "Blog",
+    "login": "sign in",
+    "logout": "sign out",
+    "admin": "Admin",
+    "customer": "Customer",
+    "master": "Master",
+    "scheduler": "Scheduler",
+    "newPost": "add new post",
+    "statistics": "Statistics",
+    "form": {
+        "email": "email",
+        "password": "password",
+        "surname": "surname",
+        "name": "name",
+        "city": "city",
+        "btnSignUp": "registration",
+        "btnOk": "Ok",
+        "confirmPassword": "confirm password",
+        "agree": "I agree with everything",
+        "asMaster": "Register as a master",
+        "btnHaveAccount": "I have an account",
+        "signUpGoogle": "Sign Up with Google",
+        "signInGoogle": "Sign in with Google",
+        "cookiesMsg": "You must enable cookies for this website or use a login password",
+        "googleErrMsg": "Something went wrong. Try to sign in with password."
+    }
+}

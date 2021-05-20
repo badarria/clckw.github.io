@@ -10,6 +10,7 @@ import { getInit } from 'services/home/api'
 import { ControlledCheckbox } from '../../components'
 import { useCallback } from 'react'
 import { SignUpGoogleForm } from '../../types'
+import { useTranslation } from 'react-i18next'
 const initCity = { id: 0, name: '' }
 
 type Props = {
@@ -33,7 +34,7 @@ const SignUpDialog2 = ({ msg, change, submit }: Props) => {
       master: false,
     },
   })
-
+  const { t } = useTranslation()
   const isAgree = watch(['agree']).agree
   const isMaster = watch(['master']).master
 
@@ -63,7 +64,7 @@ const SignUpDialog2 = ({ msg, change, submit }: Props) => {
     submit(data)
   }, [])
 
-  const cityFieldProps = { data: cities, control, name: 'city', keyToSelect: 'name', errors }
+  const cityFieldProps = { data: cities, control, name: 'city', keyToSelect: 'name', errors, label: t('form.city') }
 
   return (
     <>
@@ -74,13 +75,13 @@ const SignUpDialog2 = ({ msg, change, submit }: Props) => {
           <FormGroup>
             <InputLabel className={checkBox}>
               <ControlledCheckbox control={control} name='agree' />
-              <span> I agree with everything</span>
+              <span> {t('form.agree')}</span>
             </InputLabel>
           </FormGroup>
           <FormGroup className={checkMasterBox}>
             <InputLabel className={checkBox}>
               <ControlledCheckbox control={control} name='master' />
-              <span> Register as a master</span>
+              <span> {t('form.asMaster')}</span>
             </InputLabel>
           </FormGroup>
           <Box className={wrap}>
@@ -95,10 +96,10 @@ const SignUpDialog2 = ({ msg, change, submit }: Props) => {
           </Box>
           <Box className={btnWrap}>
             <Button type='submit' color='primary' variant='contained' className={btn} disabled={disabled}>
-              Ok
+              {t('form.btnOk')}
             </Button>
             <Button size='small' onClick={change} className={btn}>
-              I have an account
+              {t('form.btnHaveAccount')}
             </Button>
           </Box>
         </form>

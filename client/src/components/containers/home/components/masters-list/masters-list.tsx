@@ -14,13 +14,13 @@ type Props = {
 
 export const MastersList = ({ data, back, confirm }: Props) => {
   const { wrap, title } = useStyles()
-  const { t } = useTranslation()
+  const { t } = useTranslation('masters')
 
   return (
     <Container>
       <Paper className={wrap}>
         <Typography align='center' className={title}>
-          {t('masters.title')}
+          {t('title')}
         </Typography>
 
         {data.map((master, inx) => {
@@ -30,7 +30,7 @@ export const MastersList = ({ data, back, confirm }: Props) => {
 
         <Box className={title}>
           <Button startIcon={<ArrowBackIcon />} onClick={back} variant='contained'>
-            {t('masters.back')}
+            {t('back')}
           </Button>
         </Box>
       </Paper>

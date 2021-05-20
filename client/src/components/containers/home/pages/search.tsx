@@ -70,7 +70,7 @@ export const Search = () => {
     hours: order?.time || findDefaultHour(),
     files: [],
   }
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation('search')
 
   const { register, handleSubmit, control, watch, errors } = useForm({
     resolver: yupResolver(searchFormSchema),
@@ -144,7 +144,7 @@ export const Search = () => {
       dispatch(setMailData(mailData))
       history.push('/freeMasters')
     } else {
-      let msg = t('search.sorryMsg')
+      let msg = t('sorryMsg')
       setToastMsg({ type: 'info', msg })
     }
   }
@@ -156,14 +156,14 @@ export const Search = () => {
       <Loader loading={loading} />
       <Box className={wrap}>
         <Typography variant='h4' component='h4' className={title}>
-          {t('search.title')}
+          {t('title')}
         </Typography>
         <Box className={msgBox}>
           <Toast toast={toast} />
         </Box>
         <Paper className={paper}>
-          <Typography align='center'>{t('search.descr.p1')}</Typography>
-          <Typography align='center'> {t('search.descr.p2')}</Typography>
+          <Typography align='center'>{t('descr.p1')}</Typography>
+          <Typography align='center'> {t('descr.p2')}</Typography>
           <form onSubmit={handleSubmit((data: SubmitData) => findFreeMasters(data))} className={form}>
             <SearchForm {...searchFormProps} />
           </form>

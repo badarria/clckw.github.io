@@ -12,7 +12,7 @@ export default () => {
   const { container, msg } = useStyles()
   const [posts, setPosts] = useState<Post[]>([])
   const history = useHistory()
-  const { t } = useTranslation()
+  const { t } = useTranslation('blog')
 
   const expand = ({ id }: { id: string }) => {
     history.push(`/blog/${id}`)
@@ -29,7 +29,7 @@ export default () => {
   return (
     <Box className={container}>
       <Typography variant='h4' align='center'>
-        {t('blog.title')}
+        {t('title')}
       </Typography>
       {posts.length ? (
         <>
@@ -41,7 +41,7 @@ export default () => {
         </>
       ) : (
         <Typography align='center' variant='h6' className={msg}>
-          {t('blog.noArticle')}
+          {t('noArticle')}
         </Typography>
       )}
     </Box>

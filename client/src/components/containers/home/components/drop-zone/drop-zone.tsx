@@ -14,7 +14,7 @@ export const DropZone = ({ control }: { control: Control }) => {
   const [open, setOpen] = useState(false)
   const [readedFiles, setReadedFiles] = useState<string[]>([])
   const { btn, tooltip } = useStyles()
-  const { t } = useTranslation()
+  const { t } = useTranslation('search')
 
   const readFile = (file: Blob): Promise<string | ArrayBuffer | null> =>
     new Promise((resolve, reject) => {
@@ -48,13 +48,11 @@ export const DropZone = ({ control }: { control: Control }) => {
   return (
     <>
       <Tooltip
-        title={`${t('search.dropZone.p1')} ${filesLimit} ${t('search.dropZone.p2')} ${maxMegaBytes} ${t(
-          'search.dropZone.p3'
-        )}`}
+        title={`${t('dropZone.p1')} ${filesLimit} ${t('dropZone.p2')} ${maxMegaBytes} ${t('dropZone.p3')}`}
         classes={{ tooltip }}>
         <span>
           <Button onClick={openZone} variant='outlined' className={btn}>
-            {t('search.dropZone.title')}
+            {t('dropZone.title')}
           </Button>
         </span>
       </Tooltip>

@@ -14,12 +14,12 @@ type Props = {
 export const SelectHours = ({ control, data, name, disabled }: Props) => {
   const { root, input } = useStyles()
   const defaultValue = data[0] || { id: 0, name: '' }
-  const { t } = useTranslation()
+  const { t } = useTranslation('search')
 
   return (
     <FormControl className={root}>
       <InputLabel htmlFor='trinity-select' required>
-        {t('search.form.time')}
+        {t('form.time')}
       </InputLabel>
       <Controller
         control={control}

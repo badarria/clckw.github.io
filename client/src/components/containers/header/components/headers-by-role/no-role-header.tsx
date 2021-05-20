@@ -1,6 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { Button, Box } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import SignForm from '../../auth-form/sign-form'
 import { useStyles } from './styles'
 import { LogoBtn, BlogBtn } from '..'

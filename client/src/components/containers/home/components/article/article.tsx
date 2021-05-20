@@ -13,7 +13,7 @@ export default ({ id }: { id: string }) => {
   const [loading, setLoading] = useState(false)
   const history = useHistory()
   const { msgBox, paper, container } = useStyles()
-  const { t } = useTranslation()
+  const { t } = useTranslation('blog')
 
   const back = () => {
     history.replace('/blog')
@@ -35,7 +35,7 @@ export default ({ id }: { id: string }) => {
       <Container className={container}>
         <Typography align='center'>Sorry, something went wrong. Try another article</Typography>
         <Button variant='contained' onClick={back} className={msgBox} color='primary'>
-          {t('blog.back')}
+          {t('back')}
         </Button>
       </Container>
     )
@@ -53,7 +53,7 @@ export default ({ id }: { id: string }) => {
         <Box dangerouslySetInnerHTML={{ __html: content }} />
 
         <Button variant='contained' onClick={back} className={msgBox} color='primary'>
-          {t('blog.back')}
+          {t('back')}
         </Button>
       </Paper>
     </Container>

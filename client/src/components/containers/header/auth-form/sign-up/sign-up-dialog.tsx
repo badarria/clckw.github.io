@@ -5,6 +5,7 @@ import { SignUpGoogleForm, GoogleSignIn, GoogleSignUp, LocalSignUp } from '../..
 import SignUpDialog1 from './sign-up-dialog-1'
 import { GoogleBtn } from '../../components'
 import SignUpDialog2 from './sign-up-dialog-2'
+import { useTranslation } from 'react-i18next'
 
 type Props = {
   msg: string
@@ -18,7 +19,7 @@ type Props = {
 const SignUpDialog = ({ close, localSignUp, open, msg, googleSignUp, changeState }: Props) => {
   const { dialog } = useStyles()
   const [token, setToken] = useState('')
-
+  const { t } = useTranslation('header')
   const change = useCallback(() => changeState(true), [])
 
   const handleGoogleStage1 = (data: GoogleSignIn) => {
@@ -33,7 +34,7 @@ const SignUpDialog = ({ close, localSignUp, open, msg, googleSignUp, changeState
     googleSignUp({ token, isMaster: master, city })
   }
 
-  const googleBtn = <GoogleBtn cb={handleGoogleStage1} label='Sign Up with Google' />
+  const googleBtn = <GoogleBtn cb={handleGoogleStage1} label={t('form.signUpGoogle')} />
 
   const regDialog1Props = { googleBtn, change, msg, localSignUp }
   const regDialog2Props = { msg, change, submit: handleGoogleStage2 }

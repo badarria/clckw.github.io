@@ -1,0 +1,28 @@
+{
+    "blog": "Блог",
+    "login": "Войти",
+    "logout": "Выйти",
+    "admin": "Админ",
+    "customer": "Клиент",
+    "master": "Мастер",
+    "scheduler": "Календарь",
+    "newPost": "новый пост",
+    "statistics": "статистика",
+    "form": {
+        "email": "почта",
+        "password": "пароль",
+        "surname": "фамилия",
+        "name": "имя",
+        "city": "city",
+        "btnSignUp": "регистрация",
+        "btnOk": "Ок",
+        "confirmPassword": "Пароль еще раз",
+        "agree": "Со всем согласен",
+        "asMaster": "Регистрация мастера",
+        "btnHaveAccount": "У меня есть аккаунт",
+        "signUpGoogle": "Регистрация через Google",
+        "signInGoogle": "Войти через Google",
+        "cookiesMsg": "Необходимо разрешить куки для этого сайта или использовать пароль",
+        "googleErrMsg": "Что-то пошло не так. Попробуйте использовать пароль"
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "back": "back to main page",
+    "errorMsg": "something went wrong",
+    "form": {
+        "back": "Back",
+        "title": "Order:",
+        "payBtn": "Pay now",
+        "service": "Sevice:",
+        "master": "Master:",
+        "begin": "Begin:",
+        "email": "Your email:",
+        "amount": "Order amount:",
+        "incorrectMsg": "Sorry, incorrect data"
+    }
+}

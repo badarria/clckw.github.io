@@ -29,7 +29,7 @@ export const Payment = () => {
   const [loading, setLoading] = useState(false)
   const [toast, setToast] = useState<Response>({ type: 'success', msg: '' })
   const [successMsg, setSuccessMsg] = useState('')
-  const { t } = useTranslation()
+  const { t } = useTranslation('payment')
 
   const back = useCallback(() => {
     history.replace('/freeMasters')
@@ -48,7 +48,7 @@ export const Payment = () => {
     }, 3000)
   }
 
-  const errorMsg = t('payment.errorMsg')
+  const errorMsg = t('errorMsg')
   const submit = async (func: StripeFunc) => {
     setLoading(true)
     if (!customerData || !amount || !order) {
@@ -99,7 +99,7 @@ export const Payment = () => {
             <Box className={form}>
               <Typography align='center'>{successMsg}</Typography>
               <Button variant='contained' onClick={backToMain} className={msgBox} color='primary'>
-                {t('payment.back')}
+                {t('back')}
               </Button>
             </Box>
           ) : (

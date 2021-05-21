@@ -37,7 +37,7 @@ export const CheckoutForm = ({ back, submit }: Props) => {
   const { box, cardInput, btnBox, btnLeft, btnPay } = useStyles()
   const stripe = useStripe()
   const elements = useElements()
-  const { t } = useTranslation()
+  const { t } = useTranslation('payment')
 
   const handleChange = async (event: StripeCardElementChangeEvent) => {
     setDisabled(event.empty)
@@ -69,7 +69,7 @@ export const CheckoutForm = ({ back, submit }: Props) => {
       </form>
       <Box className={btnBox}>
         <Button variant='contained' startIcon={<ArrowBackIcon />} onClick={back} className={btnLeft}>
-          {t('payment.form.back')}
+          {t('form.back')}
         </Button>
         <Button
           disabled={disabled}
@@ -79,7 +79,7 @@ export const CheckoutForm = ({ back, submit }: Props) => {
           onClick={handleSubmit}
           type='submit'
           className={btnPay}>
-          <span id='button-text'>{t('payment.form.payBtn')}</span>
+          <span id='button-text'>{t('form.payBtn')}</span>
         </Button>
       </Box>
     </>

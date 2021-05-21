@@ -15,7 +15,7 @@ export const MasterCard = ({ data, confirm }: Props) => {
   const { content, stars, card } = useStyles()
   const masterName = `${name} ${surname}`
   const confirmMaster = useCallback(() => confirm(data), [])
-  const { t } = useTranslation()
+  const { t } = useTranslation('masters')
 
   return (
     <Card className={card}>
@@ -25,13 +25,13 @@ export const MasterCard = ({ data, confirm }: Props) => {
         </Typography>
         <Box component='fieldset' borderColor='transparent' className={stars}>
           <Typography component='legend' align='center'>
-            {t('masters.rating')}
+            {t('rating')}
           </Typography>
           <Rating name='read-only' value={Number(rating)} readOnly />
         </Box>
       </CardContent>
       <Button variant='contained' color='primary' fullWidth size='large' onClick={confirmMaster}>
-        {t('masters.chooseBtn')}
+        {t('chooseBtn')}
       </Button>
     </Card>
   )

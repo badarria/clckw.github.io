@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 export const DatePicker = (props: { control: Control }) => {
   const { root, input } = useStyles()
   const { control } = props
-  const { t } = useTranslation()
+  const { t } = useTranslation('search')
 
   return (
     <Controller
@@ -27,7 +27,7 @@ export const DatePicker = (props: { control: Control }) => {
             format='dd/MM/yy'
             margin='normal'
             id='date-picker'
-            label={t('search.form.day')}
+            label={t('form.day')}
             inputProps={{ className: input }}
             {...props}
           />

@@ -5,11 +5,11 @@ import { useTranslation } from 'react-i18next'
 type Props = { logout: () => void }
 
 export default ({ logout }: Props) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation('header')
 
   return (
     <Button color='inherit' onClick={logout}>
-      {t('header.logout')}
+      {t('logout')}
     </Button>
   )
 }

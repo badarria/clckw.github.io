@@ -5,12 +5,12 @@ import { useTranslation } from 'react-i18next'
 import { useStyles } from './styles'
 
 export default () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation('blog')
   const { btns } = useStyles()
 
   return (
     <Button color='inherit' component={Link} to={'/blog'} className={btns}>
-      {t('header.blog')}
+      {t('title')}
     </Button>
   )
 }

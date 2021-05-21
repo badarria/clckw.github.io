@@ -14,7 +14,7 @@ type Props = {
 
 export default ({ id, title, date, description, preview, expand }: Props) => {
   const { card, descr, content, img, link } = useStyles()
-  const { t } = useTranslation()
+  const { t } = useTranslation('blog')
 
   const click = () => expand({ id })
 
@@ -29,7 +29,7 @@ export default ({ id, title, date, description, preview, expand }: Props) => {
           <Box className={descr} dangerouslySetInnerHTML={{ __html: description }} />
           <Box className={link}>
             <Button color='primary' onClick={click}>
-              {t('blog.continue')}
+              {t('continue')}
             </Button>
           </Box>
         </Box>

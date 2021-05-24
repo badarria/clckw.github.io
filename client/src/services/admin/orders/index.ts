@@ -1,4 +1,4 @@
-import { Method, State, NewOrder } from '../../../components/containers/admin/types'
+import { Method, State, NewOrder, UserByText } from '../../../components/containers/admin/types'
 import { Response, Order, ServiceAsKey, Paging } from '../../../types'
 
 const adminPath = '/admin/orders'
@@ -57,6 +57,18 @@ const getFiltered = async (master_id: number, order_id: number, date: string): P
   return res.json()
 }
 
+const findMasters = async (str: string): Promise<UserByText[]> => {
+  const token = getToken()
+  const res = await fetch(`${adminPath}/findMastersByText/${str}`, { headers: { token } })
+  return res.json()
+}
+
+const findCustomers = async (str: string): Promise<UserByText[]> => {
+  const token = getToken()
+  const res = await fetch(`${adminPath}/findCustomersByText/${str}`, { headers: { token } })
+  return res.json()
+}
+
 export const getOrders = async (paging: Paging) => await wrapTryCatch(get(paging))
 export const deleteOrder = async (id: number) => await wrapTryCatch(del(id))
 export const acceptOrder = async (data: NewOrder, state: State) => {
@@ -66,3 +78,5 @@ export const acceptOrder = async (data: NewOrder, state: State) => {
 export const getOrdersKeys = async () => await wrapTryCatch(getKeys())
 export const getFilteredOrders = async (master_id: number, order_id: number, date: string) =>
   await wrapTryCatch(getFiltered(master_id, order_id, date))
+export const findMastersByText = async (data: string) => await wrapTryCatch(findMasters(data))
+export const findCustomersByText = async (data: string) => await wrapTryCatch(findCustomers(data))

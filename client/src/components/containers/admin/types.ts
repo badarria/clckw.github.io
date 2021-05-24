@@ -82,3 +82,4 @@ export type HistogramRes = {
 export type Period = 'month' | 'week' | 'day'
 export type Range = { begin: string; finish: string }
 export type HistogramInit = { cities: string[]; masters: string[] }
+export type UserByText = { id: number; fullName: string }

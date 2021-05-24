@@ -14,6 +14,7 @@ import { Order, ServiceAsKey } from '../../../../types'
 import { getOrdersKeys, getFilteredOrders } from 'services/admin/orders'
 import { SelectHours } from 'components/ui/select/select-hours'
 import { State, NewOrder } from '../../admin/types'
+import { AutocompleteAsync } from 'components/ui'
 
 type Props = {
   cancel: () => void
@@ -141,14 +142,14 @@ export const OrdersForm = ({ data, cancel, accept, editState }: Props) => {
       <TableForm {...formProps}>
         <>
           {id ? <InputField {...{ register, label: 'id', errors }} /> : null}
-          <AutocompleteField
+          <AutocompleteAsync
             control={control}
             name='master'
             data={keys.master}
             keyToSelect='fullName'
             errors={errors}
           />
-          <AutocompleteField
+          <AutocompleteAsync
             control={control}
             name='customer'
             data={keys.customer}

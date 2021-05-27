@@ -30,7 +30,7 @@ type Props = {
 }
 
 export default ({ data, paging, setChange, getData }: Props) => {
-  const { root, table, head, container, title, noDataBox } = useStyles()
+  const { root, table, head, container, title, noDataBox, rangeBox } = useStyles()
   const [range, setRange] = useState<Range>({ begin: initBegin, finish: initFinish })
   const [servicesKeys, setServiceKeys] = useState<string[]>([])
   const { order, orderby, offset, limit, count } = paging
@@ -44,7 +44,7 @@ export default ({ data, paging, setChange, getData }: Props) => {
     setServiceKeys(keys)
   }
 
-  const getRange = ({ begin, finish }: { begin: string; finish: string }) => {
+  const getRange = ({ begin, finish }: Range) => {
     setRange(() => ({ begin, finish }))
   }
 
@@ -65,7 +65,9 @@ export default ({ data, paging, setChange, getData }: Props) => {
         <Typography variant='h5' className={title} align='center'>
           Statistics by masters
         </Typography>
-        <DateRangePicker getRange={getRange} initBegin={initBegin} initFinish={initFinish} />
+        <Box className={rangeBox}>
+          <DateRangePicker getRange={getRange} initBegin={initBegin} initFinish={initFinish} />
+        </Box>
         {data.length ? (
           <TableContainer className={root}>
             <Table className={table} aria-label={`table`}>

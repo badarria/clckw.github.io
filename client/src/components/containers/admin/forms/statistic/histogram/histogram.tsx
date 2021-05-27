@@ -53,7 +53,7 @@ export default ({ getData, data }: Props) => {
     getData(range, period)
   }, [range])
 
-  const getRange = ({ begin, finish, period }: { begin: string; finish: string; period: Period }) => {
+  const getRange = ({ begin, finish, period }: Range & { period: Period }) => {
     setPeriod(period)
     setRange(() => ({ begin, finish }))
   }

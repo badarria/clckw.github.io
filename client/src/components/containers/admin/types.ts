@@ -50,12 +50,12 @@ export type AlertDialogProps = {
 
 export type BtnType = 'button' | 'submit' | 'reset'
 
-export type ChartDate = { begin: string; finish: string }
-export type Histogram = ChartDate & { period: Period }
+// export type ChartDate = { begin: string; finish: string }
+export type Histogram = Range & { period: Period }
 export type DiagramByCitiesRes = { city: string; total: number }
 export type DiagramByMastersRes = { master: string; total: number }
 export type ServiceTypes = Record<string, number>
-export type TableByMasters = ChartDate & { paging: Paging }
+export type TableByMasters = Range & { paging: Paging }
 export type TableByMastersList = {
   types: ServiceTypes[]
   master: string
@@ -80,6 +80,24 @@ export type HistogramRes = {
   total: number
 }[]
 export type Period = 'month' | 'week' | 'day'
-export type Range = { begin: string; finish: string }
+export type Range = { begin: string | null; finish: string | null }
 export type HistogramInit = { cities: string[]; masters: string[] }
 export type UserByText = { id: number; fullName: string }
+
+export type DataItem = City | Service | (Master & { fullName: string }) | { id: number; name: string }
+export type SelectFilterProps = {
+  changeOptions: (value: number[]) => void
+  selected: number[]
+  data: DataItem[]
+  label: string
+  keyWord?: keyof City | keyof Service | keyof (Master & { fullName: string })
+}
+export type FilterQuery = {
+  masters?: number[]
+  cities?: number[]
+  services?: number[]
+  begin?: string
+  finish?: string
+  completed?: boolean[]
+}
+export type GetOrders = Paging & FilterQuery

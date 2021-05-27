@@ -14,10 +14,11 @@ type Props = {
   toast: Response
   header: ReactElement
   pagination: ReactElement
+  filter?: ReactElement
 }
 
 export const AdminTable = (props: Props) => {
-  const { items, columns, remove, push, editState, toast, header, pagination } = props
+  const { items, columns, remove, push, editState, toast, header, pagination, filter } = props
   const { wrap, root, box, table, head } = useStyles()
 
   return (
@@ -25,6 +26,7 @@ export const AdminTable = (props: Props) => {
       <Box className={box}>
         <Toast toast={toast} />
       </Box>
+      {filter}
       <TableContainer component={Paper} className={root}>
         <Table className={table} aria-label={`table`}>
           <TableHead className={head}>{header}</TableHead>

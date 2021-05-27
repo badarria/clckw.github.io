@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import { useStyles } from './styles'
 import { DateTime } from 'luxon'
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
@@ -21,19 +21,21 @@ const findPeriod = ({ begin, finish }: DateRange): Period => {
   else if (months <= 4) return 'week'
   return 'month'
 }
-const toStringDate = (date: MaterialUiPickersDate) => {
+const toStringDate = (date: MaterialUiPickersDate | null) => {
+  if (date === null) return null
   if (!date) return DateTime.now().toISO()
   return DateTime.fromJSDate(date).toISO()
 }
 
 type DateRange = { begin: MaterialUiPickersDate; finish: MaterialUiPickersDate }
 type Props = {
-  getRange: (data: { begin: string; finish: string; period: Period }) => void
-  initBegin: string
-  initFinish: string
+  getRange: (data: { begin: string | null; finish: string | null; period: Period }) => void
+  initBegin: string | null
+  initFinish: string | null
+  required?: boolean
 }
 
-export default ({ getRange, initBegin, initFinish }: Props) => {
+export default ({ getRange, initBegin, initFinish, required = true }: Props) => {
   const [range, setRange] = useState<DateRange>({ begin: isoToJs(initBegin), finish: isoToJs(initFinish) })
   const { fieldBox, inputField } = useStyles()
 
@@ -42,6 +44,7 @@ export default ({ getRange, initBegin, initFinish }: Props) => {
 
     const beginToStr = toStringDate(begin)
     const finishToStr = toStringDate(finish)
+
     const period = findPeriod({ begin, finish })
     getRange({ begin: beginToStr, finish: finishToStr, period })
   }
@@ -60,7 +63,7 @@ export default ({ getRange, initBegin, initFinish }: Props) => {
           <KeyboardDatePicker
             className={inputField}
             disableToolbar
-            required
+            required={required}
             onChange={changeBegin}
             value={range.begin}
             variant='inline'
@@ -72,7 +75,8 @@ export default ({ getRange, initBegin, initFinish }: Props) => {
           />
           <KeyboardDatePicker
             disableToolbar
-            required
+            className={inputField}
+            required={required}
             onChange={changeFinish}
             value={range.finish}
             variant='inline'

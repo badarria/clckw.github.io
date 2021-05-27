@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Box, Paper, Typography } from '@material-ui/core'
 import { useEffect, useState } from 'react'
-import { DiagramByCitiesRes, Range, ChartDate } from '../../types'
+import { DiagramByCitiesRes, Range } from '../../types'
 import { PieSeries, Chart, Tooltip, Legend } from '@devexpress/dx-react-chart-material-ui'
 import { useStyles } from './styles'
 import { DateRangePicker } from '../../components'
@@ -19,7 +19,7 @@ export default ({ data, getData }: Props) => {
     getData(range)
   }, [range])
 
-  const getRange = ({ begin, finish }: ChartDate) => setRange(() => ({ begin, finish }))
+  const getRange = ({ begin, finish }: Range) => setRange(() => ({ begin, finish }))
 
   return (
     <Paper className={container}>

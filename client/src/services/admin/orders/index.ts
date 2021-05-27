@@ -1,4 +1,4 @@
-import { Method, State, NewOrder, UserByText } from '../../../components/containers/admin/types'
+import { Method, State, NewOrder, UserByText, GetOrders } from '../../../components/containers/admin/types'
 import { Response, Order, ServiceAsKey, Paging } from '../../../types'
 
 const adminPath = '/admin/orders'
@@ -19,9 +19,18 @@ type OrdersKey = {
 type List = { items: Order[]; count: number }
 type FilteredOrders = { begin: string; finish: string }[]
 
-const get = async ({ limit, order, orderby, offset }: Paging): Promise<List> => {
+const get = async (data: GetOrders): Promise<List> => {
+  let query = ''
   const token = getToken()
-  const res = await fetch(`${adminPath}/${limit}/${offset}/${order}/${orderby}`, {
+
+  Object.entries(data).forEach(([key, value]) => {
+    if (Array.isArray(value)) query += `${key}=[${value}]&`
+    else {
+      query += `${key}=${value}&`
+    }
+  })
+  query = query.slice(0, -1)
+  const res = await fetch(`${adminPath}?${query}`, {
     headers: { token },
   })
   return res.json()
@@ -69,7 +78,13 @@ const findCustomers = async (str: string): Promise<UserByText[]> => {
   return res.json()
 }
 
-export const getOrders = async (paging: Paging) => await wrapTryCatch(get(paging))
+const getFilterInint = async (): Promise<any> => {
+  const token = getToken()
+  const res = await fetch(`${adminPath}/initFilterData`, { headers: { token } })
+  return res.json()
+}
+
+export const getOrders = async (paging: GetOrders) => await wrapTryCatch(get(paging))
 export const deleteOrder = async (id: number) => await wrapTryCatch(del(id))
 export const acceptOrder = async (data: NewOrder, state: State) => {
   const method = state === 'isEditing' ? 'PUT' : 'POST'
@@ -80,3 +95,4 @@ export const getFilteredOrders = async (master_id: number, order_id: number, dat
   await wrapTryCatch(getFiltered(master_id, order_id, date))
 export const findMastersByText = async (data: string) => await wrapTryCatch(findMasters(data))
 export const findCustomersByText = async (data: string) => await wrapTryCatch(findCustomers(data))
+export const getFilterInintData = async () => await wrapTryCatch(getFilterInint())

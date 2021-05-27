@@ -105,4 +105,4 @@ export const findDiapazone = () => {
   return { initBegin, initFinish }
 }
 
-export const isoToJs = (str: string) => DateTime.fromISO(str).toJSDate()
+export const isoToJs = (str: string | null) => (str ? DateTime.fromISO(str).toJSDate() : null)

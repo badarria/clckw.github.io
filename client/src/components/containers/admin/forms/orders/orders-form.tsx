@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { TableForm, DatePicker, Loader, InputField, AutocompleteField } from '../components'
+import { Controller, useForm } from 'react-hook-form'
+import { TableForm, DatePicker, Loader, InputField, AutocompleteField } from '../../components'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { orders } from '../../../../services/admin/validation/schema'
+import { orders } from '../../../../../services/admin/validation/schema'
 import {
   dateFromFormatToObj,
   dateFromNewDate,
   dateToRequest,
   getBeginFinish,
   getHoursArray,
-} from '../../../../services/utils/datetime-func'
-import { Order, ServiceAsKey } from '../../../../types'
-import { getOrdersKeys, getFilteredOrders } from 'services/admin/orders'
+} from '../../../../../services/utils/datetime-func'
+import { Order, ServiceAsKey } from '../../../../../types'
+import { getOrdersKeys, getFilteredOrders, findMastersByText, findCustomersByText } from 'services/admin/orders'
 import { SelectHours } from 'components/ui/select/select-hours'
-import { State, NewOrder } from '../../admin/types'
-import { AutocompleteAsync } from 'components/ui'
+import { State, NewOrder } from '../../types'
+import { AutocompleteAsyncField } from 'components/ui'
 
 type Props = {
   cancel: () => void
@@ -135,6 +135,22 @@ export const OrdersForm = ({ data, cancel, accept, editState }: Props) => {
   }
 
   const selectProps = { data: newHours, control, name: 'hours', disabled: disableHours }
+  const masterProps = {
+    data: keys.master,
+    keyToSelect: 'fullName',
+    errors: errors,
+    name: 'master',
+    getData: findMastersByText,
+    controlled: true,
+  }
+  const customerProps = {
+    data: keys.customer,
+    keyToSelect: 'fullName',
+    errors: errors,
+    name: 'customer',
+    getData: findCustomersByText,
+    controlled: true,
+  }
 
   return (
     <>
@@ -142,19 +158,15 @@ export const OrdersForm = ({ data, cancel, accept, editState }: Props) => {
       <TableForm {...formProps}>
         <>
           {id ? <InputField {...{ register, label: 'id', errors }} /> : null}
-          <AutocompleteAsync
+          <Controller
             control={control}
             name='master'
-            data={keys.master}
-            keyToSelect='fullName'
-            errors={errors}
+            render={({ onChange, ref }) => <AutocompleteAsyncField {...masterProps} onChange={onChange} ref={ref} />}
           />
-          <AutocompleteAsync
+          <Controller
             control={control}
             name='customer'
-            data={keys.customer}
-            keyToSelect='fullName'
-            errors={errors}
+            render={({ onChange, ref }) => <AutocompleteAsyncField {...customerProps} onChange={onChange} ref={ref} />}
           />
           <AutocompleteField
             control={control}

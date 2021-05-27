@@ -3,7 +3,8 @@ import { AdminTable, AdminTableHead, Loader, Pagination } from '../components'
 import { Response, Paging, Order } from '../../../../types'
 import { acceptOrder, deleteOrder, getOrders } from 'services/admin/orders'
 import { OrdersForm } from '../forms'
-import { State, NewOrder, AllSubjectsData } from '../../../containers/admin/types'
+import { State, NewOrder, FilterQuery } from '../../../containers/admin/types'
+import OrdersFilter from '../forms/orders/orders-filter'
 
 const columns = ['id', 'service', 'price', 'master', 'customer', 'city', 'date', 'begin', 'finish', 'rating', 'status']
 const initPaging: Required<Paging> = { limit: 15, offset: 0, orderby: 'date', order: 'desc', count: 50 }
@@ -25,6 +26,7 @@ export const Orders = () => {
   const [paging, setPaging] = useState(initPaging)
   const [dataToChange, setDataToChange] = useState(initDataToChange)
   const { limit, offset, count, orderby, order } = paging
+  const [filtered, setFiltered] = useState<FilterQuery>({})
 
   const setLoader = async <T extends any>(doSomething: T) => {
     setLoading(true)
@@ -40,8 +42,15 @@ export const Orders = () => {
     }, 3000)
   }
 
+  const changeFiltered = (data: FilterQuery) => {
+    const newData = Object.entries(data).length
+    const currentData = Object.entries(filtered).length
+    if (newData === currentData && !newData) return
+    setFiltered(data)
+  }
+
   const getItems = async () => {
-    const res = await setLoader(getOrders(paging))
+    const res = await setLoader(getOrders({ ...paging, ...filtered }))
     if ('items' in res) {
       let { items, count } = res
       if (paging.count !== count) {
@@ -91,7 +100,7 @@ export const Orders = () => {
 
   useEffect(() => {
     getItems()
-  }, [paging])
+  }, [paging, filtered])
 
   const formProps = { data: dataToChange, cancel, accept, editState }
   const headProps = { columns, push, order, orderby, setChange }
@@ -109,6 +118,7 @@ export const Orders = () => {
     toast,
     pagination: <Pagination {...pagingProps} />,
     header: <AdminTableHead {...headProps} />,
+    filter: <OrdersFilter changeFiltered={changeFiltered} />,
   }
 
   return (

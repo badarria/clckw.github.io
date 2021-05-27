@@ -20,6 +20,7 @@ export type Master = {
   rating: number
   email: string
   password?: string
+  city_id?: number
 }
 
 export type ServiceAsKey = { id: number; service: string; service_time: string }

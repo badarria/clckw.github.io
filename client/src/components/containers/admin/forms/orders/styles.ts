@@ -2,6 +2,25 @@ import { makeStyles } from '@material-ui/core/styles'
 
 export const useStyles = makeStyles({
   container: { overflowX: 'hidden', margin: '50px auto 50px' },
+  filtersBox: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    alignItems: 'baseline',
+    margin: '0 -16px',
+  },
+  selectsBox: { display: 'flex', justifyContent: 'space-between' },
+  filter: { maxWidth: '100%' },
+  accordion: { background: '#bfbfbf33' },
+  detailBox: { display: 'flex', flexDirection: 'column' },
+  chipsBox: {
+    margin: '16px -8px',
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  fields: {
+    margin: '0 16px',
+  },
   title: {
     padding: '32px 0 16px',
   },
@@ -14,26 +33,26 @@ export const useStyles = makeStyles({
     justifyContent: 'space-between',
     margin: '0 16px 0',
   },
-  chipsBox: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    margin: '0 16px 0',
-  },
+
   chip: {
     margin: '8px',
     display: 'flex',
     justifyContent: 'space-between',
   },
   select: {
-    minWidth: '200px',
-    maxWidth: '400px',
+    minWidth: '150px',
+    maxWidth: '150px',
   },
-  selectLabel: { padding: '0 16px 0' },
+  selectLabel: { textTransform: 'capitalize' },
   formBox1: {
     display: 'flex',
     flexDirection: 'column',
     width: '400px',
     marginRight: '16px',
+  },
+  btnBox: {
+    display: 'flex',
+    justifyContent: 'flex-end',
   },
   formBox2: {
     display: 'flex',
@@ -77,8 +96,5 @@ export const useStyles = makeStyles({
   serviceTime: {
     fontSize: '12px',
     padding: '8px',
-  },
-  rangeBox: {
-    margin: '16px',
   },
 })

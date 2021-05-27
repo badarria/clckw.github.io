@@ -4,6 +4,6 @@ import { Loader } from './loader/loader'
 import { SelectHours } from './select/select-hours'
 import { Toast } from './toast/toast'
 import { InputField } from './input-field/input-field'
-import AutocompleteAsync from './autocomplete-async/autocomplete-async'
+import AutocompleteAsyncField from './autocomplete-async/autocomplete-async-field'
 
-export { DatePicker, Loader, Toast, SelectHours, AutocompleteField, InputField, AutocompleteAsync }
+export { DatePicker, Loader, Toast, SelectHours, AutocompleteField, InputField, AutocompleteAsyncField }

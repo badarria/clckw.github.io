@@ -2,7 +2,7 @@ import {
   Histogram,
   HistogramInit,
   HistogramRes,
-  ChartDate,
+  Range,
   DiagramByCitiesRes,
   DiagramByMastersRes,
   TableByMastersRes,
@@ -42,7 +42,7 @@ const getHistInit = async (): Promise<HistogramInit> => {
   return res.json()
 }
 
-const getDiagramCities = async ({ begin, finish }: ChartDate): Promise<DiagramByCitiesRes[]> => {
+const getDiagramCities = async ({ begin, finish }: Range): Promise<DiagramByCitiesRes[]> => {
   const token = getToken()
   const res = await fetch(`${adminPath}/citiesDiagram/'${begin}'/'${finish}'`, {
     headers: { token },
@@ -50,7 +50,7 @@ const getDiagramCities = async ({ begin, finish }: ChartDate): Promise<DiagramBy
   return res.json()
 }
 
-const getDiagramMasters = async ({ begin, finish }: ChartDate): Promise<DiagramByMastersRes[]> => {
+const getDiagramMasters = async ({ begin, finish }: Range): Promise<DiagramByMastersRes[]> => {
   const token = getToken()
   const res = await fetch(`${adminPath}/mastersDiagram/'${begin}'/'${finish}'`, {
     headers: { token },
@@ -81,7 +81,7 @@ const getTableInit = async (): Promise<TableByMastersInit> => {
 
 export const getHistogram = async (data: Histogram) => await wrapTryCatch(get1(data))
 export const getHistogramInit = async () => await wrapTryCatch(getHistInit())
-export const getDiagramByCities = async (data: ChartDate) => await wrapTryCatch(getDiagramCities(data))
-export const getDiagramByMasters = async (data: ChartDate) => await wrapTryCatch(getDiagramMasters(data))
+export const getDiagramByCities = async (data: Range) => await wrapTryCatch(getDiagramCities(data))
+export const getDiagramByMasters = async (data: Range) => await wrapTryCatch(getDiagramMasters(data))
 export const getTableByMasters = async (data: TableByMasters) => await wrapTryCatch(getTable(data))
 export const getTableByMastersInit = async () => await wrapTryCatch(getTableInit())

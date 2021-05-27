@@ -3,7 +3,7 @@ import { checkAdminToken } from '../../shared/utils'
 import { Router } from 'express'
 const index = Router()
 
-index.get('/', checkAdminToken, get)
+index.get('/getOrders', checkAdminToken, get)
 index.get('/filtered', getFiltered)
 index.get('/foreignKeys', checkAdminToken, getKeys)
 index.put('/', checkAdminToken, update)

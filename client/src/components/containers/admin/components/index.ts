@@ -8,6 +8,7 @@ import { ButtonIcon } from './table/button-icon'
 import { AlertDialog } from './table/alert-dialog'
 import Article from './article/article'
 import DateRangePicker from './date-range-picker/date-range-picker'
+import ExportXLSX from './export-xlsx'
 import * as shared from '../../../ui'
 const { DatePicker, Loader, Toast, SelectHours, InputField, AutocompleteField } = shared
 
@@ -28,4 +29,5 @@ export {
   Article,
   TableForm,
   DateRangePicker,
+  ExportXLSX,
 }

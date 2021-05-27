@@ -3,8 +3,6 @@ import { ArgumentAxis } from '@devexpress/dx-react-chart-material-ui'
 import { DateTime } from 'luxon'
 import { Period } from '../../../types'
 
-type Props = { period: Period }
-
 const getWeekDates = (weekNumber: number) => {
   if (`${weekNumber}`.match(/(\d\d.[1-9])/)) return null
   const dt = DateTime.fromObject({ weekYear: 2017, weekNumber })

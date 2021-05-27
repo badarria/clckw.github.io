@@ -29,6 +29,10 @@ export type Order = {
   id: number
   m: { fullName: string; id: number }
   c: { fullName: string; id: number }
+  service?: string
+  price?: number
+  master?: string
+  customer?: string
   s: ServiceAsKey
   begin: string
   finish: string

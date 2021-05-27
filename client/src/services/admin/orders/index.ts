@@ -1,4 +1,4 @@
-import { Method, State, NewOrder, UserByText, GetOrders } from '../../../components/containers/admin/types'
+import { Method, State, NewOrder, UserByText, GetOrders, FilterQuery } from '../../../components/containers/admin/types'
 import { Response, Order, ServiceAsKey, Paging } from '../../../types'
 
 const adminPath = '/admin/orders'
@@ -30,7 +30,7 @@ const get = async (data: GetOrders): Promise<List> => {
     }
   })
   query = query.slice(0, -1)
-  const res = await fetch(`${adminPath}?${query}`, {
+  const res = await fetch(`${adminPath}/getOrders?${query}`, {
     headers: { token },
   })
   return res.json()

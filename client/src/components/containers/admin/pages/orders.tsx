@@ -1,12 +1,24 @@
 import React, { useEffect, useState } from 'react'
-import { AdminTable, AdminTableHead, Loader, Pagination } from '../components'
+import { AdminTable, AdminTableHead, ExportXLSX, Loader, Pagination } from '../components'
 import { Response, Paging, Order } from '../../../../types'
 import { acceptOrder, deleteOrder, getOrders } from 'services/admin/orders'
 import { OrdersForm } from '../forms'
 import { State, NewOrder, FilterQuery } from '../../../containers/admin/types'
 import OrdersFilter from '../forms/orders/orders-filter'
 
-const columns = ['id', 'service', 'price', 'master', 'customer', 'city', 'date', 'begin', 'finish', 'rating', 'status']
+const columns: Array<keyof Order> = [
+  'id',
+  'service',
+  'price',
+  'master',
+  'customer',
+  'city',
+  'date',
+  'begin',
+  'finish',
+  'rating',
+  'status',
+]
 const initPaging: Required<Paging> = { limit: 15, offset: 0, orderby: 'date', order: 'desc', count: 50 }
 const initDataToChange = {
   id: 0,
@@ -108,7 +120,7 @@ export const Orders = () => {
     option: { limit, offset, count },
     setPaging: setChange,
   }
-
+  const filterProps = { changeFiltered, columns }
   const tableProps = {
     items,
     columns,
@@ -118,7 +130,7 @@ export const Orders = () => {
     toast,
     pagination: <Pagination {...pagingProps} />,
     header: <AdminTableHead {...headProps} />,
-    filter: <OrdersFilter changeFiltered={changeFiltered} />,
+    filter: <OrdersFilter {...filterProps} />,
   }
 
   return (

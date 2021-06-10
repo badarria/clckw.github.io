@@ -7,5 +7,6 @@ import getFiltered from './get-filtered'
 import findMasters from './find-masters-by-text'
 import findCustomers from './find-customers-by-text'
 import getInitFilter from './get-init-filter'
+import getXLSX from './get-xlsx'
 
-export { get, remove, add, update, getKeys, getFiltered, findMasters, findCustomers, getInitFilter }
+export { get, remove, add, update, getKeys, getFiltered, findMasters, findCustomers, getInitFilter, getXLSX }

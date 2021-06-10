@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { AdminTable, AdminTableHead, ExportXLSX, Loader, Pagination } from '../components'
+import { AdminTable, AdminTableHead, Loader, Pagination } from '../components'
 import { Response, Paging, Order } from '../../../../types'
 import { acceptOrder, deleteOrder, getOrders } from 'services/admin/orders'
 import { OrdersForm } from '../forms'
@@ -120,7 +120,7 @@ export const Orders = () => {
     option: { limit, offset, count },
     setPaging: setChange,
   }
-  const filterProps = { changeFiltered, columns }
+  const filterProps = { changeFiltered }
   const tableProps = {
     items,
     columns,

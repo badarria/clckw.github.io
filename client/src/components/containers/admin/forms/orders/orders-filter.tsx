@@ -8,7 +8,7 @@ import DoneIcon from '@material-ui/icons/Done'
 import { useStyles } from './styles'
 import { getFilterInintData } from 'services/admin/orders'
 import { ButtonIcon, DateRangePicker, ExportXLSX } from '../../components'
-import { City, Master, Service, Order } from '../../../../../types'
+import { City, Master, Service } from '../../../../../types'
 
 type InitData = {
   masters: Array<Master & { fullName: string }>
@@ -18,7 +18,7 @@ type InitData = {
 }
 type Selected = { masters: number[]; cities: number[]; services: number[]; status: number[] }
 type Chips = { id: number; label: string; key: keyof Selected; color: string }
-type Props = { changeFiltered: (data: FilterQuery) => void; columns: Array<keyof Order> }
+type Props = { changeFiltered: (data: FilterQuery) => void }
 
 const initRange: Range = { begin: '', finish: '' }
 const initStatus = [
@@ -29,7 +29,7 @@ const initSelected = { masters: [], cities: [], services: [], status: [] }
 const initInitData = { masters: [], cities: [], services: [], status: initStatus }
 const colors = { masters: '#c8dbf8', cities: '#dcf8c8', services: '#faeaa9', status: '#e2d2fa' }
 
-export default ({ changeFiltered, columns }: Props) => {
+export default ({ changeFiltered }: Props) => {
   const [initData, setInitData] = useState<InitData>(initInitData)
   const [selected, setSelected] = useState<Selected>(initSelected)
   const [chips, setChips] = useState<Chips[]>([])
@@ -177,7 +177,7 @@ export default ({ changeFiltered, columns }: Props) => {
     disabled: !isSelected(),
     type: 'submit',
   }
-  const XLSXProps = { filters: filterForXLSX, columns }
+  const XLSXProps = { filters: filterForXLSX }
 
   const handleExpand = () => setExpanded(!expanded)
 

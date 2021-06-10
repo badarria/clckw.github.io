@@ -29,13 +29,13 @@ const toStringDate = (date: MaterialUiPickersDate | null) => {
 
 type DateRange = { begin: MaterialUiPickersDate; finish: MaterialUiPickersDate }
 type Props = {
-  getRange: (data: { begin: string | null; finish: string | null; period: Period }) => void
+  onChange: (data: { begin: string | null; finish: string | null; period: Period }) => void
   initBegin: string | null
   initFinish: string | null
   required?: boolean
 }
 
-export default ({ getRange, initBegin, initFinish, required = true }: Props) => {
+export default ({ onChange, initBegin, initFinish, required = true }: Props) => {
   const [range, setRange] = useState<DateRange>({ begin: isoToJs(initBegin), finish: isoToJs(initFinish) })
   const { fieldBox, inputField } = useStyles()
 
@@ -46,7 +46,7 @@ export default ({ getRange, initBegin, initFinish, required = true }: Props) => 
     const finishToStr = toStringDate(finish)
 
     const period = findPeriod({ begin, finish })
-    getRange({ begin: beginToStr, finish: finishToStr, period })
+    onChange({ begin: beginToStr, finish: finishToStr, period })
   }
 
   const changeBegin = (data: MaterialUiPickersDate) => setRange((range) => ({ ...range, begin: data }))

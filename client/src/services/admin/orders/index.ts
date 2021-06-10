@@ -1,4 +1,4 @@
-import { Method, State, NewOrder, UserByText, GetOrders } from '../../../components/containers/admin/types'
+import { Method, State, NewOrder, UserByText, GetOrders, FilterQuery } from '../../../components/containers/admin/types'
 import { Response, Order, ServiceAsKey, Paging } from '../../../types'
 
 const adminPath = '/admin/orders'
@@ -19,10 +19,8 @@ type OrdersKey = {
 type List = { items: Order[]; count: number }
 type FilteredOrders = { begin: string; finish: string }[]
 
-const get = async (data: GetOrders): Promise<List> => {
+const createQuery = (data: GetOrders) => {
   let query = ''
-  const token = getToken()
-
   Object.entries(data).forEach(([key, value]) => {
     if (Array.isArray(value)) query += `${key}=[${value}]&`
     else {
@@ -30,7 +28,14 @@ const get = async (data: GetOrders): Promise<List> => {
     }
   })
   query = query.slice(0, -1)
-  const res = await fetch(`${adminPath}?${query}`, {
+  return query
+}
+
+const get = async (data: GetOrders): Promise<List> => {
+  const token = getToken()
+  const query = createQuery(data)
+
+  const res = await fetch(`${adminPath}/getOrders?${query}`, {
     headers: { token },
   })
   return res.json()
@@ -84,6 +89,16 @@ const getFilterInint = async (): Promise<any> => {
   return res.json()
 }
 
+const getXLSX = async (data: GetOrders): Promise<ArrayBuffer> => {
+  const token = getToken()
+  const query = createQuery(data)
+
+  const res = await fetch(`${adminPath}/getOrdersXLSX?${query}`, {
+    headers: { token },
+  })
+  return res.arrayBuffer()
+}
+
 export const getOrders = async (paging: GetOrders) => await wrapTryCatch(get(paging))
 export const deleteOrder = async (id: number) => await wrapTryCatch(del(id))
 export const acceptOrder = async (data: NewOrder, state: State) => {
@@ -96,3 +111,4 @@ export const getFilteredOrders = async (master_id: number, order_id: number, dat
 export const findMastersByText = async (data: string) => await wrapTryCatch(findMasters(data))
 export const findCustomersByText = async (data: string) => await wrapTryCatch(findCustomers(data))
 export const getFilterInintData = async () => await wrapTryCatch(getFilterInint())
+export const getOrdersXLSX = async (data: GetOrders) => await wrapTryCatch(getXLSX(data))

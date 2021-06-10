@@ -6,9 +6,9 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ClearIcon from '@material-ui/icons/Clear'
 import DoneIcon from '@material-ui/icons/Done'
 import { useStyles } from './styles'
-import {  getFilterInintData } from 'services/admin/orders'
-import { ButtonIcon, DateRangePicker } from '../../components'
-import { City, Master, Service } from 'types'
+import { getFilterInintData } from 'services/admin/orders'
+import { ButtonIcon, DateRangePicker, ExportXLSX } from '../../components'
+import { City, Master, Service } from '../../../../../types'
 
 type InitData = {
   masters: Array<Master & { fullName: string }>
@@ -35,6 +35,7 @@ export default ({ changeFiltered }: Props) => {
   const [chips, setChips] = useState<Chips[]>([])
   const [range, setRange] = useState<Range>(initRange)
   const [expanded, setExpanded] = useState(false)
+  const [filterForXLSX, setFilterForXLSX] = useState<FilterQuery>({})
   const { accordion, filtersBox, chipsBox, chip, detailBox, filter, btnBox } = useStyles()
   const { masters, services, cities, status } = initData
 
@@ -49,15 +50,7 @@ export default ({ changeFiltered }: Props) => {
     return false
   }
 
-  const reset = () => {
-    setSelected(initSelected)
-    setChips([])
-    changeFiltered({})
-  }
-
-  const accept = () => {
-    if (!isSelected()) return
-
+  const dataToFilterQuery = () => {
     const { begin, finish } = range
     const data = Object.entries(selected).reduce((acc: any, [key, values]) => {
       if (key === 'status' && values.length) {
@@ -68,8 +61,20 @@ export default ({ changeFiltered }: Props) => {
     const querydata: FilterQuery = { ...data }
     if (begin) querydata.begin = begin.slice(0, -6)
     if (finish) querydata.finish = finish.slice(0, -6)
+    setFilterForXLSX(querydata)
+    return querydata
+  }
 
-    changeFiltered(querydata)
+  const reset = () => {
+    setSelected(initSelected)
+    setChips([])
+    changeFiltered({})
+  }
+
+  const accept = () => {
+    if (!isSelected()) return
+
+    changeFiltered(dataToFilterQuery())
   }
 
   useEffect(() => {
@@ -80,6 +85,10 @@ export default ({ changeFiltered }: Props) => {
     }
     getInitData()
   }, [])
+
+  useEffect(() => {
+    dataToFilterQuery()
+  }, [selected, range])
 
   const filteredChips = (key: keyof Selected, values: number[]) =>
     chips.filter((chip) => {
@@ -100,6 +109,7 @@ export default ({ changeFiltered }: Props) => {
 
         return acc
       }, [])
+      setFilterForXLSX(dataToFilterQuery())
       return setChips((prev) => [...prev, ...newChip])
     }
 
@@ -150,7 +160,7 @@ export default ({ changeFiltered }: Props) => {
   const rangeProps = {
     initBegin: range.begin,
     initFinish: range.finish,
-    getRange: changeRange,
+    onChange: changeRange,
     required: false,
   }
   const resetProps: ButtonIconProps = {
@@ -167,6 +177,7 @@ export default ({ changeFiltered }: Props) => {
     disabled: !isSelected(),
     type: 'submit',
   }
+  const XLSXProps = { filters: filterForXLSX }
 
   const handleExpand = () => setExpanded(!expanded)
 
@@ -202,6 +213,7 @@ export default ({ changeFiltered }: Props) => {
           <Box className={btnBox}>
             <ButtonIcon {...acceptProps} />
             <ButtonIcon {...resetProps} />
+            <ExportXLSX {...XLSXProps} />
           </Box>
         </AccordionDetails>
       </Accordion>

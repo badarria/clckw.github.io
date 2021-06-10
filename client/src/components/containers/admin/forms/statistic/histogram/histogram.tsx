@@ -66,7 +66,7 @@ export default ({ getData, data }: Props) => {
       </Typography>
 
       <Box className={radioBox}>
-        <DateRangePicker getRange={getRange} initBegin={initBegin} initFinish={initFinish} />
+        <DateRangePicker onChange={getRange} initBegin={initBegin} initFinish={initFinish} />
         <HistogramSelect {...selectProps} />
       </Box>
       <Box className={chartBox}>

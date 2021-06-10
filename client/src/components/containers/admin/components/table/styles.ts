@@ -29,4 +29,7 @@ export const useStyles = makeStyles({
     top: 20,
     width: 1,
   },
+  titleFont: {
+    fontSize: '14px',
+  },
 })

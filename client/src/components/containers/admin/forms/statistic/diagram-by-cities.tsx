@@ -27,7 +27,7 @@ export default ({ data, getData }: Props) => {
         Total count of orders
       </Typography>
       <Box className={radioBox}>
-        <DateRangePicker getRange={getRange} initBegin={initBegin} initFinish={initFinish} />
+        <DateRangePicker onChange={getRange} initBegin={initBegin} initFinish={initFinish} />
       </Box>
       <Box className={chartBox}>
         {data.length > 1 ? (

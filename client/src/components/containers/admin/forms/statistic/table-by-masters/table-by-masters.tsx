@@ -66,7 +66,7 @@ export default ({ data, paging, setChange, getData }: Props) => {
           Statistics by masters
         </Typography>
         <Box className={rangeBox}>
-          <DateRangePicker getRange={getRange} initBegin={initBegin} initFinish={initFinish} />
+          <DateRangePicker onChange={getRange} initBegin={initBegin} initFinish={initFinish} />
         </Box>
         {data.length ? (
           <TableContainer className={root}>
